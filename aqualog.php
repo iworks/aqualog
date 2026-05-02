@@ -46,7 +46,7 @@ $aqualog_vendor = $aqualog_base . '/includes';
  */
 if ( ! class_exists( 'iworks_aqualog' ) ) {
 	// Load the main plugin class from the includes directory
-	require_once $aqualog_vendor . '/iworks/class-aqualog.php';
+	require_once $aqualog_vendor . '/iworks/class-iworks-aqualog.php';
 }
 
 /**
@@ -63,30 +63,6 @@ if ( ! class_exists( 'iworks_options' ) ) {
 	// Load the options class from the includes directory
 	require_once $aqualog_vendor . '/iworks/options/options.php';
 }
-
-/**
- * Post Type Filters
- * These filters control which custom post types are loaded by the plugin
- * Each filter returns false by default - change to true to enable the post type
- */
-// FAQ post type
-add_filter( 'aqualog/load/posttype/faq', '__return_false' );
-// Hero post type
-add_filter( 'aqualog/load/posttype/hero', '__return_false' );
-// Opinion post type
-add_filter( 'aqualog/load/posttype/opinion', '__return_false' );
-// Custom page post type
-add_filter( 'aqualog/load/posttype/page', '__return_false' );
-// Person post type
-add_filter( 'aqualog/load/posttype/person', '__return_false' );
-// Custom post post type
-add_filter( 'aqualog/load/posttype/post', '__return_false' );
-// Project post type
-add_filter( 'aqualog/load/posttype/project', '__return_false' );
-// Promo post type
-add_filter( 'aqualog/load/posttype/promo', '__return_false' );
-// Publication post type
-add_filter( 'aqualog/load/posttype/publication', '__return_false' );
 
 /**
  * Initialize and get plugin options

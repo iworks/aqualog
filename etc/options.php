@@ -8,7 +8,7 @@
  * @package    iWorks
  * @subpackage AquaLog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
- * @copyright  2025-PLUGIN_TILL_YEAR Marcin Pietrzak
+ * @copyright  2026-PLUGIN_TILL_YEAR Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0
  * @version    1.0.0
  */

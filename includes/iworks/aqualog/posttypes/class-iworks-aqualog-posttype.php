@@ -2,7 +2,7 @@
 /**
 
 
-Copyright 2025-PLUGIN_TILL_YEAR Marcin Pietrzak (marcin@iworks.pl)
+Copyright 2026-PLUGIN_TILL_YEAR Marcin Pietrzak (marcin@iworks.pl)
 
 this program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as
@@ -20,9 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( ( dirname( __FILE__ ) ) ) . '/class-aqualog-base.php';
+require_once dirname( __FILE__, 3 ) . '/class-iworks-aqualog-base.php';
 
-abstract class iworks_aqualog_posttype_base extends iworks_aqualog_base {
+abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 
 	/**
 	 * Post Type Name

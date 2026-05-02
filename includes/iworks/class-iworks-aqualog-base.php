@@ -2,20 +2,20 @@
 /**
  * iWorks AquaLog Base Class
  *
- * This is the base class for the AquaLog, providing
- * common functionality and properties for the plugin.
+ * This is the base class for the AquaLog plugin, providing
+ * common functionality and properties used throughout the plugin.
  *
  * @package    iWorks
  * @subpackage AquaLog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
- * @copyright  2025-PLUGIN_TILL_YEAR Marcin Pietrzak
+ * @copyright  2025 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0
  * @version    1.0.0
  */
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Prevent multiple class definitions
+ * Prevent multiple class definitions.
  */
 if ( class_exists( 'iworks_aqualog_base' ) ) {
 	return;
@@ -24,7 +24,7 @@ if ( class_exists( 'iworks_aqualog_base' ) ) {
 /**
  * iWorks AquaLog Base Class
  *
- * This class provides the foundation for the AquaLog,
+ * This class provides the foundation for the AquaLog plugin,
  * offering essential properties and methods used throughout the plugin.
  *
  * @since 1.0.0
@@ -136,12 +136,22 @@ class iworks_aqualog_base {
 	protected $options;
 
 	/**
-	 * Constructor for the base class
-	 *
-	 * Initializes all necessary properties and sets up the plugin environment
-	 * including debug mode, directories, URLs, and WordPress hooks
+	 * Post type name
 	 *
 	 * @since 1.0.0
+	 * @var string $post_type The post type being handled
+	 */
+	protected $post_type;
+
+	/**
+	 * Constructor for the base class.
+	 *
+	 * Initializes all necessary properties and sets up the plugin environment
+	 * including debug mode, directories, URLs, and WordPress hooks.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function __construct() {
 		/**
@@ -165,7 +175,8 @@ class iworks_aqualog_base {
 		/**
 		 * plugin ID
 		 */
-		$this->plugin_file_path = $this->base . '/aqualog.php';
+		$this->plugin_file_dir = dirname( $this->base, 2 );
+		$this->plugin_file_path = $this->plugin_file_dir . '/aqualog.php';
 		$this->plugin_file      = plugin_basename( $this->plugin_file_path );
 		/**
 		 * plugin includes directory
@@ -177,17 +188,18 @@ class iworks_aqualog_base {
 	}
 
 	/**
-	 * Get the plugin version
+	 * Get the plugin version.
 	 *
-	 * Returns either the current version or a timestamp/file hash in dev mode
+	 * Returns either the current version or a timestamp/file hash in dev mode.
 	 *
-	 * @param string|null $file Optional file path for hash generation
-	 * @return string Version string or timestamp/hash
 	 * @since 1.0.0
+	 * @access public
+	 * @param string|null $file Optional file path for hash generation.
+	 * @return string Version string or timestamp/hash.
 	 */
 	public function get_version( $file = null ) {
 		if ( defined( 'IWORKS_DEV_MODE' ) && IWORKS_DEV_MODE ) {
-			if ( null != $file ) {
+			if ( null !== $file ) {
 				$file = dirname( $this->base ) . $file;
 				if ( is_file( $file ) ) {
 					return md5_file( $file );
@@ -199,78 +211,84 @@ class iworks_aqualog_base {
 	}
 
 	/**
-	 * Generate a meta key name
+	 * Generate a meta key name.
 	 *
-	 * Creates a properly formatted meta key name using the prefix
+	 * Creates a properly formatted meta key name using the prefix.
 	 *
-	 * @param string $name Base name for the meta key
-	 * @return string Formatted meta key name
 	 * @since 1.0.0
+	 * @access protected
+	 * @param string $name Base name for the meta key.
+	 * @return string Formatted meta key name.
 	 */
 	protected function get_meta_name( $name ) {
 		return sprintf( '%s_%s', $this->meta_prefix, sanitize_title( $name ) );
 	}
 
 	/**
-	 * Get the post type
+	 * Get the post type.
 	 *
-	 * Returns the current post type being handled
+	 * Returns the current post type being handled.
 	 *
-	 * @return string Post type name
 	 * @since 1.0.0
+	 * @access public
+	 * @return string Post type name.
 	 */
 	public function get_post_type() {
 		return $this->post_type;
 	}
 
 	/**
-	 * Get the plugin capability
+	 * Get the plugin capability.
 	 *
-	 * Returns the required capability for plugin settings
+	 * Returns the required capability for plugin settings.
 	 *
-	 * @return string Capability name
 	 * @since 1.0.0
+	 * @access public
+	 * @return string Capability name.
 	 */
 	public function get_this_capability() {
 		return $this->capability;
 	}
 
 	/**
-	 * Generate a slug name
+	 * Generate a slug name.
 	 *
-	 * Creates a URL-safe slug from the given name
+	 * Creates a URL-safe slug from the given name.
 	 *
-	 * @param string $name Input name to convert
-	 * @return string URL-safe slug
 	 * @since 1.0.0
+	 * @access private
+	 * @param string $name Input name to convert.
+	 * @return string URL-safe slug.
 	 */
 	private function slug_name( $name ) {
 		return preg_replace( '/[_ ]+/', '-', strtolower( __CLASS__ . '_' . $name ) );
 	}
 
 	/**
-	 * Get post meta value
+	 * Get post meta value.
 	 *
-	 * Retrieves a post meta value using the plugin's meta prefix
+	 * Retrieves a post meta value using the plugin's meta prefix.
 	 *
-	 * @param int $post_id Post ID to get meta for
-	 * @param string $meta_key Meta key name
-	 * @return mixed Meta value
 	 * @since 1.0.0
+	 * @access public
+	 * @param int    $post_id  Post ID to get meta for.
+	 * @param string $meta_key Meta key name.
+	 * @return mixed Meta value.
 	 */
 	public function get_post_meta( $post_id, $meta_key ) {
 		return get_post_meta( $post_id, $this->get_meta_name( $meta_key ), true );
 	}
 
 	/**
-	 * Print table body for post meta fields
+	 * Print table body for post meta fields.
 	 *
-	 * Generates an HTML table with form inputs for post meta fields
+	 * Generates an HTML table with form inputs for post meta fields.
 	 *
-	 * @param int $post_id Post ID to display meta for
-	 * @param array $fields Array of field definitions
-	 * @return void Outputs HTML directly
 	 * @since 1.0.0
+	 * @access protected
+	 * @param int   $post_id Post ID to display meta for.
+	 * @param array $fields  Array of field definitions.
+	 * @return void Outputs HTML directly.
 	 */
 	protected function print_table_body( $post_id, $fields ) {
 		echo '<table class="widefat striped"><tbody>';
@@ -283,7 +301,7 @@ class iworks_aqualog_base {
 			$extra = isset( $data['placeholder'] ) ? sprintf( ' placeholder="%s" ', esc_attr( $data['placeholder'] ) ) : '';
 			foreach ( array( 'placeholder', 'style', 'class', 'id' ) as $extra_key ) {
 				if ( isset( $data[ $extra_key ] ) ) {
-					$extra .= sprintf( ' min="%d" ', esc_attr( $data[ $extra_key ] ) );
+					$extra .= sprintf( ' %s="%s" ', esc_attr( $extra_key ), esc_attr( $data[ $extra_key ] ) );
 				}
 			}
 			/**
@@ -296,7 +314,7 @@ class iworks_aqualog_base {
 				case 'number':
 					foreach ( array( 'min', 'max', 'step' ) as $extra_key ) {
 						if ( isset( $data[ $extra_key ] ) ) {
-							$extra .= sprintf( ' min="%d" ', intval( $data[ $extra_key ] ) );
+							$extra .= sprintf( ' %s="%d" ', $extra_key, intval( $data[ $extra_key ] ) );
 						}
 					}
 					printf(
@@ -325,6 +343,17 @@ class iworks_aqualog_base {
 		echo '</tbody></table>';
 	}
 
+	/**
+	 * Get module file path.
+	 *
+	 * Constructs and returns the full path to a module file.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @param string $filename The filename to locate.
+	 * @param string $vendor   The vendor directory name. Default 'iworks'.
+	 * @return string|false The full path to the file, or false if not found.
+	 */
 	protected function get_module_file( $filename, $vendor = 'iworks' ) {
 		return realpath(
 			sprintf(
@@ -337,14 +366,28 @@ class iworks_aqualog_base {
 		);
 	}
 
+	/**
+	 * Display HTML heading.
+	 *
+	 * Outputs a properly escaped WordPress admin heading.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @param string $text The heading text to display.
+	 * @return void
+	 */
 	protected function html_title( $text ) {
 		printf( '<h1 class="wp-heading-inline">%s</h1>', esc_html( $text ) );
 	}
 
 	/**
-	 * check option object
+	 * Check option object.
+	 *
+	 * Ensures the options object is properly initialized.
 	 *
 	 * @since 1.0.0
+	 * @access protected
+	 * @return void
 	 */
 	protected function check_option_object() {
 		if ( is_a( $this->options, 'iworks_options' ) ) {
@@ -408,7 +451,7 @@ class iworks_aqualog_base {
 			$data = wp_parse_args(
 				$data,
 				array(
-					'username'    => $user->display_name?? $user->user_login,
+					'username'    => $user->display_name ?? $user->user_login,
 					'_user_id'    => get_current_user_id(),
 					'_user_login' => $user->user_login,
 					'_user_email' => $user->user_email,
@@ -418,20 +461,19 @@ class iworks_aqualog_base {
 		/**
 		 * select level and write log
 		 */
-            switch ( $level ) {
-            case 'debug':
-                SimpleLogger()->debug( $message, $data );
-                break;
-            case 'warning':
-                SimpleLogger()->warning( $message, $data );
-                break;
-            case 'notice':
-                SimpleLogger()->notice( $message, $data );
-                break;
-            default:
-                SimpleLogger()->notice( $message, $data );
-                break;
-            }
-        }
+		switch ( $level ) {
+			case 'debug':
+				SimpleLogger()->debug( $message, $data );
+				break;
+			case 'warning':
+				SimpleLogger()->warning( $message, $data );
+				break;
+			case 'notice':
+				SimpleLogger()->notice( $message, $data );
+				break;
+			default:
+				SimpleLogger()->notice( $message, $data );
+				break;
+		}
 	}
 }

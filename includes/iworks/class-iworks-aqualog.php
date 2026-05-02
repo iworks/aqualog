@@ -4,7 +4,7 @@
  *
  * @package WordPress_Plugin_Stub
  * @author Marcin Pietrzak <marcin@iworks.pl>
- * @copyright 2025-PLUGIN_TILL_YEAR Marcin Pietrzak
+ * @copyright 2026-PLUGIN_TILL_YEAR Marcin Pietrzak
  * @license GPL-3.0-or-later
  * @link https://iworks.pl/
  *
@@ -16,7 +16,7 @@ if ( class_exists( 'iworks_aqualog' ) ) {
 	return;
 }
 
-require_once __DIR__ . '/class-aqualog-base.php';
+require_once __DIR__ . '/class-iworks-aqualog-base.php';
 
 /**
  * Main plugin class.
@@ -50,12 +50,16 @@ class iworks_aqualog extends iworks_aqualog_base {
 		 */
 		add_action( 'init', array( $this, 'action_init_settings' ) );
 		/**
+		 * Enable aquarium post type
+		 */
+		add_filter( 'aqualog/load/posttype/aquarium', '__return_true' );
+		/**
 		 * post types
 		 */
 		$filename = $this->includes_directory . '/class-iworks-aqualog-posttypes.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			new iworks_wordpress_plugin_posttypes();
+			new iworks_aqualog_posttypes();
 		}
 		/**
 		 * load github class
