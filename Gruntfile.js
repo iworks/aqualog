@@ -82,9 +82,11 @@ module.exports = function(grunt) {
 		},
 
 		// SASS files to process. Resulting CSS files will be minified as well.
-		css_files_compile: {},
+		css_files_compile: {
+			'assets/styles/admin/dashboard.css': ['assets/sass/admin/dashboard.scss']
+		},
 		css_files_concat: {
-			'assets/styles/admin.css': ['assets/styles/admin/*.css']
+			'assets/styles/<%= pkg.name %>-admin.css': ['assets/styles/admin/*.css']
 		},
 
 		replace_patterns: [{

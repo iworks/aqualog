@@ -33,7 +33,9 @@ function iworks_aqualog_options() {
 	/**
 	 * Parent page placeholder (uncomment and set as needed)
 	 */
-	$parent = null;
+	$parent = admin_url( add_query_arg( 'page', 'aqualog-dashboard', 'admin.php' ) );
+	$parent = add_query_arg( 'page', 'aqualog-dashboard', 'admin.php' );
+	$parent = 'aqualog-dashboard';
 
 	/**
 	 * Main settings configuration
@@ -55,7 +57,7 @@ function iworks_aqualog_options() {
 		/**
 		 * Title of the options page
 		 */
-		'page_title' => __( 'AquaLog', 'aqualog' ),
+		'page_title' => __( 'Settings', 'aqualog' ),
 
 /**
  * Menu type for the options page
@@ -75,7 +77,7 @@ function iworks_aqualog_options() {
  * - 'media'        - Add under Media menu
  * - 'custom'       - Custom menu position (requires 'menu_slug' to be set)
  */
-'menu'       => 'options',
+'menu'       => 'submenu',
 
 /**
  * Parent page for submenu items
@@ -125,13 +127,22 @@ function iworks_aqualog_options() {
 					'since' => '1.0.0',
 				),
 				array(
-					'name'              => 'example_text',
-					'type'              => 'text',
-					'th'                => __( 'Example Text', 'aqualog' ),
-					'description'       => __( 'Enter some text.', 'aqualog' ),
+					'name'              => 'units',
+					'type'              => 'radio',
+					'th'                => __( 'Units', 'aqualog' ),
+					'description'       => __( 'Select units for measurements.', 'aqualog' ),
 					'classes'           => array( 'small-text' ),
 					'sanitize_callback' => 'esc_html',
 					'since'             => '1.0.0',
+					'options'           => array(
+						'imperial' => array(
+							'label' => __( 'Imperial', 'aqualog' ),
+						),
+						'metric'   => array(
+							'label' => __( 'Metric', 'aqualog' ),
+						),
+					),
+					'default'           => 'metric',
 				),
 				array(
 					'name'              => 'example_textarea',

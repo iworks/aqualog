@@ -80,6 +80,14 @@ class iworks_aqualog_base {
 	protected $plugin_file;
 
 	/**
+	 * Plugin file directory
+	 *
+	 * @since 1.0.0
+	 * @var string $plugin_file_dir Full path to the plugin directory
+	 */
+	protected $plugin_file_dir;
+
+	/**
 	 * Plugin file path
 	 *
 	 * @since 1.0.0
@@ -142,6 +150,14 @@ class iworks_aqualog_base {
 	 * @var string $post_type The post type being handled
 	 */
 	protected $post_type;
+
+	/**
+	 * WP Admin slug
+	 *
+	 * @since 1.0.0
+	 * @var string $wp_admin_slug The WP Admin slug
+	 */
+	protected string $wp_admin_slug = 'aqualog-dashboard';
 
 	/**
 	 * Constructor for the base class.

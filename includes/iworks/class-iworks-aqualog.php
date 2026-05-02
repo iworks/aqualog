@@ -80,6 +80,14 @@ class iworks_aqualog extends iworks_aqualog_base {
 			}
 		}
 		/**
+		 * load db class
+		 */
+		$filename = $this->includes_directory . '/class-iworks-aqualog-db.php';
+		if ( is_file( $filename ) ) {
+			include_once $filename;
+			new iworks_aqualog_db();
+		}
+		/**
 		 * is active?
 		 */
 		add_filter( 'aqualog/is_active', '__return_true' );

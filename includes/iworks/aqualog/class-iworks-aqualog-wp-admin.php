@@ -164,17 +164,24 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * @since 1.1.0
 	 */
 	public function action_admin_enqueue_scripts_register_assets() {
-		$name = $this->options->get_option_name( 'admin' );
-		$file = '/assets/scripts/aqualog-admin' . $this->dev . '.js';
+		$name = $this->dir . '-admin';
+		$file = 'assets/scripts/' . $this->dir . '-admin' . $this->dev . '.js';
 		wp_register_script(
 			$name,
 			plugins_url( $file, $this->plugin_file_path ),
 			array(),
-			$this->get_version( $file ),
+			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) ),
 			array(
 				'in_footer' => true,
 				'strategy'  => 'defer',
 			)
+		);
+		$file = 'assets/styles/' . $this->dir . '-admin' . $this->dev . '.css';
+		wp_enqueue_style(
+			$name,
+			plugins_url( $file, $this->plugin_file_path ),
+			array(),
+			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) )
 		);
 	}
 
@@ -354,6 +361,21 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	}
 
 	/**
+	 * Enqueue dashboard styles.
+	 *
+	 * Loads the CSS styles for the dashboard page.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @return void
+	 */
+	public function enqueue_assets() {
+		$name = $this->dir . '-admin';
+		wp_enqueue_style( $name );
+		wp_enqueue_script( $name );
+	}
+
+	/**
 	 * Get base64 encoded SVG icon.
 	 *
 	 * Reads the SVG icon file and returns it as a base64 encoded data URI.
@@ -390,54 +412,48 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 */
 	public function register_admin_menu() {
 		// Main menu item
-		add_menu_page(
+		$slug = add_menu_page(
 			__( 'AquaLog Dashboard', 'aqualog' ),
 			__( 'AquaLog', 'aqualog' ),
 			$this->capability,
-			'aqualog-dashboard',
+			$this->wp_admin_slug,
 			array( $this, 'render_dashboard_page' ),
 			$this->get_base64_svg_icon(),
 			25
 		);
+		add_action( 'load-' . $slug, array( $this, 'enqueue_assets' ) );
 
 		// Dashboard submenu (same as main menu)
-		add_submenu_page(
-			'aqualog-dashboard',
+		$slug = add_submenu_page(
+			$this->wp_admin_slug,
 			__( 'Dashboard', 'aqualog' ),
 			__( 'Dashboard', 'aqualog' ),
 			$this->capability,
-			'aqualog-dashboard',
+			$this->wp_admin_slug,
 			array( $this, 'render_dashboard_page' )
 		);
+		add_action( 'load-' . $slug, array( $this, 'enqueue_assets' ) );
 
 		// Aquariums submenu
-		add_submenu_page(
-			'aqualog-dashboard',
+		$slug = add_submenu_page(
+			$this->wp_admin_slug,
 			__( 'Aquariums', 'aqualog' ),
 			__( 'Aquariums', 'aqualog' ),
 			$this->capability,
 			'edit.php?post_type=iw_aquarium'
 		);
-
-		// Settings submenu
-		add_submenu_page(
-			'aqualog-dashboard',
-			__( 'Settings', 'aqualog' ),
-			__( 'Settings', 'aqualog' ),
-			$this->capability,
-			'aqualog-settings',
-			array( $this, 'render_settings_page' )
-		);
+		add_action( 'load-' . $slug, array( $this, 'enqueue_assets' ) );
 
 		// Help submenu
-		add_submenu_page(
-			'aqualog-dashboard',
+		$slug = add_submenu_page(
+			$this->wp_admin_slug,
 			__( 'Help & Support', 'aqualog' ),
 			__( 'Help', 'aqualog' ),
 			$this->capability,
 			'aqualog-help',
 			array( $this, 'render_help_page' )
 		);
+		add_action( 'load-' . $slug, array( $this, 'enqueue_assets' ) );
 	}
 
 	/**
@@ -509,121 +525,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				</div>
 			</div>
 		</div>
-
-		<style>
-		.aqualog-dashboard-grid {
-			display: grid;
-			gap: 20px;
-			margin-top: 20px;
-		}
-		.aqualog-stats-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-			gap: 15px;
-			margin-bottom: 20px;
-		}
-		.aqualog-stat-card {
-			background: #fff;
-			border: 1px solid #ccd0d4;
-			border-radius: 4px;
-			padding: 20px;
-			text-align: center;
-			box-shadow: 0 1px 1px rgba(0,0,0,0.04);
-		}
-		.aqualog-stat-card .dashicons {
-			font-size: 32px;
-			width: 32px;
-			height: 32px;
-			margin-bottom: 10px;
-			color: #2271b1;
-		}
-		.aqualog-stat-number {
-			font-size: 24px;
-			font-weight: bold;
-			color: #1e1e1e;
-			margin: 5px 0;
-		}
-		.aqualog-stat-label {
-			font-size: 14px;
-			color: #646970;
-		}
-		.aqualog-card {
-			background: #fff;
-			border: 1px solid #ccd0d4;
-			border-radius: 4px;
-			padding: 20px;
-			box-shadow: 0 1px 1px rgba(0,0,0,0.04);
-		}
-		.aqualog-card h2 {
-			margin-top: 0;
-			margin-bottom: 15px;
-			font-size: 18px;
-			color: #1e1e1e;
-		}
-		.aqualog-activity-list {
-			max-height: 300px;
-			overflow-y: auto;
-		}
-		.aqualog-activity-item {
-			padding: 10px 0;
-			border-bottom: 1px solid #f0f0f1;
-		}
-		.aqualog-activity-item:last-child {
-			border-bottom: none;
-		}
-		.aqualog-actions-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-			gap: 10px;
-		}
-		.aqualog-action-card {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			padding: 15px;
-			background: #f6f7f7;
-			border: 1px solid #dcdcde;
-			border-radius: 4px;
-			text-decoration: none;
-			color: #1e1e1e;
-			transition: all 0.2s ease;
-		}
-		.aqualog-action-card:hover {
-			background: #e5e5e5;
-			border-color: #949494;
-			transform: translateY(-1px);
-		}
-		.aqualog-action-card .dashicons {
-			font-size: 24px;
-			width: 24px;
-			height: 24px;
-			margin-bottom: 8px;
-		}
-		.aqualog-action-card span:last-child {
-			font-size: 12px;
-			text-align: center;
-		}
-		.aqualog-water-stats {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-			gap: 15px;
-		}
-		.aqualog-water-stat {
-			text-align: center;
-		}
-		.aqualog-water-stat-value {
-			font-size: 18px;
-			font-weight: bold;
-			color: #1e1e1e;
-		}
-		.aqualog-water-stat-label {
-			font-size: 12px;
-			color: #646970;
-		}
-		.aqualog-good { color: #00a32a; }
-		.aqualog-warning { color: #d63638; }
-		.aqualog-info { color: #2271b1; }
-		</style>
 		<?php
 	}
 
@@ -631,7 +532,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * Render statistic card.
 	 *
 	 * Displays a single statistics card on the dashboard.
-	 *
+	*
 	 * @since 1.0.0
 	 * @access private
 	 * @param string $type    The statistic type.
