@@ -69,6 +69,37 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		add_filter( 'iworks_post_type_aquarium_terms_options_list', array( $this, 'get_options_list_array' ) );
 		add_filter( 'manage_' . $this->posttypes_names[ $this->posttype_name ] . '_posts_columns', array( $this, 'filter_add_menu_order_column' ) );
 		add_filter( 'wp_localize_script_iworks_theme', array( $this, 'filter_wp_localize_script_iworks_theme' ) );
+		add_action( 'load-post.php', array( $this, 'post_type_admin_enqueue_assets' ) );
+		add_action( 'load-post-new.php', array( $this, 'post_type_admin_enqueue_assets' ) );
+		/**
+		 * iworks option class hooks.
+		 */
+		add_filter( 'index_iworks_aqualog_default_aquarium_id_data', array( $this, 'filter_index_iworks_aqualog_default_aquarium_data' ), 10, 3 );
+	}
+
+	public function filter_index_iworks_aqualog_default_aquarium_data( $data, $option_name, $default ) {
+		$args = array(
+			'post_type' => $this->posttypes_names[ $this->posttype_name ],
+			'posts_per_page' => -1,
+		);
+		$wp_query = new WP_Query( $args );
+		while ( $wp_query->have_posts() ) {
+			$wp_query->the_post();
+			$data[ get_the_ID() ] = get_the_title();
+		}
+		wp_reset_postdata();
+		// TODO: Implement filter logic
+		return $data;
+	}
+
+	public function post_type_admin_enqueue_assets() {
+		if ( !function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+		$screen = get_current_screen();
+		if ( $screen && $this->posttypes_names[ $this->posttype_name ] === $screen->post_type ) {
+			$this->admin_enqueue_assets();
+		}
 	}
 
 	/**
@@ -89,16 +120,151 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 						'name'  => 'width',
 						'type'  => 'number',
 						'label' => esc_html__( 'Width', 'aqualog' ),
+						'sufix' => 'cm',
 					),
 					array(
 						'name'  => 'height',
 						'type'  => 'number',
 						'label' => esc_html__( 'Height', 'aqualog' ),
+						'sufix' => 'cm',
 					),
 					array(
 						'name'  => 'length',
 						'type'  => 'number',
 						'label' => esc_html__( 'Length', 'aqualog' ),
+						'sufix' => 'cm',
+					),
+					'capacity' => array(
+						'name'  => 'capacity',
+						'type'  => 'number',
+						'label' => esc_html__( 'Capacity', 'aqualog' ),
+						'sufix' => 'L',
+					),
+					'water_volume' => array(
+						'name'  => 'water_volume',
+						'type'  => 'number',
+						'label' => esc_html__( 'Water Volume', 'aqualog' ),
+						'sufix' => 'L',
+					),
+				),
+			),
+			'aquarium-data' => array(
+				'title'  => __( 'Data', 'aqualog' ),
+				'fields' => array(
+					array(
+						'name'  => 'start_date',
+						'type'  => 'date',
+						'label' => esc_html__( 'Start Date', 'aqualog' ),
+					),
+				),
+			),
+			'aquarium-chemistry' => array(
+				'title'  => __( 'Chemistry', 'aqualog' ),
+				'fields' => array(
+					array(
+						'name'  => 'check_co2',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check CO₂', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_ph',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check pH', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_gh',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check GH', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_kh',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check KH', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_no3',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Nitrate (NO₃)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_po4',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Phosphate (PO₄)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_k',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Potassium (K)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_fe',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Iron (Fe)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_ca',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Calcium (Ca)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_mg',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Magnesium (Mg)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_nh3',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Ammonia (NH₃)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_no2',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Nitrite (NO₂)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_cl',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Chlorine (Cl)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_cu',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Copper (Cu)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_zn',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Zinc (Zn)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_mn',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Manganese (Mn)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_mo',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Molybdenum (Mo)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_zn',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Zinc (Zn)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_b',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Boron (B)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_o2',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Oxygen (O₂)', 'aqualog' ),
+					),
+					array(
+						'name'  => 'check_tds',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Total Dissolved Solids (TDS)', 'aqualog' ),
 					),
 				),
 			),
@@ -243,6 +409,45 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			),
 		);
 		return $data;
+	}
+
+	/**
+	 * Add custom columns to aquarium post list.
+	 *
+	 * Adds capacity column to the aquarium post type list.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @param array $columns The existing columns array.
+	 * @return array Modified columns array with capacity column.
+	 */
+	public function filter_add_menu_order_column( $columns ) {
+		$columns['capacity'] = __( 'Capacity', 'aqualog' );
+		return $columns;
+	}
+
+	/**
+	 * Display custom column values in aquarium post list.
+	 *
+	 * Handles display of capacity and menu order columns.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @param string $column The column name.
+	 * @param int    $post_id The post ID.
+	 * @return void
+	 */
+	public function action_add_menu_order_value( $column, $post_id ) {
+		switch ( $column ) {
+			case 'capacity':
+				$capacity = get_post_meta( $post_id, '_iw_aquarium-size_capacity', true );
+				if ( $capacity ) {
+					echo esc_html( $capacity ) . ' ' . esc_html__( 'L', 'aqualog' );
+				} else {
+					echo '&mdash;';
+				}
+				break;
+		}
 	}
 
 	/**

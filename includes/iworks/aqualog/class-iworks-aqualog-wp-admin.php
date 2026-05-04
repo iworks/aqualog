@@ -49,7 +49,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->capability = apply_filters( 'iworks_aqualog_capability', $this->capability );
 		/**
 		 * WordPress Hooks
 		 */
@@ -59,10 +58,70 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		add_action( 'admin_notices', array( $this, 'display_admin_dashboard_message' ) );
 		add_action( 'wp_ajax_iworks_aqualog_dismiss_message', array( $this, 'ajax_dismiss_dashboard_message' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
+		add_action( 'init', array( $this, 'action_init' ) );
 		/**
 		 * iWorks Options Hooks
 		 */
 		add_filter( 'aqualog/etc/config/metaboxes', array( $this, 'filter_iworks_options_add_meta_boxes' ) );
+		/**
+		 * Load post types from the posttypes directory
+		 */
+		$admin_classes_dir = $this->includes_directory . '/wp-admin/';
+		/**
+		 * Iterate through all PHP files in the posttypes directory
+		 */
+		foreach ( glob( $admin_classes_dir . 'class*.php' ) as $filename_with_path ) {
+			/**
+			 * Get the base filename
+			 */
+			$filename = basename( $filename_with_path );
+			/**
+			 * Validate the filename format
+			 * Only process files that match the expected pattern
+			 */
+			if ( ! preg_match( '/^class-iworks-aqualog-wp-admin-([a-z]+).php$/', $filename, $matches ) ) {
+				continue;
+			}
+			/**
+			 * Extract the post type name from the filename
+			 */
+			$admin_name = $matches[1];
+			/**
+			 * Create the filter name for this post type
+			 */
+			$filter = sprintf(
+				'aqualog/load/wp-admin/%s',
+				$admin_name
+			);
+			/**
+			 * Check if this admin should be loaded
+			 * Only load if the filter returns true
+			 */
+			if ( apply_filters( $filter, false ) ) {
+				/**
+				 * Include the admin class file
+				 */
+				include_once $admin_classes_dir . $filename;
+
+				/**
+				 * Generate the class name
+				 */
+				$class_name = sprintf( 'iworks_aqualog_wp_admin_%s', $admin_name );
+
+				/**
+				 * Initialize the post type class
+				 */
+				do_action( 'aqualog/register_objects', $admin_name, 'wp-admin', new $class_name() );
+			}
+		}
+	} // Added missing closing brace here
+
+	public function action_init() {
+		/**
+		 * settings
+		 */
+		$this->set_current_aquarium_id();
+		
 	}
 
 	/**
@@ -169,7 +228,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		wp_register_script(
 			$name,
 			plugins_url( $file, $this->plugin_file_path ),
-			array(),
+			array('jquery'),
 			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) ),
 			array(
 				'in_footer' => true,
@@ -177,7 +236,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			)
 		);
 		$file = 'assets/styles/' . $this->dir . '-admin' . $this->dev . '.css';
-		wp_enqueue_style(
+		wp_register_style(
 			$name,
 			plugins_url( $file, $this->plugin_file_path ),
 			array(),
@@ -280,9 +339,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		if ( $dismissed ) {
 			return;
 		}
-
-		// Enqueue the JavaScript for dismissal functionality
-		wp_enqueue_script( 'jquery' );
 		?>
 		<div id="iworks-aqualog-dashboard-message" class="notice notice-info is-dismissible">
 			<h3><?php esc_html_e( 'Welcome to AquaLog!', 'aqualog' ); ?></h3>
@@ -361,21 +417,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	}
 
 	/**
-	 * Enqueue dashboard styles.
-	 *
-	 * Loads the CSS styles for the dashboard page.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 * @return void
-	 */
-	public function enqueue_assets() {
-		$name = $this->dir . '-admin';
-		wp_enqueue_style( $name );
-		wp_enqueue_script( $name );
-	}
-
-	/**
 	 * Get base64 encoded SVG icon.
 	 *
 	 * Reads the SVG icon file and returns it as a base64 encoded data URI.
@@ -421,39 +462,56 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			$this->get_base64_svg_icon(),
 			25
 		);
-		add_action( 'load-' . $slug, array( $this, 'enqueue_assets' ) );
+		add_action( 'load-' . $slug, array( $this, 'admin_enqueue_assets' ) );
 
-		// Dashboard submenu (same as main menu)
-		$slug = add_submenu_page(
-			$this->wp_admin_slug,
-			__( 'Dashboard', 'aqualog' ),
-			__( 'Dashboard', 'aqualog' ),
-			$this->capability,
-			$this->wp_admin_slug,
-			array( $this, 'render_dashboard_page' )
+		$submenus = array(
+			array(
+				'title' => __( 'Dashboard', 'aqualog' ),
+				'slug' => $this->wp_admin_slug,
+				'callback' => array( $this, 'render_dashboard_page' ),
+			),
+			array(
+				'title' => __( 'Chemistry', 'aqualog' ),
+				'slug' => 'aqualog-chemistry',
+				'callback' => array( $this, 'render_chemistry_page' ),
+				'filter' => 'aqualog/load/wp-admin/chemistry',
+			),
+			array(
+				'title' => __( 'Maintenance', 'aqualog' ),
+				'slug' => 'aqualog-maintenance',
+				'callback' => array( $this, 'render_maintenance_page' ),
+			),
+			array(
+				'title' => __( 'Notes', 'aqualog' ),
+				'slug' => 'edit.php?post_type=iw_note',
+				'callback' => null,
+			),
+			array(
+				'title' => __( 'Aquariums', 'aqualog' ),
+				'slug' => 'edit.php?post_type=iw_aquarium',
+				'callback' => null,
+			),
+			array(
+				'title' => __( 'Help', 'aqualog' ),
+				'slug' => 'aqualog-help',
+				'callback' => array( $this, 'render_help_page' ),
+			),
 		);
-		add_action( 'load-' . $slug, array( $this, 'enqueue_assets' ) );
+		foreach ( $submenus as $submenu ) {
+			if ( isset( $submenu['filter'] ) && ! apply_filters( $submenu['filter'], false ) ) {
+				continue;
+			}
+			$slug = add_submenu_page(
+				$this->wp_admin_slug,
+				$submenu['title'],
+				$submenu['title'],
+				$this->capability,
+				$submenu['slug'],
+				$submenu['callback']
+			);
+			add_action( 'load-' . $slug, array( $this, 'admin_enqueue_assets' ) );
+		}
 
-		// Aquariums submenu
-		$slug = add_submenu_page(
-			$this->wp_admin_slug,
-			__( 'Aquariums', 'aqualog' ),
-			__( 'Aquariums', 'aqualog' ),
-			$this->capability,
-			'edit.php?post_type=iw_aquarium'
-		);
-		add_action( 'load-' . $slug, array( $this, 'enqueue_assets' ) );
-
-		// Help submenu
-		$slug = add_submenu_page(
-			$this->wp_admin_slug,
-			__( 'Help & Support', 'aqualog' ),
-			__( 'Help', 'aqualog' ),
-			$this->capability,
-			'aqualog-help',
-			array( $this, 'render_help_page' )
-		);
-		add_action( 'load-' . $slug, array( $this, 'enqueue_assets' ) );
 	}
 
 	/**
@@ -466,65 +524,11 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_dashboard_page() {
+		$file = $this->get_template_file( 'dashboard', 'pages' );
+		if ( $file ) {
+			load_template( $file );
+		}
 		?>
-		<div class="wrap">
-			<?php $this->html_title( __( 'AquaLog Dashboard', 'aqualog' ) ); ?>
-			
-			<div class="aqualog-dashboard-grid">
-				<!-- Statistics Cards -->
-				<div class="aqualog-stats-grid">
-					<?php $this->render_statistic_card( 'aquariums', __( 'Total Aquariums', 'aqualog' ), 'dashicons-water' ); ?>
-					<?php $this->render_statistic_card( 'water-entries', __( 'Water Entries', 'aqualog' ), 'dashicons-chart-line' ); ?>
-					<?php $this->render_statistic_card( 'ph-readings', __( 'pH Readings', 'aqualog' ), 'dashicons-clipboard' ); ?>
-					<?php $this->render_statistic_card( 'maintenance', __( 'Maintenance Tasks', 'aqualog' ), 'dashicons-hammer' ); ?>
-				</div>
-
-				<!-- Recent Activity -->
-				<div class="aqualog-activity-section">
-					<div class="aqualog-card">
-						<h2><?php esc_html_e( 'Recent Activity', 'aqualog' ); ?></h2>
-						<div class="aqualog-activity-list">
-							<?php $this->render_recent_activity(); ?>
-						</div>
-					</div>
-				</div>
-
-				<!-- Quick Actions -->
-				<div class="aqualog-quick-actions-section">
-					<div class="aqualog-card">
-						<h2><?php esc_html_e( 'Quick Actions', 'aqualog' ); ?></h2>
-						<div class="aqualog-actions-grid">
-							<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=iw_aquarium' ) ); ?>" class="aqualog-action-card">
-								<span class="dashicons dashicons-plus-alt"></span>
-								<span><?php esc_html_e( 'Add Aquarium', 'aqualog' ); ?></span>
-							</a>
-							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=iw_aquarium' ) ); ?>" class="aqualog-action-card">
-								<span class="dashicons dashicons-list-view"></span>
-								<span><?php esc_html_e( 'View All', 'aqualog' ); ?></span>
-							</a>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=aqualog-settings' ) ); ?>" class="aqualog-action-card">
-								<span class="dashicons dashicons-admin-settings"></span>
-								<span><?php esc_html_e( 'Settings', 'aqualog' ); ?></span>
-							</a>
-							<a href="<?php echo esc_url( 'https://wordpress.org/plugins/aqualog/' ); ?>" target="_blank" class="aqualog-action-card">
-								<span class="dashicons dashicons-external"></span>
-								<span><?php esc_html_e( 'Documentation', 'aqualog' ); ?></span>
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<!-- Water Quality Overview -->
-				<div class="aqualog-water-quality-section">
-					<div class="aqualog-card">
-						<h2><?php esc_html_e( 'Water Quality Overview', 'aqualog' ); ?></h2>
-						<div class="aqualog-water-stats">
-							<?php $this->render_water_quality_stats(); ?>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<?php
 	}
 
@@ -579,47 +583,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		}
 	}
 
-	/**
-	 * Render recent activity.
-	 *
-	 * Displays recent activity items on the dashboard.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 * @return void
-	 */
-	private function render_recent_activity() {
-		// Get recent aquarium posts
-		$recent_posts = get_posts( array(
-			'post_type'      => 'iw_aquarium',
-			'posts_per_page' => 5,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		) );
-
-		if ( empty( $recent_posts ) ) {
-			echo '<p>' . esc_html__( 'No recent activity found.', 'aqualog' ) . '</p>';
-			return;
-		}
-
-		foreach ( $recent_posts as $post ) {
-			?>
-			<div class="aqualog-activity-item">
-				<strong><?php echo esc_html( get_the_title( $post->ID ) ); ?></strong>
-				<br>
-				<span class="aqualog-activity-meta">
-					<?php 
-					printf(
-						esc_html__( 'Created on %s', 'aqualog' ),
-						get_the_date( get_option( 'date_format' ), $post->ID )
-					);
-					?>
-				</span>
-			</div>
-			<?php
-		}
-	}
-
+	
 	/**
 	 * Render water quality stats.
 	 *
@@ -722,4 +686,38 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		</div>
 		<?php
 	}
+
+	public function render_chemistry_page() {
+		echo '<div class="wrap">';
+		$this->current_aquarium();
+		$this->html_title( __( 'Chemistry', 'aqualog' ) );
+		if ( empty( $this->current_aquarium_id ) ) {
+			echo '<p>' . esc_html__( 'Please select an aquarium to view chemistry data.', 'aqualog' ) . '</p>';
+		} else {
+			do_action( 'aqualog/wp-admin/chemistry_page' );
+		}
+		echo '</div>';
+	}
+
+	private function current_aquarium() {
+		$title = esc_html__( 'No aquarium selected', 'aqualog' );
+		if ( !empty( $this->current_aquarium_id ) ) {
+			$aquarium = get_post( $this->current_aquarium_id );
+			if ( $aquarium ) {
+				$title = sprintf(
+					'<a href="%s">%s</a>',
+					esc_url( get_edit_post_link( $this->current_aquarium_id ) ),
+					esc_html( $aquarium->post_title )
+				);
+			}
+		}
+		?>
+		<div class="aqualog-current-aquarium">
+			<?php esc_html_e( 'Current Aquarium:', 'aqualog' ); ?>
+			<?php echo $title; ?>
+		</div>
+
+		<?php
+	}
+
 }

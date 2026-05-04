@@ -208,6 +208,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		if ( method_exists( $this, $method ) ) {
 			$this->$method( $post, $one );
 		} else {
+			$sufix = isset( $one['sufix'] ) ? sprintf( ' <span class="sufix">%s</span>', $one['sufix'] ) : '';
 			echo '<p>';
 			echo '<label>';
 			if ( isset( $one['label'] ) ) {
@@ -222,11 +223,12 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 					break;
 			}
 			printf(
-				'<input type="%s" value="%s" name="%s" class="%s" />',
+				'<input type="%s" value="%s" name="%s" class="%s" />%s',
 				esc_attr( $one['type'] ),
 				esc_attr( $one['meta']['value'] ),
 				esc_attr( $one['meta']['key'] ),
-				esc_attr( implode( ' ', $classes ) )
+				esc_attr( implode( ' ', $classes ) ),
+				$sufix
 			);
 			echo '</label>';
 			if ( isset( $one['description'] ) ) {

@@ -88,16 +88,36 @@ class iworks_aqualog extends iworks_aqualog_base {
 			new iworks_aqualog_db();
 		}
 		/**
+		 * register objects filter
+		 */
+		add_action( 'aqualog/register_objects', array( $this, 'register_objects' ),10, 3 );
+		/**
 		 * is active?
 		 */
 		add_filter( 'aqualog/is_active', '__return_true' );
 	}
 
 	/**
+	 * Register plugin objects.
+	 *
+	 * @since 1.0.0
+	 * @param array $objects The objects array.
+	 * @param string $type The type of objects to register.
+	 * @param string $name The name of the objects to register.
+	 * @return array The modified objects array.
+	 */
+	public function register_objects( $name, $group, $object ) {
+		if ( ! isset( $objects[ $group ] ) ) {
+			$objects[ $group ] = array();
+		}
+		return $objects[ $group ][ $name ] = $object;
+	}
+
+	/**
 	 * Initialize plugin settings and assets.
-	 *
+	*
 	 * Handles the initialization of plugin settings and enqueues frontend assets.
-	 *
+	*
 	 * @since 1.0.0
 	 * @return void
 	 */

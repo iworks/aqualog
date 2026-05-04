@@ -83,7 +83,8 @@ module.exports = function(grunt) {
 
 		// SASS files to process. Resulting CSS files will be minified as well.
 		css_files_compile: {
-			'assets/styles/admin/dashboard.css': ['assets/sass/admin/dashboard.scss']
+			'assets/styles/admin/commons.css': ['assets/sass/admin/commons.scss'],
+			'assets/styles/admin/dashboard.css': ['assets/sass/admin/dashboard.scss'],
 		},
 		css_files_concat: {
 			'assets/styles/<%= pkg.name %>-admin.css': ['assets/styles/admin/*.css']
@@ -365,7 +366,6 @@ module.exports = function(grunt) {
 						'report-msgid-bugs-to': 'http://iworks.pl',
 						'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
 					},
-					exclude: ['node_modules', '.git', '.sass-cache', 'release'],
 					type: 'wp-plugin',
 					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
 					updatePoFiles: true // Whether to update PO files in the same directory as the POT file.
@@ -501,7 +501,7 @@ module.exports = function(grunt) {
 			'copy:wporg',
 			'replace',
 			'compress:wporg'
-		],
+		]
 	);
 	grunt.registerTask(
 		'build:github',

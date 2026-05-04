@@ -41,15 +41,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 	 */
 	private array $table_names = array(
 		'aqualog_log',
-		'aqualog_nonces',
-		'aqualog_question_answers',
-		'aqualog_questionmeta',
-		'aqualog_questions',
-		'aqualog_response_answers',
-		'aqualog_responses',
-		'aqualog_sites',
-		'aqualog_surveymeta',
-		'aqualog_surveys',
+		'aqualog_chemistry',
 	);
 	/**
 	 * Class constructor.
@@ -124,6 +116,33 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 			foreach ( $aquarium_types as $aquarium_type ) {
 				wp_insert_term( $aquarium_type, 'iw_aquarium_group' );
 			}
+			update_option( $this->_db_version, $version_to_update );
+		}
+		/**
+		 * chemistry table
+		 */
+		$version_to_update = 2;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'aqualog_chemistry';
+			
+			$charset_collate = $wpdb->get_charset_collate();
+			
+			$sql = "CREATE TABLE $table_name (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				aquarium_id bigint(20) unsigned NOT NULL,
+				date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+				param varchar(100) NOT NULL DEFAULT '',
+				value text NOT NULL,
+				PRIMARY KEY  (id),
+				KEY aquarium_id (aquarium_id),
+				KEY param (param),
+				KEY date (date)
+			) $charset_collate;";
+			
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			dbDelta( $sql );
+			
 			update_option( $this->_db_version, $version_to_update );
 		}
 	}

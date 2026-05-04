@@ -159,6 +159,10 @@ class iworks_aqualog_base {
 	 */
 	protected string $wp_admin_slug = 'aqualog-dashboard';
 
+
+	protected ?int $current_aquarium_id = null;
+
+
 	/**
 	 * Constructor for the base class.
 	 *
@@ -432,8 +436,8 @@ class iworks_aqualog_base {
 	 */
 	public function get_stub_data() {
 		return array(
-			'published' => '2025-05-21',
-			'version'   => '2.0.0',
+			'published' => '2026-05-21',
+			'version'   => 'PLUGIN_VERSION',
 			'github'    => 'https://github.com/iworks/aqualog',
 		);
 	}
@@ -491,5 +495,48 @@ class iworks_aqualog_base {
 				SimpleLogger()->notice( $message, $data );
 				break;
 		}
+	}
+	/**
+	 * Enqueue dashboard styles.
+	 *
+	 * Loads the CSS styles for the dashboard page.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @return void
+	 */
+	public function admin_enqueue_assets() {
+		$name = $this->dir . '-admin';
+		wp_enqueue_style( $name );
+		wp_enqueue_script( $name );
+	}
+
+	protected function set_current_aquarium_id() {
+		$aquarium_id = intval( get_query_var( 'aquarium_id' ) );
+		if ( $aquarium_id ) {
+			$this->current_aquarium_id = $aquarium_id;
+			return;
+		}
+		$this->check_option_object();
+		$default_aquarium_id = $this->options->get_option( 'default_aquarium_id' );
+		if ( ! empty( $default_aquarium_id ) ) {
+			$this->current_aquarium_id = $default_aquarium_id;
+			return;
+		}
+	}
+
+	protected function get_template_file( $file, $group = '' ) {
+		$file = sprintf(
+				'%s/assets/templates/%s%s%s.php',
+				$this->plugin_file_dir,
+				$group,
+				'' === $group ? '' : '/',
+				sanitize_title( $file )
+			);
+		$file = realpath( $file );
+		if ( is_file( $file ) ) {
+			return $file;
+		}
+		return false;
 	}
 }

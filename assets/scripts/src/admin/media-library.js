@@ -1,4 +1,4 @@
-/* global jQuery, wp */
+/* global jQuery, wp, window, document */
 jQuery(function($) {
 	// Set all variables to be used in scope
 	var frame;

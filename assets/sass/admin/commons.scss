@@ -1,0 +1,16 @@
+.aqualog {
+  &-current {
+    &-aquarium {
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-top: 0;
+    }
+  }
+}
+
+.wrap {
+  &:has(.aqualog-current-aquarium) {
+    margin-top: 0;
+  }
+}
