@@ -10,10 +10,59 @@
         padding: var(--aqualog-settings-padding-s);
         border: 1px solid var(--aqualog-settings-border);
         border-radius: var(--aqualog-settings-radius);
+        &:hover {
+            cursor: pointer;
+        }
         &-header {
             display: grid;
-            grid-template-columns: 24px auto 24px;
+            grid-template-columns: 24px auto;
             align-items: center;
         }
+        h3 {
+            margin: 0;
+            font: {
+                size: 1em;
+                weight: 400;
+            }
+        }
+        &-body {
+            &-scale {
+                &-char {
+                    background-color: var(--aqualog-settings-border);
+                    display: block;
+                    height: 10px;
+                    width: 100%;
+                    position: relative;
+                    margin: 1em 0;
+                    .scale-item {
+                        position: absolute;
+                        top: 0;
+                        height: 100%;
+                        &--danger {
+                            background-color: #dc3545;
+                        }
+                        &--safety {
+                            background-color: #ffc107;
+                        }
+                        &--ideal {
+                            background-color: #28a745;
+                        }
+                    }
+                }
+                &-legend {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+        }
+        &.param-importance-default {
+            .aqualog-chemistry-item-header {
+                display: block;
+            }
+
+        }
+    }
+    .dashicons {
+        color: var(--aqualog-settings-border);
     }
 }

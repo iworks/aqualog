@@ -71,6 +71,8 @@ if ( ! class_exists( 'iworks_options' ) ) {
 	require_once $aqualog_vendor . '/iworks/options/options.php';
 }
 
+require_once $aqualog_base . '/includes/template-tags.php';
+
 /**
  * Initialize and get plugin options
  * This function creates and returns the options object

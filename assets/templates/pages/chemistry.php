@@ -9,7 +9,7 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<div class="wrap">
+<div class="wrap aqualog-chemistry">
 	<?php do_action( 'aqualog/wp-admin/current-aquarium-bar' ); ?>
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Chemistry', 'aqualog' ); ?></h1>
 	<?php 

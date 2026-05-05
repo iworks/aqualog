@@ -47,14 +47,13 @@ switch( $args['importance'] ) {
         $icon1 = 'dashicons dashicons-info-outline';
         break;
 }
-$icon2 = 'dashicons dashicons-warning';
-
 ?>
 <div class="<?php echo implode( ' ', $classes ); ?>">
     <div class="aqualog-chemistry-item-header">
+        <?php if ( ! empty( $icon1 ) ) { ?>
         <span class="<?php echo esc_attr( $icon1 ); ?>"></span>
-        <h3><?php echo esc_html( $args['name'] ); ?></h3>
-        <span class="<?php echo esc_attr( $icon2 ); ?>"></span>
+        <?php } ?>
+        <h3><?php echo esc_html( $args['description'] ); ?> (<?php echo esc_html( $args['name'] ); ?>)</h3>
     </div>
     <div class="aqualog-chemistry-item-body">
         <p class="param-value"><?php echo esc_html( $args['value'] ); ?></p>
@@ -65,10 +64,10 @@ $icon2 = 'dashicons dashicons-warning';
             <?php } ?>
         </p>
         <div class="aqualog-chemistry-item-body-scale">
-            <div class="aqualog-chemistry-item-body-scale-char">
-                <span class="scale-item--danger"></span>
-                <span class="scale-item--save"></span>
-                <span class="scale-item--ideal"></span>
+            <div class="aqualog-chemistry-item-body-scale-char" data-min="<?php echo esc_attr( $args['range'][0] ); ?>" data-max="<?php echo esc_attr( $args['range'][1] ); ?>">
+                <?php echo aqualog_chemistry_scale_item( $args, 'danger' ); ?>
+                <?php echo aqualog_chemistry_scale_item( $args, 'safety' ); ?>
+                <?php echo aqualog_chemistry_scale_item( $args, 'ideal' ); ?>
             </div>
             <div class="aqualog-chemistry-item-body-scale-legend">
                 <span class="legend-item--min"><?php echo esc_html( $args['range'][0] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
