@@ -37,21 +37,26 @@ $classes = array(
 if ( empty( $args['last_test_date'] ) ) {
     $classes[] = 'no-last-test-date';
 }
-$icon1 = '';
+$tooltip = $icon = '';
 switch( $args['importance'] ) {
     case 'critical':
+        $icon = 'dashicons dashicons-info';
+        $tooltip = __( 'Critical parameter - requires close monitoring', 'aqualog' );
+        break;
     case 'important':
-        $icon1 = 'dashicons dashicons-info';
+        $icon = 'dashicons dashicons-info';
+        $tooltip = __( 'Important parameter - monitor regularly', 'aqualog' );
         break;
     case 'recommended':
-        $icon1 = 'dashicons dashicons-info-outline';
+        $icon = 'dashicons dashicons-info-outline';
+        $tooltip = __( 'Recommended parameter - good to track', 'aqualog' );
         break;
 }
 ?>
-<div class="<?php echo implode( ' ', $classes ); ?>">
+<div class="<?php echo implode( ' ', $classes ); ?>" data-key="<?php echo esc_attr( $args['key'] ); ?>">
     <div class="aqualog-chemistry-item-header">
-        <?php if ( ! empty( $icon1 ) ) { ?>
-        <span class="<?php echo esc_attr( $icon1 ); ?>"></span>
+        <?php if ( ! empty( $icon ) ) { ?>
+        <span class="<?php echo esc_attr( $icon ); ?>" title="<?php echo esc_attr( $tooltip ); ?>"></span>
         <?php } ?>
         <h3><?php echo esc_html( $args['description'] ); ?> (<?php echo esc_html( $args['name'] ); ?>)</h3>
     </div>
@@ -64,11 +69,11 @@ switch( $args['importance'] ) {
             <?php } ?>
         </p>
         <div class="aqualog-chemistry-item-body-scale">
-            <div class="aqualog-chemistry-item-body-scale-char" data-min="<?php echo esc_attr( $args['range'][0] ); ?>" data-max="<?php echo esc_attr( $args['range'][1] ); ?>">
-                <?php echo aqualog_chemistry_scale_item( $args, 'danger' ); ?>
-                <?php echo aqualog_chemistry_scale_item( $args, 'safety' ); ?>
-                <?php echo aqualog_chemistry_scale_item( $args, 'ideal' ); ?>
-            </div>
+                <?php 
+
+aqualog_get_scale($args);
+?>
+
             <div class="aqualog-chemistry-item-body-scale-legend">
                 <span class="legend-item--min"><?php echo esc_html( $args['range'][0] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
                 <span class="legend-item--max"><?php echo esc_html( $args['range'][1] ); ?> <?php  echo esc_html( $args['unit'] ); ?></span>

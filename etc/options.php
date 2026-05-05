@@ -160,6 +160,7 @@ function iworks_aqualog_options() {
 			'safety'      => array( 0, 0.25 ),
 			'ideal'       => array( 0, 0 ),
 			'frequency'   => 'daily',
+			'importance'  => 'critical',
 		),
 		'nh3' => array(
 			'name'        => 'NH₃',
@@ -170,6 +171,7 @@ function iworks_aqualog_options() {
 			'safety'      => array( 0, 0.02 ),
 			'ideal'       => array( 0, 0 ),
 			'frequency'   => 'daily',
+			'importance'  => 'critical',
 		),
 		'po4' => array(
 			'name'        => 'PO₄',
@@ -213,6 +215,7 @@ function iworks_aqualog_options() {
 			'safety'      => array( 2, 40 ),
 			'ideal'       => array( 5, 20 ),
 			'frequency'   => 'monthly',
+			'importance'  => 'recommended',
 		),
 		'k' => array(
 			'name'        => 'K',
@@ -234,6 +237,7 @@ function iworks_aqualog_options() {
 			'safety'      => array( 50, 350 ),
 			'ideal'       => array( 100, 250 ),
 			'frequency'   => 'monthly',
+			'importance'  => 'recommended',
 		),
 		'o2' => array(
 			'name'        => 'O₂',

@@ -12,19 +12,15 @@ defined( 'ABSPATH' ) || exit;
 <div class="wrap aqualog-chemistry">
 	<?php do_action( 'aqualog/wp-admin/current-aquarium-bar' ); ?>
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Chemistry', 'aqualog' ); ?></h1>
-	<?php 
-	if ( empty( $args['aquarium_id'] ) ) {
-		load_template( $args['messages']['create-aquarium-first'] ); 
-	} else {
-		if ( empty( $args['latest_measurements'] ) ) {
-			load_template( $args['messages']['chemistry-no-measurements'] ); 
-		}
-	
+<?php 
+if ( empty( $args['aquarium_id'] ) ) {
+	load_template( $args['messages']['create-aquarium-first'] ); 
+} else {
+	if ( empty( $args['latest_measurements'] ) ) {
+		load_template( $args['messages']['chemistry-no-measurements'] ); 
 	}
-
-//d($args['params']);
-	
-	if ( false) {
+}
+if ( false) {
 	?>
 	<!-- Quick Actions -->
 	<div class="aqualog-quick-actions-section">
@@ -38,17 +34,23 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 		</div>
 	</div>
-	<?php } ?>
-
+<?php } ?>
 	<div class="aqualog-chemistry-container">
 		<?php foreach ( $args['params'] as $param_key => $param ) {
 			load_template( dirname(__FILE__, 2) . '/elements/chemistry-param.php', false, $param );
 			?>
 		<?php } ?>
 	</div>
+</div>
+
 <script>
 jQuery(document).ready(function($) {
-	window.aqualog.chemistry.params = <?php echo wp_json_encode($args['params']); ?>;
+   window.aqualog.chemistry.params = <?php echo wp_json_encode($args['params']); ?>;
 });
 </script>
-</div>
+
+<?php
+// Load the chemistry form template
+load_template( dirname(__FILE__, 2) . '/elements/chemistry-form.php', false, $args );
+
+

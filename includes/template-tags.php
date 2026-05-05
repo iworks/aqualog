@@ -33,14 +33,45 @@ function aqualog_chemistry_scale_item( $one, $range ) {
 	$max = $one['range'][1];
 	$length = ( $max - $min ) * 1000;
 	$start = ( $one[$range][0] - $min ) * 100000 / $length;
-	$end = ( $one[$range][1] - $min ) * 100000 / $length - $start;
-	
-	return sprintf(
-		'<span class="scale-item scale-item--%s" style="left: %f%%;width: %f%%;" data-min="%f" data-max="%f"></span>',
-		esc_attr( $range ),
-		$start,
-		$end,
-		$one[$range][0],
-		$one[$range][1]
+	$end = ( $one[$range][1] - $min ) * 100000 / $length ;
+	return array( $start, $end );
+}
+
+function aqualog_get_scale($args) {
+	$danger = aqualog_chemistry_scale_item( $args, 'danger' );
+	$safety = aqualog_chemistry_scale_item( $args, 'safety' );
+	$ideal = aqualog_chemistry_scale_item( $args, 'ideal' );
+
+	$range_min = esc_attr( $args['range'][0] );
+	$range_max = esc_attr( $args['range'][1] );
+	$range_step = esc_attr( ( $args['range'][1] - $args['range'][0] ) / 100 );
+
+	$content = sprintf('<div class="aqualog-chemistry-item-body-scale-char"
+		data-range-min="%s"
+		data-range-max="%s"
+		data-range-step="%s"',
+		$range_min,
+		$range_max,
+		$range_step
 	);
+	$content .= ' ';
+	$content .= sprintf(
+		'style="background: linear-gradient(
+			to right,
+			var(--aqualog-settings-danger) %1$f%% %2$f%%,
+			var(--aqualog-settings-safety) %2$f%% %3$f%%,
+			var(--aqualog-settings-ideal) %3$f%% %4$f%%,
+			var(--aqualog-settings-safety) %4$f%% %5$f%%,
+			var(--aqualog-settings-danger) %5$f%% %6$f%%
+		);"',
+		$danger[0],
+		$safety[0],
+		$ideal[0],
+		$ideal[1],
+		$safety[1],
+		$danger[1]
+	);
+	$content .= '></div>';
+
+	echo $content;
 }

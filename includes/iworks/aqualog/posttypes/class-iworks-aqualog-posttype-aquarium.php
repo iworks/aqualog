@@ -166,6 +166,11 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 				'title'  => __( 'Chemistry', 'aqualog' ),
 				'fields' => array(
 					array(
+						'name'  => 'check_temp',
+						'type'  => 'checkbox',
+						'label' => esc_html__( 'Check Temperature', 'aqualog' ),
+					),
+					array(
 						'name'  => 'check_co2',
 						'type'  => 'checkbox',
 						'label' => esc_html__( 'Check CO₂', 'aqualog' ),

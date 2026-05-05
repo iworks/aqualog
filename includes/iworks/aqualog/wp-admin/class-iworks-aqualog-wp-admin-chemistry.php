@@ -97,11 +97,40 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 						'key' => $key,
 						'last_test_date' => esc_html__( 'Never tested!', 'aqualog' ),
 						'frequency' => '',
+						'value' => '',
 					)
 				);
 			}
 		}
+		uasort($parameters, array( $this, 'sort_parameters' ));
 		return apply_filters( 'aqualog/chemistry/parameters', $parameters );
+	}
+
+	/**
+	 * Sort parameters by importance.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @param array $a First parameter.
+	 * @param array $b Second parameter.
+	 * @return int Comparison result.
+	 */
+	private function sort_parameters( $a, $b ) {
+		// Define importance order
+		$importance_order = array(
+			'critical' => 1,
+			'important' => 2,
+			'recommended' => 3,
+			'default' => 4,
+		);
+		
+		$importance_a = isset( $importance_order[ $a['importance'] ] ) ? $importance_order[ $a['importance'] ] : 5;
+		$importance_b = isset( $importance_order[ $b['importance'] ] ) ? $importance_order[ $b['importance'] ] : 5;
+		
+		if ( $importance_a === $importance_b ) {
+			return strcmp( $a['key'], $b['key'] );
+		}
+		return ( $importance_a < $importance_b ) ? -1 : 1;
 	}
 
 	/**

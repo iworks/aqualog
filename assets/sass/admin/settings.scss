@@ -1,12 +1,18 @@
 // AquaLog Settings Styles
 :root {
-    --aqualog-settings-bg: #fff;
-    --aqualog-settings-border: var(--wp-editor-canvas-background);
+	--aqualog-settings-bg: #fff;
+	--aqualog-settings-border: var(--wp-editor-canvas-background);
 
-    --aqualog-settings-padding-s: 10px;
-    --aqualog-settings-padding-m: 20px;
-    --aqualog-settings-padding-l: 30px;
+	--aqualog-settings-padding-s: 10px;
+	--aqualog-settings-padding-m: 20px;
+	--aqualog-settings-padding-l: 30px;
 
-    --aqualog-settings-radius: 4px;
-    --aqualog-settings-gap: 10px;
+	--aqualog-settings-radius: 4px;
+	--aqualog-settings-gap: 10px;
+
+
+	--aqualog-settings-danger: #dc3545;
+	--aqualog-settings-safety: #ffc107;
+	--aqualog-settings-ideal: #28a745;
+
 }

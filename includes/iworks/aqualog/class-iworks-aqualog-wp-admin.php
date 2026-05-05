@@ -240,12 +240,25 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * @since 1.1.0
 	 */
 	public function action_admin_enqueue_scripts_register_assets() {
+		//
+		$file = 'includes/iworks/options/assets/scripts/select2.min.js';
+		wp_register_script( 
+			'select2',
+			plugins_url( $file, $this->plugin_file_path ),
+			array('jquery'),
+			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+		// Register admin script
 		$name = $this->dir . '-admin';
 		$file = 'assets/scripts/' . $this->dir . '-admin' . $this->dev . '.js';
 		wp_register_script(
 			$name,
 			plugins_url( $file, $this->plugin_file_path ),
-			array('jquery'),
+			array('jquery', 'select2', 'wp-util', 'jquery-ui-slider'),
 			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) ),
 			array(
 				'in_footer' => true,
