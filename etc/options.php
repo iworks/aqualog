@@ -2,122 +2,66 @@
 /**
  * AquaLog Options Configuration
  *
- * This file contains the configuration options for the AquaLog.
+ * This file contains the configuration options for the AquaLog plugin.
  * It defines the structure of the plugin's options and settings pages.
  *
  * @package    iWorks
  * @subpackage AquaLog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
- * @copyright  2026-PLUGIN_TILL_YEAR Marcin Pietrzak
+ * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0
  * @version    1.0.0
+ * @since      1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get plugin options configuration
+ * Get plugin options configuration.
  *
  * Returns an array containing the configuration for the plugin's options pages
- * and settings.
+ * and settings, including main settings, chemistry parameters, and page structure.
  *
- * @return array Array of options configuration
  * @since 1.0.0
+ * @return array Array of options configuration.
  */
 function iworks_aqualog_options() {
-	/**
-	 * Initialize empty options array
-	 */
+	// Initialize empty options array
 	$options = array();
 
-	/**
-	 * Parent page placeholder (uncomment and set as needed)
-	 */
-	$parent = admin_url( add_query_arg( 'page', 'aqualog-dashboard', 'admin.php' ) );
-	$parent = add_query_arg( 'page', 'aqualog-dashboard', 'admin.php' );
+	// Set parent page for submenu items
 	$parent = 'aqualog-dashboard';
 
-	/**
-	 * Main settings configuration
-	 *
-	 * Defines the structure of the main options page including:
-	 * - Version number
-	 * - Page title
-	 * - Menu type
-	 * - Options array
-	 * - Metaboxes array
-	 * - Subpages array
-	 */
+	// Main settings configuration
+	// Defines the structure of the main options page including:
+	// - Version number
+	// - Page title
+	// - Menu type
+	// - Options array
+	// - Metaboxes array
+	// - Subpages array
 	$options['index'] = array(
-		/**
-		 * Current version of the options configuration
-		 */
+		// Current version of the options configuration
 		'version'    => '0.0',
 
-		/**
-		 * Title of the options page
-		 */
+		// Title of the options page
 		'page_title' => __( 'Settings', 'aqualog' ),
 
-/**
- * Menu type for the options page
- *
- * Possible values:
- * - 'options'      - Add as a top-level menu item (default)
- * - 'submenu'      - Add as a submenu item (requires 'parent' to be set)
- * - 'management'   - Add under Tools menu
- * - 'theme'        - Add under Appearance menu
- * - 'posts'        - Add under Posts menu
- * - 'pages'        - Add under Pages menu
- * - 'users'        - Add under Users menu (or Profile for single)
- * - 'plugins'      - Add under Plugins menu
- * - 'comments'     - Add under Comments menu
- * - 'dashboard'    - Add under Dashboard menu
- * - 'settings'     - Add under Settings menu
- * - 'media'        - Add under Media menu
- * - 'custom'       - Custom menu position (requires 'menu_slug' to be set)
- */
-'menu'       => 'submenu',
+		// Menu type for the options page
+		// Possible values: 'options', 'submenu', 'management', 'theme', 'posts',
+		// 'pages', 'users', 'plugins', 'comments', 'dashboard', 'settings',
+		// 'media', 'custom'
+		'menu'       => 'submenu',
 
-/**
- * Parent page for submenu items
- *
- * Required when 'menu' is set to 'submenu' or when nesting under another menu.
- * Can be one of the following:
- * - The file name of a standard WordPress admin page (e.g., 'edit.php' for Posts)
- * - The value of 'menu_slug' from another options page
- * - The plugin file if you want to nest under a plugin's main menu
- *
- * Common WordPress admin page values:
- * - 'index.php'                  - Dashboard
- * - 'edit.php'                   - Posts
- * - 'upload.php'                 - Media
- * - 'edit.php?post_type=page'    - Pages
- * - 'edit-comments.php'          - Comments
- * - 'themes.php'                 - Appearance
- * - 'plugins.php'                - Plugins
- * - 'users.php'                  - Users
- * - 'tools.php'                  - Tools
- * - 'options-general.php'        - Settings
- * - 'options-general.php?page=YOUR_PAGE' - Custom settings page
- *
- * Example for nesting under a plugin's main menu:
- * 'parent' => 'my-plugin-slug',
- */
-		'parent' => $parent,
+		// Parent page for submenu items
+		// Required when 'menu' is set to 'submenu'
+		'parent'     => $parent,
 
-		/**
-		 * Use tabs for options page
-		 *
-		 * possible values:
-		 * - true - use tabs
-		 * - false - options will be shown flat on one screen
-		 */
-		'use_tabs' => false,
+		// Use tabs for options page
+		// true - use tabs, false - options shown flat on one screen
+		'use_tabs'   => false,
 
-		/**
-		 * Array of options fields
-		 */
+		// Array of options fields
 		'options'    => apply_filters(
 			'aqualog/etc/config/options',
 			array(
@@ -141,169 +85,232 @@ function iworks_aqualog_options() {
 			)
 		),
 
-		/**
-		 * Array of metaboxes
-		 */
+		// Array of metaboxes
 		'metaboxes'  => apply_filters( 'aqualog/etc/config/metaboxes', array() ),
 
-		/**
-		 * Array of subpages
-		 */
+		// Array of subpages
 		'pages'      => apply_filters( 'aqualog/etc/config/pages', array() ),
+	);
 
-		'chemistry'  => array(
+	// Chemistry parameters configuration
+	// Defines all available water chemistry parameters with their properties
+	// including name, unit, description, range, ideal values, and testing frequency
+	$options['chemistry'] = array(
+		'temp' => array(
+			'name'        => 'Temperature',
+			'unit'        => '°C',
+			'description' => esc_html__( 'Water temperature', 'aqualog' ),
+			'range'       => array( 10, 40 ),
+			'danger'      => array( 15, 32 ),
+			'safety'      => array( 20, 28 ),
+			'ideal'       => array( 24, 26 ),
+			'frequency'   => 'daily',
+			'importance'  => 'important',
+		),
 		'ph' => array(
-			'name' => 'pH',
-			'unit' => '',
+			'name'        => 'pH',
+			'unit'        => 'pH',
 			'description' => esc_html__( 'Acidity/Alkalinity level', 'aqualog' ),
-			'range' => array( 0, 14 ),
-			'ideal' => array( 6.5, 7.5 ),
+			'range'       => array( 0, 14 ),
+			'danger'      => array( 5, 8 ),
+			'safety'      => array( 6.5, 7.5 ),
+			'ideal'       => array( 6, 7 ),
+			'frequency'   => 'daily',
+			'importance'  => 'critical',
 		),
 		'gh' => array(
-			'name' => 'GH',
-			'unit' => '°dH',
+			'name'        => 'GH',
+			'unit'        => '°dH',
 			'description' => esc_html__( 'General Hardness', 'aqualog' ),
-			'range' => array( 0, 30 ),
-			'ideal' => array( 4, 12 ),
+			'range'       => array( 0, 30 ),
+			'danger'      => array( 0, 20 ),
+			'safety'      => array( 2, 12 ),
+			'ideal'       => array( 3, 8 ),
+			'frequency'   => 'biweekly',
+			'importance'  => 'important',
 		),
 		'kh' => array(
-			'name' => 'KH',
-			'unit' => '°dH',
+			'name'        => 'KH',
+			'unit'        => '°dH',
 			'description' => esc_html__( 'Carbonate Hardness', 'aqualog' ),
-			'range' => array( 0, 20 ),
-			'ideal' => array( 3, 8 ),
+			'range'       => array( 0, 25 ),
+			'danger'      => array( 0, 15),
+			'safety'      => array( 1, 10 ),
+			'ideal'       => array( 3, 6 ),
+			'frequency'   => 'biweekly',
+			'importance'  => 'important',
 		),
 		'no3' => array(
-			'name' => 'NO₃',
-			'unit' => 'mg/L',
+			'name'        => 'NO₃',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Nitrate', 'aqualog' ),
-			'range' => array( 0, 200 ),
-			'ideal' => array( 5, 20 ),
+			'range'       => array( 0, 100 ),
+			'danger'      => array( 0, 60 ),
+			'safety'      => array( 5, 40 ),
+			'ideal'       => array( 10, 25 ),
+			'frequency'   => 'weekly',
+			'importance'  => 'important',
 		),
 		'no2' => array(
-			'name' => 'NO₂',
-			'unit' => 'mg/L',
+			'name'        => 'NO₂',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Nitrite', 'aqualog' ),
-			'range' => array( 0, 5 ),
-			'ideal' => array( 0, 0.1 ),
+			'range'       => array( 0, 2 ),
+			'danger'      => array( 0.25, 2 ),
+			'safety'      => array( 0, 0.25 ),
+			'ideal'       => array( 0, 0 ),
+			'frequency'   => 'daily',
 		),
 		'nh3' => array(
-			'name' => 'NH₃',
-			'unit' => 'mg/L',
+			'name'        => 'NH₃',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Ammonia', 'aqualog' ),
-			'range' => array( 0, 5 ),
-			'ideal' => array( 0, 0.02 ),
+			'range'       => array( 0, 2 ),
+			'danger'      => array( 0.02, 0.05 ),
+			'safety'      => array( 0, 0.02 ),
+			'ideal'       => array( 0, 0 ),
+			'frequency'   => 'daily',
 		),
 		'po4' => array(
-			'name' => 'PO₄',
-			'unit' => 'mg/L',
+			'name'        => 'PO₄',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Phosphate', 'aqualog' ),
-			'range' => array( 0, 10 ),
-			'ideal' => array( 0, 1 ),
+			'range'       => array( 0, 5 ),
+			'danger'      => array( 0, 5 ),
+			'safety'      => array( 0.1, 3 ),
+			'ideal'       => array( 0.5, 2 ),
+			'frequency'   => 'weekly',
+			'importance'  => 'important',
 		),
 		'fe' => array(
-			'name' => 'Fe',
-			'unit' => 'mg/L',
+			'name'        => 'Fe',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Iron', 'aqualog' ),
-			'range' => array( 0, 2 ),
-			'ideal' => array( 0.1, 0.5 ),
+			'range'       => array( 0, 1.5 ),
+			'danger'      => array( 0, 1.5 ),
+			'safety'      => array( 0.01, 0.5 ),
+			'ideal'       => array( 0.05, 0.2 ),
+			'frequency'   => 'weekly',
+			'importance'  => 'important',
 		),
 		'ca' => array(
-			'name' => 'Ca',
-			'unit' => 'mg/L',
+			'name'        => 'Ca',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Calcium', 'aqualog' ),
-			'range' => array( 0, 500 ),
-			'ideal' => array( 300, 450 ),
+			'range'       => array( 0, 200 ),
+			'danger'      => array( 0, 200 ),
+			'safety'      => array( 10, 100 ),
+			'ideal'       => array( 20, 60 ),
+			'frequency'   => 'monthly',
+			'importance'  => 'recommended',
 		),
 		'mg' => array(
-			'name' => 'Mg',
-			'unit' => 'mg/L',
+			'name'        => 'Mg',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Magnesium', 'aqualog' ),
-			'range' => array( 0, 2000 ),
-			'ideal' => array( 1200, 1500 ),
+			'range'       => array( 0, 100 ),
+			'danger'      => array( 0, 100 ),
+			'safety'      => array( 2, 40 ),
+			'ideal'       => array( 5, 20 ),
+			'frequency'   => 'monthly',
 		),
 		'k' => array(
-			'name' => 'K',
-			'unit' => 'mg/L',
+			'name'        => 'K',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Potassium', 'aqualog' ),
-			'range' => array( 0, 100 ),
-			'ideal' => array( 10, 30 ),
-		),
-		'temperature' => array(
-			'name' => 'Temperature',
-			'unit' => '°C',
-			'description' => esc_html__( 'Water Temperature', 'aqualog' ),
-			'range' => array( 0, 35 ),
-			'ideal' => array( 24, 26 ),
+			'range'       => array( 0, 100 ),
+			'danger'      => array( 0, 100 ),
+			'safety'      => array( 5, 50 ),
+			'ideal'       => array( 10, 30 ),
+			'frequency'   => 'weekly',
+			'importance'  => 'important',
 		),
 		'tds' => array(
-			'name' => 'TDS',
-			'unit' => 'ppm',
+			'name'        => 'TDS',
+			'unit'        => 'ppm',
 			'description' => esc_html__( 'Total Dissolved Solids', 'aqualog' ),
-			'range' => array( 0, 1000 ),
-			'ideal' => array( 100, 500 ),
+			'range'       => array( 0, 1000 ),
+			'danger'      => array( 25, 1000 ),
+			'safety'      => array( 50, 350 ),
+			'ideal'       => array( 100, 250 ),
+			'frequency'   => 'monthly',
 		),
 		'o2' => array(
-			'name' => 'O₂',
-			'unit' => 'mg/L',
+			'name'        => 'O₂',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Oxygen', 'aqualog' ),
-			'range' => array( 0, 15 ),
-			'ideal' => array( 6, 8 ),
+			'range'       => array( 0, 15 ),
+			'danger'      => array( 0, 15 ),
+			'safety'      => array( 4, 10 ),
+			'ideal'       => array( 6, 8 ),
+			'importance'  => 'recommended',
 		),
 		'co2' => array(
-			'name' => 'CO₂',
-			'unit' => 'mg/L',
+			'name'        => 'CO₂',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Carbon Dioxide', 'aqualog' ),
-			'range' => array( 0, 50 ),
-			'ideal' => array( 20, 30 ),
+			'range'       => array( 0, 50 ),
+			'danger'      => array( 0, 50 ),
+			'safety'      => array( 15, 40 ),
+			'ideal'       => array( 20, 35 ),
+			'frequency'   => 'daily',
+			'importance'  => 'critical',
 		),
 		'cl' => array(
-			'name' => 'Cl',
-			'unit' => 'mg/L',
+			'name'        => 'Cl',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Chlorine', 'aqualog' ),
-			'range' => array( 0, 5 ),
-			'ideal' => array( 0, 0 ),
+			'range'       => array( 0, 5 ),
+			'ideal'       => array( 0, 0 ),
+			'importance'  => 'critical',
 		),
 		'cu' => array(
-			'name' => 'Cu',
-			'unit' => 'mg/L',
+			'name'        => 'Cu',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Copper', 'aqualog' ),
-			'range' => array( 0, 0.5 ),
-			'ideal' => array( 0, 0 ),
+			'range'       => array( 0, 2 ),
+			'danger'      => array( 0, 2 ),
+			'safety'      => array( 0, 0 ),
+			'ideal'       => array( 0, 0 ),
 		),
 		'zn' => array(
-			'name' => 'Zn',
-			'unit' => 'mg/L',
+			'name'        => 'Zn',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Zinc', 'aqualog' ),
-			'range' => array( 0, 5 ),
-			'ideal' => array( 0, 0.1 ),
+			'range'       => array( 0, 0.5 ),
+			'danger'      => array( 0, 0.5 ),
+			'safety'      => array( 0, 0 ),
+			'ideal'       => array( 0, 0 ),
 		),
 		'mn' => array(
-			'name' => 'Mn',
-			'unit' => 'mg/L',
+			'name'        => 'Mn',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Manganese', 'aqualog' ),
-			'range' => array( 0, 2 ),
-			'ideal' => array( 0, 0.05 ),
+			'range'       => array( 0, 0.5 ),
+			'danger'      => array( 0, 0.5 ),
+			'safety'      => array( 0, 0 ),
+			'ideal'       => array( 0, 0 ),
 		),
 		'mo' => array(
-			'name' => 'Mo',
-			'unit' => 'mg/L',
+			'name'        => 'Mo',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Molybdenum', 'aqualog' ),
-			'range' => array( 0, 1 ),
-			'ideal' => array( 0, 0.01 ),
+			'range'       => array( 0, 0.1 ),
+			'danger'      => array( 0, 0.1 ),
+			'safety'      => array( 0, 0 ),
+			'ideal'       => array( 0, 0 ),
 		),
 		'b' => array(
-			'name' => 'B',
-			'unit' => 'mg/L',
+			'name'        => 'B',
+			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Boron', 'aqualog' ),
-			'range' => array( 0, 5 ),
-			'ideal' => array( 0.1, 0.5 ),
-		),
+			'range'       => array( 0, 10 ),
+			'danger'      => array( 0, 10 ),
+			'safety'      => array( 0, 0 ),
+			'ideal'       => array( 0, 0 ),
 		),
 	);
 
-	/**
-	 * Return the complete options configuration
-	 */
+	// Return the complete options configuration
 	return $options;
 }

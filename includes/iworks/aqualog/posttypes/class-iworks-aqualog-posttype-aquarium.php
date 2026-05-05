@@ -75,6 +75,10 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		 * iworks option class hooks.
 		 */
 		add_filter( 'index_iworks_aqualog_default_aquarium_id_data', array( $this, 'filter_index_iworks_aqualog_default_aquarium_data' ), 10, 3 );
+		/**
+		 * AquaLog plugin hooks.
+		 */
+		add_filter( 'aqualog/set/current_aquarium_id', array( $this, 'filter_set_current_aquarium_id' ) );
 	}
 
 	public function filter_index_iworks_aqualog_default_aquarium_data( $data, $option_name, $default ) {
@@ -158,7 +162,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 					),
 				),
 			),
-			'aquarium-chemistry' => array(
+			'chemistry' => array(
 				'title'  => __( 'Chemistry', 'aqualog' ),
 				'fields' => array(
 					array(
@@ -482,5 +486,36 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 
 		$this->list = $list;
 		return $list;
+	}
+	
+	/**
+	 * Set current aquarium ID.
+	 *
+	 * Sets the current aquarium ID based on the post type.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @param int $current_aquarium_id The current aquarium ID.
+	 * @return int The modified aquarium ID.
+	 */
+	public function filter_set_current_aquarium_id( $current_aquarium_id ) {
+		if ( 0 < $current_aquarium_id ) {
+			return $current_aquarium_id;
+		}
+		$count = wp_count_posts( $this->posttypes_names[ $this->posttype_name ] );
+		if ( 1 === intval( $count->publish ) ) {
+			$query = new WP_Query(
+				array(
+					'post_type' => $this->posttypes_names[ $this->posttype_name ],
+					'posts_per_page' => 1,
+					'fields' => 'ids',
+				)
+			);
+			if ( $query->have_posts() ) {
+				$current_aquarium_id = $query->posts[0];
+			}
+			wp_reset_postdata();
+		}
+		return $current_aquarium_id;
 	}
 }

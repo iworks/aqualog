@@ -39,8 +39,10 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 		/**
 		 * WordPress Hooks
 		 */
-		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_statistics' ) );
-		add_action( 'aqualog/dashboard/statistics', array( $this, '' ) );
+		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_aquariums' ), 10 );
+		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_water_entries' ), 20 );
+		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_ph_readings' ), 30 );
+		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_maintenance_tasks' ), 40 );
 	}
 
 	/**
@@ -52,7 +54,51 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 	 * @access public
 	 * @return void
 	 */
-	public function render_statistics() {
-		// Statistics rendering will be implemented here
+	private function render_card( $class, $title, $value, $icon) {
+		$file = $this->get_template_file( 'statistic-card', 'elements' );
+		if ( file_exists( $file ) ) {
+			load_template( $file, false, array(
+				'class' => $class,
+				'title' => $title,
+				'value' => $value,
+				'icon' => $icon,
+			) );
+		}
+	}
+	
+	public function render_aquariums() {
+		$this->render_card(
+			'aquariums',
+			__( 'Total Aquariums', 'aqualog' ),
+			wp_count_posts( 'iw_aquarium' )->publish,
+			'button'
+		);
+	}
+	
+	public function render_water_entries() {
+		$this->render_card(
+			'water-entries',
+			__( 'Water Entries', 'aqualog' ),
+			0,
+			'chart-line'
+		);
+	}
+	
+	public function render_ph_readings() {
+		$this->render_card(
+			'ph-readings',
+			__( 'pH Readings', 'aqualog' ),
+			0,
+			'clipboard'
+		);
+	}
+	
+	public function render_maintenance_tasks() {
+		$this->render_card(
+			'maintenance',
+			__( 'Maintenance Tasks', 'aqualog' ),
+			0,
+			'hammer'
+		);
 	}
 }

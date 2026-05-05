@@ -114,7 +114,24 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				do_action( 'aqualog/register_objects', $admin_name, 'wp-admin', new $class_name() );
 			}
 		}
-	} // Added missing closing brace here
+		/**
+		 * plugin hooks
+		 */
+		add_action( 'aqualog/wp-admin/current-aquarium-bar', array( $this, 'current_aquarium_bar' ) );
+		add_filter( 'aqualog/wp-admin/messages/files', array( $this, 'read_messages_files' ) );
+	}
+
+	public function read_messages_files( $messages ) {
+		$files = glob( $this->plugin_file_dir . '/assets/templates/messages/*.php' );
+		foreach ( $files as $file ) {
+			if ( 'index.php' === basename( $file ) ) {
+				continue;
+			}
+			$file_slug = basename( $file, '.php' );
+			$messages[ $file_slug ] = $this->get_template_file( $file_slug, 'messages' );
+		}
+		return $messages;
+	}
 
 	public function action_init() {
 		/**
@@ -528,8 +545,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		if ( $file ) {
 			load_template( $file );
 		}
-		?>
-		<?php
 	}
 
 	/**
@@ -642,26 +657,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	}
 
 	/**
-	 * Render settings page.
-	 *
-	 * Displays the AquaLog settings page.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function render_settings_page() {
-		?>
-		<div class="wrap">
-			<?php $this->html_title( __( 'AquaLog Settings', 'aqualog' ) ); ?>
-			<div class="aqualog-card">
-				<p><?php esc_html_e( 'Settings page content will be implemented here.', 'aqualog' ); ?></p>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Render help page.
 	 *
 	 * Displays the AquaLog help and support page.
@@ -688,20 +683,21 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	}
 
 	public function render_chemistry_page() {
-		echo '<div class="wrap">';
-		$this->current_aquarium();
-		$this->html_title( __( 'Chemistry', 'aqualog' ) );
-		if ( empty( $this->current_aquarium_id ) ) {
-			echo '<p>' . esc_html__( 'Please select an aquarium to view chemistry data.', 'aqualog' ) . '</p>';
-		} else {
-			do_action( 'aqualog/wp-admin/chemistry_page' );
-		}
-		echo '</div>';
+		do_action( 'aqualog/wp-admin/chemistry_page' );
 	}
 
-	private function current_aquarium() {
+
+	public function current_aquarium_bar() {
+		echo $this->get_current_aquarium();
+	}
+
+	private function get_current_aquarium() {
+		$this->set_current_aquarium_id();
+		$content = '';
+		$id = 0;
 		$title = esc_html__( 'No aquarium selected', 'aqualog' );
-		if ( !empty( $this->current_aquarium_id ) ) {
+		if ( empty( $this->current_aquarium_id ) ) {
+		} else {
 			$aquarium = get_post( $this->current_aquarium_id );
 			if ( $aquarium ) {
 				$title = sprintf(
@@ -711,13 +707,12 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				);
 			}
 		}
-		?>
-		<div class="aqualog-current-aquarium">
-			<?php esc_html_e( 'Current Aquarium:', 'aqualog' ); ?>
-			<?php echo $title; ?>
-		</div>
-
-		<?php
+		$content .= '<div class="aqualog-current-aquarium">';
+		$content .= esc_html__( 'Current Aquarium:', 'aqualog' );
+		$content .= ' ';
+		$content .= $title;
+		$content .= '</div>';
+		return $content;
 	}
 
 }

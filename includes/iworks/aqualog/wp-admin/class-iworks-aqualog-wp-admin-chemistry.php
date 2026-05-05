@@ -48,10 +48,29 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		/**
 		 * WordPress Hooks
 		 */
-		add_action( 'aqualog/wp-admin/chemistry_page', array( $this, 'render_chemistry_interface' ) );
 		add_action( 'wp_ajax_aqualog_save_chemistry', array( $this, 'ajax_save_chemistry' ) );
 		add_action( 'wp_ajax_aqualog_get_chemistry_data', array( $this, 'ajax_get_chemistry_data' ) );
 		add_action( 'wp_ajax_aqualog_delete_chemistry', array( $this, 'ajax_delete_chemistry' ) );
+
+		add_action( 'aqualog/wp-admin/chemistry_page', array( $this, 'render_page' ) );
+	}
+	
+	public function render_page() {
+		$this->set_current_aquarium_id();
+		$file = $this->get_template_file( 'chemistry', 'pages' );
+		if ( $file ) {
+			load_template(
+				$file, 
+				true, 
+				array(
+					'aquarium_id'         => $this->current_aquarium_id,
+					'latest_measurements' => $this->get_latest_measurements( $this->current_aquarium_id ),
+					'messages'            => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
+					'meta'                => get_post_meta( $this->current_aquarium_id ),
+					'params'              => $this->get_parameters(),
+				)
+			);
+		}
 	}
 
 	/**
@@ -66,7 +85,23 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 */
 	public function get_parameters() {
 		$this->check_option_object();
-		return apply_filters( 'aqualog/chemistry/parameters', $this->options->get_group( 'chemistry' ) );
+		$config = $this->options->get_group( 'chemistry' );
+		$parameters = array();
+		foreach( $config as $key => $value ) {
+			$meta_name = 'chemistry_check_' . $key ;
+			if ( 'yes' === $this->get_post_meta( $this->current_aquarium_id, $meta_name ) ) {
+				$parameters[ $key ] = wp_parse_args(
+					$value,
+					array(
+						'importance' => 'default',
+						'key' => $key,
+						'last_test_date' => esc_html__( 'Never tested!', 'aqualog' ),
+						'frequency' => '',
+					)
+				);
+			}
+		}
+		return apply_filters( 'aqualog/chemistry/parameters', $parameters );
 	}
 
 	/**
@@ -286,14 +321,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			return;
 		}
 
-		$latest_measurements = $this->get_latest_measurements( $this->current_aquarium_id );
 
-		if ( empty( $latest_measurements ) ) {
-			$file = $this->get_template_file( 'chemistry-no-measurements', 'message' );
-			if ( $file ) {
-				load_template( $file );
-			}
-		}
 
 		$parameters = $this->get_parameters();
 		

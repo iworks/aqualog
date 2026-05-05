@@ -17,10 +17,6 @@ defined( 'ABSPATH' ) || exit;
 				<!-- Statistics Cards -->
 				<div class="aqualog-stats-grid">
                     <?php do_action( 'aqualog/dashboard/statistics' ); ?>
-					<?php //$this->render_statistic_card( 'aquariums', __( 'Total Aquariums', 'aqualog' ), 'dashicons-water' ); ?>
-					<?php //$this->render_statistic_card( 'water-entries', __( 'Water Entries', 'aqualog' ), 'dashicons-chart-line' ); ?>
-					<?php //$this->render_statistic_card( 'ph-readings', __( 'pH Readings', 'aqualog' ), 'dashicons-clipboard' ); ?>
-					<?php //$this->render_statistic_card( 'maintenance', __( 'Maintenance Tasks', 'aqualog' ), 'dashicons-hammer' ); ?>
 				</div>
 
 				<!-- Recent Activity -->
@@ -42,11 +38,15 @@ defined( 'ABSPATH' ) || exit;
 								<span class="dashicons dashicons-plus-alt"></span>
 								<span><?php esc_html_e( 'Add Aquarium', 'aqualog' ); ?></span>
 							</a>
+							<a href="#" class="aqualog-action-card">
+								<span class="dashicons dashicons-color-picker"></span>
+								<span><?php esc_html_e( 'Add Measurement Results', 'aqualog' ); ?></span>
+							</a>
 							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=iw_aquarium' ) ); ?>" class="aqualog-action-card">
 								<span class="dashicons dashicons-list-view"></span>
 								<span><?php esc_html_e( 'View All', 'aqualog' ); ?></span>
 							</a>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=aqualog-settings' ) ); ?>" class="aqualog-action-card">
+							<a href="<?php echo esc_url( admin_url( add_query_arg( 'page', 'iworks_aqualog_index', 'admin.php' ) ) ); ?>" class="aqualog-action-card">
 								<span class="dashicons dashicons-admin-settings"></span>
 								<span><?php esc_html_e( 'Settings', 'aqualog' ); ?></span>
 							</a>

@@ -8,10 +8,11 @@
  * @package    iWorks
  * @subpackage AquaLog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
- * @copyright  2025 Marcin Pietrzak
+ * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0
  * @version    1.0.0
  */
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -159,9 +160,13 @@ class iworks_aqualog_base {
 	 */
 	protected string $wp_admin_slug = 'aqualog-dashboard';
 
-
+	/**
+	 * Current aquarium ID.
+	 *
+	 * @since 1.0.0
+	 * @var int|null $current_aquarium_id Current aquarium ID or null if not set.
+	 */
 	protected ?int $current_aquarium_id = null;
-
 
 	/**
 	 * Constructor for the base class.
@@ -511,7 +516,18 @@ class iworks_aqualog_base {
 		wp_enqueue_script( $name );
 	}
 
+	/**
+	 * Set the current aquarium ID.
+	 *
+	 * Determines and sets the current aquarium ID based on query variables,
+	 * default settings, or filter hooks.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @return void
+	 */
 	protected function set_current_aquarium_id() {
+		$this->current_aquarium_id = 0;
 		$aquarium_id = intval( get_query_var( 'aquarium_id' ) );
 		if ( $aquarium_id ) {
 			$this->current_aquarium_id = $aquarium_id;
@@ -523,19 +539,32 @@ class iworks_aqualog_base {
 			$this->current_aquarium_id = $default_aquarium_id;
 			return;
 		}
+		$this->current_aquarium_id = apply_filters( 'aqualog/set/current_aquarium_id', 0 );
 	}
 
+	/**
+	 * Get template file path.
+	 *
+	 * Constructs and returns the full path to a template file,
+	 * with proper validation and sanitization.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @param string $file   Template file name.
+	 * @param string $group  Template group directory (optional).
+	 * @return string|false Full path to template file or false if not found.
+	 */
 	protected function get_template_file( $file, $group = '' ) {
-		$file = sprintf(
-				'%s/assets/templates/%s%s%s.php',
-				$this->plugin_file_dir,
-				$group,
-				'' === $group ? '' : '/',
-				sanitize_title( $file )
-			);
-		$file = realpath( $file );
-		if ( is_file( $file ) ) {
-			return $file;
+		$file_path = sprintf(
+			'%s/assets/templates/%s%s%s.php',
+			$this->plugin_file_dir,
+			$group,
+			'' === $group ? '' : '/',
+			sanitize_title( $file )
+		);
+		$real_path = realpath( $file_path );
+		if ( is_file( $real_path ) ) {
+			return $real_path;
 		}
 		return false;
 	}

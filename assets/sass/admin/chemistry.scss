@@ -1,0 +1,19 @@
+.aqualog-chemistry {
+    &-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--aqualog-settings-gap);
+    }
+    &-item {
+        width: 200px;
+        background-color: var(--aqualog-settings-bg);
+        padding: var(--aqualog-settings-padding-s);
+        border: 1px solid var(--aqualog-settings-border);
+        border-radius: var(--aqualog-settings-radius);
+        &-header {
+            display: grid;
+            grid-template-columns: 24px auto 24px;
+            align-items: center;
+        }
+    }
+}
