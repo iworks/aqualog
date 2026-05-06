@@ -45,7 +45,7 @@ if ( false) {
 
 <script>
 jQuery(document).ready(function($) {
-   window.aqualog.chemistry.params = <?php echo wp_json_encode($args['params']); ?>;
+   //window.aqualog.chemistry.params = <?php echo wp_json_encode($args['params']); ?>;
 });
 </script>
 

@@ -51,8 +51,32 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		add_action( 'wp_ajax_aqualog_save_chemistry', array( $this, 'ajax_save_chemistry' ) );
 		add_action( 'wp_ajax_aqualog_get_chemistry_data', array( $this, 'ajax_get_chemistry_data' ) );
 		add_action( 'wp_ajax_aqualog_delete_chemistry', array( $this, 'ajax_delete_chemistry' ) );
-
+		/**
+		 * Aqualog plugin action hook for chemistry page rendering.
+		 *
+		 * @since 1.0.0
+		 */
 		add_action( 'aqualog/wp-admin/chemistry_page', array( $this, 'render_page' ) );
+		add_filter( 'aqualog/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
+	}
+
+	/**
+	 * Filter WordPress localize script data for chemistry page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data Localize script data.
+	 * @return array Filtered localize script data.
+	 */
+	public function filter_wp_localize_script( $data ) {
+		$this->set_current_aquarium_id();
+		$data['chemistry'] = array(
+			'params' => $this->get_parameters(),
+		);
+		$data['nonces']['chemistry'] = array(
+			'save' => wp_create_nonce( 'aqualog_chemistry_save' ),
+		);
+		return $data;
 	}
 	
 	public function render_page() {

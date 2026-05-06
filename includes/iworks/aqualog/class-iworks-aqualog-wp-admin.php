@@ -272,6 +272,22 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			array(),
 			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) )
 		);
+		/**
+		 * Add more data to localize script.
+		 */
+		$data = apply_filters(
+			'aqualog/wp-admin/wp_localize_script',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonces' => array(),
+				'i18n' => array(
+					'loading' => __( 'Loading…', 'aqualog' ),
+				),
+				'chemistry' => array(),
+				'maintenance' => array(),
+			)
+		);
+		wp_localize_script( $name, 'aqualog', $data);
 	}
 
 	/**

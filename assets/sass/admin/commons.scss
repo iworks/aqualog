@@ -8,6 +8,14 @@
 		}
 	}
 
+	&-form {
+		&-actions {
+			display: flex;
+			flex-direction: row-reverse;
+			justify-content: space-between;
+		}
+	}
+
 	&-action {
 		&s {
 			&-grid {
@@ -65,4 +73,16 @@
 	&:has(.aqualog-current-aquarium) {
 		margin-top: 0;
 	}
+}
+
+.ui-slider-handle {
+	display: block;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background-color: var(--wp-admin-theme-color);
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
 }

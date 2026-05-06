@@ -69,11 +69,7 @@ switch( $args['importance'] ) {
             <?php } ?>
         </p>
         <div class="aqualog-chemistry-item-body-scale">
-                <?php 
-
-aqualog_get_scale($args);
-?>
-
+            <?php aqualog_get_scale($args); ?>
             <div class="aqualog-chemistry-item-body-scale-legend">
                 <span class="legend-item--min"><?php echo esc_html( $args['range'][0] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
                 <span class="legend-item--max"><?php echo esc_html( $args['range'][1] ); ?> <?php  echo esc_html( $args['unit'] ); ?></span>
