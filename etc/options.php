@@ -156,7 +156,7 @@ function iworks_aqualog_options() {
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Nitrite', 'aqualog' ),
 			'range'       => array( 0, 2 ),
-			'danger'      => array( 0.25, 2 ),
+			'danger'      => array( 0, 2 ),
 			'safety'      => array( 0, 0.25 ),
 			'ideal'       => array( 0, 0 ),
 			'frequency'   => 'daily',

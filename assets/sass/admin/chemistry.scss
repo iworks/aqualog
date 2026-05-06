@@ -114,6 +114,24 @@
 					}
 				}
 			}
+
+			.param-value {
+				font-size: 2em;
+				font-weight: 700;
+				text-align: center;
+
+				&--danger {
+					color: var(--aqualog-settings-danger);
+				}
+
+				&--safety {
+					color: var(--aqualog-settings-safety);
+				}
+
+				&--ideal {
+					color: var(--aqualog-settings-ideal);
+				}
+			}
 		}
 
 		&.param-importance-default {

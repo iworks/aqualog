@@ -131,13 +131,13 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 			$sql = "CREATE TABLE $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				aquarium_id bigint(20) unsigned NOT NULL,
-				date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-				param varchar(100) NOT NULL DEFAULT '',
-				value text NOT NULL,
+				param_key varchar(100) NOT NULL DEFAULT '',
+				param_value float NOT NULL,
+				measurement_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 				PRIMARY KEY  (id),
 				KEY aquarium_id (aquarium_id),
-				KEY param (param),
-				KEY date (date)
+				KEY param (param_key),
+				KEY measurement_date (measurement_date)
 			) $charset_collate;";
 			
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';

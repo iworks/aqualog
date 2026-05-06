@@ -281,7 +281,12 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonces' => array(),
 				'i18n' => array(
-					'loading' => __( 'Loading…', 'aqualog' ),
+					'messages' => array(
+						'loading' => __( 'Loading…', 'aqualog' ),
+						'saving' => __( 'Saving…', 'aqualog' ),
+						'saveError' => __( 'An error occurred while saving. Please try again.', 'aqualog' ),
+						'invalidValues' => __( 'Please correct the highlighted fields and try again.', 'aqualog' ),
+					),
 				),
 				'chemistry' => array(),
 				'maintenance' => array(),

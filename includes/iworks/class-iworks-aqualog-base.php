@@ -568,4 +568,32 @@ class iworks_aqualog_base {
 		}
 		return false;
 	}
+	/**
+	 * Get time elapsed text from measurement date.
+	 *
+	 * Calculates the time elapsed from the measurement date and returns
+	 * a human-readable text format (today, yesterday, or N days ago).
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @param string $measurement_date The measurement date in Y-m-d format.
+	 * @return string Human-readable time elapsed text.
+	 */
+	protected function get_time_elapsed_text( $measurement_date ) {
+		$measurement_timestamp = strtotime( $measurement_date );
+		$current_timestamp = current_time( 'timestamp' );
+		
+		// Calculate days difference
+		$days_diff = intval( ( $current_timestamp - $measurement_timestamp ) / ( 24 * 60 * 60 ) );
+		
+		if ( $days_diff === 0 ) {
+			return __( 'Today', 'aqualog' );
+		}
+		if ( $days_diff === 1 ) {
+			return __( 'Yesterday', 'aqualog' );
+		}
+		/* translators: %s: number of days */
+		return sprintf( _n( '%s day ago', '%s days ago', $days_diff, 'aqualog' ), number_format_i18n( $days_diff ) );
+	}
+
 }

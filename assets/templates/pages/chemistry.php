@@ -42,13 +42,6 @@ if ( false) {
 		<?php } ?>
 	</div>
 </div>
-
-<script>
-jQuery(document).ready(function($) {
-   //window.aqualog.chemistry.params = <?php echo wp_json_encode($args['params']); ?>;
-});
-</script>
-
 <?php
 // Load the chemistry form template
 load_template( dirname(__FILE__, 2) . '/elements/chemistry-form.php', false, $args );

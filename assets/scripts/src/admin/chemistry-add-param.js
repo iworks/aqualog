@@ -18,6 +18,8 @@
 (function($) {
 	'use strict';
 
+	var field_value_class = '.aqualog-chemistry-item-body-scale-value';
+
 	// Initialize chemistry form functionality
 	window.aqualog = window.aqualog || {};
 	window.aqualog.chemistry = window.aqualog.chemistry || {};
@@ -50,7 +52,6 @@
 		data.step_small = data.range_step * 2;
 		window.aqualog.chemistry.formData = data;
 	};
-
 
 	window.aqualog.chemistry.scaleItem = function(range) {
 		var args = window.aqualog.chemistry.formData;
@@ -113,15 +114,17 @@
 		});
 
 		// Clear error state on input
-		$form.find('.aqualog-form-input--number').on('input', function() {
+		$form.find(field_value_class).on('input', function() {
 			$(this).removeClass('error');
 		});
 		/**
 		 * set min/max
 		 */
-		$form.find('.aqualog-chemistry-item-body-scale-value')
+		$form.find(field_value_class)
+			.val(args.value)
 			.attr('min', args.range[0])
 			.attr('max', args.range[1])
+			.attr('step', args.range_step)
 			.on('input change keyup keydown paste cut focus blur', function() {
 				var value = $(this).val();
 				$form.find('.aqualog-chemistry-item-body-scale-slider').slider('value', value);
@@ -134,16 +137,17 @@
 				min: args.range[0],
 				max: args.range[1],
 				step: args.range_step,
+				value: args.value,
 				change: function(event, ui) {
-					$form.find('.aqualog-chemistry-item-body-scale-value').val(ui.value);
+					$form.find(field_value_class).val(ui.value);
 				}
 			});
 		}
 		$('.aqualog-chemistry-item-body-scale-button').on('click', function() {
 			var value = $(this).data('value');
-			var current = parseFloat($form.find('.aqualog-chemistry-item-body-scale-value').val()) || 0;
+			var current = parseFloat($form.find(field_value_class).val()) || 0;
 			var new_value = current + parseFloat(value);
-			$form.find('.aqualog-chemistry-item-body-scale-value').val(new_value);
+			$form.find(field_value_class).val(new_value);
 		});
 	};
 
@@ -156,7 +160,7 @@
 	window.aqualog.chemistry.validateForm = function($form) {
 		var isValid = true;
 
-		$form.find('.aqualog-form-input--number').each(function() {
+		$form.find(field_value_class).each(function() {
 			var $input = $(this);
 			var value = parseFloat($input.val());
 			var min = parseFloat($input.data('range-min'));
@@ -194,9 +198,15 @@
 
 		// Submit via AJAX
 		$.ajax({
-			url: $form.attr('action'),
+			url: window.aqualog.ajax_url,
 			type: 'POST',
-			data: $form.serialize(),
+			data: {
+				action: 'aqualog_chemistry_add_param',
+				_wpnonce: window.aqualog.nonces.chemistry.add_param,
+				value: $form.find(field_value_class).val(),
+				key: window.aqualog.chemistry.formData.key,
+				id: $form.data('aquarium-id'),
+			},
 			success: function(response) {
 				if (response.success) {
 					// Show success message
@@ -251,9 +261,10 @@
 		var $notice = $('<div class="notice is-dismissible ' + noticeClass + '"><p>' + message + '</p></div>');
 
 		// Insert notice at the top of the form or page
-		var $target = $('.aqualog-chemistry-form').find('.aqualog-card');
+		var $target = $('.aqualog-chemistry-form').find('.aqualog-card-header');
 		if ($target.length) {
-			$notice.insertBefore($target);
+			$('.aqualog-chemistry-form').find('.notice').detach();
+			$notice.insertAfter($target);
 		} else {
 			$notice.insertBefore('.wrap h1');
 		}

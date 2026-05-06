@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) || exit;
 				<span class="aqualog-card-header__date"><?php echo esc_html( date_i18n( get_option( 'date_format' ) ) ); ?></span>
 			</div>
 			
-			<form id="aqualog-chemistry-measurement-form">
+			<form id="aqualog-chemistry-measurement-form" data-aquarium-id="<?php echo esc_attr( $args['aquarium_id'] ); ?>">
 				<div class="aqualog-chemistry-item-body-scale-buttons">
 					<button type="button" class="aqualog-chemistry-item-body-scale-button" data-value="-{{data.step_big}}"><span class="dashicons dashicons-remove"></span>{{data.step_big}}</button>
 					<button type="button" class="aqualog-chemistry-item-body-scale-button" data-value="-{{data.step_small}}"><span class="dashicons dashicons-minus"></span>{{data.step_small}}</button>

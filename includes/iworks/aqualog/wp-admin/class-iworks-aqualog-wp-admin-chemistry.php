@@ -35,6 +35,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 * @since 1.0.0
 	 * @var array
 	 */
+	private $parameters = array();
 
 	/**
 	 * Class constructor.
@@ -48,9 +49,10 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		/**
 		 * WordPress Hooks
 		 */
-		add_action( 'wp_ajax_aqualog_save_chemistry', array( $this, 'ajax_save_chemistry' ) );
-		add_action( 'wp_ajax_aqualog_get_chemistry_data', array( $this, 'ajax_get_chemistry_data' ) );
-		add_action( 'wp_ajax_aqualog_delete_chemistry', array( $this, 'ajax_delete_chemistry' ) );
+		/**
+		 * AJAX handler for adding chemistry parameters.
+		 */
+		add_action( 'wp_ajax_aqualog_chemistry_add_param', array( $this, 'ajax_add_chemistry_param' ) );
 		/**
 		 * Aqualog plugin action hook for chemistry page rendering.
 		 *
@@ -74,11 +76,16 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			'params' => $this->get_parameters(),
 		);
 		$data['nonces']['chemistry'] = array(
-			'save' => wp_create_nonce( 'aqualog_chemistry_save' ),
+			'save' => wp_create_nonce( $this->get_meta_name( 'chemistry_save' ) ),
+			'add_param' => wp_create_nonce( $this->get_meta_name( 'chemistry_add_param' ) ),
 		);
 		return $data;
 	}
-	
+/**
+ * Render chemistry page.
+ *
+ * @since 1.0.0
+ */
 	public function render_page() {
 		$this->set_current_aquarium_id();
 		$file = $this->get_template_file( 'chemistry', 'pages' );
@@ -88,7 +95,6 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 				true, 
 				array(
 					'aquarium_id'         => $this->current_aquarium_id,
-					'latest_measurements' => $this->get_latest_measurements( $this->current_aquarium_id ),
 					'messages'            => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
 					'meta'                => get_post_meta( $this->current_aquarium_id ),
 					'params'              => $this->get_parameters(),
@@ -108,8 +114,12 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 * @return array Available parameters with their properties.
 	 */
 	public function get_parameters() {
+		if ( isset( $this->parameters[$this->current_aquarium_id] ) ) {
+			return $this->parameters[$this->current_aquarium_id];
+		}
 		$this->check_option_object();
 		$config = $this->options->get_group( 'chemistry' );
+		$latest_measurements = $this->get_latest_measurements();
 		$parameters = array();
 		foreach( $config as $key => $value ) {
 			$meta_name = 'chemistry_check_' . $key ;
@@ -122,12 +132,33 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 						'last_test_date' => esc_html__( 'Never tested!', 'aqualog' ),
 						'frequency' => '',
 						'value' => '',
+						'value_class' => 'unknown',
 					)
 				);
+				if ( isset( $latest_measurements[ $key ] ) ) {
+					$parameters[ $key ]['last_test_date'] = $latest_measurements[ $key ]['since'];
+					$parameters[ $key ]['value'] = $latest_measurements[ $key ]['param_value'];
+				}
+				if ( $parameters[ $key ]['value'] && is_numeric( $parameters[ $key ]['value'] ) ) {
+					$parameters[ $key ]['value_class'] = 'danger';
+					$v = (float) $parameters[ $key ]['value'];
+					if (
+						$parameters[ $key ]['ideal'][0] <= $v &&
+						$parameters[ $key ]['ideal'][1] >= $v
+					) {
+						$parameters[ $key ]['value_class'] = 'ideal';
+					} else if (
+						$parameters[ $key ]['safety'][0] <= $v &&
+						$parameters[ $key ]['safety'][1] >= $v
+					) {
+						$parameters[ $key ]['value_class'] = 'safety';
+					}
+				}
 			}
 		}
 		uasort($parameters, array( $this, 'sort_parameters' ));
-		return apply_filters( 'aqualog/chemistry/parameters', $parameters );
+		$this->parameters[$this->current_aquarium_id] = apply_filters( 'aqualog/chemistry/parameters', $parameters );
+		return $this->parameters[$this->current_aquarium_id];
 	}
 
 	/**
@@ -173,111 +204,38 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	}
 
 	/**
-	 * Save chemistry measurement.
-	 *
-	 * Saves a new chemistry measurement to the database.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @param int    $aquarium_id The aquarium ID.
-	 * @param string $param       The parameter name.
-	 * @param string $value       The measured value.
-	 * @param string $date        The measurement date (optional).
-	 * @return int|false The measurement ID or false on failure.
-	 */
-	public function save_measurement( $aquarium_id, $param, $value, $date = '' ) {
-		global $wpdb;
-
-		if ( ! $this->get_parameter( $param ) ) {
-			return false;
-		}
-
-		$table_name = $wpdb->prefix . 'aqualog_chemistry';
-		
-		$data = array(
-			'aquarium_id' => intval( $aquarium_id ),
-			'param' => sanitize_key( $param ),
-			'value' => sanitize_text_field( $value ),
-			'date' => ! empty( $date ) ? $date : current_time( 'mysql' ),
-		);
-
-		$format = array( '%d', '%s', '%s', '%s' );
-
-		$result = $wpdb->insert( $table_name, $data, $format );
-
-		if ( $result ) {
-			$measurement_id = $wpdb->insert_id;
-			do_action( 'aqualog/chemistry/measurement_saved', $measurement_id, $data );
-			return $measurement_id;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Get chemistry measurements for an aquarium.
-	 *
-	 * Retrieves measurements for a specific aquarium and parameter.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @param int    $aquarium_id The aquarium ID.
-	 * @param string $param       The parameter name (optional).
-	 * @param int    $limit       Maximum number of records (optional).
-	 * @param string $order       Order direction (ASC/DESC, optional).
-	 * @return array Array of measurements.
-	 */
-	public function get_measurements( $aquarium_id, $param = '', $limit = 50, $order = 'DESC' ) {
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'aqualog_chemistry';
-		
-		$where = $wpdb->prepare( 'aquarium_id = %d', $aquarium_id );
-		if ( ! empty( $param ) ) {
-			$where .= $wpdb->prepare( ' AND param = %s', $param );
-		}
-
-		$sql = "SELECT * FROM $table_name WHERE $where ORDER BY date $order";
-		if ( $limit > 0 ) {
-			$sql .= $wpdb->prepare( ' LIMIT %d', $limit );
-		}
-
-		return $wpdb->get_results( $sql );
-	}
-
-	/**
 	 * Get latest measurements for all parameters.
 	 *
 	 * Retrieves the most recent measurement for each parameter
 	 * for a specific aquarium.
-	 *
+	*
 	 * @since 1.0.0
 	 * @access public
-	 * @param int $aquarium_id The aquarium ID.
 	 * @return array Array of latest measurements.
 	 */
-	public function get_latest_measurements( $aquarium_id ) {
+	public function get_latest_measurements() {
 		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'aqualog_chemistry';
+		$sql = "SELECT * FROM {$wpdb->aqualog_chemistry} WHERE aquarium_id = %d GROUP BY param_key ORDER BY measurement_date DESC";
+		$results = $wpdb->get_results( $wpdb->prepare( $sql, $this->current_aquarium_id ), ARRAY_A );
+		if ( empty( $results ) || ! is_array( $results ) ) {
+			return array();
+		}
+		// Convert to associative array with param_key as key
+		$assoc_results = array();
+		foreach ( $results as $result ) {
+			if ( isset( $result['param_key'] ) ) {
+				// Add "since" field with time elapsed text
+				$result['since'] = $this->get_time_elapsed_text( $result['measurement_date'] );
+				$assoc_results[ $result['param_key'] ] = $result;
+			}
+		}
 		
-		$sql = "SELECT param, value, date
-				FROM $table_name 
-				WHERE aquarium_id = %d 
-				AND id IN (
-					SELECT MAX(id) 
-					FROM $table_name 
-					WHERE aquarium_id = %d 
-					GROUP BY param
-				)
-				ORDER BY param ASC";
-
-		return $wpdb->get_results( $wpdb->prepare( $sql, $aquarium_id, $aquarium_id ) );
+		return $assoc_results;
 	}
 
 	/**
 	 * Delete chemistry measurement.
-	 *
+	*
 	 * Deletes a specific chemistry measurement.
 	 *
 	 * @since 1.0.0
@@ -441,90 +399,40 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		<?php
 	}
 
-	/**
-	 * AJAX handler for saving chemistry measurements.
-	 *
-	 * Handles the AJAX request to save a new chemistry measurement.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_save_chemistry() {
-		check_ajax_referer( 'aqualog_chemistry_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'aqualog' ) );
-		}
-
-		$aquarium_id = intval( $_POST['aquarium_id'] );
-		$param = sanitize_key( $_POST['param'] );
+	public function ajax_add_chemistry_param() {
+		check_ajax_referer($this->get_meta_name( 'chemistry_add_param' ));
+		$this->check_option_object();
 		$value = sanitize_text_field( $_POST['value'] );
-		$date = sanitize_text_field( $_POST['date'] );
-
-		$measurement_id = $this->save_measurement( $aquarium_id, $param, $value, $date );
-
-		if ( $measurement_id ) {
+		$key = sanitize_key( $_POST['key'] );
+		$id = intval( $_POST['id'] );
+		/**
+		 * sanitize
+		 */
+		$config = $this->options->get_group( 'chemistry' );
+		if ( ! array_key_exists( $key, $config ) ) {
+			wp_send_json_error( __( 'Invalid parameter', 'aqualog' ) );
+		}
+		global $wpdb;
+		$result = $wpdb->insert(
+			$wpdb->aqualog_chemistry,
+			array(
+				'aquarium_id' => $id,
+				'param_key' => $key,
+				'param_value' => $value,
+				'measurement_date' => current_time( 'mysql' ),
+			),
+			array(
+				'%d',
+				'%s',
+				'%f',
+				'%s',
+			)
+		);
+		if ( $result ) {
 			wp_send_json_success( array(
-				'message' => __( 'Measurement saved successfully', 'aqualog' ),
-				'measurement_id' => $measurement_id,
+				'message' => __( 'Parameter added successfully', 'aqualog' ),
 			) );
-		} else {
-			wp_send_json_error( __( 'Failed to save measurement', 'aqualog' ) );
 		}
-	}
-
-	/**
-	 * AJAX handler for retrieving chemistry data.
-	 *
-	 * Handles the AJAX request to get chemistry measurements.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_get_chemistry_data() {
-		check_ajax_referer( 'aqualog_chemistry_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'aqualog' ) );
-		}
-
-		$aquarium_id = intval( $_POST['aquarium_id'] );
-		$param = isset( $_POST['param'] ) ? sanitize_key( $_POST['param'] ) : '';
-		$limit = isset( $_POST['limit'] ) ? intval( $_POST['limit'] ) : 50;
-
-		$measurements = $this->get_measurements( $aquarium_id, $param, $limit );
-
-		wp_send_json_success( array(
-			'measurements' => $measurements,
-		) );
-	}
-
-	/**
-	 * AJAX handler for deleting chemistry measurements.
-	 *
-	 * Handles the AJAX request to delete a chemistry measurement.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_delete_chemistry() {
-		check_ajax_referer( 'aqualog_chemistry_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'aqualog' ) );
-		}
-
-		$measurement_id = intval( $_POST['measurement_id'] );
-
-		if ( $this->delete_measurement( $measurement_id ) ) {
-			wp_send_json_success( array(
-				'message' => __( 'Measurement deleted successfully', 'aqualog' ),
-			) );
-		} else {
-			wp_send_json_error( __( 'Failed to delete measurement', 'aqualog' ) );
-		}
+		wp_send_json_error( __( 'Failed to add parameter', 'aqualog' ) );
 	}
 }

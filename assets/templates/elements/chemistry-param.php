@@ -53,7 +53,11 @@ switch( $args['importance'] ) {
         break;
 }
 ?>
-<div class="<?php echo implode( ' ', $classes ); ?>" data-key="<?php echo esc_attr( $args['key'] ); ?>">
+<div
+    class="<?php echo implode( ' ', $classes ); ?>"
+    data-key="<?php echo esc_attr( $args['key'] ); ?>"
+    data-value="<?php echo esc_attr( $args['value'] ); ?>"
+>
     <div class="aqualog-chemistry-item-header">
         <?php if ( ! empty( $icon ) ) { ?>
         <span class="<?php echo esc_attr( $icon ); ?>" title="<?php echo esc_attr( $tooltip ); ?>"></span>
@@ -61,7 +65,27 @@ switch( $args['importance'] ) {
         <h3><?php echo esc_html( $args['description'] ); ?> (<?php echo esc_html( $args['name'] ); ?>)</h3>
     </div>
     <div class="aqualog-chemistry-item-body">
-        <p class="param-value"><?php echo esc_html( $args['value'] ); ?></p>
+        <p class="param-value param-value--<?php echo esc_attr( $args['value_class'] ); ?>">
+            <?php if ( '' === $args['value'] ) {
+                echo '—';
+            } else {
+                if ( is_numeric( $args['value'] ) ) {
+                    if ( $args['value'] == floor( $args['value'] ) ) {
+                        echo esc_html( number_format_i18n( $args['value'] ) );
+                    } else {
+                        if ( 0 === $args['value'] * 100 % 10 ) {
+                            echo esc_html( number_format_i18n( $args['value'], 1 ) );
+                        } else {
+                            echo esc_html( number_format_i18n( $args['value'], 2 ) );
+                        }
+                    }
+                } else {
+                    echo esc_html( $args['value'] );
+                }
+                echo ' ';
+                echo esc_html( $args['unit'] );
+            } ?>
+        </p>
         <p class="param-last-test-date">
             <?php echo esc_html( $args['last_test_date'] ); ?>
             <?php if ( ! empty( $args['frequency'] ) ) { ?>

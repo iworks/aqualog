@@ -41,11 +41,9 @@ function aqualog_get_scale($args) {
 	$danger = aqualog_chemistry_scale_item( $args, 'danger' );
 	$safety = aqualog_chemistry_scale_item( $args, 'safety' );
 	$ideal = aqualog_chemistry_scale_item( $args, 'ideal' );
-
 	$range_min = esc_attr( $args['range'][0] );
 	$range_max = esc_attr( $args['range'][1] );
 	$range_step = esc_attr( ( $args['range'][1] - $args['range'][0] ) / 100 );
-
 	$content = sprintf('<div class="aqualog-chemistry-item-body-scale-char"
 		data-range-min="%s"
 		data-range-max="%s"
@@ -71,7 +69,13 @@ function aqualog_get_scale($args) {
 		$safety[1],
 		$danger[1]
 	);
-	$content .= '></div>';
-
+	$content .= '>';
+	if ( '' !== $args['value'] ) {
+		$content .= sprintf(
+			'<span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: %d%%;"></span>',
+			( ( $args['value'] - $args['range'][0] ) * 100 ) / ( $args['range'][1] - $args['range'][0] )
+		);
+	}
+	$content .= '</div>';
 	echo $content;
 }
