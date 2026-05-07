@@ -131,6 +131,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 						'frequency'      => '',
 						'value'          => '',
 						'value_class'    => 'unknown',
+						'show_name'      => true,
 					)
 				);
 				if ( isset( $latest_measurements[ $key ] ) ) {
@@ -213,7 +214,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 */
 	public function get_latest_measurements() {
 		global $wpdb;
-		$sql     = "SELECT * FROM {$wpdb->aqualog_chemistry} WHERE aquarium_id = %d GROUP BY param_key ORDER BY measurement_date DESC";
+		$sql     = "SELECT t1.* FROM {$wpdb->aqualog_chemistry} t1 WHERE t1.aquarium_id = %d and t1.measurement_date = ( SELECT MAX(t2.measurement_date) FROM {$wpdb->aqualog_chemistry} t2 WHERE t2.param_key = t1.param_key)";
 		$results = $wpdb->get_results( $wpdb->prepare( $sql, $this->current_aquarium_id ), ARRAY_A );
 		if ( empty( $results ) || ! is_array( $results ) ) {
 			return array();
@@ -374,9 +375,9 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	public function ajax_add_chemistry_param() {
 		check_ajax_referer( $this->get_meta_name( 'chemistry_add_param' ) );
 		$this->check_option_object();
-		$value = sanitize_text_field( $_POST['value'] );
-		$key   = sanitize_key( $_POST['key'] );
-		$id    = intval( $_POST['id'] );
+		$value = sanitize_text_field( filter_input( INPUT_POST, 'value' ) );
+		$key   = sanitize_key( filter_input( INPUT_POST, 'key' ) );
+		$id    = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
 		/**
 		 * sanitize
 		 */

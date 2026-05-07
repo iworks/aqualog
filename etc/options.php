@@ -111,8 +111,9 @@ function iworks_aqualog_options() {
 			'ideal'       => array( 24, 26 ),
 			'frequency'   => 'daily',
 			'importance'  => 'important',
+			'show_name'   => false,
 		),
-		'ph' => array(
+		'ph'   => array(
 			'name'        => 'pH',
 			'unit'        => 'pH',
 			'description' => esc_html__( 'Acidity/Alkalinity level', 'aqualog' ),
@@ -123,7 +124,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'daily',
 			'importance'  => 'critical',
 		),
-		'gh' => array(
+		'gh'   => array(
 			'name'        => 'GH',
 			'unit'        => '°dH',
 			'description' => esc_html__( 'General Hardness', 'aqualog' ),
@@ -134,7 +135,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'weekly',
 			'importance'  => 'recommended',
 		),
-		'kh' => array(
+		'kh'   => array(
 			'name'        => 'KH',
 			'unit'        => '°dH',
 			'description' => esc_html__( 'Carbonate Hardness', 'aqualog' ),
@@ -145,7 +146,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'weekly',
 			'importance'  => 'recommended',
 		),
-		'no3' => array(
+		'no3'  => array(
 			'name'        => 'NO₃',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Nitrate', 'aqualog' ),
@@ -156,7 +157,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'weekly',
 			'importance'  => 'recommended',
 		),
-		'no2' => array(
+		'no2'  => array(
 			'name'        => 'NO₂',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Nitrite', 'aqualog' ),
@@ -167,7 +168,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'daily',
 			'importance'  => 'critical',
 		),
-		'nh3' => array(
+		'nh3'  => array(
 			'name'        => 'NH₃',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Ammonia', 'aqualog' ),
@@ -178,7 +179,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'daily',
 			'importance'  => 'critical',
 		),
-		'po4' => array(
+		'po4'  => array(
 			'name'        => 'PO₄',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Phosphate', 'aqualog' ),
@@ -189,7 +190,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'monthly',
 			'importance'  => 'recommended',
 		),
-		'fe' => array(
+		'fe'   => array(
 			'name'        => 'Fe',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Iron', 'aqualog' ),
@@ -200,7 +201,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'monthly',
 			'importance'  => 'recommended',
 		),
-		'ca' => array(
+		'ca'   => array(
 			'name'        => 'Ca',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Calcium', 'aqualog' ),
@@ -211,7 +212,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'monthly',
 			'importance'  => 'recommended',
 		),
-		'mg' => array(
+		'mg'   => array(
 			'name'        => 'Mg',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Magnesium', 'aqualog' ),
@@ -222,7 +223,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'monthly',
 			'importance'  => 'recommended',
 		),
-		'k' => array(
+		'k'    => array(
 			'name'        => 'K',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Potassium', 'aqualog' ),
@@ -233,7 +234,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'weekly',
 			'importance'  => 'important',
 		),
-		'tds' => array(
+		'tds'  => array(
 			'name'        => 'TDS',
 			'unit'        => 'ppm',
 			'description' => esc_html__( 'Total Dissolved Solids', 'aqualog' ),
@@ -244,7 +245,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'monthly',
 			'importance'  => 'recommended',
 		),
-		'o2' => array(
+		'o2'   => array(
 			'name'        => 'O₂',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Oxygen', 'aqualog' ),
@@ -254,7 +255,7 @@ function iworks_aqualog_options() {
 			'ideal'       => array( 6, 8 ),
 			'importance'  => 'recommended',
 		),
-		'co2' => array(
+		'co2'  => array(
 			'name'        => 'CO₂',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Carbon Dioxide', 'aqualog' ),
@@ -265,7 +266,7 @@ function iworks_aqualog_options() {
 			'frequency'   => 'daily',
 			'importance'  => 'critical',
 		),
-		'cl' => array(
+		'cl'   => array(
 			'name'        => 'Cl',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Chlorine', 'aqualog' ),
@@ -275,7 +276,7 @@ function iworks_aqualog_options() {
 			'ideal'       => array( 0, 0 ),
 			'importance'  => 'critical',
 		),
-		'cu' => array(
+		'cu'   => array(
 			'name'        => 'Cu',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Copper', 'aqualog' ),
@@ -284,7 +285,7 @@ function iworks_aqualog_options() {
 			'safety'      => array( 0, 0 ),
 			'ideal'       => array( 0, 0 ),
 		),
-		'zn' => array(
+		'zn'   => array(
 			'name'        => 'Zn',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Zinc', 'aqualog' ),
@@ -293,7 +294,7 @@ function iworks_aqualog_options() {
 			'safety'      => array( 0, 0 ),
 			'ideal'       => array( 0, 0 ),
 		),
-		'mn' => array(
+		'mn'   => array(
 			'name'        => 'Mn',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Manganese', 'aqualog' ),
@@ -302,7 +303,7 @@ function iworks_aqualog_options() {
 			'safety'      => array( 0, 0 ),
 			'ideal'       => array( 0, 0 ),
 		),
-		'mo' => array(
+		'mo'   => array(
 			'name'        => 'Mo',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Molybdenum', 'aqualog' ),
@@ -311,7 +312,7 @@ function iworks_aqualog_options() {
 			'safety'      => array( 0, 0 ),
 			'ideal'       => array( 0, 0 ),
 		),
-		'b' => array(
+		'b'    => array(
 			'name'        => 'B',
 			'unit'        => 'mg/L',
 			'description' => esc_html__( 'Boron', 'aqualog' ),
@@ -323,76 +324,76 @@ function iworks_aqualog_options() {
 	);
 
 	$options['frequencies'] = array(
-		'annually' => esc_html__( 'Annually', 'aqualog' ),
-		'daily' => esc_html__( 'Daily', 'aqualog' ),
+		'annually'        => esc_html__( 'Annually', 'aqualog' ),
+		'daily'           => esc_html__( 'Daily', 'aqualog' ),
 		'every_other_day' => esc_html__( 'Every other day', 'aqualog' ),
-		'monthly' => esc_html__( 'Monthly', 'aqualog' ),
-		'on_demand' => esc_html__( 'On demand', 'aqualog' ),
-		'other' => esc_html__( 'Other', 'aqualog' ),
-		'quarterly' => esc_html__( 'Quarterly', 'aqualog' ),
-		'semi_annually' => esc_html__( 'Semi-annually', 'aqualog' ),
-		'twice_daily' => esc_html__( 'Twice daily', 'aqualog' ),
-		'twice_monthly' => esc_html__( 'Twice monthly', 'aqualog' ),
-		'weekly' => esc_html__( 'Weekly', 'aqualog' ),
+		'monthly'         => esc_html__( 'Monthly', 'aqualog' ),
+		'on_demand'       => esc_html__( 'On demand', 'aqualog' ),
+		'other'           => esc_html__( 'Other', 'aqualog' ),
+		'quarterly'       => esc_html__( 'Quarterly', 'aqualog' ),
+		'semi_annually'   => esc_html__( 'Semi-annually', 'aqualog' ),
+		'twice_daily'     => esc_html__( 'Twice daily', 'aqualog' ),
+		'twice_monthly'   => esc_html__( 'Twice monthly', 'aqualog' ),
+		'weekly'          => esc_html__( 'Weekly', 'aqualog' ),
 	);
 
 	$options['maintenance_tasks'] = array(
-			'algae_removal' => array(
-				'title' => esc_html__( 'Algae Removal', 'aqualog' ),
-				'description' => esc_html__( 'Remove algae from tank surfaces', 'aqualog' ),
-				'frequency' => 'on_demand',
-				),
-			'equipment_inspection' => array(
-				'title' => esc_html__( 'Equipment Inspection', 'aqualog' ),
-				'description' => esc_html__( 'Inspect and clean equipment', 'aqualog' ),
-				'frequency' => 'monthly',
-				),
-			'feeding' => array(
-				'title' => esc_html__( 'Feeding', 'aqualog' ),
-				'description' => esc_html__( 'Feed fish and monitor feeding schedule', 'aqualog' ),
-				'frequency' => 'daily',
-				),
-			'fertilization' => array(
-				'title' => esc_html__( 'Fertilization', 'aqualog' ),
-				'description' => esc_html__( 'Add fertilizers and nutrients', 'aqualog' ),
-				'frequency' => 'weekly',
-				),
-			'filter_cleaning' => array(
-				'title' => esc_html__( 'Filter Cleaning', 'aqualog' ),
-				'description' => esc_html__( 'Clean or replace filter media', 'aqualog' ),
-				'frequency' => 'monthly',
-				),
-			'glass_cleaning' => array(
-				'title' => esc_html__( 'Glass Cleaning', 'aqualog' ),
-				'description' => esc_html__( 'Clean aquarium glass and remove algae', 'aqualog' ),
-				'frequency' => 'weekly',
-				),
-			'plant_trimming' => array(
-				'title' => esc_html__( 'Plant Trimming', 'aqualog' ),
-				'description' => esc_html__( 'Trim and maintain aquatic plants', 'aqualog' ),
-				'frequency' => 'weekly',
-				),
-			'substrate_cleaning' => array(
-				'title' => esc_html__( 'Substrate Cleaning', 'aqualog' ),
-				'description' => esc_html__( 'Clean substrate and gravel', 'aqualog' ),
-				'frequency' => 'monthly',
-				),
-			'temperature_adjustment' => array(
-				'title' => esc_html__( 'Temperature Adjustment', 'aqualog' ),
-				'description' => esc_html__( 'Check and adjust water temperature', 'aqualog' ),
-				'frequency' => 'daily',
-				),
-			'water_testing' => array(
-				'title' => esc_html__( 'Water Testing', 'aqualog' ),
-				'description' => esc_html__( 'Test water parameters', 'aqualog' ),
-				'frequency' => 'weekly',
-				),
-			'other' => array(
-				'title' => esc_html__( 'Other', 'aqualog' ),
-				'description' => esc_html__( 'Other maintenance tasks', 'aqualog' ),
-				'frequency' => 'as_needed',
-				),
-		);
+		'algae_removal'          => array(
+			'title'       => esc_html__( 'Algae Removal', 'aqualog' ),
+			'description' => esc_html__( 'Remove algae from tank surfaces', 'aqualog' ),
+			'frequency'   => 'on_demand',
+		),
+		'equipment_inspection'   => array(
+			'title'       => esc_html__( 'Equipment Inspection', 'aqualog' ),
+			'description' => esc_html__( 'Inspect and clean equipment', 'aqualog' ),
+			'frequency'   => 'monthly',
+		),
+		'feeding'                => array(
+			'title'       => esc_html__( 'Feeding', 'aqualog' ),
+			'description' => esc_html__( 'Feed fish and monitor feeding schedule', 'aqualog' ),
+			'frequency'   => 'daily',
+		),
+		'fertilization'          => array(
+			'title'       => esc_html__( 'Fertilization', 'aqualog' ),
+			'description' => esc_html__( 'Add fertilizers and nutrients', 'aqualog' ),
+			'frequency'   => 'weekly',
+		),
+		'filter_cleaning'        => array(
+			'title'       => esc_html__( 'Filter Cleaning', 'aqualog' ),
+			'description' => esc_html__( 'Clean or replace filter media', 'aqualog' ),
+			'frequency'   => 'monthly',
+		),
+		'glass_cleaning'         => array(
+			'title'       => esc_html__( 'Glass Cleaning', 'aqualog' ),
+			'description' => esc_html__( 'Clean aquarium glass and remove algae', 'aqualog' ),
+			'frequency'   => 'weekly',
+		),
+		'plant_trimming'         => array(
+			'title'       => esc_html__( 'Plant Trimming', 'aqualog' ),
+			'description' => esc_html__( 'Trim and maintain aquatic plants', 'aqualog' ),
+			'frequency'   => 'weekly',
+		),
+		'substrate_cleaning'     => array(
+			'title'       => esc_html__( 'Substrate Cleaning', 'aqualog' ),
+			'description' => esc_html__( 'Clean substrate and gravel', 'aqualog' ),
+			'frequency'   => 'monthly',
+		),
+		'temperature_adjustment' => array(
+			'title'       => esc_html__( 'Temperature Adjustment', 'aqualog' ),
+			'description' => esc_html__( 'Check and adjust water temperature', 'aqualog' ),
+			'frequency'   => 'daily',
+		),
+		'water_testing'          => array(
+			'title'       => esc_html__( 'Water Testing', 'aqualog' ),
+			'description' => esc_html__( 'Test water parameters', 'aqualog' ),
+			'frequency'   => 'weekly',
+		),
+		'other'                  => array(
+			'title'       => esc_html__( 'Other', 'aqualog' ),
+			'description' => esc_html__( 'Other maintenance tasks', 'aqualog' ),
+			'frequency'   => 'as_needed',
+		),
+	);
 
 	// Return the complete options configuration
 	return $options;

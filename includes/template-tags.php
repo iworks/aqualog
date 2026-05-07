@@ -29,28 +29,26 @@ defined( 'ABSPATH' ) || exit;
  * @return string HTML span element with inline styles for positioning.
  */
 function aqualog_chemistry_scale_item( $one, $range ) {
-	$min = $one['range'][0];
-	$max = $one['range'][1];
+	$min    = $one['range'][0];
+	$max    = $one['range'][1];
 	$length = ( $max - $min ) * 1000;
-	$start = ( $one[$range][0] - $min ) * 100000 / $length;
-	$end = ( $one[$range][1] - $min ) * 100000 / $length ;
+	$start  = ( $one[ $range ][0] - $min ) * 100000 / $length;
+	$end    = ( $one[ $range ][1] - $min ) * 100000 / $length;
 	return array( $start, $end );
 }
 
-function aqualog_get_scale($args) {
-	$danger = aqualog_chemistry_scale_item( $args, 'danger' );
-	$safety = aqualog_chemistry_scale_item( $args, 'safety' );
-	$ideal = aqualog_chemistry_scale_item( $args, 'ideal' );
-	$range_min = esc_attr( $args['range'][0] );
-	$range_max = esc_attr( $args['range'][1] );
-	$range_step = esc_attr( ( $args['range'][1] - $args['range'][0] ) / 100 );
-	$content = sprintf('<div class="aqualog-chemistry-item-body-scale-char"
+function aqualog_get_scale( $args ) {
+	$danger   = aqualog_chemistry_scale_item( $args, 'danger' );
+	$safety   = aqualog_chemistry_scale_item( $args, 'safety' );
+	$ideal    = aqualog_chemistry_scale_item( $args, 'ideal' );
+	$content  = sprintf(
+		'<div class="aqualog-chemistry-item-body-scale-char"
 		data-range-min="%s"
 		data-range-max="%s"
 		data-range-step="%s"',
-		$range_min,
-		$range_max,
-		$range_step
+		esc_attr( $args['range'][0] ),
+		esc_attr( $args['range'][1] ),
+		esc_attr( ( $args['range'][1] - $args['range'][0] ) / 100 )
 	);
 	$content .= ' ';
 	$content .= sprintf(
@@ -73,9 +71,9 @@ function aqualog_get_scale($args) {
 	if ( '' !== $args['value'] ) {
 		$content .= sprintf(
 			'<span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: %d%%;"></span>',
-			( ( $args['value'] - $args['range'][0] ) * 100 ) / ( $args['range'][1] - $args['range'][0] )
+			esc_attr( ( ( $args['value'] - $args['range'][0] ) * 100 ) / ( $args['range'][1] - $args['range'][0] ) )
 		);
 	}
 	$content .= '</div>';
-	echo $content;
+	echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }

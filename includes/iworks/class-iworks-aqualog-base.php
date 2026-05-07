@@ -347,7 +347,7 @@ class iworks_aqualog_base {
 						esc_attr( $key ),
 						intval( $value ),
 						// $extra contains already escaped HTML attributes
-						$extra
+						$extra // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					);
 					break;
 				case 'date':
@@ -603,7 +603,7 @@ class iworks_aqualog_base {
 			return;
 		}
 		$this->simple_history_logger_helper(
-			/* translators: %1$s: template file name, %2$s: template group name */
+			/* translators: {file}: template file name, {group}: template group name (do not translate placeholders)*/
 			esc_html__( 'Template file not found: {file} ({group}).', 'aqualog' ),
 			array(
 				'file'  => $file,
@@ -613,14 +613,17 @@ class iworks_aqualog_base {
 		);
 		if ( current_user_can( 'administrator' ) ) {
 			echo '<div class="notice notice-inline notice-error">';
-			echo wpautop(
-				/* translators: %1$s: template file name, %2$s: template group name */
-				sprintf(
-					esc_html__( 'Template file not found: %1$s (%2$s).', 'aqualog' ),
-					$file,
-					$group
+			echo wp_kses_post(
+				wpautop(
+					sprintf(
+						/* translators: %1$s: template file name, %2$s: template group name */
+						esc_html__( 'Template file not found: %1$s (%2$s).', 'aqualog' ),
+						esc_html( $file ),
+						esc_html( $group )
+					)
 				)
 			);
+			echo '</div>';
 		}
 	}
 }

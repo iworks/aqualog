@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.1\n"
 "Report-Msgid-Bugs-To: http://iworks.pl\n"
-"POT-Creation-Date: 2026-05-07 11:36:34+00:00\n"
+"POT-Creation-Date: 2026-05-07 15:22:03+00:00\n"
 "PO-Revision-Date: 2026-05-02 20:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: iWorks <support@iworks.pl>\n"
@@ -58,56 +58,115 @@ msgstr ""
 msgid "Create Your First Aquarium"
 msgstr ""
 
+#: assets/templates/messages/dashboard-welcome.php:14
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:113
+msgid "Welcome to AquaLog!"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:17
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:116
+msgid ""
+"Thank you for installing AquaLog! This powerful plugin helps you manage and "
+"track your water-related activities with ease. Here are some quick tips to "
+"get you started:"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:21
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:120
+msgid "Navigate to the AquaLog settings page to configure your preferences"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:22
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:121
+msgid "Add your first water entry to start tracking your daily consumption"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:23
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:122
+msgid "Check out the analytics dashboard to view your water usage patterns"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:24
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:123
+msgid "Set up reminders to help you stay hydrated throughout the day"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:27
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:126
+msgid "Pro Tip:"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:28
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:127
+msgid ""
+"Regular water tracking can improve your health and wellbeing. Make it a "
+"daily habit!"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:32
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:131
+msgid "Get Started"
+msgstr ""
+
+#: assets/templates/messages/dashboard-welcome.php:35
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:134
+msgid "Learn More"
+msgstr ""
+
+#. translators: Chemistry submenu title
 #: assets/templates/pages/chemistry.php:14
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:577
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:548
 #: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:166
 msgid "Chemistry"
 msgstr ""
 
 #: assets/templates/pages/chemistry.php:28
-#: assets/templates/pages/dashboard.php:35
+#: assets/templates/pages/dashboard.php:36
 #: assets/templates/pages/maintenance.php:72
 msgid "Quick Actions"
 msgstr ""
 
 #: assets/templates/pages/chemistry.php:32
-#: assets/templates/pages/dashboard.php:43
+#: assets/templates/pages/dashboard.php:44
 msgid "Add Measurement Results"
 msgstr ""
 
+#. translators: Main menu page title
 #: assets/templates/pages/dashboard.php:14
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:560
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:528
 msgid "AquaLog Dashboard"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:25
+#: assets/templates/pages/dashboard.php:26
 msgid "Recent Activity"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:39
+#: assets/templates/pages/dashboard.php:40
 msgid "Add Aquarium"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:47
+#: assets/templates/pages/dashboard.php:48
 msgid "View All"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:51 etc/options.php:48
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:377
+#. translators: Settings menu item
+#: assets/templates/pages/dashboard.php:52 etc/options.php:48
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:388
 #: includes/iworks/rate/rate.php:159
 msgid "Settings"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:55
+#: assets/templates/pages/dashboard.php:56
 msgid "Documentation"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:64
+#: assets/templates/pages/dashboard.php:65
 msgid "Water Quality Overview"
 msgstr ""
 
+#. translators: Maintenance submenu title
 #: assets/templates/pages/maintenance.php:21
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:583
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:555
 msgid "Maintenance"
 msgstr ""
 
@@ -373,172 +432,144 @@ msgstr ""
 msgid "Other maintenance tasks"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:197
+#. translators: Meta box title for assistance section
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:205
 msgid "Have a question or need help?"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:203
+#. translators: Meta box title for plugin appreciation section
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:211
 msgid "Enjoying this plugin?"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:226
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:234
 msgid "Help others discover it—share the link with your friends and community!"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:228
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:236
 msgid "Give it a five stars on WordPress.org"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:229
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:237
 msgid "Link to it so others can easily find it"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:250
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:258
 msgid ""
 "We’re here for you! Send us a message and we’ll get back to you as soon as "
 "possible."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:252
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:260
 msgid "WordPress Help Forum"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:333
+#. translators: Loading message
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:343
 msgid "Loading…"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:334
+#. translators: Saving message
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:344
 msgid "Saving…"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:335
+#. translators: Error message when saving fails
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:345
 msgid "An error occurred while saving. Please try again."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:336
+#. translators: Validation error message
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:346
 msgid "Please correct the highlighted fields and try again."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:392
+#. translators: Donate menu item
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:404
 msgid "Donate"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:406
+#. translators: GitHub menu item
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:419
 msgid "GitHub"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:444
-msgid "Welcome to AquaLog!"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:447
-msgid ""
-"Thank you for installing AquaLog! This powerful plugin helps you manage and "
-"track your water-related activities with ease. Here are some quick tips to "
-"get you started:"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:451
-msgid "Navigate to the AquaLog settings page to configure your preferences"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:452
-msgid "Add your first water entry to start tracking your daily consumption"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:453
-msgid "Check out the analytics dashboard to view your water usage patterns"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:454
-msgid "Set up reminders to help you stay hydrated throughout the day"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:457
-msgid "Pro Tip:"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:458
-msgid ""
-"Regular water tracking can improve your health and wellbeing. Make it a "
-"daily habit!"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:462
-msgid "Get Started"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:465
-msgid "Learn More"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
 msgid "AquaLog"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:572
+#. translators: Dashboard submenu title
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:542
 msgid "Dashboard"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:589
+#. translators: Notes submenu title
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:562
 msgid "Notes"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:595
+#. translators: Aquariums submenu title
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:569
 #: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:299
 #: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:313
 msgid "Aquariums"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:600
+#. translators: Help submenu title
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:575
 msgid "Help"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:710
+#. translators: Message when no aquarium data is available
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:684
 msgid "No aquarium data available."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:736
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:710
 msgid "Avg Temperature"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:742
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:716
 msgid "Avg pH Level"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:746
+#. translators: Message when no water quality data is available
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:721
 msgid "No water quality data available."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:761
+#. translators: Help & Support page title
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:738
 msgid "Help & Support"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:763
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:741
 msgid "Getting Started"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:764
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:742
 msgid "Welcome to AquaLog! Here are some resources to help you get started:"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:766
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:744
 msgid "Plugin Documentation"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:767
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:745
 msgid "Support Forum"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:768
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:746
 msgid "Leave a Review"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:829
+#. translators: Default text when no aquarium is selected
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:807
 msgid "No aquarium selected"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:842
+#. translators: Label for current aquarium display
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:820
 msgid "Current Aquarium:"
 msgstr ""
 
@@ -785,35 +816,35 @@ msgid "L"
 msgstr ""
 
 #: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:485
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:151
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:333
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:141
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:323
 msgid "&mdash; Select &mdash;"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:279
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:269
 #: includes/iworks/options/options.php:998
 #: includes/iworks/options/options.php:2388
 msgid "Select Image"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:283
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:273
 #: includes/iworks/options/options.php:1003
 msgid "Delete image"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:449
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:439
 msgid "Order"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:474
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:464
 msgid "Selected Taxonomy dosn't exists."
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:596
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:586
 msgid "Select or Upload Media"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:598
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:588
 msgid "Use this Media"
 msgstr ""
 
@@ -821,31 +852,34 @@ msgstr ""
 msgid "No recent activity found."
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-activity.php:122
-msgid "Created on %s at %s"
+#. translators: %1$s: date, %2$s: time
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-activity.php:123
+msgid "Created on %1$s at %2$s"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:132
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:130
 msgid "Never tested!"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:254
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:252
 msgid "Unknown parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:265
-msgid "Value is outside typical range (%s - %s %s)"
+#. translators: %1$s: range min, %2$s: range max, %3$s: unit
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:264
+msgid "Value is outside typical range (%1$s - %2$s %3$s)"
 msgstr ""
 
+#. translators: %1$s: ideal min, %2$s: ideal max, %3$s: unit
 #: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:278
-msgid "Value is outside ideal range (%s - %s %s)"
+msgid "Value is outside ideal range (%1$s - %2$s %3$s)"
 msgstr ""
 
 #: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:288
 msgid "Value is within ideal range"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:314
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:312
 msgid "Latest Measurements"
 msgstr ""
 
@@ -877,27 +911,27 @@ msgstr ""
 msgid "Invalid parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:405
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:406
 msgid "Parameter added successfully"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:408
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:410
 msgid "Failed to add parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:72
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:74
 msgid "Total Aquariums"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:81
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:83
 msgid "Water Entries"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:90
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:92
 msgid "pH Readings"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:99
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:101
 msgid "Maintenance Tasks"
 msgstr ""
 
@@ -916,6 +950,16 @@ msgid_plural "%s days ago"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#. translators: %1$s: template file name, %2$s: template group name
+#: includes/iworks/class-iworks-aqualog-base.php:607
+msgid "Template file not found: {file} ({group})."
+msgstr ""
+
+#. translators: %1$s: template file name, %2$s: template group name
+#: includes/iworks/class-iworks-aqualog-base.php:619
+msgid "Template file not found: %1$s (%2$s)."
+msgstr ""
 
 #: includes/iworks/options/includes/class-iworks-options-logger.php:99
 msgid ""
@@ -1131,6 +1175,12 @@ msgstr ""
 msgid "http://iworks.pl/"
 msgstr ""
 
+#: assets/templates/messages/dashboard-welcome.php:34
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-dashboard.php:133
+msgctxt "plugin homepage"
+msgid "https://wordpress.org/plugins/aqualog/"
+msgstr ""
+
 #: includes/iworks/aqualog/class-iworks-aqualog-db.php:103
 msgctxt "import terms to aquarium type"
 msgid "Biotope"
@@ -1201,24 +1251,19 @@ msgctxt "import terms to aquarium type"
 msgid "Wabi Kusa"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:228
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:236
 msgctxt "link to add new review page on WordPress.org"
 msgid "https://wordpress.org/support/plugin/aqualog/reviews/#new-post"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:229
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:237
 msgctxt "plugin home page on WordPress.org"
 msgid "https://wordpress.org/plugins/aqualog/"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:252
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:260
 msgctxt "link to support forum on WordPress.org"
 msgid "https://wordpress.org/support/plugin/aqualog/"
-msgstr ""
-
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:464
-msgctxt "plugin homepage"
-msgid "https://wordpress.org/plugins/aqualog/"
 msgstr ""
 
 #: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:294

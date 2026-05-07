@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __FILE__, 3 ) . '/class-iworks-aqualog-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 
@@ -198,7 +198,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		if ( method_exists( $this, $method ) ) {
 			$this->$method( $post, $one );
 		} else {
-			$sufix = isset( $one['sufix'] ) ? sprintf( ' <span class="sufix">%s</span>', $one['sufix'] ) : '';
+			$sufix = isset( $one['sufix'] ) ? sprintf( ' <span class="sufix">%s</span>', esc_html( $one['sufix'] ) ) : '';
 			echo '<p>';
 			echo '<label>';
 			if ( isset( $one['label'] ) ) {
@@ -218,11 +218,11 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 				esc_attr( $one['meta']['value'] ),
 				esc_attr( $one['meta']['key'] ),
 				esc_attr( implode( ' ', $classes ) ),
-				$sufix
+				$sufix // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			);
 			echo '</label>';
 			if ( isset( $one['description'] ) ) {
-				printf( '<span class="description">%s</span>', $one['description'] );
+				printf( '<span class="description">%s</span>', wp_kses_post( $one['description'] ) );
 			}
 			echo '</p>';
 		}
@@ -256,8 +256,8 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		printf(
 			'<img src="%s" alt="" style="%s%sclear:right;display:block;margin-bottom:10px;" />',
 			esc_attr( $src ? $src : '' ),
-			array_key_exists( 'max-width', $one ) && is_integer( $one['max-width'] ) ? sprintf( 'max-width: %dpx;', $one['max-width'] ) : '',
-			array_key_exists( 'max-height', $one ) && is_integer( $one['max-height'] ) ? sprintf( 'max-height: %dpx;', $one['max-height'] ) : ''
+			array_key_exists( 'max-width', $one ) && is_integer( $one['max-width'] ) ? sprintf( 'max-width: %dpx;', $one['max-width'] ) : '', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			array_key_exists( 'max-height', $one ) && is_integer( $one['max-height'] ) ? sprintf( 'max-height: %dpx;', $one['max-height'] ) : '' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		);
 		printf(
 			'<input class="attachment-id" type="hidden" name="%s" value="%s">',
@@ -320,13 +320,13 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			'<select name="%s">',
 			esc_attr( $one['name'] )
 		);
-		printf( '<option value="">%s</option>', __( '&mdash; Select &mdash;', 'aqualog' ) );
+		printf( '<option value="">%s</option>', esc_html__( '&mdash; Select &mdash;', 'aqualog' ) );
 		foreach ( $one['options'] as $option_value => $option_name ) {
 			printf(
 				'<option value="%s" %s>%s</option>',
 				esc_attr( $option_value ),
 				selected( $option_value, $value, false ),
-				$option_name
+				esc_html( $option_name )
 			);
 		}
 		echo '</select>';
@@ -435,21 +435,6 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			}
 		}
 	}
-	public function filter_add_menu_order_column( $columns ) {
-		$columns['menu_order'] = __( 'Order', 'aqualog' );
-		return $columns;
-	}
-
-	public function action_add_menu_order_value( $column, $post_id ) {
-		switch ( $column ) {
-			case 'menu_order':
-				printf(
-					'<span class="alignright">%d</span>',
-					get_post_field( $column, $post_id )
-				);
-				return;
-		}
-	}
 
 	protected function get_taxonomy( $taxonomy_name ) {
 		if ( ! isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
@@ -459,7 +444,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			);
 		}
 		if ( isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
-			return  $this->taxonomies_names[ $taxonomy_name ];
+			return $this->taxonomies_names[ $taxonomy_name ];
 		}
 		return new WP_Error( 'taxonomy', esc_html__( 'Selected Taxonomy dosn\'t exists.', 'aqualog' ) );
 	}
@@ -637,7 +622,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 				file_get_contents(
 					sprintf(
 						'%s/assets/images/%s.svg',
-						dirname( dirname( $this->base ) ),
+						dirname( $this->base, 2 ),
 						sanitize_file_name( $icon )
 					)
 				)
@@ -657,6 +642,4 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			$feature
 		);
 	}
-
 }
-

@@ -30,74 +30,83 @@
 defined( 'ABSPATH' ) || exit;
 
 $classes = array(
-    'aqualog-chemistry-item',
-    'aqualog-chemistry-item--' . $args['key'],
-    'param-importance-' . $args['importance'],
+	'aqualog-chemistry-item',
+	'aqualog-chemistry-item--' . $args['key'],
+	'param-importance-' . $args['importance'],
 );
 if ( empty( $args['last_test_date'] ) ) {
-    $classes[] = 'no-last-test-date';
+	$classes[] = 'no-last-test-date';
 }
 $tooltip = $icon = '';
-switch( $args['importance'] ) {
-    case 'critical':
-        $icon = 'dashicons dashicons-info';
-        $tooltip = __( 'Critical parameter - requires close monitoring', 'aqualog' );
-        break;
-    case 'important':
-        $icon = 'dashicons dashicons-info';
-        $tooltip = __( 'Important parameter - monitor regularly', 'aqualog' );
-        break;
-    case 'recommended':
-        $icon = 'dashicons dashicons-info-outline';
-        $tooltip = __( 'Recommended parameter - good to track', 'aqualog' );
-        break;
+switch ( $args['importance'] ) {
+	case 'critical':
+		$icon    = 'dashicons dashicons-info';
+		$tooltip = __( 'Critical parameter - requires close monitoring', 'aqualog' );
+		break;
+	case 'important':
+		$icon    = 'dashicons dashicons-info';
+		$tooltip = __( 'Important parameter - monitor regularly', 'aqualog' );
+		break;
+	case 'recommended':
+		$icon    = 'dashicons dashicons-info-outline';
+		$tooltip = __( 'Recommended parameter - good to track', 'aqualog' );
+		break;
 }
 ?>
 <div
-    class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
-    data-key="<?php echo esc_attr( $args['key'] ); ?>"
-    data-value="<?php echo esc_attr( $args['value'] ); ?>"
+	class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
+	data-key="<?php echo esc_attr( $args['key'] ); ?>"
+	data-value="<?php echo esc_attr( $args['value'] ); ?>"
 >
-    <div class="aqualog-chemistry-item-header">
-        <?php if ( ! empty( $icon ) ) { ?>
-        <span class="<?php echo esc_attr( $icon ); ?>" title="<?php echo esc_attr( $tooltip ); ?>"></span>
-        <?php } ?>
-        <h3><?php echo esc_html( $args['description'] ); ?> (<?php echo esc_html( $args['name'] ); ?>)</h3>
-    </div>
-    <div class="aqualog-chemistry-item-body">
-        <p class="param-value param-value--<?php echo esc_attr( $args['value_class'] ); ?>">
-            <?php if ( '' === $args['value'] ) {
-                echo '—';
-            } else {
-                if ( is_numeric( $args['value'] ) ) {
-                    if ( $args['value'] == floor( $args['value'] ) ) {
-                        echo esc_html( number_format_i18n( $args['value'] ) );
-                    } else {
-                        if ( 0 === $args['value'] * 100 % 10 ) {
-                            echo esc_html( number_format_i18n( $args['value'], 1 ) );
-                        } else {
-                            echo esc_html( number_format_i18n( $args['value'], 2 ) );
-                        }
-                    }
-                } else {
-                    echo esc_html( $args['value'] );
-                }
-                echo ' ';
-                echo esc_html( $args['unit'] );
-            } ?>
-        </p>
-        <p class="param-last-test-date">
-            <?php echo esc_html( $args['last_test_date'] ); ?>
-            <?php if ( ! empty( $args['frequency'] ) ) { ?>
-            <span class="param-frequency">(<?php echo esc_html( $args['frequency'] ); ?>)</span>
-            <?php } ?>
-        </p>
-        <div class="aqualog-chemistry-item-body-scale">
-            <?php aqualog_get_scale($args); ?>
-            <div class="aqualog-chemistry-item-body-scale-legend">
-                <span class="legend-item--min"><?php echo esc_html( $args['range'][0] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
-                <span class="legend-item--max"><?php echo esc_html( $args['range'][1] ); ?> <?php  echo esc_html( $args['unit'] ); ?></span>
-            </div>
-        </div>
-    </div>
+	<div class="aqualog-chemistry-item-header">
+		<?php if ( ! empty( $icon ) ) { ?>
+		<span class="<?php echo esc_attr( $icon ); ?>" title="<?php echo esc_attr( $tooltip ); ?>"></span>
+		<?php } ?>
+		<h3>
+		<?php
+			echo esc_html( $args['description'] );
+		if ( $args['show_name'] ) {
+			echo ' (' . esc_html( $args['name'] ) . ')';
+		}
+		?>
+			</h3>
+	</div>
+	<div class="aqualog-chemistry-item-body">
+		<p class="param-value param-value--<?php echo esc_attr( $args['value_class'] ); ?>">
+			<?php
+			if ( '' === $args['value'] ) {
+				echo '—';
+			} else {
+				if ( is_numeric( $args['value'] ) ) {
+					if ( $args['value'] == floor( $args['value'] ) ) {
+						echo esc_html( number_format_i18n( $args['value'] ) );
+					} else {
+						if ( 0 === $args['value'] * 100 % 10 ) {
+							echo esc_html( number_format_i18n( $args['value'], 1 ) );
+						} else {
+							echo esc_html( number_format_i18n( $args['value'], 2 ) );
+						}
+					}
+				} else {
+					echo esc_html( $args['value'] );
+				}
+				echo ' ';
+				echo esc_html( $args['unit'] );
+			}
+			?>
+		</p>
+		<p class="param-last-test-date">
+			<?php echo esc_html( $args['last_test_date'] ); ?>
+			<?php if ( ! empty( $args['frequency'] ) ) { ?>
+			<span class="param-frequency">(<?php echo esc_html( $args['frequency'] ); ?>)</span>
+			<?php } ?>
+		</p>
+		<div class="aqualog-chemistry-item-body-scale">
+			<?php aqualog_get_scale( $args ); ?>
+			<div class="aqualog-chemistry-item-body-scale-legend">
+				<span class="legend-item--min"><?php echo esc_html( $args['range'][0] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
+				<span class="legend-item--max"><?php echo esc_html( $args['range'][1] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
+			</div>
+		</div>
+	</div>
 </div>

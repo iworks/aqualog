@@ -788,7 +788,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * @return  void
 	 */
 	public function current_aquarium_bar() {
-		echo $this->get_current_aquarium();
+		echo $this->get_current_aquarium(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -819,7 +819,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		$content .= '<div class="aqualog-current-aquarium">';
 		$content .= /* translators: Label for current aquarium display */ esc_html__( 'Current Aquarium:', 'aqualog' );
 		$content .= ' ';
-		$content .= $title;
+		$content .= $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$content .= '</div>';
 		return $content;
 	}
