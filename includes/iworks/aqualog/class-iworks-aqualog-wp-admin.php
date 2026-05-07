@@ -175,7 +175,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			if ( 'index.php' === basename( $file ) ) {
 				continue;
 			}
-			$file_slug = basename( $file, '.php' );
+			$file_slug              = basename( $file, '.php' );
 			$messages[ $file_slug ] = $this->get_template_file( $file_slug, 'messages' );
 		}
 		return $messages;
@@ -188,7 +188,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		 */
 		$this->user_meta_dashboard_message_dismissed_name = $this->options->get_option_name( 'dashboard_message_dismissed' );
 		$this->set_current_aquarium_id();
-		
 	}
 
 	/**
@@ -294,22 +293,11 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	public function action_admin_enqueue_scripts_register_assets() {
 		//
 		$file = 'includes/iworks/options/assets/scripts/select2.min.js';
-		wp_register_script( 
+		wp_register_script(
 			'select2',
 			plugins_url( $file, $this->plugin_file_path ),
-			array('jquery'),
+			array( 'jquery' ),
 			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) ),
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
-		// Register dashboard script
-		wp_register_script(
-			'aqualog-dashboard',
-			plugins_url( 'src/admin/dashboard.js', $this->plugin_file_path ),
-			array('jquery'),
-			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . 'src/admin/dashboard.js' ) ),
 			array(
 				'in_footer' => true,
 				'strategy'  => 'defer',
@@ -317,18 +305,18 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		);
 		// Register admin script
 		$name = $this->dir . '-admin';
-		$file = 'assets/scripts/' . $this->dir . '-admin' . $this->dev . '.js';
+		$file = 'assets/scripts/aqualog-admin' . $this->dev . '.js';
 		wp_register_script(
 			$name,
 			plugins_url( $file, $this->plugin_file_path ),
-			array('jquery', 'select2', 'wp-util', 'jquery-ui-slider'),
+			array( 'jquery', 'select2', 'wp-util', 'jquery-ui-slider' ),
 			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) ),
 			array(
 				'in_footer' => true,
 				'strategy'  => 'defer',
 			)
 		);
-		$file = 'assets/styles/' . $this->dir . '-admin' . $this->dev . '.css';
+		$file = 'assets/styles/aqualog-admin' . $this->dev . '.css';
 		wp_register_style(
 			$name,
 			plugins_url( $file, $this->plugin_file_path ),
@@ -346,23 +334,23 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		$data = apply_filters(
 			'aqualog/wp-admin/wp_localize_script',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonces' => array(
-				'dismiss_message' => wp_create_nonce( 'iworks_aqualog_dismiss_message' ),
-			),
-				'i18n' => array(
+				'ajax_url'    => admin_url( 'admin-ajax.php' ),
+				'nonces'      => array(
+					'dismiss_message' => wp_create_nonce( 'iworks_aqualog_dismiss_message' ),
+				),
+				'i18n'        => array(
 					'messages' => array(
-						'loading' => /* translators: Loading message */ __( 'Loading…', 'aqualog' ),
-						'saving' => /* translators: Saving message */ __( 'Saving…', 'aqualog' ),
-						'saveError' => /* translators: Error message when saving fails */ __( 'An error occurred while saving. Please try again.', 'aqualog' ),
+						'loading'       => /* translators: Loading message */ __( 'Loading…', 'aqualog' ),
+						'saving'        => /* translators: Saving message */ __( 'Saving…', 'aqualog' ),
+						'saveError'     => /* translators: Error message when saving fails */ __( 'An error occurred while saving. Please try again.', 'aqualog' ),
 						'invalidValues' => /* translators: Validation error message */ __( 'Please correct the highlighted fields and try again.', 'aqualog' ),
 					),
 				),
-				'chemistry' => array(),
+				'chemistry'   => array(),
 				'maintenance' => array(),
 			)
 		);
-		wp_localize_script( $name, 'aqualog', $data);
+		wp_localize_script( $name, 'aqualog', $data );
 	}
 
 	/**
@@ -412,7 +400,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 						'https://ko-fi.com/iworks'
 					)
 				),
-					/* translators: Donate menu item */
+				/* translators: Donate menu item */
 						esc_html__( 'Donate', 'aqualog' )
 			);
 			/* end:free */
@@ -427,7 +415,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 						'https://github.com/iworks.pl/aqualog'
 					)
 				),
-					/* translators: GitHub menu item */
+				/* translators: GitHub menu item */
 						esc_html__( 'GitHub', 'aqualog' )
 			);
 		}
@@ -458,16 +446,13 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		}
 
 		// Check if user has dismissed this message
-		$user_id = get_current_user_id();
+		$user_id   = get_current_user_id();
 		$dismissed = get_user_meta( $user_id, $this->user_meta_dashboard_message_dismissed_name, true );
 
 		if ( $dismissed ) {
 			return;
 		}
-		$file = $this->get_template_file( 'messages/dashboard-welcome', 'templates' );
-		if ( $file ) {
-			load_template( $file );
-		}
+		$this->load_template( 'messages/dashboard-welcome', 'templates' );
 	}
 
 	/**
@@ -554,41 +539,41 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		$submenus = array(
 			array(
 				/* translators: Dashboard submenu title */
-				'title' => __( 'Dashboard', 'aqualog' ),
-				'slug' => $this->wp_admin_slug,
+				'title'    => __( 'Dashboard', 'aqualog' ),
+				'slug'     => $this->wp_admin_slug,
 				'callback' => array( $this, 'render_dashboard_page' ),
 			),
 			array(
 				/* translators: Chemistry submenu title */
-				'title' => __( 'Chemistry', 'aqualog' ),
-				'slug' => 'aqualog-chemistry',
+				'title'    => __( 'Chemistry', 'aqualog' ),
+				'slug'     => 'aqualog-chemistry',
 				'callback' => array( $this, 'render_chemistry_page' ),
-				'filter' => 'aqualog/load/wp-admin/chemistry',
+				'filter'   => 'aqualog/load/wp-admin/chemistry',
 			),
 			array(
 				/* translators: Maintenance submenu title */
-				'title' => __( 'Maintenance', 'aqualog' ),
-				'slug' => 'aqualog-maintenance',
+				'title'    => __( 'Maintenance', 'aqualog' ),
+				'slug'     => 'aqualog-maintenance',
 				'callback' => array( $this, 'render_maintenance_page' ),
-				'filter' => 'aqualog/load/wp-admin/maintenance',
+				'filter'   => 'aqualog/load/wp-admin/maintenance',
 			),
 			array(
 				/* translators: Notes submenu title */
-				'title' => __( 'Notes', 'aqualog' ),
-				'slug' => 'edit.php?post_type=iw_note',
+				'title'    => __( 'Notes', 'aqualog' ),
+				'slug'     => 'edit.php?post_type=iw_note',
 				'callback' => null,
-				'filter' => 'aqualog/load/wp-admin/notes',
+				'filter'   => 'aqualog/load/wp-admin/notes',
 			),
 			array(
 				/* translators: Aquariums submenu title */
-				'title' => __( 'Aquariums', 'aqualog' ),
-				'slug' => 'edit.php?post_type=iw_aquarium',
+				'title'    => __( 'Aquariums', 'aqualog' ),
+				'slug'     => 'edit.php?post_type=iw_aquarium',
 				'callback' => null,
 			),
 			array(
 				/* translators: Help submenu title */
-				'title' => __( 'Help', 'aqualog' ),
-				'slug' => 'aqualog-help',
+				'title'    => __( 'Help', 'aqualog' ),
+				'slug'     => 'aqualog-help',
 				'callback' => array( $this, 'render_help_page' ),
 			),
 		);
@@ -606,7 +591,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			);
 			add_action( 'load-' . $slug, array( $this, 'admin_enqueue_assets' ) );
 		}
-
 	}
 
 	/**
@@ -619,7 +603,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * @return  void
 	 */
 	public function render_dashboard_page() {
-		do_action( 'aqualog/wp-admin/dashboard_page' );
+		do_action( 'aqualog/wp-admin/page/dashboard' );
 	}
 
 	/**
@@ -675,7 +659,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		}
 	}
 
-	
+
 	/**
 	 * Render water quality stats.
 	 *
@@ -688,10 +672,12 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 */
 	private function render_water_quality_stats() {
 		// Get average values from all aquariums
-		$aquariums = get_posts( array(
-			'post_type'      => 'iw_aquarium',
-			'posts_per_page' => -1,
-		) );
+		$aquariums = get_posts(
+			array(
+				'post_type'      => 'iw_aquarium',
+				'posts_per_page' => -1,
+			)
+		);
 
 		if ( empty( $aquariums ) ) {
 			/* translators: Message when no aquarium data is available */
@@ -700,8 +686,8 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		}
 
 		$total_temp = 0;
-		$total_ph = 0;
-		$count = 0;
+		$total_ph   = 0;
+		$count      = 0;
 
 		foreach ( $aquariums as $aquarium ) {
 			$temp = get_post_meta( $aquarium->ID, '_iw_temperature', true );
@@ -710,7 +696,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			if ( $temp && $ph ) {
 				$total_temp += floatval( $temp );
 				$total_ph   += floatval( $ph );
-				$count++;
+				++$count;
 			}
 		}
 
@@ -747,9 +733,10 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	public function render_help_page() {
 		?>
 		<div class="wrap">
-			<?php 
+			<?php
 			/* translators: Help & Support page title */
-			$this->html_title( __( 'Help & Support', 'aqualog' ) ); ?>
+			$this->html_title( __( 'Help & Support', 'aqualog' ) );
+			?>
 			<div class="aqualog-card">
 				<h3><?php esc_html_e( 'Getting Started', 'aqualog' ); ?></h3>
 				<p><?php esc_html_e( 'Welcome to AquaLog! Here are some resources to help you get started:', 'aqualog' ); ?></p>
@@ -816,8 +803,8 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	private function get_current_aquarium() {
 		$this->set_current_aquarium_id();
 		$content = '';
-		$id = 0;
-		$title = /* translators: Default text when no aquarium is selected */ esc_html__( 'No aquarium selected', 'aqualog' );
+		$id      = 0;
+		$title   = /* translators: Default text when no aquarium is selected */ esc_html__( 'No aquarium selected', 'aqualog' );
 		if ( empty( $this->current_aquarium_id ) ) {
 		} else {
 			$aquarium = get_post( $this->current_aquarium_id );
@@ -836,5 +823,4 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		$content .= '</div>';
 		return $content;
 	}
-
 }

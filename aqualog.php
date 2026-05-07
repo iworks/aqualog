@@ -43,6 +43,7 @@ $aqualog_vendor = $aqualog_base . '/includes';
 /**
  * modules to load
  */
+add_filter( 'aqualog/load/wp-admin/dashboard', '__return_true' );
 add_filter( 'aqualog/load/wp-admin/chemistry', '__return_true' );
 add_filter( 'aqualog/load/wp-admin/activity', '__return_true' );
 add_filter( 'aqualog/load/wp-admin/statistics', '__return_true' );

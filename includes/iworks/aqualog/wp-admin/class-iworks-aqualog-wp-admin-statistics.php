@@ -54,18 +54,20 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 	 * @access public
 	 * @return void
 	 */
-	private function render_card( $class, $title, $value, $icon) {
-		$file = $this->get_template_file( 'statistic-card', 'elements' );
-		if ( file_exists( $file ) ) {
-			load_template( $file, false, array(
+	private function render_card( $class, $title, $value, $icon ) {
+		$this->load_template(
+			'statistic-card',
+			'elements',
+			false,
+			array(
 				'class' => $class,
 				'title' => $title,
 				'value' => $value,
-				'icon' => $icon,
-			) );
-		}
+				'icon'  => $icon,
+			)
+		);
 	}
-	
+
 	public function render_aquariums() {
 		$this->render_card(
 			'aquariums',
@@ -74,7 +76,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 			'button'
 		);
 	}
-	
+
 	public function render_water_entries() {
 		$this->render_card(
 			'water-entries',
@@ -83,7 +85,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 			'chart-line'
 		);
 	}
-	
+
 	public function render_ph_readings() {
 		$this->render_card(
 			'ph-readings',
@@ -92,7 +94,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 			'clipboard'
 		);
 	}
-	
+
 	public function render_maintenance_tasks() {
 		$this->render_card(
 			'maintenance',

@@ -200,7 +200,7 @@ class iworks_aqualog_base {
 		/**
 		 * plugin ID
 		 */
-		$this->plugin_file_dir = dirname( $this->base, 2 );
+		$this->plugin_file_dir  = dirname( $this->base, 2 );
 		$this->plugin_file_path = $this->plugin_file_dir . '/aqualog.php';
 		$this->plugin_file      = plugin_basename( $this->plugin_file_path );
 		/**
@@ -447,14 +447,14 @@ class iworks_aqualog_base {
 		);
 	}
 
-    /**
-     * Log message using Simple Logger.
-     *
-     * Logs a message using the Simple Logger plugin if available,
-     * including current user information.
-     *
-     * Read more: https://simple-history.com/docs/logging-api/#using-simpleLogger
-     *
+	/**
+	 * Log message using Simple Logger.
+	 *
+	 * Logs a message using the Simple Logger plugin if available,
+	 * including current user information.
+	 *
+	 * Read more: https://simple-history.com/docs/logging-api/#using-simpleLogger
+	 *
 	 * @since 1.0.0
 	 * @access protected
 	 * @param string $message Log message.
@@ -465,7 +465,7 @@ class iworks_aqualog_base {
 		/**
 		 * Check if Simple History plugin is active
 		 */
-		if ( !function_exists( 'SimpleLogger' ) ) {
+		if ( ! function_exists( 'SimpleLogger' ) ) {
 			return;
 		}
 		/**
@@ -528,7 +528,7 @@ class iworks_aqualog_base {
 	 */
 	protected function set_current_aquarium_id() {
 		$this->current_aquarium_id = 0;
-		$aquarium_id = intval( get_query_var( 'aquarium_id' ) );
+		$aquarium_id               = intval( get_query_var( 'aquarium_id' ) );
 		if ( $aquarium_id ) {
 			$this->current_aquarium_id = $aquarium_id;
 			return;
@@ -581,11 +581,11 @@ class iworks_aqualog_base {
 	 */
 	protected function get_time_elapsed_text( $measurement_date ) {
 		$measurement_timestamp = strtotime( $measurement_date );
-		$current_timestamp = current_time( 'timestamp' );
-		
+		$current_timestamp     = current_time( 'timestamp' );
+
 		// Calculate days difference
 		$days_diff = intval( ( $current_timestamp - $measurement_timestamp ) / ( 24 * 60 * 60 ) );
-		
+
 		if ( $days_diff === 0 ) {
 			return __( 'Today', 'aqualog' );
 		}
@@ -596,4 +596,31 @@ class iworks_aqualog_base {
 		return sprintf( _n( '%s day ago', '%s days ago', $days_diff, 'aqualog' ), number_format_i18n( $days_diff ) );
 	}
 
+	protected function load_template( $file, $group = '', $load_once = true, array $args = array() ) {
+		$filename = $this->get_template_file( $file, $group );
+		if ( $filename ) {
+			load_template( $filename, $load_once, $args );
+			return;
+		}
+		$this->simple_history_logger_helper(
+			/* translators: %1$s: template file name, %2$s: template group name */
+			esc_html__( 'Template file not found: {file} ({group}).', 'aqualog' ),
+			array(
+				'file'  => $file,
+				'group' => $group,
+			),
+			'error'
+		);
+		if ( current_user_can( 'administrator' ) ) {
+			echo '<div class="notice notice-inline notice-error">';
+			echo wpautop(
+				/* translators: %1$s: template file name, %2$s: template group name */
+				sprintf(
+					esc_html__( 'Template file not found: %1$s (%2$s).', 'aqualog' ),
+					$file,
+					$group
+				)
+			);
+		}
+	}
 }

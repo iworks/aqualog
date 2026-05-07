@@ -66,33 +66,31 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	public function filter_wp_localize_script( $data ) {
 		$this->set_current_aquarium_id();
 		$data['nonces']['maintenance'] = array(
-			'add' => wp_create_nonce( $this->get_meta_name( 'maintenance_add' ) ),
+			'add'  => wp_create_nonce( $this->get_meta_name( 'maintenance_add' ) ),
 			'save' => wp_create_nonce( $this->get_meta_name( 'maintenance_save' ) ),
 		);
 		return $data;
 	}
-/**
- * Render chemistry page.
- *
- * @since 1.0.0
- */
+
+	/**
+	 * Render chemistry page.
+	 *
+	 * @since 1.0.0
+	 */
 	public function render_page() {
 		$this->set_current_aquarium_id();
-		$file = $this->get_template_file( 'maintenance', 'pages' );
-		if ( $file ) {
-			load_template(
-				$file, 
-				true, 
-				array(
-					'aquarium_id'         => $this->current_aquarium_id,
-					'messages'            => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
-					'meta'                => get_post_meta( $this->current_aquarium_id ),
-					'tasks'               => array(),
-					'completed'           => array(),
-					'scheduled'           => array(),
-				)
-			);
-		}
+		$this->load_template(
+			'maintenance',
+			'pages',
+			true,
+			array(
+				'aquarium_id' => $this->current_aquarium_id,
+				'messages'    => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
+				'meta'        => get_post_meta( $this->current_aquarium_id ),
+				'tasks'       => array(),
+				'completed'   => array(),
+				'scheduled'   => array(),
+			)
+		);
 	}
-
 }

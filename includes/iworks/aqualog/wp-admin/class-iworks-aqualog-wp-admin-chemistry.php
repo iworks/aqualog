@@ -72,35 +72,33 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 */
 	public function filter_wp_localize_script( $data ) {
 		$this->set_current_aquarium_id();
-		$data['chemistry'] = array(
+		$data['chemistry']           = array(
 			'params' => $this->get_parameters(),
 		);
 		$data['nonces']['chemistry'] = array(
-			'save' => wp_create_nonce( $this->get_meta_name( 'chemistry_save' ) ),
+			'save'      => wp_create_nonce( $this->get_meta_name( 'chemistry_save' ) ),
 			'add_param' => wp_create_nonce( $this->get_meta_name( 'chemistry_add_param' ) ),
 		);
 		return $data;
 	}
-/**
- * Render chemistry page.
- *
- * @since 1.0.0
- */
+	/**
+	 * Render chemistry page.
+	 *
+	 * @since 1.0.0
+	 */
 	public function render_page() {
 		$this->set_current_aquarium_id();
-		$file = $this->get_template_file( 'chemistry', 'pages' );
-		if ( $file ) {
-			load_template(
-				$file, 
-				true, 
+			$this->load_template(
+				'chemistry',
+				'pages',
+				true,
 				array(
-					'aquarium_id'         => $this->current_aquarium_id,
-					'messages'            => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
-					'meta'                => get_post_meta( $this->current_aquarium_id ),
-					'params'              => $this->get_parameters(),
+					'aquarium_id' => $this->current_aquarium_id,
+					'messages'    => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
+					'meta'        => get_post_meta( $this->current_aquarium_id ),
+					'params'      => $this->get_parameters(),
 				)
 			);
-		}
 	}
 
 	/**
@@ -114,40 +112,40 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 * @return array Available parameters with their properties.
 	 */
 	public function get_parameters() {
-		if ( isset( $this->parameters[$this->current_aquarium_id] ) ) {
-			return $this->parameters[$this->current_aquarium_id];
+		if ( isset( $this->parameters[ $this->current_aquarium_id ] ) ) {
+			return $this->parameters[ $this->current_aquarium_id ];
 		}
 		$this->check_option_object();
-		$config = $this->options->get_group( 'chemistry' );
+		$config              = $this->options->get_group( 'chemistry' );
 		$latest_measurements = $this->get_latest_measurements();
-		$parameters = array();
-		foreach( $config as $key => $value ) {
-			$meta_name = 'chemistry_check_' . $key ;
+		$parameters          = array();
+		foreach ( $config as $key => $value ) {
+			$meta_name = 'chemistry_check_' . $key;
 			if ( 'yes' === $this->get_post_meta( $this->current_aquarium_id, $meta_name ) ) {
 				$parameters[ $key ] = wp_parse_args(
 					$value,
 					array(
-						'importance' => 'default',
-						'key' => $key,
+						'importance'     => 'default',
+						'key'            => $key,
 						'last_test_date' => esc_html__( 'Never tested!', 'aqualog' ),
-						'frequency' => '',
-						'value' => '',
-						'value_class' => 'unknown',
+						'frequency'      => '',
+						'value'          => '',
+						'value_class'    => 'unknown',
 					)
 				);
 				if ( isset( $latest_measurements[ $key ] ) ) {
 					$parameters[ $key ]['last_test_date'] = $latest_measurements[ $key ]['since'];
-					$parameters[ $key ]['value'] = $latest_measurements[ $key ]['param_value'];
+					$parameters[ $key ]['value']          = $latest_measurements[ $key ]['param_value'];
 				}
 				if ( $parameters[ $key ]['value'] && is_numeric( $parameters[ $key ]['value'] ) ) {
 					$parameters[ $key ]['value_class'] = 'danger';
-					$v = (float) $parameters[ $key ]['value'];
+					$v                                 = (float) $parameters[ $key ]['value'];
 					if (
 						$parameters[ $key ]['ideal'][0] <= $v &&
 						$parameters[ $key ]['ideal'][1] >= $v
 					) {
 						$parameters[ $key ]['value_class'] = 'ideal';
-					} else if (
+					} elseif (
 						$parameters[ $key ]['safety'][0] <= $v &&
 						$parameters[ $key ]['safety'][1] >= $v
 					) {
@@ -156,9 +154,9 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 				}
 			}
 		}
-		uasort($parameters, array( $this, 'sort_parameters' ));
-		$this->parameters[$this->current_aquarium_id] = apply_filters( 'aqualog/chemistry/parameters', $parameters );
-		return $this->parameters[$this->current_aquarium_id];
+		uasort( $parameters, array( $this, 'sort_parameters' ) );
+		$this->parameters[ $this->current_aquarium_id ] = apply_filters( 'aqualog/chemistry/parameters', $parameters );
+		return $this->parameters[ $this->current_aquarium_id ];
 	}
 
 	/**
@@ -173,15 +171,15 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	private function sort_parameters( $a, $b ) {
 		// Define importance order
 		$importance_order = array(
-			'critical' => 1,
-			'important' => 2,
+			'critical'    => 1,
+			'important'   => 2,
 			'recommended' => 3,
-			'default' => 4,
+			'default'     => 4,
 		);
-		
+
 		$importance_a = isset( $importance_order[ $a['importance'] ] ) ? $importance_order[ $a['importance'] ] : 5;
 		$importance_b = isset( $importance_order[ $b['importance'] ] ) ? $importance_order[ $b['importance'] ] : 5;
-		
+
 		if ( $importance_a === $importance_b ) {
 			return strcmp( $a['key'], $b['key'] );
 		}
@@ -215,7 +213,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 */
 	public function get_latest_measurements() {
 		global $wpdb;
-		$sql = "SELECT * FROM {$wpdb->aqualog_chemistry} WHERE aquarium_id = %d GROUP BY param_key ORDER BY measurement_date DESC";
+		$sql     = "SELECT * FROM {$wpdb->aqualog_chemistry} WHERE aquarium_id = %d GROUP BY param_key ORDER BY measurement_date DESC";
 		$results = $wpdb->get_results( $wpdb->prepare( $sql, $this->current_aquarium_id ), ARRAY_A );
 		if ( empty( $results ) || ! is_array( $results ) ) {
 			return array();
@@ -225,11 +223,11 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		foreach ( $results as $result ) {
 			if ( isset( $result['param_key'] ) ) {
 				// Add "since" field with time elapsed text
-				$result['since'] = $this->get_time_elapsed_text( $result['measurement_date'] );
+				$result['since']                       = $this->get_time_elapsed_text( $result['measurement_date'] );
 				$assoc_results[ $result['param_key'] ] = $result;
 			}
 		}
-		
+
 		return $assoc_results;
 	}
 
@@ -247,23 +245,23 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 */
 	public function validate_value( $param, $value ) {
 		$parameter = $this->get_parameter( $param );
-		
+
 		if ( ! $parameter ) {
 			return array(
-				'status' => 'error',
+				'status'  => 'error',
 				'message' => __( 'Unknown parameter', 'aqualog' ),
 			);
 		}
 
 		$numeric_value = floatval( $value );
-		$range = $parameter['range'];
+		$range         = $parameter['range'];
 
 		if ( $numeric_value < $range[0] || $numeric_value > $range[1] ) {
 			return array(
-				'status' => 'warning',
+				'status'  => 'warning',
 				'message' => sprintf(
 					/* translators: %1$s: range min, %2$s: range max, %3$s: unit */
-					__( 'Value is outside typical range (%s - %s %s)', 'aqualog' ),
+					__( 'Value is outside typical range (%1$s - %2$s %3$s)', 'aqualog' ),
 					$range[0],
 					$range[1],
 					$parameter['unit']
@@ -274,10 +272,10 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		$ideal = $parameter['ideal'];
 		if ( $numeric_value < $ideal[0] || $numeric_value > $ideal[1] ) {
 			return array(
-				'status' => 'info',
+				'status'  => 'info',
 				'message' => sprintf(
 					/* translators: %1$s: ideal min, %2$s: ideal max, %3$s: unit */
-					__( 'Value is outside ideal range (%s - %s %s)', 'aqualog' ),
+					__( 'Value is outside ideal range (%1$s - %2$s %3$s)', 'aqualog' ),
 					$ideal[0],
 					$ideal[1],
 					$parameter['unit']
@@ -286,7 +284,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		}
 
 		return array(
-			'status' => 'success',
+			'status'  => 'success',
 			'message' => __( 'Value is within ideal range', 'aqualog' ),
 		);
 	}
@@ -306,19 +304,19 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			return;
 		}
 
-
-
 		$parameters = $this->get_parameters();
-		
+
 		?>
 		<div class="aqualog-chemistry-interface">
 			<div class="aqualog-chemistry-overview">
 				<h3><?php esc_html_e( 'Latest Measurements', 'aqualog' ); ?></h3>
 				<div class="aqualog-grid">
 					<?php foreach ( $latest_measurements as $measurement ) : ?>
-						<?php 
+						<?php
 						$param = $this->get_parameter( $measurement->param );
-						if ( ! $param ) continue;
+						if ( ! $param ) {
+							continue;
+						}
 						$validation = $this->validate_value( $measurement->param, $measurement->value );
 						?>
 						<div class="aqualog-card aqualog-card-hover">
@@ -374,11 +372,11 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	}
 
 	public function ajax_add_chemistry_param() {
-		check_ajax_referer($this->get_meta_name( 'chemistry_add_param' ));
+		check_ajax_referer( $this->get_meta_name( 'chemistry_add_param' ) );
 		$this->check_option_object();
 		$value = sanitize_text_field( $_POST['value'] );
-		$key = sanitize_key( $_POST['key'] );
-		$id = intval( $_POST['id'] );
+		$key   = sanitize_key( $_POST['key'] );
+		$id    = intval( $_POST['id'] );
 		/**
 		 * sanitize
 		 */
@@ -390,9 +388,9 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		$result = $wpdb->insert(
 			$wpdb->aqualog_chemistry,
 			array(
-				'aquarium_id' => $id,
-				'param_key' => $key,
-				'param_value' => $value,
+				'aquarium_id'      => $id,
+				'param_key'        => $key,
+				'param_value'      => $value,
 				'measurement_date' => current_time( 'mysql' ),
 			),
 			array(
@@ -403,9 +401,11 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			)
 		);
 		if ( $result ) {
-			wp_send_json_success( array(
-				'message' => __( 'Parameter added successfully', 'aqualog' ),
-			) );
+			wp_send_json_success(
+				array(
+					'message' => __( 'Parameter added successfully', 'aqualog' ),
+				)
+			);
 		}
 		wp_send_json_error( __( 'Failed to add parameter', 'aqualog' ) );
 	}
