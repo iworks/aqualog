@@ -42,6 +42,8 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 	private array $table_names = array(
 		'aqualog_log',
 		'aqualog_chemistry',
+		'aqualog_maintenance',
+		'aqualog_maintenance_log',
 	);
 	/**
 	 * Class constructor.
@@ -125,24 +127,72 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'aqualog_chemistry';
-			
 			$charset_collate = $wpdb->get_charset_collate();
-			
-			$sql = "CREATE TABLE $table_name (
+			$sql = "CREATE TABLE  IF NOT EXISTS $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				aquarium_id bigint(20) unsigned NOT NULL,
 				param_key varchar(100) NOT NULL DEFAULT '',
 				param_value float NOT NULL,
 				measurement_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+				created_at datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
 				PRIMARY KEY  (id),
 				KEY aquarium_id (aquarium_id),
 				KEY param (param_key),
 				KEY measurement_date (measurement_date)
 			) $charset_collate;";
-			
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
-			
+		}
+		/**
+		 * maintenance table
+		 */
+		$version_to_update = 3;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'aqualog_maintenance';
+			$charset_collate = $wpdb->get_charset_collate();
+			$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				aquarium_id bigint(20) unsigned NOT NULL COMMENT 'Aquarium ID',
+				type varchar(50) NOT NULL DEFAULT '' COMMENT 'Task type identifier',
+				title varchar(255) NOT NULL COMMENT 'Task title',
+				description text NOT NULL COMMENT 'Task description',
+				start_date datetime DEFAULT NULL COMMENT 'Task start date',
+				end_date datetime DEFAULT NULL COMMENT 'Task end date',
+				status varchar(20) NOT NULL DEFAULT 'pending' COMMENT 'Task status',
+				created_at datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+				updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update timestamp',
+				next_schedule_date datetime DEFAULT NULL COMMENT 'Next schedule date',
+				PRIMARY KEY (id),
+				KEY idx_aquarium_id (aquarium_id),
+				KEY idx_type (type),
+				KEY idx_status (status)
+			) $charset_collate;";
+			dbDelta( $sql );
+			update_option( $this->_db_version, $version_to_update );
+		}
+		/**
+		 * maintenance log table
+		 */
+		$version_to_update = 4;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'aqualog_maintenance_log';
+			$charset_collate = $wpdb->get_charset_collate();
+			$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				maintenance_id bigint(20) unsigned NOT NULL COMMENT 'Related maintenance task ID',
+				message text NOT NULL COMMENT 'Log message',
+				user_id bigint(20) unsigned DEFAULT NULL COMMENT 'User who performed action',
+				log_date datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Log timestamp',
+				data longtext DEFAULT NULL COMMENT 'Additional action data (JSON)',
+				PRIMARY KEY (id),
+				KEY idx_maintenance_id (maintenance_id),
+				KEY idx_user_id (user_id),
+				KEY idx_log_date (log_date)
+			) $charset_collate;";
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			dbDelta( $sql );
 			update_option( $this->_db_version, $version_to_update );
 		}
 	}

@@ -262,6 +262,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			return array(
 				'status' => 'warning',
 				'message' => sprintf(
+					/* translators: %1$s: range min, %2$s: range max, %3$s: unit */
 					__( 'Value is outside typical range (%s - %s %s)', 'aqualog' ),
 					$range[0],
 					$range[1],
@@ -275,6 +276,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			return array(
 				'status' => 'info',
 				'message' => sprintf(
+					/* translators: %1$s: ideal min, %2$s: ideal max, %3$s: unit */
 					__( 'Value is outside ideal range (%s - %s %s)', 'aqualog' ),
 					$ideal[0],
 					$ideal[1],

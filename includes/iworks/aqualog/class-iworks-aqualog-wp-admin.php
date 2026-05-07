@@ -48,6 +48,14 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	private string $capability = 'manage_options';
 
 	/**
+	 * User meta key for dashboard message dismissal.
+	 *
+	 * @since 1.0.0
+	 * @var   string
+	 */
+	private string $user_meta_dashboard_message_dismissed_name = 'dashboard_message_dismissed';
+
+	/**
 	 * Initialize admin class.
 	 *
 	 * Sets up required capability and registers WordPress hooks for admin functionality.
@@ -67,7 +75,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts_register_assets' ), 0 );
 		add_action( 'wp_loaded', array( $this, 'action_wp_loaded_init_options' ) );
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
-		add_action( 'admin_notices', array( $this, 'display_admin_dashboard_message' ) );
 		add_action( 'wp_ajax_iworks_aqualog_dismiss_message', array( $this, 'ajax_dismiss_dashboard_message' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 		add_action( 'init', array( $this, 'action_init' ) );
@@ -175,9 +182,11 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	}
 
 	public function action_init() {
+		$this->check_option_object();
 		/**
 		 * settings
 		 */
+		$this->user_meta_dashboard_message_dismissed_name = $this->options->get_option_name( 'dashboard_message_dismissed' );
 		$this->set_current_aquarium_id();
 		
 	}
@@ -194,13 +203,13 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 */
 	public function filter_iworks_options_add_meta_boxes( $metaboxes ) {
 		$metaboxes['assistance'] = array(
-			'title'    => __( 'Have a question or need help?', 'aqualog' ),
+			'title'    => /* translators: Meta box title for assistance section */ __( 'Have a question or need help?', 'aqualog' ),
 			'callback' => array( $this, 'need_assistance' ),
 			'context'  => 'side',
 			'priority' => 'core',
 		);
 		$metaboxes['love']       = array(
-			'title'    => __( 'Enjoying this plugin?', 'aqualog' ),
+			'title'    => /* translators: Meta box title for plugin appreciation section */ __( 'Enjoying this plugin?', 'aqualog' ),
 			'callback' => array( $this, 'loved_this_plugin' ),
 			'context'  => 'side',
 			'priority' => 'core',
@@ -295,6 +304,17 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				'strategy'  => 'defer',
 			)
 		);
+		// Register dashboard script
+		wp_register_script(
+			'aqualog-dashboard',
+			plugins_url( 'src/admin/dashboard.js', $this->plugin_file_path ),
+			array('jquery'),
+			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . 'src/admin/dashboard.js' ) ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 		// Register admin script
 		$name = $this->dir . '-admin';
 		$file = 'assets/scripts/' . $this->dir . '-admin' . $this->dev . '.js';
@@ -327,13 +347,15 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			'aqualog/wp-admin/wp_localize_script',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonces' => array(),
+				'nonces' => array(
+				'dismiss_message' => wp_create_nonce( 'iworks_aqualog_dismiss_message' ),
+			),
 				'i18n' => array(
 					'messages' => array(
-						'loading' => __( 'Loading…', 'aqualog' ),
-						'saving' => __( 'Saving…', 'aqualog' ),
-						'saveError' => __( 'An error occurred while saving. Please try again.', 'aqualog' ),
-						'invalidValues' => __( 'Please correct the highlighted fields and try again.', 'aqualog' ),
+						'loading' => /* translators: Loading message */ __( 'Loading…', 'aqualog' ),
+						'saving' => /* translators: Saving message */ __( 'Saving…', 'aqualog' ),
+						'saveError' => /* translators: Error message when saving fails */ __( 'An error occurred while saving. Please try again.', 'aqualog' ),
+						'invalidValues' => /* translators: Validation error message */ __( 'Please correct the highlighted fields and try again.', 'aqualog' ),
 					),
 				),
 				'chemistry' => array(),
@@ -374,7 +396,8 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 							admin_url( 'admin.php' )
 						)
 					),
-					esc_html__( 'Settings', 'aqualog' )
+					/* translators: Settings menu item */
+						esc_html__( 'Settings', 'aqualog' )
 				);
 			}
 			/* start:free */
@@ -389,7 +412,8 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 						'https://ko-fi.com/iworks'
 					)
 				),
-				esc_html__( 'Donate', 'aqualog' )
+					/* translators: Donate menu item */
+						esc_html__( 'Donate', 'aqualog' )
 			);
 			/* end:free */
 			$links[] = sprintf(
@@ -403,7 +427,8 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 						'https://github.com/iworks.pl/aqualog'
 					)
 				),
-				esc_html__( 'GitHub', 'aqualog' )
+					/* translators: GitHub menu item */
+						esc_html__( 'GitHub', 'aqualog' )
 			);
 		}
 		return $links;
@@ -434,58 +459,15 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 
 		// Check if user has dismissed this message
 		$user_id = get_current_user_id();
-		$dismissed = get_user_meta( $user_id, 'iworks_aqualog_dashboard_message_dismissed', true );
+		$dismissed = get_user_meta( $user_id, $this->user_meta_dashboard_message_dismissed_name, true );
 
 		if ( $dismissed ) {
 			return;
 		}
-		?>
-		<div id="iworks-aqualog-dashboard-message" class="notice notice-info is-dismissible">
-			<h3><?php esc_html_e( 'Welcome to AquaLog!', 'aqualog' ); ?></h3>
-			<p>
-				<?php 
-				esc_html_e( 'Thank you for installing AquaLog! This powerful plugin helps you manage and track your water-related activities with ease. Here are some quick tips to get you started:', 'aqualog' ); 
-				?>
-			</p>
-			<ul>
-				<li><?php esc_html_e( 'Navigate to the AquaLog settings page to configure your preferences', 'aqualog' ); ?></li>
-				<li><?php esc_html_e( 'Add your first water entry to start tracking your daily consumption', 'aqualog' ); ?></li>
-				<li><?php esc_html_e( 'Check out the analytics dashboard to view your water usage patterns', 'aqualog' ); ?></li>
-				<li><?php esc_html_e( 'Set up reminders to help you stay hydrated throughout the day', 'aqualog' ); ?></li>
-			</ul>
-			<p>
-				<strong><?php esc_html_e( 'Pro Tip:', 'aqualog' ); ?></strong> 
-				<?php esc_html_e( 'Regular water tracking can improve your health and wellbeing. Make it a daily habit!', 'aqualog' ); ?>
-			</p>
-			<p>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $this->dir . '/admin/index.php' ) ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Get Started', 'aqualog' ); ?>
-				</a>
-				<a href="<?php echo esc_url( _x( 'https://wordpress.org/plugins/aqualog/', 'plugin homepage', 'aqualog' ) ); ?>" target="_blank" class="button">
-					<?php esc_html_e( 'Learn More', 'aqualog' ); ?>
-				</a>
-			</p>
-		</div>
-
-		<script>
-		jQuery(document).ready(function($) {
-			$('#iworks-aqualog-dashboard-message').on('click', '.notice-dismiss', function(e) {
-				e.preventDefault();
-				$.ajax({
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'iworks_aqualog_dismiss_message',
-						nonce: '<?php echo wp_create_nonce( 'iworks_aqualog_dismiss_message' ); ?>'
-					},
-					success: function(response) {
-						$('#iworks-aqualog-dashboard-message').fadeOut();
-					}
-				});
-			});
-		});
-		</script>
-		<?php
+		$file = $this->get_template_file( 'messages/dashboard-welcome', 'templates' );
+		if ( $file ) {
+			load_template( $file );
+		}
 	}
 
 	/**
@@ -512,7 +494,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 
 		// Store dismissal preference
 		$user_id = get_current_user_id();
-		update_user_meta( $user_id, 'iworks_aqualog_dashboard_message_dismissed', true );
+		update_user_meta( $user_id, $this->user_meta_dashboard_message_dismissed_name, true );
 
 		wp_die( 'Message dismissed' );
 	}
@@ -557,7 +539,9 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	public function register_admin_menu() {
 		// Main menu item
 		$slug = add_menu_page(
+			/* translators: Main menu page title */
 			__( 'AquaLog Dashboard', 'aqualog' ),
+			/* translators: Main menu item title */
 			__( 'AquaLog', 'aqualog' ),
 			$this->capability,
 			$this->wp_admin_slug,
@@ -569,34 +553,40 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 
 		$submenus = array(
 			array(
+				/* translators: Dashboard submenu title */
 				'title' => __( 'Dashboard', 'aqualog' ),
 				'slug' => $this->wp_admin_slug,
 				'callback' => array( $this, 'render_dashboard_page' ),
 			),
 			array(
+				/* translators: Chemistry submenu title */
 				'title' => __( 'Chemistry', 'aqualog' ),
 				'slug' => 'aqualog-chemistry',
 				'callback' => array( $this, 'render_chemistry_page' ),
 				'filter' => 'aqualog/load/wp-admin/chemistry',
 			),
 			array(
+				/* translators: Maintenance submenu title */
 				'title' => __( 'Maintenance', 'aqualog' ),
 				'slug' => 'aqualog-maintenance',
 				'callback' => array( $this, 'render_maintenance_page' ),
 				'filter' => 'aqualog/load/wp-admin/maintenance',
 			),
 			array(
+				/* translators: Notes submenu title */
 				'title' => __( 'Notes', 'aqualog' ),
 				'slug' => 'edit.php?post_type=iw_note',
 				'callback' => null,
 				'filter' => 'aqualog/load/wp-admin/notes',
 			),
 			array(
+				/* translators: Aquariums submenu title */
 				'title' => __( 'Aquariums', 'aqualog' ),
 				'slug' => 'edit.php?post_type=iw_aquarium',
 				'callback' => null,
 			),
 			array(
+				/* translators: Help submenu title */
 				'title' => __( 'Help', 'aqualog' ),
 				'slug' => 'aqualog-help',
 				'callback' => array( $this, 'render_help_page' ),
@@ -629,10 +619,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * @return  void
 	 */
 	public function render_dashboard_page() {
-		$file = $this->get_template_file( 'dashboard', 'pages' );
-		if ( $file ) {
-			load_template( $file );
-		}
+		do_action( 'aqualog/wp-admin/dashboard_page' );
 	}
 
 	/**
@@ -707,6 +694,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		) );
 
 		if ( empty( $aquariums ) ) {
+			/* translators: Message when no aquarium data is available */
 			echo '<p>' . esc_html__( 'No aquarium data available.', 'aqualog' ) . '</p>';
 			return;
 		}
@@ -743,6 +731,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			</div>
 			<?php
 		} else {
+			/* translators: Message when no water quality data is available */
 			echo '<p>' . esc_html__( 'No water quality data available.', 'aqualog' ) . '</p>';
 		}
 	}
@@ -758,13 +747,15 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	public function render_help_page() {
 		?>
 		<div class="wrap">
-			<?php $this->html_title( __( 'Help & Support', 'aqualog' ) ); ?>
+			<?php 
+			/* translators: Help & Support page title */
+			$this->html_title( __( 'Help & Support', 'aqualog' ) ); ?>
 			<div class="aqualog-card">
 				<h3><?php esc_html_e( 'Getting Started', 'aqualog' ); ?></h3>
 				<p><?php esc_html_e( 'Welcome to AquaLog! Here are some resources to help you get started:', 'aqualog' ); ?></p>
 				<ul>
 					<li><a href="<?php echo esc_url( 'https://wordpress.org/plugins/aqualog/' ); ?>" target="_blank"><?php esc_html_e( 'Plugin Documentation', 'aqualog' ); ?></a></li>
-					<li><a href="<?php echo esc_url( 'https://wordpress.org/support/plugin/aqualog/' ); ?>" target="_blank"><?php esc_html_e( 'Support Forum', 'aqualog' ); ?></li>
+					<li><a href="<?php echo esc_url( 'https://wordpress.org/support/plugin/aqualog/' ); ?>" target="_blank"><?php esc_html_e( 'Support Forum', 'aqualog' ); ?></a></li>
 					<li><a href="<?php echo esc_url( 'https://wordpress.org/support/plugin/aqualog/reviews/' ); ?>" target="_blank"><?php esc_html_e( 'Leave a Review', 'aqualog' ); ?></a></li>
 				</ul>
 			</div>
@@ -826,7 +817,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		$this->set_current_aquarium_id();
 		$content = '';
 		$id = 0;
-		$title = esc_html__( 'No aquarium selected', 'aqualog' );
+		$title = /* translators: Default text when no aquarium is selected */ esc_html__( 'No aquarium selected', 'aqualog' );
 		if ( empty( $this->current_aquarium_id ) ) {
 		} else {
 			$aquarium = get_post( $this->current_aquarium_id );
@@ -839,7 +830,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			}
 		}
 		$content .= '<div class="aqualog-current-aquarium">';
-		$content .= esc_html__( 'Current Aquarium:', 'aqualog' );
+		$content .= /* translators: Label for current aquarium display */ esc_html__( 'Current Aquarium:', 'aqualog' );
 		$content .= ' ';
 		$content .= $title;
 		$content .= '</div>';

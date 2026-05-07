@@ -54,7 +54,7 @@ switch( $args['importance'] ) {
 }
 ?>
 <div
-    class="<?php echo implode( ' ', $classes ); ?>"
+    class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
     data-key="<?php echo esc_attr( $args['key'] ); ?>"
     data-value="<?php echo esc_attr( $args['value'] ); ?>"
 >

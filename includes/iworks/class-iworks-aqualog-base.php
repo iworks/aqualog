@@ -316,7 +316,7 @@ class iworks_aqualog_base {
 	 * @return void Outputs HTML directly.
 	 */
 	protected function print_table_body( $post_id, $fields ) {
-		echo '<table class="widefat striped"><tbody>';
+		echo '<table class="widefat striped"><tbody>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		foreach ( $fields as $name => $data ) {
 			$key   = $this->get_meta_name( $name );
 			$value = $this->get_post_meta( $post_id, $name );
@@ -332,9 +332,9 @@ class iworks_aqualog_base {
 			/**
 			 * start row
 			 */
-			echo '<tr>';
-			printf( '<th scope="row" style="width: 130px">%s</th>', $data['title'] );
-			echo '<td>';
+			echo '<tr>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			printf( '<th scope="row" style="width: 130px">%s</th>', esc_html( $data['title'] ) );
+			echo '<td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			switch ( $data['type'] ) {
 				case 'number':
 					foreach ( array( 'min', 'max', 'step' ) as $extra_key ) {
@@ -346,7 +346,7 @@ class iworks_aqualog_base {
 						'<input type="number" name="%s" value="%d" %s />',
 						esc_attr( $key ),
 						intval( $value ),
-						// data string escaped few lines above
+						// $extra contains already escaped HTML attributes
 						$extra
 					);
 					break;
@@ -362,10 +362,10 @@ class iworks_aqualog_base {
 					);
 					break;
 			}
-			echo '</td>';
-			echo '</tr>';
+			echo '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '</tr>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
-		echo '</tbody></table>';
+		echo '</tbody></table>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

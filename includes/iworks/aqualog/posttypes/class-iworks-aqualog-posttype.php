@@ -75,16 +75,6 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		add_action( 'load-post.php', array( $this, 'action_load_admin_maybe_enqueue_assets' ) );
 		add_action( 'save_post', array( $this, 'action_save_post_meta' ), 10, 3 );
 		/**
-		 * columns
-		 *
-		 * add_filter( "manage_{$post_type}_posts_columns", array( $this, 'filter_manage_post_type_posts_columns' ) );
-		 * add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'action_manage_post_type_posts_custom_column' ), 10, 2 );
-		 * add_filter( "manage_edit-{$post_type}_sortable_columns", array( $this, 'filter_manage_sortable_columns' ) );
-		 */
-		/**
-		 * AquaLog Hooks
-		 */
-		/**
 		 * Settings
 		 */
 		$this->posttypes_names  = apply_filters(
@@ -212,7 +202,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			echo '<p>';
 			echo '<label>';
 			if ( isset( $one['label'] ) ) {
-				echo $one['label'];
+				echo esc_html( $one['label'] );
 				echo '<br />';
 			}
 			$classes = array();
@@ -304,7 +294,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		);
 		if ( isset( $one['label'] ) ) {
 			echo ' ';
-			echo $one['label'];
+			echo esc_html( $one['label'] );
 		}
 		echo '</label>';
 		if ( isset( $one['description'] ) ) {
@@ -323,7 +313,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		echo '<p>';
 		echo '<label>';
 		if ( isset( $one['label'] ) ) {
-			echo $one['label'];
+			echo esc_html( $one['label'] );
 			echo '<br />';
 		}
 		printf(
@@ -354,7 +344,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		echo '<p>';
 		if ( isset( $one['label'] ) ) {
 			echo '<label>';
-			echo $one['label'];
+			echo esc_html( $one['label'] );
 			echo '<br />';
 			echo '</label>';
 		}
@@ -668,78 +658,5 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		);
 	}
 
-	/**
-	 * add columns to post type
-	 *
-	 * @since 1.0.0
-	 */
-	public function filter_manage_post_type_posts_columns( $posts_columns ) {
-		$screen = get_current_screen();
-		if ( ! is_a( $screen, 'WP_Screen' ) ) {
-			return $posts_columns;
-		}
-		foreach ( $this->meta_boxes[ $screen->post_type ] as $group => $one ) {
-			foreach ( $one['fields'] as $field_id => $field ) {
-				if ( isset( $field['add_column'] ) ) {
-					$column_name                   = $this->get_post_meta_name( $field['name'], $group );
-					$posts_columns[ $column_name ] = $field['label'];
-				}
-			}
-		}
-		return $posts_columns;
-	}
-
-	public function action_manage_post_type_posts_custom_column( $column_name, $post_id ) {
-		$screen = get_current_screen();
-		if ( ! is_a( $screen, 'WP_Screen' ) ) {
-			return;
-		}
-		foreach ( $this->meta_boxes[ $screen->post_type ] as $group => $one ) {
-			foreach ( $one['fields'] as $field_id => $field ) {
-				if (
-					isset( $field['add_column'] )
-					&& $this->get_post_meta_name( $field['name'], $group ) === $column_name
-				) {
-					echo apply_filters(
-						'iworks/iworks-plugins-management/post/meta',
-						get_post_meta( $post_id, $column_name, true ),
-						$group,
-						$field
-					);
-				}
-			}
-		}
-	}
-
-	/**
-	 * add sortable column
-	 *
-	 * @since 1.0.0
-	 */
-	public function filter_manage_sortable_columns( $sortable_columns ) {
-		$screen = get_current_screen();
-		if ( ! is_a( $screen, 'WP_Screen' ) ) {
-			return $posts_columns;
-		}
-		foreach ( $this->meta_boxes[ $screen->post_type ] as $group => $one ) {
-			foreach ( $one['fields'] as $field_id => $field ) {
-				if (
-					isset( $field['add_column'] )
-					&& is_array( $field['add_column'] )
-					&& 'sortable' === $field['add_column']['type']
-				) {
-					$column_name                      = $this->get_post_meta_name( $field['name'], $group );
-					$sortable_columns[ $column_name ] = array(
-						$column_name,
-						false,
-						$field['label'],
-						$field['add_column']['description'],
-						$field['add_column']['default_order'],
-					);
-				}
-			}
-		}
-		return $sortable_columns;
-	}
 }
 

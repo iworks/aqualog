@@ -119,7 +119,8 @@ class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 				<span class="aqualog-activity-meta">
 					<?php 
 					printf(
-						esc_html__( 'Created on %s at %s', 'aqualog' ),
+						/* translators: %1$s: date, %2$s: time */
+						esc_html__( 'Created on %1$s at %2$s', 'aqualog' ),
 						esc_html( $activity['date'] ),
 						esc_html( $activity['time'] )
 					);
