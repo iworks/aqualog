@@ -46,6 +46,7 @@ $aqualog_vendor = $aqualog_base . '/includes';
 add_filter( 'aqualog/load/wp-admin/chemistry', '__return_true' );
 add_filter( 'aqualog/load/wp-admin/activity', '__return_true' );
 add_filter( 'aqualog/load/wp-admin/statistics', '__return_true' );
+add_filter( 'aqualog/load/wp-admin/maintenance', '__return_true' );
 
 /**
  * Load the main plugin class if it doesn't exist

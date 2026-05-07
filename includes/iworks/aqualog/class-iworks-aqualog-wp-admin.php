@@ -1,13 +1,17 @@
 <?php
 /**
- * AquaLog - Admin Class
+ * AquaLog Admin Class
  *
- * Handles all WordPress admin-specific functionality for the plugin.
+ * Handles all WordPress admin-specific functionality for the AquaLog plugin.
+ * This includes settings management, asset registration, menu creation,
+ * and admin interface rendering.
  *
- * @package WordPress_Plugin_Stub
- * @author  Marcin Pietrzak <marcin@iworks.pl>
- * @license GPL-2.0
- * @since   1.0.0
+ * @package    iWorks\AquaLog
+ * @subpackage Admin
+ * @author     Marcin Pietrzak <marcin@iworks.pl>
+ * @copyright  2026 Marcin Pietrzak
+ * @license    http://www.gnu.org/licenses/gpl-2.0.html GPL-2.0-or-later
+ * @since      1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -23,9 +27,11 @@ require_once dirname( __DIR__ ) . '/class-aqualog-base.php';
  *
  * This class handles all admin-specific functionality including:
  * - Plugin settings and options management
- * - Admin assets registration
- * - Plugin meta links
- * - Admin interface rendering
+ * - Admin assets registration and localization
+ * - Plugin meta links and support information
+ * - Admin interface rendering and menu management
+ * - Dashboard message handling
+ * - Template file management
  *
  * @since 1.0.0
  */
@@ -34,23 +40,29 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * The capability required to access plugin admin features.
 	 *
+	 * Users must have this capability to access admin pages and settings.
+	 *
 	 * @since 1.0.0
-	 * @var string
+	 * @var   string
 	 */
 	private string $capability = 'manage_options';
 
 	/**
-	 * Initialize the admin class.
+	 * Initialize admin class.
 	 *
-	 * Sets up the required capability and registers admin hooks.
+	 * Sets up required capability and registers WordPress hooks for admin functionality.
+	 * Also loads admin classes dynamically from the wp-admin directory.
 	 *
 	 * @since 1.0.0
-	 * @see iworks_aqualog_base::__construct()
+	 * @see   iworks_aqualog_base::__construct()
+	 * @uses  load_admin_classes()
 	 */
 	public function __construct() {
 		parent::__construct();
 		/**
-		 * WordPress Hooks
+		 * Register WordPress hooks for admin functionality.
+		 *
+		 * @since 1.0.0
 		 */
 		add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts_register_assets' ), 0 );
 		add_action( 'wp_loaded', array( $this, 'action_wp_loaded_init_options' ) );
@@ -60,62 +72,91 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
 		add_action( 'init', array( $this, 'action_init' ) );
 		/**
-		 * iWorks Options Hooks
+		 * Register iWorks Options hooks.
+		 *
+		 * @since 1.0.0
 		 */
 		add_filter( 'aqualog/etc/config/metaboxes', array( $this, 'filter_iworks_options_add_meta_boxes' ) );
 		/**
-		 * Load post types from the posttypes directory
+		 * Load admin classes from wp-admin directory.
+		 *
+		 * Dynamically loads all admin class files that match the expected pattern.
+		 *
+		 * @since 1.0.0
 		 */
 		$admin_classes_dir = $this->includes_directory . '/wp-admin/';
 		/**
-		 * Iterate through all PHP files in the posttypes directory
+		 * Iterate through all PHP files in wp-admin directory.
+		 *
+		 * @since 1.0.0
 		 */
 		foreach ( glob( $admin_classes_dir . 'class*.php' ) as $filename_with_path ) {
 			/**
-			 * Get the base filename
+			 * Extract base filename from full path.
+			 *
+			 * @since 1.0.0
 			 */
 			$filename = basename( $filename_with_path );
 			/**
-			 * Validate the filename format
-			 * Only process files that match the expected pattern
+			 * Validate filename format using regex pattern.
+			 *
+			 * Only processes files that match the pattern 'class-iworks-aqualog-wp-admin-{name}.php'.
+			 *
+			 * @since 1.0.0
 			 */
 			if ( ! preg_match( '/^class-iworks-aqualog-wp-admin-([a-z]+).php$/', $filename, $matches ) ) {
 				continue;
 			}
 			/**
-			 * Extract the post type name from the filename
+			 * Extract admin class name from filename.
+			 *
+			 * @since 1.0.0
 			 */
 			$admin_name = $matches[1];
 			/**
-			 * Create the filter name for this post type
+			 * Create filter name for this admin class.
+			 *
+			 * @since 1.0.0
 			 */
 			$filter = sprintf(
 				'aqualog/load/wp-admin/%s',
 				$admin_name
 			);
 			/**
-			 * Check if this admin should be loaded
-			 * Only load if the filter returns true
+			 * Check if this admin class should be loaded.
+			 *
+			 * Uses the filter 'aqualog/load/wp-admin/{admin_name}' to determine
+			 * whether the admin class should be instantiated.
+			 *
+			 * @since 1.0.0
 			 */
 			if ( apply_filters( $filter, false ) ) {
 				/**
-				 * Include the admin class file
-				 */
+			 * Include the admin class file.
+			 *
+			 * @since 1.0.0
+			 */
 				include_once $admin_classes_dir . $filename;
 
 				/**
-				 * Generate the class name
-				 */
+			 * Generate fully qualified class name.
+			 *
+			 * @since 1.0.0
+			 */
 				$class_name = sprintf( 'iworks_aqualog_wp_admin_%s', $admin_name );
 
 				/**
-				 * Initialize the post type class
-				 */
+			 * Initialize admin class instance.
+			 *
+			 * @since 1.0.0
+			 */
 				do_action( 'aqualog/register_objects', $admin_name, 'wp-admin', new $class_name() );
 			}
 		}
 		/**
-		 * plugin hooks
+		 * Register additional plugin hooks.
+		 *
+		 * @since 1.0.0
 		 */
 		add_action( 'aqualog/wp-admin/current-aquarium-bar', array( $this, 'current_aquarium_bar' ) );
 		add_filter( 'aqualog/wp-admin/messages/files', array( $this, 'read_messages_files' ) );
@@ -142,13 +183,14 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	}
 
 	/**
-	 * Add meta boxes to the iWorks Options page.
+	 * Add meta boxes to iWorks Options page.
+	 *
+	 * Adds assistance and plugin appreciation meta boxes to the settings page.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $metaboxes The options array.
-	 *
-	 * @return array The modified options array.
+	 * @param array $metaboxes Existing meta boxes array.
+	 * @return array Modified meta boxes array with new boxes added.
 	 */
 	public function filter_iworks_options_add_meta_boxes( $metaboxes ) {
 		$metaboxes['assistance'] = array(
@@ -168,11 +210,10 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Display plugin appreciation links.
 	 *
-	 * Outputs HTML for the "Love this plugin" section, including links to rate the plugin
-	 * and share it with others.
+	 * Outputs HTML for "Love this plugin" section, including links to rate
+	 * the plugin and share it with others. Uses filter to allow custom content.
 	 *
 	 * @since 1.0.0
-	 * @param object $iworks_orphan The main plugin instance.
 	 * @return void
 	 */
 	public function loved_this_plugin() {
@@ -192,10 +233,10 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Display assistance information.
 	 *
-	 * Outputs HTML for the "Need Assistance" section, including support links.
+	 * Outputs HTML for "Need Assistance" section, including support links.
+	 * Uses filter to allow custom content.
 	 *
 	 * @since 1.0.0
-	 * @param object $iworks_orphans The main plugin instance.
 	 * @return void
 	 */
 	public function need_assistance() {
@@ -215,16 +256,15 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Initialize plugin options during WordPress loaded hook.
 	 *
-	 * This method is called when WordPress is fully loaded. It performs the following actions:
+	 * This method is called when WordPress is fully loaded. It performs:
 	 * 1. Ensures the options object is properly initialized
-	 * 2. Initializes the plugin options through the options object
+	 * 2. Initializes plugin options through the options object
 	 *
-	 * @hook wp_loaded
 	 * @since 1.0.0
-	 * @see iworks_aqualog_base::check_option_object()
-	 * @see iworks_options::options_init()
-	 *
-	 * @return void
+	 * @action wp_loaded
+	 * @see    iworks_aqualog_base::check_option_object()
+	 * @see    iworks_options::options_init()
+	 * @return   void
 	 */
 	public function action_wp_loaded_init_options() {
 		$this->check_option_object();
@@ -234,10 +274,13 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Register admin assets.
 	 *
-	 * Registers the required JavaScript files for the admin interface.
+	 * Registers required JavaScript and CSS files for the admin interface.
+	 * Includes Select2, jQuery UI Slider, and main admin script.
+	 * Localizes script data for AJAX and internationalization.
 	 *
-	 * @hook admin_enqueue_scripts
 	 * @since 1.1.0
+	 * @action admin_enqueue_scripts
+	 * @return   void
 	 */
 	public function action_admin_enqueue_scripts_register_assets() {
 		//
@@ -273,7 +316,12 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			md5( file_get_contents( plugin_dir_path( $this->plugin_file_path ) . $file ) )
 		);
 		/**
-		 * Add more data to localize script.
+		 * Add data to localize script.
+		 *
+		 * Prepares data for JavaScript localization including AJAX URLs,
+		 * nonces, and internationalized messages.
+		 *
+		 * @since 1.0.0
 		 */
 		$data = apply_filters(
 			'aqualog/wp-admin/wp_localize_script',
@@ -304,10 +352,10 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * 2. A 'Donate' link (only in the free version)
 	 * 3. A 'GitHub' link
 	 *
-	 * @hook plugin_row_meta
 	 * @since 1.0.0
+	 * @filter plugin_row_meta
 	 *
-	 * @param string[] $links An array of the plugin's metadata, including the version, author,
+	 * @param string[] $links An array of the plugin's metadata, including version, author,
 	 *                       author URI, and plugin name.
 	 * @param string  $file  Path to the plugin file relative to the plugins directory.
 	 *
@@ -364,12 +412,13 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Display admin dashboard message.
 	 *
-	 * Shows a dismissible admin notice with dummy content. The message
+	 * Shows a dismissible admin notice with welcome content. The message
 	 * will only be displayed if the user hasn't dismissed it previously.
+	 * Includes AJAX handler for dismissal functionality.
 	 *
 	 * @since 1.0.0
-	 * @access public
-	 * @return void
+	 * @action admin_notices
+	 * @return  void
 	 */
 	public function display_admin_dashboard_message() {
 		// Only show on admin dashboard page
@@ -444,10 +493,11 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 *
 	 * Processes the AJAX request to dismiss the admin dashboard message
 	 * and stores the user's preference in user meta.
+	 * Includes nonce verification and capability checks.
 	 *
 	 * @since 1.0.0
-	 * @access public
-	 * @return void
+	 * @action wp_ajax_iworks_aqualog_dismiss_message
+	 * @return  void
 	 */
 	public function ajax_dismiss_dashboard_message() {
 		// Verify nonce for security
@@ -471,10 +521,10 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * Get base64 encoded SVG icon.
 	 *
 	 * Reads the SVG icon file and returns it as a base64 encoded data URI.
+	 * Falls back to dashicon if SVG file doesn't exist or can't be read.
 	 *
 	 * @since 1.0.0
-	 * @access private
-	 * @return string Base64 encoded SVG data URI.
+	 * @return string Base64 encoded SVG data URI or dashicon class name.
 	 */
 	private function get_base64_svg_icon() {
 		$icon_file = $this->plugin_file_dir . '/assets/images/icon.svg';
@@ -497,10 +547,12 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * Register admin menu.
 	 *
 	 * Creates the main AquaLog admin menu and submenu items.
+	 * Includes Dashboard, Chemistry, Maintenance, Notes, Aquariums, and Help pages.
+	 * Uses filter to control which submenu items are loaded.
 	 *
 	 * @since 1.0.0
-	 * @access public
-	 * @return void
+	 * @action admin_menu
+	 * @return  void
 	 */
 	public function register_admin_menu() {
 		// Main menu item
@@ -531,11 +583,13 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				'title' => __( 'Maintenance', 'aqualog' ),
 				'slug' => 'aqualog-maintenance',
 				'callback' => array( $this, 'render_maintenance_page' ),
+				'filter' => 'aqualog/load/wp-admin/maintenance',
 			),
 			array(
 				'title' => __( 'Notes', 'aqualog' ),
 				'slug' => 'edit.php?post_type=iw_note',
 				'callback' => null,
+				'filter' => 'aqualog/load/wp-admin/notes',
 			),
 			array(
 				'title' => __( 'Aquariums', 'aqualog' ),
@@ -569,10 +623,10 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * Render dashboard page.
 	 *
 	 * Displays the main AquaLog dashboard with statistics and overview.
+	 * Loads dashboard template if available.
 	 *
 	 * @since 1.0.0
-	 * @access public
-	 * @return void
+	 * @return  void
 	 */
 	public function render_dashboard_page() {
 		$file = $this->get_template_file( 'dashboard', 'pages' );
@@ -585,13 +639,14 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * Render statistic card.
 	 *
 	 * Displays a single statistics card on the dashboard.
+	* Uses get_statistic_count() to retrieve the count value.
 	*
 	 * @since 1.0.0
-	 * @access private
-	 * @param string $type    The statistic type.
-	 * @param string $label   The statistic label.
-	 * @param string $icon    The dashicon class.
-	 * @return void
+	 *
+	 * @param string $type  The statistic type (e.g., 'aquariums', 'water-entries').
+	 * @param string $label The statistic label for display.
+	 * @param string $icon  The dashicon class name.
+	 * @return  void
 	 */
 	private function render_statistic_card( $type, $label, $icon ) {
 		$count = $this->get_statistic_count( $type );
@@ -608,11 +663,12 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * Get statistic count.
 	 *
 	 * Retrieves the count for a specific statistic type.
+	 * Currently supports 'aquariums' with planned support for other types.
 	 *
 	 * @since 1.0.0
-	 * @access private
-	 * @param string $type The statistic type.
-	 * @return int The count value.
+	 *
+	 * @param string $type The statistic type to retrieve.
+	 * @return int    The count value or 0 if type not supported.
 	 */
 	private function get_statistic_count( $type ) {
 		switch ( $type ) {
@@ -637,10 +693,11 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * Render water quality stats.
 	 *
 	 * Displays water quality statistics on the dashboard.
+	 * Calculates average temperature and pH values from all aquariums.
+	 * Shows color-coded indicators for pH levels.
 	 *
 	 * @since 1.0.0
-	 * @access private
-	 * @return void
+	 * @return  void
 	 */
 	private function render_water_quality_stats() {
 		// Get average values from all aquariums
@@ -693,11 +750,10 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Render help page.
 	 *
-	 * Displays the AquaLog help and support page.
+	 * Displays the AquaLog help and support page with documentation links.
 	 *
 	 * @since 1.0.0
-	 * @access public
-	 * @return void
+	 * @return  void
 	 */
 	public function render_help_page() {
 		?>
@@ -716,15 +772,56 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		<?php
 	}
 
+	/**
+	 * Render chemistry page.
+	 *
+	 * Triggers the chemistry page action to allow other components
+	 * to render the chemistry interface.
+	 *
+	 * @since 1.0.0
+	 * @action aqualog/wp-admin/chemistry_page
+	 * @return  void
+	 */
 	public function render_chemistry_page() {
 		do_action( 'aqualog/wp-admin/chemistry_page' );
 	}
 
+	/**
+	 * Render maintenance page.
+	 *
+	 * Triggers the maintenance page action to allow other components
+	 * to render the maintenance interface.
+	 *
+	 * @since 1.0.0
+	 * @action aqualog/wp-admin/maintenance_page
+	 * @return  void
+	 */
+	public function render_maintenance_page() {
+		do_action( 'aqualog/wp-admin/maintenance_page' );
+	}
 
+	/**
+	 * Display current aquarium bar.
+	 *
+	 * Outputs the current aquarium selection bar in the admin interface.
+	 *
+	 * @since 1.0.0
+	 * @action aqualog/wp-admin/current-aquarium-bar
+	 * @return  void
+	 */
 	public function current_aquarium_bar() {
 		echo $this->get_current_aquarium();
 	}
 
+	/**
+	 * Get current aquarium information.
+	 *
+	 * Retrieves and formats the current aquarium information for display.
+	 * Sets the current aquarium ID and returns formatted HTML content.
+	 *
+	 * @since 1.0.0
+	 * @return string Formatted HTML content for current aquarium bar.
+	 */
 	private function get_current_aquarium() {
 		$this->set_current_aquarium_id();
 		$content = '';

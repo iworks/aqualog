@@ -233,34 +233,6 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		return $assoc_results;
 	}
 
-	/**
-	 * Delete chemistry measurement.
-	*
-	 * Deletes a specific chemistry measurement.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @param int $measurement_id The measurement ID.
-	 * @return bool True on success, false on failure.
-	 */
-	public function delete_measurement( $measurement_id ) {
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'aqualog_chemistry';
-		
-		$result = $wpdb->delete(
-			$table_name,
-			array( 'id' => intval( $measurement_id ) ),
-			array( '%d' )
-		);
-
-		if ( $result ) {
-			do_action( 'aqualog/chemistry/measurement_deleted', $measurement_id );
-			return true;
-		}
-
-		return false;
-	}
 
 	/**
 	 * Validate parameter value.
