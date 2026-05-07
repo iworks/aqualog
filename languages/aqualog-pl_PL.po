@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.1\n"
 "Report-Msgid-Bugs-To: http://iworks.pl\n"
-"POT-Creation-Date: 2026-05-07 15:22:03+00:00\n"
+"POT-Creation-Date: 2026-05-07 16:11:20+00:00\n"
 "PO-Revision-Date: 2026-05-02 20:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: iWorks <support@iworks.pl>\n"
@@ -224,211 +224,211 @@ msgstr ""
 msgid "Water temperature"
 msgstr ""
 
-#: etc/options.php:118
+#: etc/options.php:119
 msgid "Acidity/Alkalinity level"
 msgstr ""
 
-#: etc/options.php:129
+#: etc/options.php:130
 msgid "General Hardness"
 msgstr ""
 
-#: etc/options.php:140
+#: etc/options.php:141
 msgid "Carbonate Hardness"
 msgstr ""
 
-#: etc/options.php:151
+#: etc/options.php:152
 msgid "Nitrate"
 msgstr ""
 
-#: etc/options.php:162
+#: etc/options.php:163
 msgid "Nitrite"
 msgstr ""
 
-#: etc/options.php:173
+#: etc/options.php:174
 msgid "Ammonia"
 msgstr ""
 
-#: etc/options.php:184
+#: etc/options.php:185
 msgid "Phosphate"
 msgstr ""
 
-#: etc/options.php:195
+#: etc/options.php:196
 msgid "Iron"
 msgstr ""
 
-#: etc/options.php:206
+#: etc/options.php:207
 msgid "Calcium"
 msgstr ""
 
-#: etc/options.php:217
+#: etc/options.php:218
 msgid "Magnesium"
 msgstr ""
 
-#: etc/options.php:228
+#: etc/options.php:229
 msgid "Potassium"
 msgstr ""
 
-#: etc/options.php:239
+#: etc/options.php:240
 msgid "Total Dissolved Solids"
 msgstr ""
 
-#: etc/options.php:250
+#: etc/options.php:251
 msgid "Oxygen"
 msgstr ""
 
-#: etc/options.php:260
+#: etc/options.php:261
 msgid "Carbon Dioxide"
 msgstr ""
 
-#: etc/options.php:271
+#: etc/options.php:272
 msgid "Chlorine"
 msgstr ""
 
-#: etc/options.php:281
+#: etc/options.php:282
 msgid "Copper"
 msgstr ""
 
-#: etc/options.php:290
+#: etc/options.php:291
 msgid "Zinc"
 msgstr ""
 
-#: etc/options.php:299
+#: etc/options.php:300
 msgid "Manganese"
 msgstr ""
 
-#: etc/options.php:308
+#: etc/options.php:309
 msgid "Molybdenum"
 msgstr ""
 
-#: etc/options.php:317
+#: etc/options.php:318
 msgid "Boron"
 msgstr ""
 
-#: etc/options.php:326
+#: etc/options.php:327
 msgid "Annually"
 msgstr ""
 
-#: etc/options.php:327
+#: etc/options.php:328
 msgid "Daily"
 msgstr ""
 
-#: etc/options.php:328
+#: etc/options.php:329
 msgid "Every other day"
 msgstr ""
 
-#: etc/options.php:329
+#: etc/options.php:330
 msgid "Monthly"
 msgstr ""
 
-#: etc/options.php:330
+#: etc/options.php:331
 msgid "On demand"
 msgstr ""
 
-#: etc/options.php:331 etc/options.php:391
+#: etc/options.php:332 etc/options.php:392
 msgid "Other"
 msgstr ""
 
-#: etc/options.php:332
+#: etc/options.php:333
 msgid "Quarterly"
 msgstr ""
 
-#: etc/options.php:333
+#: etc/options.php:334
 msgid "Semi-annually"
 msgstr ""
 
-#: etc/options.php:334
+#: etc/options.php:335
 msgid "Twice daily"
 msgstr ""
 
-#: etc/options.php:335
+#: etc/options.php:336
 msgid "Twice monthly"
 msgstr ""
 
-#: etc/options.php:336
+#: etc/options.php:337
 msgid "Weekly"
 msgstr ""
 
-#: etc/options.php:341
+#: etc/options.php:342
 msgid "Algae Removal"
 msgstr ""
 
-#: etc/options.php:342
+#: etc/options.php:343
 msgid "Remove algae from tank surfaces"
 msgstr ""
 
-#: etc/options.php:346
+#: etc/options.php:347
 msgid "Equipment Inspection"
 msgstr ""
 
-#: etc/options.php:347
+#: etc/options.php:348
 msgid "Inspect and clean equipment"
 msgstr ""
 
-#: etc/options.php:351
+#: etc/options.php:352
 msgid "Feeding"
 msgstr ""
 
-#: etc/options.php:352
+#: etc/options.php:353
 msgid "Feed fish and monitor feeding schedule"
 msgstr ""
 
-#: etc/options.php:356
+#: etc/options.php:357
 msgid "Fertilization"
 msgstr ""
 
-#: etc/options.php:357
+#: etc/options.php:358
 msgid "Add fertilizers and nutrients"
 msgstr ""
 
-#: etc/options.php:361
+#: etc/options.php:362
 msgid "Filter Cleaning"
 msgstr ""
 
-#: etc/options.php:362
+#: etc/options.php:363
 msgid "Clean or replace filter media"
 msgstr ""
 
-#: etc/options.php:366
+#: etc/options.php:367
 msgid "Glass Cleaning"
 msgstr ""
 
-#: etc/options.php:367
+#: etc/options.php:368
 msgid "Clean aquarium glass and remove algae"
 msgstr ""
 
-#: etc/options.php:371
+#: etc/options.php:372
 msgid "Plant Trimming"
 msgstr ""
 
-#: etc/options.php:372
+#: etc/options.php:373
 msgid "Trim and maintain aquatic plants"
 msgstr ""
 
-#: etc/options.php:376
+#: etc/options.php:377
 msgid "Substrate Cleaning"
 msgstr ""
 
-#: etc/options.php:377
+#: etc/options.php:378
 msgid "Clean substrate and gravel"
 msgstr ""
 
-#: etc/options.php:381
+#: etc/options.php:382
 msgid "Temperature Adjustment"
 msgstr ""
 
-#: etc/options.php:382
+#: etc/options.php:383
 msgid "Check and adjust water temperature"
 msgstr ""
 
-#: etc/options.php:386
+#: etc/options.php:387
 msgid "Water Testing"
 msgstr ""
 
-#: etc/options.php:387
+#: etc/options.php:388
 msgid "Test water parameters"
 msgstr ""
 
-#: etc/options.php:392
+#: etc/options.php:393
 msgid "Other maintenance tasks"
 msgstr ""
 
@@ -832,19 +832,15 @@ msgstr ""
 msgid "Delete image"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:439
-msgid "Order"
-msgstr ""
-
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:464
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:449
 msgid "Selected Taxonomy dosn't exists."
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:586
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:571
 msgid "Select or Upload Media"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:588
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:573
 msgid "Use this Media"
 msgstr ""
 
@@ -861,77 +857,81 @@ msgstr ""
 msgid "Never tested!"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:252
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:253
 msgid "Unknown parameter"
 msgstr ""
 
 #. translators: %1$s: range min, %2$s: range max, %3$s: unit
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:264
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:265
 msgid "Value is outside typical range (%1$s - %2$s %3$s)"
 msgstr ""
 
 #. translators: %1$s: ideal min, %2$s: ideal max, %3$s: unit
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:278
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:279
 msgid "Value is outside ideal range (%1$s - %2$s %3$s)"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:288
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:289
 msgid "Value is within ideal range"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:312
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:313
 msgid "Latest Measurements"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:340
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:341
 msgid "Add Measurement"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:344
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:345
 msgid "Parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:346
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:347
 msgid "Select parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:355
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:356
 msgid "Value"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:359
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:360
 msgid "Date"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:365
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:366
 msgid "Save Measurement"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:385
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:386
 msgid "Invalid parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:406
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:407
 msgid "Parameter added successfully"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:410
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:411
 msgid "Failed to add parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:74
+#. translators: Statistics card title for total aquariums
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:97
 msgid "Total Aquariums"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:83
+#. translators: Statistics card title for water entries
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:123
 msgid "Water Entries"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:92
+#. translators: Statistics card title for pH readings
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:149
 msgid "pH Readings"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:101
+#. translators: Statistics card title for maintenance tasks
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:173
 msgid "Maintenance Tasks"
 msgstr ""
 
@@ -951,13 +951,14 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#. translators: %1$s: template file name, %2$s: template group name
+#. translators: {file}: template file name, {group}: template group name (do
+#. not translate placeholders)
 #: includes/iworks/class-iworks-aqualog-base.php:607
 msgid "Template file not found: {file} ({group})."
 msgstr ""
 
 #. translators: %1$s: template file name, %2$s: template group name
-#: includes/iworks/class-iworks-aqualog-base.php:619
+#: includes/iworks/class-iworks-aqualog-base.php:620
 msgid "Template file not found: %1$s (%2$s)."
 msgstr ""
 
@@ -1029,19 +1030,19 @@ msgstr ""
 msgid "https://wordpress.org/plugins/og/"
 msgstr ""
 
-#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:21
+#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:19
 #: includes/iworks/rate/templates/happy-anniversary/first-year.php:21
 msgid "🎉 Happy Anniversary! 🎉"
 msgstr ""
 
-#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:23
+#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:21
 msgid ""
 "Wow, it’s already been a whole year since you’ve been using our plugin—thank "
 "you so much for being part of our journey! We truly appreciate your support "
 "and hope the plugin has made your work easier and more enjoyable."
 msgstr ""
 
-#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:24
+#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:22
 #: includes/iworks/rate/templates/happy-anniversary/first-year.php:24
 msgid ""
 "If you’ve found our plugin helpful and would like to support its continued "
@@ -1050,17 +1051,17 @@ msgid ""
 "awesome users like you!"
 msgstr ""
 
-#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:25
+#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:23
 #: includes/iworks/rate/templates/happy-anniversary/first-year.php:25
 msgid "☕ Buy Me a Coffee"
 msgstr ""
 
-#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:26
+#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:24
 #: includes/iworks/rate/templates/happy-anniversary/first-year.php:26
 msgid "Thank you for your support and for making this community amazing!"
 msgstr ""
 
-#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:30
+#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:28
 #: includes/iworks/rate/templates/happy-anniversary/first-year.php:30
 msgid "With gratitude"
 msgstr ""
@@ -1069,7 +1070,7 @@ msgstr ""
 msgid "Marcin Pietrzak"
 msgstr ""
 
-#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:36
+#: includes/iworks/rate/templates/happy-anniversary/anniversary.php:34
 #: includes/iworks/rate/templates/happy-anniversary/first-year.php:36
 msgid "Plugin Author"
 msgstr ""

@@ -239,9 +239,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			wp_enqueue_media();
 		}
 		if ( isset( $one['label'] ) ) {
-			echo '<p>';
-			echo $one['label'];
-			echo '</p>';
+			echo wpautop( esc_html( $one['label'] ) );
 		}
 		echo '<p class="iworks-field-image-row">';
 		/**
@@ -298,7 +296,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		}
 		echo '</label>';
 		if ( isset( $one['description'] ) ) {
-			printf( '<span class="description">%s</span>', $one['description'] );
+			printf( '<span class="description">%s</span>', esc_html( $one['description'] ) );
 		}
 		echo '</p>';
 	}
@@ -359,7 +357,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 				esc_attr( $one['name'] ),
 				esc_attr( $option_value ),
 				checked( $option_value, $value, false ),
-				$option_name
+				esc_html( $option_name )
 			);
 		}
 		echo '</ul>';

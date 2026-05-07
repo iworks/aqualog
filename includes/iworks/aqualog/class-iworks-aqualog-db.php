@@ -99,21 +99,21 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		 */
 		$version_to_update = 1;
 		if ( $db_version < $version_to_update ) {
-			$aquarium_types	 = array(
-				_x('Biotope', 'import terms to aquarium type', 'aqualog' ),
-				_x('Brackish', 'import terms to aquarium type', 'aqualog' ),
-				_x('High Tech', 'import terms to aquarium type', 'aqualog' ),
-				_x('Hobbyist', 'import terms to aquarium type', 'aqualog' ),
-				_x('Iwagumi', 'import terms to aquarium type', 'aqualog' ),
-				_x('Low Tech', 'import terms to aquarium type', 'aqualog' ),
-				_x('Marine', 'import terms to aquarium type', 'aqualog' ),
-				_x('Mizube', 'import terms to aquarium type', 'aqualog' ),
-				_x('Paludarium', 'import terms to aquarium type', 'aqualog' ),
-				_x('Pond', 'import terms to aquarium type', 'aqualog' ),
-				_x('Ragwork', 'import terms to aquarium type', 'aqualog' ),
-				_x('Ryuboku', 'import terms to aquarium type', 'aqualog' ),
-				_x('Shrimp', 'import terms to aquarium type', 'aqualog' ),
-				_x('Wabi Kusa', 'import terms to aquarium type', 'aqualog' ),
+			$aquarium_types = array(
+				_x( 'Biotope', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Brackish', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'High Tech', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Hobbyist', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Iwagumi', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Low Tech', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Marine', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Mizube', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Paludarium', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Pond', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Ragwork', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Ryuboku', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Shrimp', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Wabi Kusa', 'import terms to aquarium type', 'aqualog' ),
 			);
 			foreach ( $aquarium_types as $aquarium_type ) {
 				wp_insert_term( $aquarium_type, 'iw_aquarium_group' );
@@ -126,9 +126,9 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		$version_to_update = 2;
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'aqualog_chemistry';
+			$table_name      = $wpdb->prefix . 'aqualog_chemistry';
 			$charset_collate = $wpdb->get_charset_collate();
-			$sql = "CREATE TABLE  IF NOT EXISTS $table_name (
+			$sql             = "CREATE TABLE  IF NOT EXISTS $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				aquarium_id bigint(20) unsigned NOT NULL,
 				param_key varchar(100) NOT NULL DEFAULT '',
@@ -149,9 +149,9 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		$version_to_update = 3;
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'aqualog_maintenance';
+			$table_name      = $wpdb->prefix . 'aqualog_maintenance';
 			$charset_collate = $wpdb->get_charset_collate();
-			$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+			$sql             = "CREATE TABLE IF NOT EXISTS $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				aquarium_id bigint(20) unsigned NOT NULL COMMENT 'Aquarium ID',
 				type varchar(50) NOT NULL DEFAULT '' COMMENT 'Task type identifier',
@@ -177,9 +177,9 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		$version_to_update = 4;
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'aqualog_maintenance_log';
+			$table_name      = $wpdb->prefix . 'aqualog_maintenance_log';
 			$charset_collate = $wpdb->get_charset_collate();
-			$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+			$sql             = "CREATE TABLE IF NOT EXISTS $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				maintenance_id bigint(20) unsigned NOT NULL COMMENT 'Related maintenance task ID',
 				message text NOT NULL COMMENT 'Log message',
@@ -211,7 +211,9 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 
 		// Drop each table
 		foreach ( $this->table_names as $table_name ) {
-			$wpdb->query( "DROP TABLE IF EXISTS `$wpdb->$table_name`" );
+			$sql   = 'DROP TABLE IF EXISTS %s';
+			$query = $wpdb->prepare( $sql, $wpdb->$table_name );
+			$wpdb->query( $query );
 		}
 
 		// Re-enable foreign key checks

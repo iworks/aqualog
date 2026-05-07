@@ -116,7 +116,8 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 			return;
 		}
 		global $wpdb;
-		$count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->aqualog_chemistry}" );
+		$query = "SELECT COUNT(*) FROM {$wpdb->aqualog_chemistry}";
+		$count = $wpdb->get_var( $query );
 		$this->render_card(
 			'water-entries',
 			/* translators: Statistics card title for water entries */
@@ -142,7 +143,9 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 			return;
 		}
 		global $wpdb;
-		$count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->aqualog_chemistry} WHERE param_key = 'ph'" );
+		$query = "SELECT COUNT(*) FROM {$wpdb->aqualog_chemistry} WHERE param_key = %s";
+		$query = $wpdb->prepare( $query, 'ph' );
+		$count = $wpdb->get_var( $query );
 		$this->render_card(
 			'ph-readings',
 			/* translators: Statistics card title for pH readings */

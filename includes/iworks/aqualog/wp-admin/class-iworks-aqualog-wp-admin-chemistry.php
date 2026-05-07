@@ -215,7 +215,8 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	public function get_latest_measurements() {
 		global $wpdb;
 		$sql     = "SELECT t1.* FROM {$wpdb->aqualog_chemistry} t1 WHERE t1.aquarium_id = %d and t1.measurement_date = ( SELECT MAX(t2.measurement_date) FROM {$wpdb->aqualog_chemistry} t2 WHERE t2.param_key = t1.param_key)";
-		$results = $wpdb->get_results( $wpdb->prepare( $sql, $this->current_aquarium_id ), ARRAY_A );
+		$query   = $wpdb->prepare( $sql, $this->current_aquarium_id );
+		$results = $wpdb->get_results( $query, ARRAY_A );
 		if ( empty( $results ) || ! is_array( $results ) ) {
 			return array();
 		}
