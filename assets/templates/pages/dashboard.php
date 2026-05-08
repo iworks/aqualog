@@ -21,30 +21,7 @@ defined( 'ABSPATH' ) || exit;
 
 		<!-- Recent Aquariums -->
 		<div class="aqualog-recent-aquariums-section">
-			<?php 
-			// Get recent aquariums data
-			$recent_aquariums = array();
-			$all_aquariums = array();
-			
-			if ( isset( $args['recent_aquariums'] ) && is_array( $args['recent_aquariums'] ) ) {
-				$recent_aquariums = $args['recent_aquariums'];
-			}
-			
-			if ( isset( $args['all_aquariums'] ) && is_array( $args['all_aquariums'] ) ) {
-				$all_aquariums = $args['all_aquariums'];
-			}
-			
-			// Load the recent aquariums card template
-			$this->load_template(
-				'recent-aquariums-card',
-				'elements',
-				false,
-				array(
-					'recent_aquariums' => $recent_aquariums,
-					'all_aquariums'    => $all_aquariums,
-				)
-			);
-			?>
+			<?php do_action( 'aqualog/dashboard/recent_aquariums' ); ?>
 		</div>
 
 		<!-- Recent Activity -->

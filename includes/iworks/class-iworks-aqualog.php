@@ -49,6 +49,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 		 * WordPress Hooks
 		 */
 		add_action( 'init', array( $this, 'action_init_settings' ) );
+		add_action( 'query_vars', array( $this, 'add_query_vars' ), 0 );
 		/**
 		 * Enable aquarium post type
 		 */
@@ -98,7 +99,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 		/**
 		 * register objects filter
 		 */
-		add_action( 'aqualog/register_objects', array( $this, 'register_objects' ),10, 3 );
+		add_action( 'aqualog/register_objects', array( $this, 'register_objects' ), 10, 3 );
 		/**
 		 * is active?
 		 */
@@ -168,5 +169,19 @@ class iworks_aqualog extends iworks_aqualog_base {
 		$this->check_option_object();
 		$this->options->deactivate();
 		do_action( 'iworks/aqualog/register_deactivation_hook' );
+	}
+
+	/**
+	 * Add aquarium_id query var.
+	 *
+	 * Adds 'aquarium_id' to the list of public query variables
+	 * so WordPress recognizes it in URLs.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function add_query_vars( $vars ) {
+		$vars[] = 'aquarium_id';
+		return $vars;
 	}
 }

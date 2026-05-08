@@ -13,20 +13,18 @@ defined( 'ABSPATH' ) || exit;
 	<?php do_action( 'aqualog/wp-admin/current-aquarium-bar' ); ?>
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Chemistry', 'aqualog' ); ?></h1>
 <?php
-
-d($args);
 if ( empty( $args['aquarium_id'] ) ) {
 	if ( $args['counters']['aquariums'] === 0 ) {
-		load_template( $args['messages']['create-aquarium-first'] ); 
+		load_template( $args['messages']['create-aquarium-first'] );
 	} else {
-		load_template( $args['messages']['select-aquarium'] ); 
+		load_template( $args['messages']['select-aquarium'], true, $args );
 	}
 } else {
 	if ( empty( $args['latest_measurements'] ) ) {
-		load_template( $args['messages']['chemistry-no-measurements'] ); 
+		load_template( $args['messages']['chemistry-no-measurements'] );
 	}
 }
-if ( false) {
+if ( false ) {
 	?>
 	<!-- Quick Actions -->
 	<div class="aqualog-quick-actions-section">
@@ -42,14 +40,15 @@ if ( false) {
 	</div>
 <?php } ?>
 	<div class="aqualog-chemistry-container">
-		<?php foreach ( $args['params'] as $param_key => $param ) {
-			load_template( dirname(__FILE__, 2) . '/elements/chemistry-param.php', false, $param );
+		<?php
+		foreach ( $args['params'] as $param_key => $param ) {
+			load_template( dirname( __DIR__, 1 ) . '/elements/chemistry-param.php', false, $param );
 			?>
 		<?php } ?>
 	</div>
 </div>
 <?php
 // Load the chemistry form template
-load_template( dirname(__FILE__, 2) . '/elements/chemistry-form.php', false, $args );
+load_template( dirname( __DIR__, 1 ) . '/elements/chemistry-form.php', false, $args );
 
 

@@ -174,7 +174,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		/**
 		 * maintenance log table
 		 */
-		$version_to_update = 5;
+		$version_to_update = 4;
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
 			$table_name      = $wpdb->prefix . 'aqualog_log';

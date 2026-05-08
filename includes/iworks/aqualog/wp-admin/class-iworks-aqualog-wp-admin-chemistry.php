@@ -92,10 +92,13 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			'chemistry',
 			'pages',
 			true,
-			array(
-				'aquarium_id' => $this->current_aquarium_id,
-				'meta'        => get_post_meta( $this->current_aquarium_id ),
-				'params'      => $this->get_parameters(),
+			apply_filters(
+				'aqualog/wp-admin/chemistry_page_args',
+				array(
+					'aquarium_id' => $this->current_aquarium_id,
+					'meta'        => get_post_meta( $this->current_aquarium_id ),
+					'params'      => $this->get_parameters(),
+				)
 			)
 		);
 	}
@@ -427,6 +430,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 
 		// Log the measurement
 		$measurement_date = current_time( 'mysql' );
-		$this->objects['logger']->log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $measurement_date );
+		$logger           = new iworks_aqualog_logger();
+		$logger->log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $measurement_date );
 	}
 }

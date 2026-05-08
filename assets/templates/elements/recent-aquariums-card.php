@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 
 // Get recent aquariums (limit to 5)
 $recent_aquariums = array();
-$all_aquariums = array();
+$all_aquariums    = array();
 
 if ( isset( $args['recent_aquariums'] ) && is_array( $args['recent_aquariums'] ) ) {
 	$recent_aquariums = $args['recent_aquariums'];
@@ -24,10 +24,11 @@ if ( isset( $args['all_aquariums'] ) && is_array( $args['all_aquariums'] ) ) {
 }
 
 // Check if we have more than 5 aquariums total
-$has_more = count( $all_aquariums ) > 5;
+$has_more             = count( $all_aquariums ) > 5;
 $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 ?>
 
+	<h2><?php esc_html_e( 'Select Aquarium', 'aqualog' ); ?></h2>
 <div class="aqualog-card aqualog-recent-aquariums-card">
 	<div class="aqualog-card-header">
 		<h3 class="aqualog-card-title">
@@ -52,7 +53,7 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 										<?php echo esc_html( $aquarium->post_title ); ?>
 									</div>
 									<div class="aqualog-dropdown-item-meta">
-										<?php 
+										<?php
 										$updated_at = get_post_meta( $aquarium->ID, '_related_updated_at', true );
 										if ( $updated_at ) {
 											echo esc_html( $this->get_time_elapsed_text_seconds( $updated_at ) );
@@ -76,54 +77,68 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 	</div>
 
 	<div class="aqualog-card-content">
-		<?php if ( ! empty( $recent_aquariums ) ) : ?>
-			<div class="aqualog-recent-aquariums-list">
-				<?php foreach ( $recent_aquariums as $aquarium ) : ?>
+		<?php
+		if ( ! empty( $recent_aquariums ) ) :
+			?>
+			<div class="aqualog-aquariums-list">
+				<?php
+				foreach ( $recent_aquariums as $aquarium ) {
+					setup_postdata( $aquarium );
+					?>
 					<?php
-					$post_id = $aquarium->ID;
-					$title = $aquarium->post_title;
-					$permalink = get_permalink( $post_id );
-					$updated_at = get_post_meta( $post_id, '_related_updated_at', true );
-					$last_updated = $updated_at ? $this->get_time_elapsed_text_seconds( $updated_at ) : __( 'Never', 'aqualog' );
-					
+					$post_id      = $aquarium->ID;
+					$title        = $aquarium->post_title;
+					$permalink    = get_permalink( $post_id );
+					$updated_at   = get_post_meta( $post_id, '_related_updated_at', true );
+					$last_updated = $updated_at ? $updated_at : __( 'Never', 'aqualog' );
+
 					// Get aquarium type
-					$types = wp_get_post_terms( $post_id, 'iw_aquarium_group' );
+					$types     = wp_get_post_terms( $post_id, 'iw_aquarium_group' );
 					$type_name = ! empty( $types ) && ! is_wp_error( $types ) ? $types[0]->name : '';
-					
+
 					// Get aquarium capacity if available
-					$capacity = get_post_meta( $post_id, 'capacity', true );
+					$capacity         = get_post_meta( $post_id, 'capacity', true );
 					$capacity_display = $capacity ? sprintf( '%s L', number_format_i18n( $capacity ) ) : '';
 					?>
-					<div class="aqualog-recent-aquarium-item">
-						<div class="aqualog-recent-aquarium-info">
-							<div class="aqualog-recent-aquarium-title">
-								<a href="<?php echo esc_url( $permalink ); ?>">
-									<?php echo esc_html( $title ); ?>
-								</a>
+					<a class="aqualog-aquarium-item" href="<?php echo esc_url( add_query_arg( 'aquarium_id', $post_id ) ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
+						<div class="aqualog-aquarium-thumbnail">
+							<?php
+							if ( has_post_thumbnail( $post_id ) ) {
+								echo get_the_post_thumbnail( $post_id, 'thumbnail', array( 'class' => 'aqualog-aquarium-thumbnail-img' ) );
+							} else {
+								// Default placeholder image
+								echo '<div class="aqualog-aquarium-thumbnail-placeholder">';
+								echo '<span class="dashicons dashicons-buddicons-groups"></span>';
+								echo '</div>';
+							}
+							?>
+						</div>
+						<div class="aqualog-aquarium-info">
+							<div class="aqualog-aquarium-title">
+								<?php echo esc_html( $title ); ?>
 							</div>
 							<?php if ( $type_name ) : ?>
-								<span class="aqualog-recent-aquarium-type"><?php echo esc_html( $type_name ); ?></span>
+								<span class="aqualog-aquarium-type"><?php echo esc_html( $type_name ); ?></span>
 							<?php endif; ?>
-							<div class="aqualog-recent-aquarium-meta">
+							<div class="aqualog-aquarium-meta">
 								<?php if ( $capacity_display ) : ?>
-									<span class="aqualog-recent-aquarium-capacity">
+									<span class="aqualog-aquarium-capacity">
 										<span class="dashicons dashicons-volume"></span>
 										<?php echo esc_html( $capacity_display ); ?>
 									</span>
 								<?php endif; ?>
-								<span class="aqualog-recent-aquarium-updated">
+								<span class="aqualog-aquarium-updated">
 									<span class="dashicons dashicons-clock"></span>
 									<?php echo esc_html( $last_updated ); ?>
 								</span>
 							</div>
+							
 						</div>
-						<div class="aqualog-recent-aquarium-actions">
-							<a href="<?php echo esc_url( $permalink ); ?>" class="aqualog-button aqualog-button-small aqualog-button-outline">
-								<?php esc_html_e( 'View', 'aqualog' ); ?>
-							</a>
-						</div>
-					</div>
-				<?php endforeach; ?>
+					</a>
+					<?php
+				}
+				wp_reset_postdata();
+				?>
 			</div>
 		<?php else : ?>
 			<div class="aqualog-empty-state">

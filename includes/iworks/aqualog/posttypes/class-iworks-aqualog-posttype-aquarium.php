@@ -89,6 +89,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		add_action( 'aqualog/dashboard/aquariums', array( $this, 'action_dashboard_aquariums' ) );
 		add_action( 'aqualog/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
 		add_filter( 'aqualog/load/template/args', array( $this, 'filter_load_template_args' ) );
+		add_filter( 'aqualog/wp-admin/chemistry_page_args', array( $this, 'filter_chemistry_page_args' ) );
 	}
 
 	public function filter_load_template_args( $args ) {
@@ -102,13 +103,18 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		);
 	}
 
+	public function filter_chemistry_page_args( $args ) {
+		$args['recent_aquariums'] = $this->get_last();
+		return $args;
+	}
+
 	/**
 	 * Get the count of aquariums.
-	 *
+	*
 	 * @return int The count of aquariums.
 	 */
 	public function get_aquariums_count() {
-		$count = wp_count_posts( $this->posttypes_names[ $this->posttype_name ] );	
+		$count = wp_count_posts( $this->posttypes_names[ $this->posttype_name ] );
 		return $count ? $count->publish : 0;
 	}
 
@@ -116,15 +122,19 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		update_post_meta( $aquarium_id, $this->meta_name_related_updated_at, current_time( 'mysql' ) );
 	}
 
-	public function action_dashboard_aquariums() {
+	private function get_last( $limit = 10 ) {
 		$wp_query_args = array(
 			'post_type'      => $this->posttypes_names[ $this->posttype_name ],
-			'posts_per_page' => 10,
+			'posts_per_page' => $limit,
 			'meta_key'       => $this->meta_name_related_updated_at,
 			'orderby'        => 'meta_value',
 			'order'          => 'DESC',
 		);
-		$posts = get_posts( $wp_query_args );
+		return get_posts( $wp_query_args );
+	}
+
+	public function action_dashboard_aquariums() {
+		$posts = $this->get_last();
 		if ( $posts ) {
 			foreach ( $posts as $post ) {
 				setup_postdata( $post );
@@ -147,18 +157,18 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 * @return void
 	 */
 	private function render_dashboard_aquarium_item() {
-		$post_id = get_the_ID();
-		$title = get_the_title();
-		$permalink = get_permalink();
-		$updated_at = get_post_meta( $post_id, $this->meta_name_related_updated_at, true );
+		$post_id      = get_the_ID();
+		$title        = get_the_title();
+		$permalink    = get_permalink();
+		$updated_at   = get_post_meta( $post_id, $this->meta_name_related_updated_at, true );
 		$last_updated = $updated_at ? $this->get_time_elapsed_text( $updated_at ) : __( 'Never', 'aqualog' );
-		
+
 		// Get aquarium type
-		$types = wp_get_post_terms( $post_id, $this->taxonomy_name );
+		$types     = wp_get_post_terms( $post_id, $this->taxonomy_name );
 		$type_name = ! empty( $types ) && ! is_wp_error( $types ) ? $types[0]->name : '';
-		
+
 		// Get aquarium capacity if available
-		$capacity = get_post_meta( $post_id, 'capacity', true );
+		$capacity         = get_post_meta( $post_id, 'capacity', true );
 		$capacity_display = $capacity ? sprintf( '%s L', number_format_i18n( $capacity ) ) : '';
 		?>
 		<div class="aqualog-aquarium-item">
@@ -435,6 +445,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 				array(
 					'title',
 					'editor',
+					'thumbnail',
 				),
 			),
 			'hierarchical'        => true,

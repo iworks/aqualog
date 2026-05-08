@@ -89,7 +89,7 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 
 		// Prepare data
 		$table_name = $wpdb->prefix . 'aqualog_log';
-		$data = array(
+		$data       = array(
 			'aquarium_id' => absint( $aquarium_id ),
 			'type'        => sanitize_key( $type ),
 			'message'     => wp_kses_post( $message ),
@@ -192,17 +192,17 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 	public function log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $date ) {
 		$param_name = $this->get_parameter_name( $param_key );
 		/* translators: 1: parameter name, 2: parameter value, 3: measurement date */
-		$message = sprintf( 
+		$message = sprintf(
 			__( 'Chemistry measurement added: %1$s = %2$s on %3$s', 'aqualog' ),
 			$param_name,
 			number_format_i18n( $param_value, 2 ),
 			$date
 		);
 		$details = array(
-			'action'       => 'add_measurement',
-			'param_key'    => $param_key,
-			'param_name'   => $param_name,
-			'param_value'  => $param_value,
+			'action'           => 'add_measurement',
+			'param_key'        => $param_key,
+			'param_name'       => $param_name,
+			'param_value'      => $param_value,
 			'measurement_date' => $date,
 		);
 
@@ -223,7 +223,7 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 	public function log_chemistry_measurement_updated( $aquarium_id, $param_key, $old_value, $new_value, $date ) {
 		$param_name = $this->get_parameter_name( $param_key );
 		/* translators: 1: parameter name, 2: old value, 3: new value, 4: measurement date */
-		$message = sprintf( 
+		$message = sprintf(
 			__( 'Chemistry measurement updated: %1$s changed from %2$s to %3$s on %4$s', 'aqualog' ),
 			$param_name,
 			number_format_i18n( $old_value, 2 ),
@@ -231,11 +231,11 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 			$date
 		);
 		$details = array(
-			'action'       => 'update_measurement',
-			'param_key'    => $param_key,
-			'param_name'   => $param_name,
-			'old_value'    => $old_value,
-			'new_value'    => $new_value,
+			'action'           => 'update_measurement',
+			'param_key'        => $param_key,
+			'param_name'       => $param_name,
+			'old_value'        => $old_value,
+			'new_value'        => $new_value,
 			'measurement_date' => $date,
 		);
 
@@ -250,13 +250,14 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 	 * @return string Parameter name
 	 */
 	private function get_parameter_name( $param_key ) {
-		$options = $this->options->get_option( 'chemistry', array() );
-		return isset( $options[ $param_key ]['name'] ) ? $options[ $param_key ]['name'] : $param_key;
+		$this->check_option_object();
+		$config = $this->options->get_group( 'chemistry' );
+		return isset( $config[ $param_key ]['name'] ) ? $config[ $param_key ]['name'] : $param_key;
 	}
 
 	/**
 	 * Get log entries for an aquarium
-	 *
+	*
 	 * @since 1.0.0
 	 * @param int    $aquarium_id Aquarium ID
 	 * @param string $type        Log type filter (optional)
@@ -266,21 +267,17 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 	 */
 	public function get_log_entries( $aquarium_id, $type = '', $limit = 50, $offset = 0 ) {
 		global $wpdb;
-
 		$table_name = $wpdb->prefix . 'aqualog_log';
-		$where = array( 'aquarium_id = %d' );
-		$params = array( $aquarium_id );
-
+		$where      = array( 'aquarium_id = %d' );
+		$params     = array( $aquarium_id );
 		if ( ! empty( $type ) && isset( $this->log_types[ $type ] ) ) {
-			$where[] = 'type = %s';
+			$where[]  = 'type = %s';
 			$params[] = $type;
 		}
-
 		$where_clause = implode( ' AND ', $where );
 		$limit_clause = $wpdb->prepare( 'LIMIT %d OFFSET %d', $limit, $offset );
-
-		$sql = "SELECT * FROM {$table_name} WHERE {$where_clause} ORDER BY log_date DESC {$limit_clause}";
-		$results = $wpdb->get_results( $wpdb->prepare( $sql, $params ) );
+		$sql          = "SELECT * FROM {$table_name} WHERE {$where_clause} ORDER BY log_date DESC {$limit_clause}";
+		$results      = $wpdb->get_results( $wpdb->prepare( $sql, $params ) );
 
 		if ( null === $results ) {
 			return new WP_Error(

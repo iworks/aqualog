@@ -168,6 +168,8 @@ class iworks_aqualog_base {
 	 */
 	protected ?int $current_aquarium_id = null;
 
+
+	protected object $logger;
 	/**
 	 * Constructor for the base class.
 	 *
@@ -528,11 +530,33 @@ class iworks_aqualog_base {
 	 */
 	protected function set_current_aquarium_id() {
 		$this->current_aquarium_id = 0;
-		$aquarium_id               = intval( get_query_var( 'aquarium_id' ) );
+		/**
+		 * check _GET for aquarium_id
+		 */
+		$aquarium_id = intval( filter_input( INPUT_GET, 'aquarium_id', FILTER_VALIDATE_INT ) );
 		if ( $aquarium_id ) {
 			$this->current_aquarium_id = $aquarium_id;
 			return;
 		}
+		/**
+		 * check _POST for aquarium_id
+		 */
+		$aquarium_id = intval( filter_input( INPUT_POST, 'aquarium_id', FILTER_VALIDATE_INT ) );
+		if ( $aquarium_id ) {
+			$this->current_aquarium_id = $aquarium_id;
+			return;
+		}
+		/**
+		 * check COOKIE for aquarium_id
+		 */
+		$aquarium_id = intval( filter_input( INPUT_COOKIE, 'aquarium_id', FILTER_VALIDATE_INT ) );
+		if ( $aquarium_id ) {
+			$this->current_aquarium_id = $aquarium_id;
+			return;
+		}
+		/**
+		 * check options for default aquarium ID
+		 */
 		$this->check_option_object();
 		$default_aquarium_id = $this->options->get_option( 'default_aquarium_id' );
 		if ( ! empty( $default_aquarium_id ) ) {
@@ -613,39 +637,39 @@ class iworks_aqualog_base {
 		if ( ! $datetime ) {
 			return __( 'Never', 'aqualog' );
 		}
-		
+
 		$time = strtotime( $datetime );
-		$now = current_time( 'timestamp' );
+		$now  = current_time( 'timestamp' );
 		$diff = $now - $time;
-		
+
 		if ( $diff < MINUTE_IN_SECONDS ) {
 			/* translators: %s: number of seconds */
 			return sprintf( _n( '%s second ago', '%s seconds ago', $diff, 'aqualog' ), number_format_i18n( $diff ) );
 		}
-		
+
 		$minutes = floor( $diff / MINUTE_IN_SECONDS );
 		if ( $minutes < 60 ) {
 			/* translators: %s: number of minutes */
 			return sprintf( _n( '%s minute ago', '%s minutes ago', $minutes, 'aqualog' ), number_format_i18n( $minutes ) );
 		}
-		
+
 		$hours = floor( $diff / HOUR_IN_SECONDS );
 		if ( $hours < 24 ) {
 			/* translators: %s: number of hours */
 			return sprintf( _n( '%s hour ago', '%s hours ago', $hours, 'aqualog' ), number_format_i18n( $hours ) );
 		}
-		
+
 		$days = floor( $diff / DAY_IN_SECONDS );
 		if ( $days === 1 ) {
 			return __( 'Yesterday', 'aqualog' );
 		}
-		
+
 		if ( $days > 6 ) {
 			$weeks = floor( $days / 7 );
 			/* translators: %s: number of weeks */
 			return sprintf( _n( '%s week ago', '%s weeks ago', $weeks, 'aqualog' ), number_format_i18n( $weeks ) );
 		}
-		
+
 		/* translators: %s: number of days */
 		return sprintf( _n( '%s day ago', '%s days ago', $days, 'aqualog' ), number_format_i18n( $days ) );
 	}
@@ -669,7 +693,7 @@ class iworks_aqualog_base {
 				wp_parse_args(
 					apply_filters( 'aqualog/load/template/args', $args ),
 					array(
-						'messages'    => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
+						'messages' => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
 						'counters' => array(
 							'aquariums' => 0,
 						),
