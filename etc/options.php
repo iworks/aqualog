@@ -59,12 +59,84 @@ function iworks_aqualog_options() {
 
 		// Use tabs for options page
 		// true - use tabs, false - options shown flat on one screen
-		'use_tabs'   => false,
+		'use_tabs'   => true,
 
 		// Array of options fields
 		'options'    => apply_filters(
 			'aqualog/etc/config/options',
 			array(
+				array(
+					'type'  => 'heading',
+					'label' => __( 'Modules', 'aqualog' ),
+					'since' => '1.0.0',
+				),
+				array(
+					'name'              => 'module_chemistry',
+					'type'              => 'checkbox',
+					'th'                => __( 'Chemistry', 'aqualog' ),
+					'description'       => __( 'Track water parameters and chemistry data.', 'aqualog' ),
+					'default'           => 1,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'switch-button' ),
+					'group'             => 'modules',
+					'since'             => '1.0.0',
+				),
+				array(
+					'name'              => 'module_maintenance',
+					'type'              => 'checkbox',
+					'th'                => __( 'Maintenance', 'aqualog' ),
+					'description'       => __( 'Schedule and track maintenance tasks.', 'aqualog' ),
+					'default'           => 1,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'switch-button' ),
+					'group'             => 'modules',
+					'since'             => '1.0.0',
+				),
+				array(
+					'name'              => 'module_dosing',
+					'type'              => 'checkbox',
+					'th'                => __( 'Dosing', 'aqualog' ),
+					'description'       => __( 'Manage fertilizers and supplement dosing.', 'aqualog' ),
+					'default'           => 1,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'switch-button' ),
+					'group'             => 'modules',
+					'since'             => '1.0.0',
+				),
+				array(
+					'name'              => 'module_equipment',
+					'type'              => 'checkbox',
+					'th'                => __( 'Equipment', 'aqualog' ),
+					'description'       => __( 'Track equipment status and schedules.', 'aqualog' ),
+					'default'           => 1,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'switch-button' ),
+					'group'             => 'modules',
+					'since'             => '1.0.0',
+				),
+				array(
+					'name'              => 'module_animals',
+					'type'              => 'checkbox',
+					'th'                => __( 'Animals', 'aqualog' ),
+					'description'       => __( 'Manage fish and aquatic livestock.', 'aqualog' ),
+					'default'           => 1,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'switch-button' ),
+					'group'             => 'modules',
+					'since'             => '1.0.0',
+				),
+				array(
+					'name'              => 'module_plants',
+					'type'              => 'checkbox',
+					'th'                => __( 'Plants', 'aqualog' ),
+					'description'       => __( 'Track aquatic plants and care needs.', 'aqualog' ),
+					'default'           => 1,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'switch-button' ),
+					'group'             => 'modules',
+					'since'             => '1.0.0',
+				),
+
 				array(
 					'type'  => 'heading',
 					'label' => __( 'Aquarium Settings', 'aqualog' ),
