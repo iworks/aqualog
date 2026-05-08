@@ -9,7 +9,7 @@
  * @subpackage AquaLog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
- * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  * @version    1.0.0
  * @since      1.0.0
  */
@@ -54,12 +54,14 @@ class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 	 */
 	public function get_recent_activity( $limit = 5 ) {
 		// Get recent aquarium posts
-		$recent_posts = get_posts( array(
-			'post_type'      => 'iw_aquarium',
-			'posts_per_page' => $limit,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		) );
+		$recent_posts = get_posts(
+			array(
+				'post_type'      => 'iw_aquarium',
+				'posts_per_page' => $limit,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
 
 		$activities = array();
 
@@ -107,7 +109,7 @@ class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 			?>
 			<div class="aqualog-activity-item">
 				<strong>
-					<?php 
+					<?php
 					if ( ! empty( $activity['edit_link'] ) ) {
 						echo '<a href="' . esc_url( $activity['edit_link'] ) . '">' . esc_html( $activity['title'] ) . '</a>';
 					} else {
@@ -117,7 +119,7 @@ class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 				</strong>
 				<br>
 				<span class="aqualog-activity-meta">
-					<?php 
+					<?php
 					printf(
 						/* translators: %1$s: date, %2$s: time */
 						esc_html__( 'Created on %1$s at %2$s', 'aqualog' ),

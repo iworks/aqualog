@@ -10,7 +10,7 @@
  * @subpackage AquaLog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
- * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  * @version    1.0.0
  * @since      1.0.0
  */
@@ -62,10 +62,10 @@ class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 	public function render_page() {
 		// Get recent aquariums data
 		$recent_aquariums = $this->get_recent_aquariums( 5 );
-		$all_aquariums = $this->get_recent_aquariums( -1 ); // Get all aquariums
-		
-		$this->load_template( 
-			'dashboard', 
+		$all_aquariums    = $this->get_recent_aquariums( -1 ); // Get all aquariums
+
+		$this->load_template(
+			'dashboard',
 			'pages',
 			true,
 			array(
@@ -107,7 +107,7 @@ class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 			'orderby'        => 'meta_value',
 			'order'          => 'DESC',
 		);
-		
+
 		// If no meta value exists, fall back to post date
 		$args_allback = array(
 			'post_type'      => 'iw_aquarium',
@@ -116,14 +116,14 @@ class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 			'orderby'        => 'date',
 			'order'          => 'DESC',
 		);
-		
+
 		$posts = get_posts( $args );
-		
+
 		// If no posts found with meta value, try fallback
 		if ( empty( $posts ) && $limit > 0 ) {
 			$posts = get_posts( $args_allback );
 		}
-		
+
 		return $posts;
 	}
 
