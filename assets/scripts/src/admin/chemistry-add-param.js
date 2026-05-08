@@ -148,6 +148,7 @@
 			var current = parseFloat($form.find(field_value_class).val()) || 0;
 			var new_value = current + parseFloat(value);
 			$form.find(field_value_class).val(new_value);
+			$form.find('.aqualog-chemistry-item-body-scale-slider').slider('value', new_value);
 		});
 	};
 
