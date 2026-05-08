@@ -12,9 +12,15 @@ defined( 'ABSPATH' ) || exit;
 <div class="wrap aqualog-chemistry">
 	<?php do_action( 'aqualog/wp-admin/current-aquarium-bar' ); ?>
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Chemistry', 'aqualog' ); ?></h1>
-<?php 
+<?php
+
+d($args);
 if ( empty( $args['aquarium_id'] ) ) {
-	load_template( $args['messages']['create-aquarium-first'] ); 
+	if ( $args['counters']['aquariums'] === 0 ) {
+		load_template( $args['messages']['create-aquarium-first'] ); 
+	} else {
+		load_template( $args['messages']['select-aquarium'] ); 
+	}
 } else {
 	if ( empty( $args['latest_measurements'] ) ) {
 		load_template( $args['messages']['chemistry-no-measurements'] ); 

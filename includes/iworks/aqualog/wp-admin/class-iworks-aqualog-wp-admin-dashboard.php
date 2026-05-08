@@ -60,7 +60,19 @@ class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 	}
 
 	public function render_page() {
-		$this->load_template( 'dashboard', 'pages' );
+		// Get recent aquariums data
+		$recent_aquariums = $this->get_recent_aquariums( 5 );
+		$all_aquariums = $this->get_recent_aquariums( -1 ); // Get all aquariums
+		
+		$this->load_template( 
+			'dashboard', 
+			'pages',
+			true,
+			array(
+				'recent_aquariums' => $recent_aquariums,
+				'all_aquariums'    => $all_aquariums,
+			)
+		);
 	}
 
 	/**
@@ -77,6 +89,42 @@ class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 			'dismiss_message' => wp_create_nonce( 'iworks_aqualog_dismiss_message' ),
 		);
 		return $data;
+	}
+
+	/**
+	 * Get recent aquariums sorted by last update time.
+	 *
+	 * @since 1.0.0
+	 * @param int $limit Number of aquariums to retrieve (-1 for all).
+	 * @return array Array of aquarium post objects.
+	 */
+	private function get_recent_aquariums( $limit = 5 ) {
+		$args = array(
+			'post_type'      => 'iw_aquarium',
+			'post_status'    => 'publish',
+			'posts_per_page' => $limit,
+			'meta_key'       => '_related_updated_at',
+			'orderby'        => 'meta_value',
+			'order'          => 'DESC',
+		);
+		
+		// If no meta value exists, fall back to post date
+		$args_allback = array(
+			'post_type'      => 'iw_aquarium',
+			'post_status'    => 'publish',
+			'posts_per_page' => $limit,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+		);
+		
+		$posts = get_posts( $args );
+		
+		// If no posts found with meta value, try fallback
+		if ( empty( $posts ) && $limit > 0 ) {
+			$posts = get_posts( $args_allback );
+		}
+		
+		return $posts;
 	}
 
 	/**

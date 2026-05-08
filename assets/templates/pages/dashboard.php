@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Dashboard page template.
@@ -11,13 +10,41 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <div class="wrap">
-    <h1 class="wp-heading-inline"><?php esc_html_e( 'AquaLog Dashboard', 'aqualog' ); ?></h1>
+	<h1 class="wp-heading-inline"><?php esc_html_e( 'AquaLog Dashboard', 'aqualog' ); ?></h1>
 	<?php do_action( 'aqualog/dashboard/before' ); ?>
 			
 	<div class="aqualog-dashboard-grid">
 		<!-- Statistics Cards -->
 		<div class="aqualog-stats-grid">
 			<?php do_action( 'aqualog/dashboard/statistics' ); ?>
+		</div>
+
+		<!-- Recent Aquariums -->
+		<div class="aqualog-recent-aquariums-section">
+			<?php 
+			// Get recent aquariums data
+			$recent_aquariums = array();
+			$all_aquariums = array();
+			
+			if ( isset( $args['recent_aquariums'] ) && is_array( $args['recent_aquariums'] ) ) {
+				$recent_aquariums = $args['recent_aquariums'];
+			}
+			
+			if ( isset( $args['all_aquariums'] ) && is_array( $args['all_aquariums'] ) ) {
+				$all_aquariums = $args['all_aquariums'];
+			}
+			
+			// Load the recent aquariums card template
+			$this->load_template(
+				'recent-aquariums-card',
+				'elements',
+				false,
+				array(
+					'recent_aquariums' => $recent_aquariums,
+					'all_aquariums'    => $all_aquariums,
+				)
+			);
+			?>
 		</div>
 
 		<!-- Recent Activity -->
@@ -39,10 +66,12 @@ defined( 'ABSPATH' ) || exit;
 						<span class="dashicons dashicons-plus-alt"></span>
 						<span><?php esc_html_e( 'Add Aquarium', 'aqualog' ); ?></span>
 					</a>
+		<?php if ( apply_filters( 'aqualog/load/module/chemistry', false ) ) { ?>
 					<a href="#" class="aqualog-action-card">
 						<span class="dashicons dashicons-color-picker"></span>
 						<span><?php esc_html_e( 'Add Measurement Results', 'aqualog' ); ?></span>
 					</a>
+		<?php } ?>
 					<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=iw_aquarium' ) ); ?>" class="aqualog-action-card">
 						<span class="dashicons dashicons-list-view"></span>
 						<span><?php esc_html_e( 'View All', 'aqualog' ); ?></span>

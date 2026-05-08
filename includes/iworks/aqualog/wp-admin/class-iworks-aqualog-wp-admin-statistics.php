@@ -112,7 +112,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_water_entries() {
-		if ( false === apply_filters( 'aqualog/load/wp-admin/statistics', false ) ) {
+		if ( false === apply_filters( 'aqualog/load/module/chemistry', false ) ) {
 			return;
 		}
 		global $wpdb;
@@ -139,7 +139,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_ph_readings() {
-		if ( false === apply_filters( 'aqualog/load/wp-admin/statistics', false ) ) {
+		if ( false === apply_filters( 'aqualog/load/module/chemistry', false ) ) {
 			return;
 		}
 		global $wpdb;
@@ -167,7 +167,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_maintenance_tasks() {
-		if ( false === apply_filters( 'aqualog/load/wp-admin/maintenance', false ) ) {
+		if ( false === apply_filters( 'aqualog/load/module/maintenance', false ) ) {
 			return;
 		}
 		$this->render_card(

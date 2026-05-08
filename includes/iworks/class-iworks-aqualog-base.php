@@ -592,14 +592,90 @@ class iworks_aqualog_base {
 		if ( $days_diff === 1 ) {
 			return __( 'Yesterday', 'aqualog' );
 		}
+		if ( $days_diff > 6 ) {
+			$weeks = floor( $days_diff / 7 );
+			/* translators: %s: number of weeks */
+			return sprintf( _n( '%s week ago', '%s weeks ago', $weeks, 'aqualog' ), number_format_i18n( $weeks ) );
+		}
 		/* translators: %s: number of days */
 		return sprintf( _n( '%s day ago', '%s days ago', $days_diff, 'aqualog' ), number_format_i18n( $days_diff ) );
 	}
 
+
+	/**
+	 * Get time elapsed text for dashboard display.
+	 *
+	 * @since 1.0.0
+	 * @param string $datetime MySQL datetime string.
+	 * @return string Time elapsed text.
+	 */
+	protected function get_time_elapsed_text_seconds( $datetime ) {
+		if ( ! $datetime ) {
+			return __( 'Never', 'aqualog' );
+		}
+		
+		$time = strtotime( $datetime );
+		$now = current_time( 'timestamp' );
+		$diff = $now - $time;
+		
+		if ( $diff < MINUTE_IN_SECONDS ) {
+			/* translators: %s: number of seconds */
+			return sprintf( _n( '%s second ago', '%s seconds ago', $diff, 'aqualog' ), number_format_i18n( $diff ) );
+		}
+		
+		$minutes = floor( $diff / MINUTE_IN_SECONDS );
+		if ( $minutes < 60 ) {
+			/* translators: %s: number of minutes */
+			return sprintf( _n( '%s minute ago', '%s minutes ago', $minutes, 'aqualog' ), number_format_i18n( $minutes ) );
+		}
+		
+		$hours = floor( $diff / HOUR_IN_SECONDS );
+		if ( $hours < 24 ) {
+			/* translators: %s: number of hours */
+			return sprintf( _n( '%s hour ago', '%s hours ago', $hours, 'aqualog' ), number_format_i18n( $hours ) );
+		}
+		
+		$days = floor( $diff / DAY_IN_SECONDS );
+		if ( $days === 1 ) {
+			return __( 'Yesterday', 'aqualog' );
+		}
+		
+		if ( $days > 6 ) {
+			$weeks = floor( $days / 7 );
+			/* translators: %s: number of weeks */
+			return sprintf( _n( '%s week ago', '%s weeks ago', $weeks, 'aqualog' ), number_format_i18n( $weeks ) );
+		}
+		
+		/* translators: %s: number of days */
+		return sprintf( _n( '%s day ago', '%s days ago', $days, 'aqualog' ), number_format_i18n( $days ) );
+	}
+
+	/**
+	 * Load a template file.
+	 *
+	 * @since 1.0.0
+	 * @param string $file Template file name.
+	 * @param string $group Template group name.
+	 * @param bool $load_once Whether to load the template only once.
+	 * @param array $args Arguments to pass to the template.
+	 * @return void
+	 */
 	protected function load_template( $file, $group = '', $load_once = true, array $args = array() ) {
 		$filename = $this->get_template_file( $file, $group );
 		if ( $filename ) {
-			load_template( $filename, $load_once, $args );
+			load_template(
+				$filename,
+				apply_filters( 'aqualog/load/template/once', $load_once ),
+				wp_parse_args(
+					apply_filters( 'aqualog/load/template/args', $args ),
+					array(
+						'messages'    => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
+						'counters' => array(
+							'aquariums' => 0,
+						),
+					)
+				)
+			);
 			return;
 		}
 		$this->simple_history_logger_helper(
@@ -625,5 +701,14 @@ class iworks_aqualog_base {
 			);
 			echo '</div>';
 		}
+	}
+
+
+	protected function is_module_enabled( $module ) {
+		$this->check_option_object();
+		if ( ! preg_match( '/^module_/', $module ) ) {
+			$module = 'module_' . $module;
+		}
+		return boolval( $this->options->get_option( $module ) );
 	}
 }

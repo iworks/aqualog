@@ -121,44 +121,25 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			 */
 			$admin_name = $matches[1];
 			/**
-			 * Create filter name for this admin class.
-			 *
-			 * @since 1.0.0
-			 */
-			$filter = sprintf(
-				'aqualog/load/wp-admin/%s',
-				$admin_name
-			);
-			/**
-			 * Check if this admin class should be loaded.
-			 *
-			 * Uses the filter 'aqualog/load/wp-admin/{admin_name}' to determine
-			 * whether the admin class should be instantiated.
-			 *
-			 * @since 1.0.0
-			 */
-			if ( apply_filters( $filter, false ) ) {
-				/**
 			 * Include the admin class file.
 			 *
 			 * @since 1.0.0
 			 */
-				include_once $admin_classes_dir . $filename;
+			include_once $admin_classes_dir . $filename;
 
-				/**
+			/**
 			 * Generate fully qualified class name.
 			 *
 			 * @since 1.0.0
 			 */
-				$class_name = sprintf( 'iworks_aqualog_wp_admin_%s', $admin_name );
+			$class_name = sprintf( 'iworks_aqualog_wp_admin_%s', $admin_name );
 
-				/**
+			/**
 			 * Initialize admin class instance.
 			 *
 			 * @since 1.0.0
 			 */
-				do_action( 'aqualog/register_objects', $admin_name, 'wp-admin', new $class_name() );
-			}
+			do_action( 'aqualog/register_objects', $admin_name, 'wp-admin', new $class_name() );
 		}
 		/**
 		 * Register additional plugin hooks.
@@ -539,47 +520,75 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		$submenus = array(
 			array(
 				/* translators: Dashboard submenu title */
-				'title'    => __( 'Dashboard', 'aqualog' ),
-				'slug'     => $this->wp_admin_slug,
-				'callback' => array( $this, 'render_dashboard_page' ),
+				'title'             => __( 'Dashboard', 'aqualog' ),
+				'slug'              => $this->wp_admin_slug,
+				'callback'          => array( $this, 'render_dashboard_page' ),
+				'module_load_check' => 'skip',
 			),
 			array(
 				/* translators: Chemistry submenu title */
-				'title'    => __( 'Chemistry', 'aqualog' ),
-				'slug'     => 'aqualog-chemistry',
-				'callback' => array( $this, 'render_chemistry_page' ),
-				'filter'   => 'aqualog/load/wp-admin/chemistry',
+				'title'             => __( 'Dosings', 'aqualog' ),
+				'slug'              => 'aqualog-dosings',
+				'callback'          => array( $this, 'render_dosings_page' ),
+				'module_load_check' => 'check',
+			),
+			array(
+				/* translators: Chemistry submenu title */
+				'title'             => __( 'Chemistry', 'aqualog' ),
+				'slug'              => 'aqualog-chemistry',
+				'callback'          => array( $this, 'render_chemistry_page' ),
+				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Maintenance submenu title */
-				'title'    => __( 'Maintenance', 'aqualog' ),
-				'slug'     => 'aqualog-maintenance',
-				'callback' => array( $this, 'render_maintenance_page' ),
-				'filter'   => 'aqualog/load/wp-admin/maintenance',
+				'title'             => __( 'Maintenance', 'aqualog' ),
+				'slug'              => 'aqualog-maintenance',
+				'callback'          => array( $this, 'render_maintenance_page' ),
+				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Notes submenu title */
-				'title'    => __( 'Notes', 'aqualog' ),
-				'slug'     => 'edit.php?post_type=iw_note',
-				'callback' => null,
-				'filter'   => 'aqualog/load/wp-admin/notes',
+				'title'             => __( 'Notes', 'aqualog' ),
+				'slug'              => 'edit.php?post_type=iw_note',
+				'callback'          => null,
+				'module_load_check' => 'check',
+			),
+			array(
+				/* translators: Equipment submenu title */
+				'title'             => __( 'Equipment', 'aqualog' ),
+				'slug'              => 'edit.php?post_type=iw_equipment',
+				'callback'          => null,
+				'module_load_check' => 'check',
+			),
+			array(
+				/* translators: Plants submenu title */
+				'title'             => __( 'Plants', 'aqualog' ),
+				'slug'              => 'edit.php?post_type=iw_plant',
+				'callback'          => null,
+				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Aquariums submenu title */
-				'title'    => __( 'Aquariums', 'aqualog' ),
-				'slug'     => 'edit.php?post_type=iw_aquarium',
-				'callback' => null,
+				'title'             => __( 'Aquariums', 'aqualog' ),
+				'slug'              => 'edit.php?post_type=iw_aquarium',
+				'callback'          => null,
+				'module_load_check' => 'skip',
 			),
 			array(
 				/* translators: Help submenu title */
-				'title'    => __( 'Help', 'aqualog' ),
-				'slug'     => 'aqualog-help',
-				'callback' => array( $this, 'render_help_page' ),
+				'title'             => __( 'Help', 'aqualog' ),
+				'slug'              => 'aqualog-help',
+				'callback'          => array( $this, 'render_help_page' ),
+				'module_load_check' => 'skip',
 			),
 		);
 		foreach ( $submenus as $submenu ) {
-			if ( isset( $submenu['filter'] ) && ! apply_filters( $submenu['filter'], false ) ) {
-				continue;
+			if ( 'check' === $submenu['module_load_check'] ) {
+				$module = str_replace( 'aqualog-', '', $submenu['slug'] );
+				if ( ! $this->is_module_enabled( $module ) ) {
+					continue;
+				}
+				add_filter( 'aqualog/load/module/' . $module, '__return_true' );
 			}
 			$slug = add_submenu_page(
 				$this->wp_admin_slug,
@@ -605,60 +614,6 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	public function render_dashboard_page() {
 		do_action( 'aqualog/wp-admin/page/dashboard' );
 	}
-
-	/**
-	 * Render statistic card.
-	 *
-	 * Displays a single statistics card on the dashboard.
-	* Uses get_statistic_count() to retrieve the count value.
-	*
-	 * @since 1.0.0
-	 *
-	 * @param string $type  The statistic type (e.g., 'aquariums', 'water-entries').
-	 * @param string $label The statistic label for display.
-	 * @param string $icon  The dashicon class name.
-	 * @return  void
-	 */
-	private function render_statistic_card( $type, $label, $icon ) {
-		$count = $this->get_statistic_count( $type );
-		?>
-		<div class="aqualog-stat-card">
-			<span class="dashicons <?php echo esc_attr( $icon ); ?>"></span>
-			<div class="aqualog-stat-number"><?php echo esc_html( $count ); ?></div>
-			<div class="aqualog-stat-label"><?php echo esc_html( $label ); ?></div>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Get statistic count.
-	 *
-	 * Retrieves the count for a specific statistic type.
-	 * Currently supports 'aquariums' with planned support for other types.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $type The statistic type to retrieve.
-	 * @return int    The count value or 0 if type not supported.
-	 */
-	private function get_statistic_count( $type ) {
-		switch ( $type ) {
-			case 'aquariums':
-				return wp_count_posts( 'iw_aquarium' )->publish;
-			case 'water-entries':
-				// This would be implemented when water entries are created
-				return 0;
-			case 'ph-readings':
-				// This would be implemented when pH readings are tracked
-				return 0;
-			case 'maintenance':
-				// This would be implemented when maintenance tasks are added
-				return 0;
-			default:
-				return 0;
-		}
-	}
-
 
 	/**
 	 * Render water quality stats.
@@ -804,7 +759,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		$this->set_current_aquarium_id();
 		$content = '';
 		$id      = 0;
-		$title   = /* translators: Default text when no aquarium is selected */ esc_html__( 'No aquarium selected', 'aqualog' );
+		$title   = /* translators: Default text when no aquarium is selected */ esc_html__( 'no aquarium selected.', 'aqualog' );
 		if ( empty( $this->current_aquarium_id ) ) {
 		} else {
 			$aquarium = get_post( $this->current_aquarium_id );

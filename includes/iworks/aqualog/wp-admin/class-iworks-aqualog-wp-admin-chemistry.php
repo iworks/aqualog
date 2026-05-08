@@ -88,17 +88,16 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 */
 	public function render_page() {
 		$this->set_current_aquarium_id();
-			$this->load_template(
-				'chemistry',
-				'pages',
-				true,
-				array(
-					'aquarium_id' => $this->current_aquarium_id,
-					'messages'    => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
-					'meta'        => get_post_meta( $this->current_aquarium_id ),
-					'params'      => $this->get_parameters(),
-				)
-			);
+		$this->load_template(
+			'chemistry',
+			'pages',
+			true,
+			array(
+				'aquarium_id' => $this->current_aquarium_id,
+				'meta'        => get_post_meta( $this->current_aquarium_id ),
+				'params'      => $this->get_parameters(),
+			)
+		);
 	}
 
 	/**
@@ -403,6 +402,9 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			)
 		);
 		if ( $result ) {
+			// Log the chemistry measurement addition
+			$this->log_chemistry_measurement( $id, $key, $value );
+
 			wp_send_json_success(
 				array(
 					'message' => __( 'Parameter added successfully', 'aqualog' ),
@@ -410,5 +412,21 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			);
 		}
 		wp_send_json_error( __( 'Failed to add parameter', 'aqualog' ) );
+	}
+
+	/**
+	 * Log chemistry measurement addition.
+	 *
+	 * @since 1.0.0
+	 * @param int    $aquarium_id Aquarium ID.
+	 * @param string $param_key   Parameter key.
+	 * @param float  $param_value Parameter value.
+	 * @return void
+	 */
+	private function log_chemistry_measurement( $aquarium_id, $param_key, $param_value ) {
+
+		// Log the measurement
+		$measurement_date = current_time( 'mysql' );
+		$this->objects['logger']->log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $measurement_date );
 	}
 }

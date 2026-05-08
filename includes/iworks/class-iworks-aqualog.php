@@ -59,7 +59,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 		$filename = $this->includes_directory . '/class-iworks-aqualog-posttypes.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			new iworks_aqualog_posttypes();
+			$this->objects['posttypes'] = new iworks_aqualog_posttypes();
 		}
 		/**
 		 * load github class
@@ -67,7 +67,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 		$filename = $this->includes_directory . '/class-iworks-aqualog-github.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			new iworks_aqualog_github();
+			$this->objects['github'] = new iworks_aqualog_github();
 		}
 		/**
 		 * admin
@@ -76,7 +76,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 			$filename = $this->includes_directory . '/class-iworks-aqualog-wp-admin.php';
 			if ( is_file( $filename ) ) {
 				include_once $filename;
-				new iworks_aqualog_wp_admin();
+				$this->objects['wp-admin'] = new iworks_aqualog_wp_admin();
 			}
 		}
 		/**
@@ -85,7 +85,15 @@ class iworks_aqualog extends iworks_aqualog_base {
 		$filename = $this->includes_directory . '/class-iworks-aqualog-db.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			new iworks_aqualog_db();
+			$this->objects['db'] = new iworks_aqualog_db();
+		}
+		/**
+		 * load logger class
+		 */
+		$filename = $this->includes_directory . '/class-iworks-aqualog-logger.php';
+		if ( is_file( $filename ) ) {
+			include_once $filename;
+			$this->objects['logger'] = new iworks_aqualog_logger();
 		}
 		/**
 		 * register objects filter
@@ -107,10 +115,10 @@ class iworks_aqualog extends iworks_aqualog_base {
 	 * @return array The modified objects array.
 	 */
 	public function register_objects( $name, $group, $object ) {
-		if ( ! isset( $objects[ $group ] ) ) {
-			$objects[ $group ] = array();
+		if ( ! isset( $this->objects[ $group ] ) ) {
+			$this->objects[ $group ] = array();
 		}
-		return $objects[ $group ][ $name ] = $object;
+		return $this->objects[ $group ][ $name ] = $object;
 	}
 
 	/**
@@ -142,7 +150,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function register_activation_hook() {
-		$this->db_install();
+		$this->objects['db']->db_install();
 		$this->check_option_object();
 		$this->options->activate();
 		do_action( 'iworks/aqualog/register_activation_hook' );
@@ -160,18 +168,5 @@ class iworks_aqualog extends iworks_aqualog_base {
 		$this->check_option_object();
 		$this->options->deactivate();
 		do_action( 'iworks/aqualog/register_deactivation_hook' );
-	}
-
-	/**
-	 * Database installation method.
-	 *
-	 * Handles the creation of required database tables.
-	 * Currently empty as it's a stub implementation.
-	 *
-	 * @since 1.0.0
-	 * @return void
-	 * @todo Implement database table creation if needed.
-	 */
-	private function db_install() {
 	}
 }

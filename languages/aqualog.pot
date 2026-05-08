@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.1\n"
 "Report-Msgid-Bugs-To: http://iworks.pl\n"
-"POT-Creation-Date: 2026-05-07 16:11:37+00:00\n"
+"POT-Creation-Date: 2026-05-07 16:26:07+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -817,30 +817,30 @@ msgstr ""
 
 #: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:485
 #: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:141
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:323
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:321
 msgid "&mdash; Select &mdash;"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:269
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:267
 #: includes/iworks/options/options.php:998
 #: includes/iworks/options/options.php:2388
 msgid "Select Image"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:273
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:271
 #: includes/iworks/options/options.php:1003
 msgid "Delete image"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:449
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:447
 msgid "Selected Taxonomy dosn't exists."
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:571
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:569
 msgid "Select or Upload Media"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:573
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype.php:571
 msgid "Use this Media"
 msgstr ""
 
@@ -857,61 +857,61 @@ msgstr ""
 msgid "Never tested!"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:253
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:254
 msgid "Unknown parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:265
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:266
 #. translators: %1$s: range min, %2$s: range max, %3$s: unit
 msgid "Value is outside typical range (%1$s - %2$s %3$s)"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:279
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:280
 #. translators: %1$s: ideal min, %2$s: ideal max, %3$s: unit
 msgid "Value is outside ideal range (%1$s - %2$s %3$s)"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:289
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:290
 msgid "Value is within ideal range"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:313
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:314
 msgid "Latest Measurements"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:341
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:342
 msgid "Add Measurement"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:345
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:346
 msgid "Parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:347
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:348
 msgid "Select parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:356
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:357
 msgid "Value"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:360
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:361
 msgid "Date"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:366
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:367
 msgid "Save Measurement"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:386
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:387
 msgid "Invalid parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:407
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:408
 msgid "Parameter added successfully"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:411
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:412
 msgid "Failed to add parameter"
 msgstr ""
 
@@ -920,17 +920,17 @@ msgstr ""
 msgid "Total Aquariums"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:123
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:124
 #. translators: Statistics card title for water entries
 msgid "Water Entries"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:149
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:152
 #. translators: Statistics card title for pH readings
 msgid "pH Readings"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:173
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-statistics.php:176
 #. translators: Statistics card title for maintenance tasks
 msgid "Maintenance Tasks"
 msgstr ""

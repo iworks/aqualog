@@ -43,7 +43,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		'aqualog_log',
 		'aqualog_chemistry',
 		'aqualog_maintenance',
-		'aqualog_maintenance_log',
+		'aqualog_dosing',
 	);
 	/**
 	 * Class constructor.
@@ -138,7 +138,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 				PRIMARY KEY  (id),
 				KEY aquarium_id (aquarium_id),
 				KEY param (param_key),
-				KEY measurement_date (measurement_date)
+				KE measurement_date (measurement_date)
 			) $charset_collate;";
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
@@ -174,20 +174,22 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		/**
 		 * maintenance log table
 		 */
-		$version_to_update = 4;
+		$version_to_update = 5;
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
-			$table_name      = $wpdb->prefix . 'aqualog_maintenance_log';
+			$table_name      = $wpdb->prefix . 'aqualog_log';
 			$charset_collate = $wpdb->get_charset_collate();
 			$sql             = "CREATE TABLE IF NOT EXISTS $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-				maintenance_id bigint(20) unsigned NOT NULL COMMENT 'Related maintenance task ID',
+				aquarium_id bigint(20) unsigned NOT NULL COMMENT 'Aquarium ID',
+				type varchar(50) NOT NULL DEFAULT '' COMMENT 'Log type identifier',
 				message text NOT NULL COMMENT 'Log message',
 				user_id bigint(20) unsigned DEFAULT NULL COMMENT 'User who performed action',
 				log_date datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Log timestamp',
-				data longtext DEFAULT NULL COMMENT 'Additional action data (JSON)',
+				details longtext DEFAULT NULL COMMENT 'Additional action details (JSON)',
 				PRIMARY KEY (id),
-				KEY idx_maintenance_id (maintenance_id),
+				KEY idx_aquarium_id (aquarium_id),
+				KEY idx_type (type),
 				KEY idx_user_id (user_id),
 				KEY idx_log_date (log_date)
 			) $charset_collate;";
