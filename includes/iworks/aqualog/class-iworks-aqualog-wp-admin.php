@@ -757,6 +757,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 */
 	private function get_current_aquarium() {
 		$this->set_current_aquarium_id();
+		$count   = intval( wp_count_posts( 'iw_aquarium' )->publish );
 		$content = '';
 		$id      = 0;
 		$title   = /* translators: Default text when no aquarium is selected */ esc_html__( 'no aquarium selected.', 'aqualog' );
@@ -772,9 +773,19 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			}
 		}
 		$content .= '<div class="aqualog-current-aquarium">';
+		$content .= '<span class="aqualog-current-aquarium-label">';
 		$content .= /* translators: Label for current aquarium display */ esc_html__( 'Current Aquarium:', 'aqualog' );
 		$content .= ' ';
 		$content .= $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$content .= '</span>';
+		$content .= ' ';
+		if ( $this->current_aquarium_id && 1 < $count ) {
+			$content .= '<span class="aqualog-current-aquarium-change">';
+			$content .= '<a href="' . esc_url( add_query_arg( 'change', 'aquarium' ) ) . '">';
+			$content .= /* translators: Link text to change aquarium */ esc_html__( 'Change Aquarium', 'aqualog' );
+			$content .= '</a>';
+			$content .= '</span>';
+		}
 		$content .= '</div>';
 		return $content;
 	}

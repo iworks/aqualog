@@ -102,23 +102,21 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 					?>
 					<a class="aqualog-aquarium-item" href="<?php echo esc_url( add_query_arg( 'aquarium_id', $post_id ) ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
 						<div class="aqualog-aquarium-thumbnail">
-							<?php
-							if ( has_post_thumbnail( $post_id ) ) {
-								echo get_the_post_thumbnail( $post_id, 'thumbnail', array( 'class' => 'aqualog-aquarium-thumbnail-img' ) );
-							} else {
-								// Default placeholder image
-								echo '<div class="aqualog-aquarium-thumbnail-placeholder">';
-								echo '<span class="dashicons dashicons-buddicons-groups"></span>';
-								echo '</div>';
-							}
-							?>
-						</div>
-						<div class="aqualog-aquarium-info">
-							<div class="aqualog-aquarium-title">
-								<?php echo esc_html( $title ); ?>
+						<?php
+						if ( has_post_thumbnail( $post_id ) ) {
+							echo get_the_post_thumbnail( $post_id, 'thumbnail', array( 'class' => 'aqualog-aquarium-thumbnail-img' ) );
+						} else {
+							// Default placeholder image
+							echo '<div class="aqualog-aquarium-thumbnail-placeholder">';
+							echo '<span class="dashicons dashicons-buddicons-groups"></span>';
+							echo '</div>';
+						}
+						?>
 							</div>
+						<div class="aqualog-aquarium-info">
+							<h3 class="aqualog-aquarium-title"><?php echo esc_html( $title ); ?></h3>
 							<?php if ( $type_name ) : ?>
-								<span class="aqualog-aquarium-type"><?php echo esc_html( $type_name ); ?></span>
+								<p class="aqualog-aquarium-type"><?php echo esc_html( $type_name ); ?></p>
 							<?php endif; ?>
 							<div class="aqualog-aquarium-meta">
 								<?php if ( $capacity_display ) : ?>
@@ -129,7 +127,7 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 								<?php endif; ?>
 								<span class="aqualog-aquarium-updated">
 									<span class="dashicons dashicons-clock"></span>
-									<?php echo esc_html( $last_updated ); ?>
+									<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $last_updated ) ) ); ?>
 								</span>
 							</div>
 							
