@@ -68,10 +68,10 @@ class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 			'dashboard',
 			'pages',
 			true,
-			array(
+			apply_filters( 'aqualog/dashboard/template_args', array(
 				'recent_aquariums' => $recent_aquariums,
 				'all_aquariums'    => $all_aquariums,
-			)
+			) )
 		);
 	}
 

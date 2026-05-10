@@ -38,6 +38,14 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	private $parameters = array();
 
 	/**
+	 * Latest measurements for each parameter.
+	 *
+	 * @since 1.0.0
+	 * @var array
+	 */
+	private $latest_measurements = array();
+
+	/**
 	 * Class constructor.
 	 *
 	 * Initializes the chemistry class and sets up hooks.
@@ -95,9 +103,10 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			apply_filters(
 				'aqualog/wp-admin/chemistry_page_args',
 				array(
-					'aquarium_id' => $this->current_aquarium_id,
-					'meta'        => get_post_meta( $this->current_aquarium_id ),
-					'params'      => $this->get_parameters(),
+					'aquarium_id'         => $this->current_aquarium_id,
+					'meta'                => get_post_meta( $this->current_aquarium_id ),
+					'params'              => $this->get_parameters(),
+					'latest_measurements' => $this->get_latest_measurements(),
 				)
 			)
 		);
@@ -215,6 +224,12 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 * @return array Array of latest measurements.
 	 */
 	public function get_latest_measurements() {
+		if ( empty( $this->current_aquarium_id ) ) {
+			return array();
+		}
+		if ( isset( $this->latest_measurements[ $this->current_aquarium_id ] ) ) {
+			return $this->latest_measurements[ $this->current_aquarium_id ];
+		}
 		global $wpdb;
 		$sql     = "SELECT t1.* FROM {$wpdb->aqualog_chemistry} t1 WHERE t1.aquarium_id = %d and t1.measurement_date = ( SELECT MAX(t2.measurement_date) FROM {$wpdb->aqualog_chemistry} t2 WHERE t2.param_key = t1.param_key)";
 		$query   = $wpdb->prepare( $sql, $this->current_aquarium_id );

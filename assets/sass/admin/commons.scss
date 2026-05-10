@@ -78,6 +78,7 @@
 	}
 
 	$aq-thumbnail-size: 80px;
+
 	&-aquarium {
 		&s {
 			&-list {
@@ -90,6 +91,7 @@
 		&-title {
 			font-size: 1.25rem;
 			font-weight: 600;
+			margin-top: 0;
 		}
 
 		&-type {
@@ -127,10 +129,19 @@
 		}
 
 		&-thumbnail {
-			.dashicons {
-				font-size: $aq-thumbnail-size;
-				width: $aq-thumbnail-size;
-				height: $aq-thumbnail-size;
+			width: $aq-thumbnail-size;
+			height: $aq-thumbnail-size;
+
+			&.no-thumbnail {
+				opacity: 0.3;
+
+				background: {
+					color: #f0f0f1;
+					image: url(../images/icon.svg);
+					repeat: no-repeat;
+					position: center;
+					size: contain;
+				}
 			}
 		}
 	}

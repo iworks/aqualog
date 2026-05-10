@@ -99,17 +99,13 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 					// Get aquarium capacity if available
 					$capacity         = get_post_meta( $post_id, 'capacity', true );
 					$capacity_display = $capacity ? sprintf( '%s L', number_format_i18n( $capacity ) ) : '';
+					$url              = remove_query_arg( 'change', add_query_arg( 'aquarium_id', $post_id ) );
 					?>
-					<a class="aqualog-aquarium-item" href="<?php echo esc_url( add_query_arg( 'aquarium_id', $post_id ) ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
-						<div class="aqualog-aquarium-thumbnail">
+					<a class="aqualog-aquarium-item" href="<?php echo esc_url( $url ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
+						<div class="aqualog-aquarium-thumbnail <?php echo has_post_thumbnail( $post_id ) ? 'has-thumbnail' : 'no-thumbnail'; ?>">
 						<?php
 						if ( has_post_thumbnail( $post_id ) ) {
 							echo get_the_post_thumbnail( $post_id, 'thumbnail', array( 'class' => 'aqualog-aquarium-thumbnail-img' ) );
-						} else {
-							// Default placeholder image
-							echo '<div class="aqualog-aquarium-thumbnail-placeholder">';
-							echo '<span class="dashicons dashicons-buddicons-groups"></span>';
-							echo '</div>';
 						}
 						?>
 							</div>

@@ -29,11 +29,12 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <!-- WordPress wp.template script for chemistry form -->
-<script type="text/html" id="tmpl-aqualog-chemistry-form">
+<script type="text/html" id="tmpl-aqualog-chemistry-form-single-param">
 	<div class="aqualog-chemistry-form">
 		<div class="aqualog-card">
 <?php load_template( __DIR__ . '/chemistry-form-header.php' ); ?>
-			<form id="aqualog-chemistry-measurement-form" data-aquarium-id="<?php echo esc_attr( $args['aquarium_id'] ); ?>">
+			<form id="aqualog-chemistry-measurement-form">
+<?php load_template( __DIR__ . '/chemistry-form-aquarium-selector.php' ); ?>
 <?php load_template( __DIR__ . '/chemistry-form-body.php' ); ?>
 <?php load_template( __DIR__ . '/chemistry-form-actions.php' ); ?>
 			</form>

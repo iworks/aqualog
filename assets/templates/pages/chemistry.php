@@ -22,10 +22,8 @@ if ( 'aquarium' === filter_input( INPUT_GET, 'change' ) ) {
 		} else {
 			load_template( $args['messages']['select-aquarium'], true, $args );
 		}
-	} else {
-		if ( empty( $args['latest_measurements'] ) ) {
-			load_template( $args['messages']['chemistry-no-measurements'] );
-		}
+	} elseif ( empty( $args['latest_measurements'] ) ) {
+		load_template( $args['messages']['chemistry-no-measurements'] );
 	}
 	?>
 	<div class="aqualog-chemistry-container">
@@ -39,6 +37,4 @@ if ( 'aquarium' === filter_input( INPUT_GET, 'change' ) ) {
 	<?php
 	// Load the chemistry form template
 	load_template( dirname( __DIR__, 1 ) . '/elements/chemistry-form.php', false, $args );
-
-
 }

@@ -90,6 +90,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		add_action( 'aqualog/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
 		add_filter( 'aqualog/load/template/args', array( $this, 'filter_load_template_args' ) );
 		add_filter( 'aqualog/wp-admin/chemistry_page_args', array( $this, 'filter_chemistry_page_args' ) );
+		add_filter( 'aqualog/wp-admin/dashboard/template_args', array( $this, 'filter_dashboard_template_args' ) );
 	}
 
 	public function filter_load_template_args( $args ) {

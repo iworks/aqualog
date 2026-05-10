@@ -65,14 +65,8 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 		</div>
 
-		<!-- Water Quality Overview -->
-		<div class="aqualog-water-quality-section">
-			<div class="aqualog-card">
-				<h2><?php esc_html_e( 'Water Quality Overview', 'aqualog' ); ?></h2>
-				<div class="aqualog-water-stats">
-					<?php //$this->render_water_quality_stats(); ?>
-				</div>
-			</div>
-		</div>
 	</div>
 </div>
+<?php
+// Load the chemistry form template
+load_template( dirname( __DIR__, 1 ) . '/elements/chemistry-form-single-param.php', false, $args );
