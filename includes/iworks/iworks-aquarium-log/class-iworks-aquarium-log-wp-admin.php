@@ -652,7 +652,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		$content .= $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$content .= '</span>';
 		$content .= ' ';
-		if ( ! $this->current_aquarium_id && 1 < $count ) {
+		if ( 1 < $count ) {
 			$content .= '<span class="aquarium-log-current-aquarium-change">';
 			$content .= '<a href="' . esc_url( add_query_arg( 'change', 'aquarium' ) ) . '">';
 			$content .= /* translators: Link text to change aquarium */ esc_html__( 'Change Aquarium', 'iworks-aquarium-log' );

@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.0.2\n"
+"Project-Id-Version: 0.0.3\n"
 "Report-Msgid-Bugs-To: http://iworks.pl\n"
-"POT-Creation-Date: 2026-05-11 18:16:42+00:00\n"
+"POT-Creation-Date: 2026-05-11 19:22:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,54 +32,54 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: assets/templates/elements/chemistry-param.php:44
+#: assets/templates/elements/chemistry-param.php:45
 msgid "Critical parameter - requires close monitoring"
 msgstr ""
 
-#: assets/templates/elements/chemistry-param.php:48
+#: assets/templates/elements/chemistry-param.php:49
 msgid "Important parameter - monitor regularly"
 msgstr ""
 
-#: assets/templates/elements/chemistry-param.php:52
+#: assets/templates/elements/chemistry-param.php:53
 msgid "Recommended parameter - good to track"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:33
+#: assets/templates/elements/recent-aquariums-card.php:34
 msgid "Select Aquarium"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:38
+#: assets/templates/elements/recent-aquariums-card.php:39
 msgid "Recent Aquariums"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:45
+#: assets/templates/elements/recent-aquariums-card.php:46
 msgid "More"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:49
+#: assets/templates/elements/recent-aquariums-card.php:50
 msgid "All Aquariums"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:63
+#: assets/templates/elements/recent-aquariums-card.php:64
 msgid "Never updated"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:72
+#: assets/templates/elements/recent-aquariums-card.php:73
 msgid "View All Aquariums"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:93
+#: assets/templates/elements/recent-aquariums-card.php:94
 #: includes/iworks/class-iworks-aquarium-log-base.php:639
 #: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:170
 msgid "Never"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:139
+#: assets/templates/elements/recent-aquariums-card.php:140
 #: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:151
 msgid "No aquariums found."
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:142
+#: assets/templates/elements/recent-aquariums-card.php:143
 #: assets/templates/messages/create-aquarium-first.php:18
 msgid "Create Your First Aquarium"
 msgstr ""

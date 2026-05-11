@@ -12,28 +12,25 @@
 defined( 'ABSPATH' ) || exit;
 
 
-function iworks_aquarium_log_template_recent_aquariums_card( $args ) {
+// Get recent aquariums (limit to 5)
+$recent_aquariums = array();
+$all_aquariums    = array();
 
-	// Get recent aquariums (limit to 5)
-	$recent_aquariums = array();
-	$all_aquariums    = array();
-
-	if ( isset( $args['recent_aquariums'] ) && is_array( $args['recent_aquariums'] ) ) {
-		$recent_aquariums = $args['recent_aquariums'];
+if ( isset( $args['recent_aquariums'] ) && is_array( $args['recent_aquariums'] ) ) {
+	$recent_aquariums = $args['recent_aquariums'];
+}
+if ( isset( $args['all_aquariums'] ) && is_array( $args['all_aquariums'] ) ) {
+	$all_aquariums = $args['all_aquariums'];
+	if ( empty( $recent_aquariums ) ) {
+		$recent_aquariums = $all_aquariums;
 	}
-	if ( isset( $args['all_aquariums'] ) && is_array( $args['all_aquariums'] ) ) {
-		$all_aquariums = $args['all_aquariums'];
-		if ( empty( $recent_aquariums ) ) {
-			$recent_aquariums = $all_aquariums;
-		}
-	}
+}
 
-	// Check if we have more than 5 aquariums total
-	$has_more             = count( $all_aquariums ) > 5;
-	$additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
-	?>
-
-	<h2><?php esc_html_e( 'Select Aquarium', 'iworks-aquarium-log' ); ?></h2>
+// Check if we have more than 5 aquariums total
+$has_more             = count( $all_aquariums ) > 5;
+$additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
+?>
+<h2><?php esc_html_e( 'Select Aquarium', 'iworks-aquarium-log' ); ?></h2>
 <div class="aquarium-log-card aquarium-log-recent-aquariums-card">
 	<div class="aquarium-log-card-header">
 		<h3 class="aquarium-log-card-title">
@@ -149,16 +146,6 @@ function iworks_aquarium_log_template_recent_aquariums_card( $args ) {
 		<?php endif; ?>
 	</div>
 </div>
-	<?php
-}
-
-
-iworks_aquarium_log_template_recent_aquariums_card( $args );
-
-?>
-
-
-
 <script>
 jQuery(document).ready(function($) {
 	$('.aquarium-log-dropdown-toggle').on('click', function(e) {

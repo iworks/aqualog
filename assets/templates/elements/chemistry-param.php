@@ -30,7 +30,6 @@
 defined( 'ABSPATH' ) || exit;
 
 
-function iworks_aquarium_log_template_chemistry_param( $args ) {
 	$classes = array(
 		'aquarium-log-chemistry-item',
 		'aquarium-log-chemistry-item--' . $args['key'],
@@ -112,6 +111,3 @@ function iworks_aquarium_log_template_chemistry_param( $args ) {
 		</div>
 	</div>
 </div>
-	<?php
-}
-iworks_aquarium_log_template_chemistry_param( $args );

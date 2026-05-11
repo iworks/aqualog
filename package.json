@@ -3,7 +3,7 @@
     "title": "iWorks Aquarium Log",
     "tagline": "Keep your tank in tune.",
     "description": "Effortless WordPress plugin for aquarium pros and hobbyists. Track multiple tanks with pH, nitrates, temp, and custom parameters. Tag maintenance like water changes, set reminders, and add notes with photos. Multi-tank dashboards, trend charts, and email alerts keep everything on point. Log smarter – watch your tanks flourish!",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "homepage": "http://aquarium-log.iworks.pl/",
     "repository": {
         "type": "git",
