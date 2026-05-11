@@ -86,8 +86,6 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 				<?php
 				foreach ( $recent_aquariums as $aquarium ) {
 					setup_postdata( $aquarium );
-					?>
-					<?php
 					$post_id      = $aquarium->ID;
 					$title        = $aquarium->post_title;
 					$permalink    = get_permalink( $post_id );

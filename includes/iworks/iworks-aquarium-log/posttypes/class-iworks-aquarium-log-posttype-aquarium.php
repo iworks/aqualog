@@ -50,6 +50,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 	 * @return void
 	 */
 	public function __construct() {
+
 		parent::__construct();
 
 		/**
@@ -76,6 +77,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		/**
 		 * Logging hooks.
 		 */
+
 		add_action( 'save_post_' . $this->posttypes_names[ $this->posttype_name ], array( $this, 'log_aquarium_changes' ), 10, 3 );
 		add_action( 'wp_trash_post', array( $this, 'log_aquarium_deletion' ) );
 		/**
@@ -633,6 +635,14 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 	 * @return void
 	 */
 	public function log_aquarium_changes( $post_id, $post, $update ) {
+		$nonce_value  = $this->get_snitized_nonce_value();
+		$nonce_action = 'update-post_' . $post_id;
+
+		// Verify nonce for security
+		if ( ! wp_verify_nonce( $nonce_value, $nonce_action ) ) {
+			return;
+		}
+
 		// Skip revisions and autosaves
 		if ( wp_is_post_revision( $post_id ) || defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;

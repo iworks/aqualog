@@ -36,9 +36,9 @@ define( 'IWORKS_AQUALOG_VERSION', 'PLUGIN_VERSION' );
 // Define prefix for all plugin options and functions
 define( 'IWORKS_AQUALOG_PREFIX', 'iworks_aquarium_log_' );
 // Get the base directory path
-$aquarium_log_base = __DIR__;
+$iworks_aquarium_log_base = __DIR__;
 // Set vendor directory path (where core classes are located)
-$aquarium_log_vendor = $aquarium_log_base . '/includes';
+$iworks_aquarium_log_vendor = $iworks_aquarium_log_base . '/includes';
 
 /**
  * Load the main plugin class if it doesn't exist
@@ -46,14 +46,14 @@ $aquarium_log_vendor = $aquarium_log_base . '/includes';
  */
 if ( ! class_exists( 'iworks_aquarium_log' ) ) {
 	// Load the main plugin class from the includes directory
-	require_once $aquarium_log_vendor . '/iworks/class-iworks-aquarium-log.php';
+	require_once $iworks_aquarium_log_vendor . '/iworks/class-iworks-aquarium-log.php';
 }
 
 /**
  * Load configuration options
  * This file contains all plugin configuration settings
  */
-require_once $aquarium_log_base . '/etc/options.php';
+require_once $iworks_aquarium_log_base . '/etc/options.php';
 
 /**
  * Load the options class if it doesn't exist
@@ -61,10 +61,10 @@ require_once $aquarium_log_base . '/etc/options.php';
  */
 if ( ! class_exists( 'iworks_options' ) ) {
 	// Load the options class from the includes directory
-	require_once $aquarium_log_vendor . '/iworks/options/options.php';
+	require_once $iworks_aquarium_log_vendor . '/iworks/options/options.php';
 }
 
-require_once $aquarium_log_base . '/includes/template-tags.php';
+require_once $iworks_aquarium_log_base . '/includes/template-tags.php';
 
 /**
  * Initialize and get plugin options

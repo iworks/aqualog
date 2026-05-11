@@ -736,10 +736,10 @@ class iworks_aquarium_log_base {
 		return boolval( $this->options->get_option( $module ) );
 	}
 
-	protected function get_snitized_nonce_value( $nonce_name ) {
+	protected function get_snitized_nonce_value( $nonce_name = '_wpnonce' ) {
 		$value = sanitize_text_field( wp_unslash( filter_input( INPUT_POST, $nonce_name ) ) );
 		if ( $value ) {
-			return false;
+			return $value;
 		}
 		return sanitize_text_field( wp_unslash( filter_input( INPUT_GET, $nonce_name ) ) );
 	}
