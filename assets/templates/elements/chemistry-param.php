@@ -41,15 +41,15 @@ $tooltip = $icon = '';
 switch ( $args['importance'] ) {
 	case 'critical':
 		$icon    = 'dashicons dashicons-info';
-		$tooltip = __( 'Critical parameter - requires close monitoring', 'iworks-aquarium-log' );
+		$tooltip = esc_html__( 'Critical parameter - requires close monitoring', 'iworks-aquarium-log' );
 		break;
 	case 'important':
 		$icon    = 'dashicons dashicons-info';
-		$tooltip = __( 'Important parameter - monitor regularly', 'iworks-aquarium-log' );
+		$tooltip = esc_html__( 'Important parameter - monitor regularly', 'iworks-aquarium-log' );
 		break;
 	case 'recommended':
 		$icon    = 'dashicons dashicons-info-outline';
-		$tooltip = __( 'Recommended parameter - good to track', 'iworks-aquarium-log' );
+		$tooltip = esc_html__( 'Recommended parameter - good to track', 'iworks-aquarium-log' );
 		break;
 }
 ?>

@@ -181,13 +181,13 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 */
 	public function filter_iworks_options_add_meta_boxes( $metaboxes ) {
 		$metaboxes['assistance'] = array(
-			'title'    => /* translators: Meta box title for assistance section */ __( 'Have a question or need help?', 'iworks-aquarium-log' ),
+			'title'    => /* translators: Meta box title for assistance section */ esc_html__( 'Have a question or need help?', 'iworks-aquarium-log' ),
 			'callback' => array( $this, 'need_assistance' ),
 			'context'  => 'side',
 			'priority' => 'core',
 		);
 		$metaboxes['love']       = array(
-			'title'    => /* translators: Meta box title for plugin appreciation section */ __( 'Enjoying this plugin?', 'iworks-aquarium-log' ),
+			'title'    => /* translators: Meta box title for plugin appreciation section */ esc_html__( 'Enjoying this plugin?', 'iworks-aquarium-log' ),
 			'callback' => array( $this, 'loved_this_plugin' ),
 			'context'  => 'side',
 			'priority' => 'core',
@@ -317,10 +317,10 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 				'nonces'      => array(),
 				'i18n'        => array(
 					'messages' => array(
-						'loading'       => /* translators: Loading message */ __( 'Loading…', 'iworks-aquarium-log' ),
-						'saving'        => /* translators: Saving message */ __( 'Saving…', 'iworks-aquarium-log' ),
-						'saveError'     => /* translators: Error message when saving fails */ __( 'An error occurred while saving. Please try again.', 'iworks-aquarium-log' ),
-						'invalidValues' => /* translators: Validation error message */ __( 'Please correct the highlighted fields and try again.', 'iworks-aquarium-log' ),
+						'loading'       => /* translators: Loading message */ esc_html__( 'Loading…', 'iworks-aquarium-log' ),
+						'saving'        => /* translators: Saving message */ esc_html__( 'Saving…', 'iworks-aquarium-log' ),
+						'saveError'     => /* translators: Error message when saving fails */ esc_html__( 'An error occurred while saving. Please try again.', 'iworks-aquarium-log' ),
+						'invalidValues' => /* translators: Validation error message */ esc_html__( 'Please correct the highlighted fields and try again.', 'iworks-aquarium-log' ),
 					),
 				),
 				'chemistry'   => array(),
@@ -455,63 +455,63 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		$submenus = array(
 			array(
 				/* translators: Dashboard submenu title */
-				'title'             => __( 'Dashboard', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Dashboard', 'iworks-aquarium-log' ),
 				'slug'              => $this->wp_admin_slug,
 				'callback'          => array( $this, 'render_dashboard_page' ),
 				'module_load_check' => 'skip',
 			),
 			array(
 				/* translators: Chemistry submenu title */
-				'title'             => __( 'Dosings', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Dosings', 'iworks-aquarium-log' ),
 				'slug'              => 'aquarium-log-dosings',
 				'callback'          => array( $this, 'render_dosings_page' ),
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Chemistry submenu title */
-				'title'             => __( 'Chemistry', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Chemistry', 'iworks-aquarium-log' ),
 				'slug'              => 'aquarium-log-chemistry',
 				'callback'          => array( $this, 'render_chemistry_page' ),
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Maintenance submenu title */
-				'title'             => __( 'Maintenance', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Maintenance', 'iworks-aquarium-log' ),
 				'slug'              => 'aquarium-log-maintenance',
 				'callback'          => array( $this, 'render_maintenance_page' ),
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Notes submenu title */
-				'title'             => __( 'Notes', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Notes', 'iworks-aquarium-log' ),
 				'slug'              => 'edit.php?post_type=iw_note',
 				'callback'          => null,
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Equipment submenu title */
-				'title'             => __( 'Equipment', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Equipment', 'iworks-aquarium-log' ),
 				'slug'              => 'edit.php?post_type=iw_equipment',
 				'callback'          => null,
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Plants submenu title */
-				'title'             => __( 'Plants', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Plants', 'iworks-aquarium-log' ),
 				'slug'              => 'edit.php?post_type=iw_plant',
 				'callback'          => null,
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Aquariums submenu title */
-				'title'             => __( 'Aquariums', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Aquariums', 'iworks-aquarium-log' ),
 				'slug'              => 'edit.php?post_type=iw_aquarium',
 				'callback'          => null,
 				'module_load_check' => 'skip',
 			),
 			array(
 				/* translators: Help submenu title */
-				'title'             => __( 'Help', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Help', 'iworks-aquarium-log' ),
 				'slug'              => 'aquarium-log-help',
 				'callback'          => array( $this, 'render_help_page' ),
 				'module_load_check' => 'skip',
@@ -563,7 +563,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		<div class="wrap">
 			<?php
 			/* translators: Help & Support page title */
-			$this->html_title( __( 'Help & Support', 'iworks-aquarium-log' ) );
+			$this->html_title( esc_html__( 'Help & Support', 'iworks-aquarium-log' ) );
 			?>
 			<div class="aquarium-log-card">
 				<h3><?php esc_html_e( 'Getting Started', 'iworks-aquarium-log' ); ?></h3>

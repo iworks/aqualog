@@ -45,7 +45,7 @@ function iworks_aquarium_log_options() {
 		'version'    => '0.0',
 
 		// Title of the options page
-		'page_title' => __( 'Settings', 'iworks-aquarium-log' ),
+		'page_title' => esc_html__( 'Settings', 'iworks-aquarium-log' ),
 
 		// Menu type for the options page
 		// Possible values: 'options', 'submenu', 'management', 'theme', 'posts',
@@ -67,14 +67,14 @@ function iworks_aquarium_log_options() {
 			array(
 				array(
 					'type'  => 'heading',
-					'label' => __( 'Modules', 'iworks-aquarium-log' ),
+					'label' => esc_html__( 'Modules', 'iworks-aquarium-log' ),
 					'since' => '1.0.0',
 				),
 				array(
 					'name'              => 'module_chemistry',
 					'type'              => 'checkbox',
-					'th'                => __( 'Chemistry', 'iworks-aquarium-log' ),
-					'description'       => __( 'Track water parameters and chemistry data.', 'iworks-aquarium-log' ),
+					'th'                => esc_html__( 'Chemistry', 'iworks-aquarium-log' ),
+					'description'       => esc_html__( 'Track water parameters and chemistry data.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -84,8 +84,8 @@ function iworks_aquarium_log_options() {
 				array(
 					'name'              => 'module_maintenance',
 					'type'              => 'checkbox',
-					'th'                => __( 'Maintenance', 'iworks-aquarium-log' ),
-					'description'       => __( 'Schedule and track maintenance tasks.', 'iworks-aquarium-log' ),
+					'th'                => esc_html__( 'Maintenance', 'iworks-aquarium-log' ),
+					'description'       => esc_html__( 'Schedule and track maintenance tasks.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -95,8 +95,8 @@ function iworks_aquarium_log_options() {
 				array(
 					'name'              => 'module_dosing',
 					'type'              => 'checkbox',
-					'th'                => __( 'Dosing', 'iworks-aquarium-log' ),
-					'description'       => __( 'Manage fertilizers and supplement dosing.', 'iworks-aquarium-log' ),
+					'th'                => esc_html__( 'Dosing', 'iworks-aquarium-log' ),
+					'description'       => esc_html__( 'Manage fertilizers and supplement dosing.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -106,8 +106,8 @@ function iworks_aquarium_log_options() {
 				array(
 					'name'              => 'module_equipment',
 					'type'              => 'checkbox',
-					'th'                => __( 'Equipment', 'iworks-aquarium-log' ),
-					'description'       => __( 'Track equipment status and schedules.', 'iworks-aquarium-log' ),
+					'th'                => esc_html__( 'Equipment', 'iworks-aquarium-log' ),
+					'description'       => esc_html__( 'Track equipment status and schedules.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -117,8 +117,8 @@ function iworks_aquarium_log_options() {
 				array(
 					'name'              => 'module_animals',
 					'type'              => 'checkbox',
-					'th'                => __( 'Animals', 'iworks-aquarium-log' ),
-					'description'       => __( 'Manage fish and aquatic livestock.', 'iworks-aquarium-log' ),
+					'th'                => esc_html__( 'Animals', 'iworks-aquarium-log' ),
+					'description'       => esc_html__( 'Manage fish and aquatic livestock.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -128,8 +128,8 @@ function iworks_aquarium_log_options() {
 				array(
 					'name'              => 'module_plants',
 					'type'              => 'checkbox',
-					'th'                => __( 'Plants', 'iworks-aquarium-log' ),
-					'description'       => __( 'Track aquatic plants and care needs.', 'iworks-aquarium-log' ),
+					'th'                => esc_html__( 'Plants', 'iworks-aquarium-log' ),
+					'description'       => esc_html__( 'Track aquatic plants and care needs.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -139,14 +139,14 @@ function iworks_aquarium_log_options() {
 
 				array(
 					'type'  => 'heading',
-					'label' => __( 'Aquarium Settings', 'iworks-aquarium-log' ),
+					'label' => esc_html__( 'Aquarium Settings', 'iworks-aquarium-log' ),
 					'since' => '1.0.0',
 				),
 				array(
 					'name'              => 'default_aquarium_id',
 					'type'              => 'select',
-					'th'                => __( 'Default Aquarium', 'iworks-aquarium-log' ),
-					'description'       => __( 'Select the default aquarium to display.', 'iworks-aquarium-log' ),
+					'th'                => esc_html__( 'Default Aquarium', 'iworks-aquarium-log' ),
+					'description'       => esc_html__( 'Select the default aquarium to display.', 'iworks-aquarium-log' ),
 					'classes'           => array( 'small-text' ),
 					'sanitize_callback' => 'intval',
 					'since'             => '1.0.0',
@@ -156,14 +156,14 @@ function iworks_aquarium_log_options() {
 				),
 				array(
 					'type'  => 'heading',
-					'label' => __( 'Plugin Settings', 'iworks-aquarium-log' ),
+					'label' => esc_html__( 'Plugin Settings', 'iworks-aquarium-log' ),
 					'since' => '1.0.0',
 				),
 				array(
 					'name'              => 'menu_position',
 					'type'              => 'number',
-					'th'                => __( 'Menu Position', 'iworks-aquarium-log' ),
-					'description'       => __( 'Set the position of the main menu item.', 'iworks-aquarium-log' ),
+					'th'                => esc_html__( 'Menu Position', 'iworks-aquarium-log' ),
+					'description'       => esc_html__( 'Set the position of the main menu item.', 'iworks-aquarium-log' ),
 					'classes'           => array( 'small-text' ),
 					'sanitize_callback' => 'intval',
 					'since'             => '1.0.0',

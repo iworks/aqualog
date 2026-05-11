@@ -92,7 +92,7 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 					$title        = $aquarium->post_title;
 					$permalink    = get_permalink( $post_id );
 					$updated_at   = get_post_meta( $post_id, '_related_updated_at', true );
-					$last_updated = $updated_at ? $updated_at : __( 'Never', 'iworks-aquarium-log' );
+					$last_updated = $updated_at ? $updated_at : esc_html__( 'Never', 'iworks-aquarium-log' );
 
 					// Get aquarium type
 					$types     = wp_get_post_terms( $post_id, 'iw_aquarium_group' );

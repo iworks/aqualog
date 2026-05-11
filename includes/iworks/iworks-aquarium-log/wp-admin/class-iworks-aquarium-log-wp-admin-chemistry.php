@@ -268,7 +268,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 		if ( ! $parameter ) {
 			return array(
 				'status'  => 'error',
-				'message' => __( 'Unknown parameter', 'iworks-aquarium-log' ),
+				'message' => esc_html__( 'Unknown parameter', 'iworks-aquarium-log' ),
 			);
 		}
 
@@ -280,7 +280,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 				'status'  => 'warning',
 				'message' => sprintf(
 					/* translators: %1$s: range min, %2$s: range max, %3$s: unit */
-					__( 'Value is outside typical range (%1$s - %2$s %3$s)', 'iworks-aquarium-log' ),
+					esc_html__( 'Value is outside typical range (%1$s - %2$s %3$s)', 'iworks-aquarium-log' ),
 					$range[0],
 					$range[1],
 					$parameter['unit']
@@ -294,7 +294,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 				'status'  => 'info',
 				'message' => sprintf(
 					/* translators: %1$s: ideal min, %2$s: ideal max, %3$s: unit */
-					__( 'Value is outside ideal range (%1$s - %2$s %3$s)', 'iworks-aquarium-log' ),
+					esc_html__( 'Value is outside ideal range (%1$s - %2$s %3$s)', 'iworks-aquarium-log' ),
 					$ideal[0],
 					$ideal[1],
 					$parameter['unit']
@@ -304,7 +304,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 
 		return array(
 			'status'  => 'success',
-			'message' => __( 'Value is within ideal range', 'iworks-aquarium-log' ),
+			'message' => esc_html__( 'Value is within ideal range', 'iworks-aquarium-log' ),
 		);
 	}
 
@@ -401,7 +401,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 		 */
 		$config = $this->options->get_group( 'chemistry' );
 		if ( ! array_key_exists( $key, $config ) ) {
-			wp_send_json_error( __( 'Invalid parameter', 'iworks-aquarium-log' ) );
+			wp_send_json_error( esc_html__( 'Invalid parameter', 'iworks-aquarium-log' ) );
 		}
 		global $wpdb;
 		$result = $wpdb->insert(
@@ -425,11 +425,11 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 
 			wp_send_json_success(
 				array(
-					'message' => __( 'Parameter added successfully', 'iworks-aquarium-log' ),
+					'message' => esc_html__( 'Parameter added successfully', 'iworks-aquarium-log' ),
 				)
 			);
 		}
-		wp_send_json_error( __( 'Failed to add parameter', 'iworks-aquarium-log' ) );
+		wp_send_json_error( esc_html__( 'Failed to add parameter', 'iworks-aquarium-log' ) );
 	}
 
 	/**

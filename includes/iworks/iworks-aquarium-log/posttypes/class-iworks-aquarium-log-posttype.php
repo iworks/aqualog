@@ -138,7 +138,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 				'post_status'    => 'publish',
 			)
 		);
-		$list[0]   = __( '&mdash; Select &mdash;', 'iworks-aquarium-log' );
+		$list[0]   = esc_html__( '&mdash; Select &mdash;', 'iworks-aquarium-log' );
 		$the_query = new WP_Query( $args );
 		foreach ( $the_query->posts as $post ) {
 			$list[ $post->ID ] = $post->post_title;

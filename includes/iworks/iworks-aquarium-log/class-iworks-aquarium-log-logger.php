@@ -70,7 +70,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 			return new WP_Error(
 				'invalid_log_type',
 				/* translators: %s: invalid log type */
-				sprintf( __( 'Invalid log type: %s', 'iworks-aquarium-log' ), $type )
+				sprintf( esc_html__( 'Invalid log type: %s', 'iworks-aquarium-log' ), $type )
 			);
 		}
 
@@ -78,7 +78,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 		if ( ! is_numeric( $aquarium_id ) || $aquarium_id <= 0 ) {
 			return new WP_Error(
 				'invalid_aquarium_id',
-				__( 'Invalid aquarium ID', 'iworks-aquarium-log' )
+				esc_html__( 'Invalid aquarium ID', 'iworks-aquarium-log' )
 			);
 		}
 
@@ -104,7 +104,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 		if ( false === $result ) {
 			return new WP_Error(
 				'log_insert_failed',
-				__( 'Failed to insert log entry', 'iworks-aquarium-log' )
+				esc_html__( 'Failed to insert log entry', 'iworks-aquarium-log' )
 			);
 		}
 
@@ -130,7 +130,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 	 */
 	public function log_aquarium_created( $aquarium_id, $title ) {
 		/* translators: %s: aquarium title */
-		$message = sprintf( __( 'Aquarium "%s" created', 'iworks-aquarium-log' ), $title );
+		$message = sprintf( esc_html__( 'Aquarium "%s" created', 'iworks-aquarium-log' ), $title );
 		$details = array(
 			'action' => 'create',
 			'title'  => $title,
@@ -150,7 +150,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 	 */
 	public function log_aquarium_updated( $aquarium_id, $title, $changes = array() ) {
 		/* translators: %s: aquarium title */
-		$message = sprintf( __( 'Aquarium "%s" updated', 'iworks-aquarium-log' ), $title );
+		$message = sprintf( esc_html__( 'Aquarium "%s" updated', 'iworks-aquarium-log' ), $title );
 		$details = array(
 			'action'  => 'update',
 			'title'   => $title,
@@ -170,7 +170,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 	 */
 	public function log_aquarium_deleted( $aquarium_id, $title ) {
 		/* translators: %s: aquarium title */
-		$message = sprintf( __( 'Aquarium "%s" deleted', 'iworks-aquarium-log' ), $title );
+		$message = sprintf( esc_html__( 'Aquarium "%s" deleted', 'iworks-aquarium-log' ), $title );
 		$details = array(
 			'action' => 'delete',
 			'title'  => $title,
@@ -191,9 +191,9 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 	 */
 	public function log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $date ) {
 		$param_name = $this->get_parameter_name( $param_key );
-		/* translators: 1: parameter name, 2: parameter value, 3: measurement date */
 		$message = sprintf(
-			__( 'Chemistry measurement added: %1$s = %2$s on %3$s', 'iworks-aquarium-log' ),
+			/* translators: 1: parameter name, 2: parameter value, 3: measurement date */
+			esc_html__( 'Chemistry measurement added: %1$s = %2$s on %3$s', 'iworks-aquarium-log' ),
 			$param_name,
 			number_format_i18n( $param_value, 2 ),
 			$date
@@ -222,9 +222,9 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 	 */
 	public function log_chemistry_measurement_updated( $aquarium_id, $param_key, $old_value, $new_value, $date ) {
 		$param_name = $this->get_parameter_name( $param_key );
-		/* translators: 1: parameter name, 2: old value, 3: new value, 4: measurement date */
 		$message = sprintf(
-			__( 'Chemistry measurement updated: %1$s changed from %2$s to %3$s on %4$s', 'iworks-aquarium-log' ),
+			/* translators: 1: parameter name, 2: old value, 3: new value, 4: measurement date */
+			esc_html__( 'Chemistry measurement updated: %1$s changed from %2$s to %3$s on %4$s', 'iworks-aquarium-log' ),
 			$param_name,
 			number_format_i18n( $old_value, 2 ),
 			number_format_i18n( $new_value, 2 ),

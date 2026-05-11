@@ -611,10 +611,10 @@ class iworks_aquarium_log_base {
 		$days_diff = intval( ( $current_timestamp - $measurement_timestamp ) / ( 24 * 60 * 60 ) );
 
 		if ( $days_diff === 0 ) {
-			return __( 'Today', 'iworks-aquarium-log' );
+			return esc_html__( 'Today', 'iworks-aquarium-log' );
 		}
 		if ( $days_diff === 1 ) {
-			return __( 'Yesterday', 'iworks-aquarium-log' );
+			return esc_html__( 'Yesterday', 'iworks-aquarium-log' );
 		}
 		if ( $days_diff > 6 ) {
 			$weeks = floor( $days_diff / 7 );
@@ -636,7 +636,7 @@ class iworks_aquarium_log_base {
 	 */
 	protected function get_time_elapsed_text_seconds( $datetime ) {
 		if ( ! $datetime ) {
-			return __( 'Never', 'iworks-aquarium-log' );
+			return esc_html__( 'Never', 'iworks-aquarium-log' );
 		}
 
 		$time = strtotime( $datetime );
@@ -662,7 +662,7 @@ class iworks_aquarium_log_base {
 
 		$days = floor( $diff / DAY_IN_SECONDS );
 		if ( $days === 1 ) {
-			return __( 'Yesterday', 'iworks-aquarium-log' );
+			return esc_html__( 'Yesterday', 'iworks-aquarium-log' );
 		}
 
 		if ( $days > 6 ) {
