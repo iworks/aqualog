@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) || exit;
  * @param string $range Type of range (danger, safety, ideal).
  * @return string HTML span element with inline styles for positioning.
  */
-function aquarium_log_chemistry_scale_item( $one, $range ) {
+function iworks_aquarium_log_chemistry_scale_item( $one, $range ) {
 	$min    = $one['range'][0];
 	$max    = $one['range'][1];
 	$length = ( $max - $min ) * 1000;
@@ -37,10 +37,10 @@ function aquarium_log_chemistry_scale_item( $one, $range ) {
 	return array( $start, $end );
 }
 
-function aquarium_log_get_scale( $args ) {
-	$danger   = aquarium_log_chemistry_scale_item( $args, 'danger' );
-	$safety   = aquarium_log_chemistry_scale_item( $args, 'safety' );
-	$ideal    = aquarium_log_chemistry_scale_item( $args, 'ideal' );
+function iworks_aquarium_log_get_scale( $args ) {
+	$danger   = iworks_aquarium_log_chemistry_scale_item( $args, 'danger' );
+	$safety   = iworks_aquarium_log_chemistry_scale_item( $args, 'safety' );
+	$ideal    = iworks_aquarium_log_chemistry_scale_item( $args, 'ideal' );
 	$content  = sprintf(
 		'<div class="aquarium-log-chemistry-item-body-scale-char"
 		data-range-min="%s"

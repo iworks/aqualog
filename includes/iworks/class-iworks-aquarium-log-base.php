@@ -514,7 +514,6 @@ class iworks_aquarium_log_base {
 	 */
 	public function admin_enqueue_assets() {
 		$name = $this->dir . '-admin';
-		l( $name );
 		wp_enqueue_style( $name );
 		wp_enqueue_script( $name );
 	}
@@ -735,5 +734,13 @@ class iworks_aquarium_log_base {
 			$module = 'module_' . $module;
 		}
 		return boolval( $this->options->get_option( $module ) );
+	}
+
+	protected function get_snitized_nonce_value( $nonce_name ) {
+		$value = sanitize_text_field( wp_unslash( filter_input( INPUT_POST, $nonce_name ) ) );
+		if ( $value ) {
+			return false;
+		}
+		return sanitize_text_field( wp_unslash( filter_input( INPUT_GET, $nonce_name ) ) );
 	}
 }

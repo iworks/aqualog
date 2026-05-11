@@ -102,7 +102,7 @@ switch ( $args['importance'] ) {
 			<?php } ?>
 		</p>
 		<div class="aquarium-log-chemistry-item-body-scale">
-			<?php aquarium_log_get_scale( $args ); ?>
+			<?php iworks_aquarium_log_get_scale( $args ); ?>
 			<div class="aquarium-log-chemistry-item-body-scale-legend">
 				<span class="legend-item--min"><?php echo esc_html( $args['range'][0] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
 				<span class="legend-item--max"><?php echo esc_html( $args['range'][1] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>

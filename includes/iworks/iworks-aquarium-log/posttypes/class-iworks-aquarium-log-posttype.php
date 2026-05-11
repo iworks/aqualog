@@ -411,8 +411,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			return;
 		}
 		foreach ( $this->meta_boxes[ $post_type ] as $id => $data ) {
-			$nonce_name  = $this->get_post_meta_name( $id );
-			$nonce_value = filter_input( INPUT_POST, $nonce_name );
+			$nonce_value = $this->get_snitized_nonce_value( $this->get_post_meta_name( $id ) );
 			if ( ! wp_verify_nonce( $nonce_value, $this->nonce_value ) ) {
 				return;
 			}
@@ -498,8 +497,8 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			/**
 			 * check nonce
 			 */
-			$nonce = filter_input( INPUT_POST, $this->get_post_meta_name( $group ) );
-			if ( ! wp_verify_nonce( $nonce, $group ) ) {
+			$nonce_value = $this->get_snitized_nonce_value( $this->get_post_meta_name( $group ) );
+			if ( ! wp_verify_nonce( $nonce_value, $group ) ) {
 				continue;
 			}
 			/**
@@ -507,7 +506,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			 */
 			foreach ( $meta_box_data['fields'] as $field ) {
 				$key   = $this->get_post_meta_name( $field['name'], $group );
-				$value = filter_input( INPUT_POST, $key );
+				$value = sanitize_text_field( filter_input( INPUT_POST, $key ) );
 				switch ( $field['type'] ) {
 					case 'checkbox':
 						$value = $value ? 'yes' : 'no';

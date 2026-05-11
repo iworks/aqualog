@@ -699,7 +699,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		if ( isset( $post_after['post_title'] ) && $post_before->post_title !== $post_after['post_title'] ) {
 			$changes['title'] = array(
 				'old' => $post_before->post_title,
-				'new' => $post_after['post_title'],
+				'new' => wp_kses_post( $post_after['post_title'] ),
 			);
 		}
 
@@ -707,7 +707,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		if ( isset( $post_after['content'] ) && $post_before->post_content !== $post_after['content'] ) {
 			$changes['content'] = array(
 				'old' => $post_before->post_content,
-				'new' => $post_after['content'],
+				'new' => wp_kses_post( $post_after['content'] ),
 			);
 		}
 
@@ -728,7 +728,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 				if ( $old_terms !== $new_term_names ) {
 					$changes['taxonomy'] = array(
 						'old' => $old_terms,
-						'new' => $new_term_names,
+						'new' => array_map( 'wp_kses_post', $new_term_names ),
 					);
 				}
 			}
