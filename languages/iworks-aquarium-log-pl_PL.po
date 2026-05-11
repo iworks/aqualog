@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.1\n"
 "Report-Msgid-Bugs-To: http://iworks.pl\n"
-"POT-Creation-Date: 2026-05-11 17:30:02+00:00\n"
+"POT-Creation-Date: 2026-05-11 18:16:24+00:00\n"
 "PO-Revision-Date: 2026-05-11 17:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: iWorks <support@iworks.pl>\n"
@@ -67,18 +67,18 @@ msgstr ""
 msgid "View All Aquariums"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:95
+#: assets/templates/elements/recent-aquariums-card.php:93
 #: includes/iworks/class-iworks-aquarium-log-base.php:639
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:168
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:170
 msgid "Never"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:141
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:149
+#: assets/templates/elements/recent-aquariums-card.php:139
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:151
 msgid "No aquariums found."
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:144
+#: assets/templates/elements/recent-aquariums-card.php:142
 #: assets/templates/messages/create-aquarium-first.php:18
 msgid "Create Your First Aquarium"
 msgstr ""
@@ -97,7 +97,7 @@ msgstr ""
 #. translators: Chemistry submenu title
 #: assets/templates/pages/chemistry.php:14 etc/options.php:76
 #: includes/iworks/iworks-aquarium-log/class-iworks-aquarium-log-wp-admin.php:472
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:298
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:300
 msgid "Chemistry"
 msgstr ""
 
@@ -651,8 +651,8 @@ msgstr ""
 
 #. translators: Aquariums submenu title
 #: includes/iworks/iworks-aquarium-log/class-iworks-aquarium-log-wp-admin.php:507
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:431
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:445
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:433
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:447
 msgid "Aquariums"
 msgstr ""
 
@@ -703,257 +703,257 @@ msgstr ""
 msgid "Change Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:199
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:201
 msgid "Last updated:"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:205
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:207
 msgid "View Details"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:208
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:210
 msgid "Edit"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:253
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:255
 msgid "Size"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:258
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:260
 msgid "Width"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:264
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:266
 msgid "Height"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:270
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:272
 msgid "Length"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:276
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:567
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:278
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:569
 msgid "Capacity"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:282
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:284
 msgid "Water Volume"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:288
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:290
 msgid "Data"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:293
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:295
 msgid "Start Date"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:303
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:305
 msgid "Check Temperature"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:308
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:310
 msgid "Check CO₂"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:313
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:315
 msgid "Check pH"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:318
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:320
 msgid "Check GH"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:323
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:325
 msgid "Check KH"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:328
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:330
 msgid "Check Nitrate (NO₃)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:333
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:335
 msgid "Check Phosphate (PO₄)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:338
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:340
 msgid "Check Potassium (K)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:343
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:345
 msgid "Check Iron (Fe)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:348
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:350
 msgid "Check Calcium (Ca)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:353
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:355
 msgid "Check Magnesium (Mg)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:358
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:360
 msgid "Check Ammonia (NH₃)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:363
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:365
 msgid "Check Nitrite (NO₂)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:368
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:370
 msgid "Check Chlorine (Cl)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:373
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:375
 msgid "Check Copper (Cu)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:378
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:393
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:380
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:395
 msgid "Check Zinc (Zn)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:383
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:385
 msgid "Check Manganese (Mn)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:388
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:390
 msgid "Check Molybdenum (Mo)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:398
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:400
 msgid "Check Boron (B)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:403
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:405
 msgid "Check Oxygen (O₂)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:408
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:410
 msgid "Check Total Dissolved Solids (TDS)"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:430
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:432
 msgid "Parent Aquarium:"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:432
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:434
 msgid "Add New Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:433
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:435
 msgid "Add New"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:434
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:436
 msgid "New Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:435
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:437
 msgid "Edit Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:436
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:438
 msgid "Update Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:437
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:439
 msgid "View Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:438
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:440
 msgid "Search Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:439
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:441
 msgid "Not found"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:440
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:442
 msgid "Not found in Trash"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:444
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:446
 msgid "Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:469
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:471
 msgid "aquariums"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:495
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:497
 msgid "Types"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:496
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:498
 msgid "All Aquarium Types"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:497
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:499
 msgid "Parent Aquarium Type"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:498
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:500
 msgid "Parent Aquarium Type:"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:499
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:501
 msgid "New Aquarium Type Name"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:500
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:502
 msgid "Add New Aquarium Type"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:501
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:503
 msgid "Edit Aquarium Type"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:502
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:504
 msgid "Update Aquarium Type"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:503
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:505
 msgid "View Aquarium Type"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:504
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:506
 msgid "Separate Aquarium Types with commas"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:505
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:507
 msgid "Add or remove Aquarium Types"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:506
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:508
 msgid "Choose from the most used"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:507
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:509
 msgid "Popular Aquarium Types"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:508
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:510
 msgid "Search Aquarium Types"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:509
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:511
 msgid "Not Found"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:527
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:529
 msgid "aquarium_types"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:549
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:551
 msgid "Expand All"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:550
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:552
 msgid "Collapse All"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:587
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:589
 msgid "L"
 msgstr ""
 
@@ -1376,32 +1376,32 @@ msgctxt "link to support forum on WordPress.org"
 msgid "https://wordpress.org/support/plugin/iworks-aquarium-log/"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:426
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:428
 msgctxt "Post Type General Name"
 msgid "Aquariums"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:427
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:429
 msgctxt "Post Type Singular Name"
 msgid "Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:428
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:430
 msgctxt "Menu Name"
 msgid "Aquariums"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:429
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:431
 msgctxt "Admin Bar Name"
 msgid "Aquarium"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:493
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:495
 msgctxt "Taxonomy General Name"
 msgid "Aquarium Types"
 msgstr ""
 
-#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:494
+#: includes/iworks/iworks-aquarium-log/posttypes/class-iworks-aquarium-log-posttype-aquarium.php:496
 msgctxt "Taxonomy Singular Name"
 msgid "Aquarium Type"
 msgstr ""

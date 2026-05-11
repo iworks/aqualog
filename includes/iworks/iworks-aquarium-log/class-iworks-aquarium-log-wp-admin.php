@@ -441,9 +441,9 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		// Main menu item
 		$slug = add_menu_page(
 			/* translators: Main menu page title */
-			__( 'iWorks Aquarium Log Dashboard', 'iworks-aquarium-log' ),
+			esc_html__( 'iWorks Aquarium Log Dashboard', 'iworks-aquarium-log' ),
 			/* translators: Main menu item title */
-			__( 'iWorks Aquarium Log', 'iworks-aquarium-log' ),
+			esc_html__( 'iWorks Aquarium Log', 'iworks-aquarium-log' ),
 			$this->capability,
 			$this->wp_admin_slug,
 			array( $this, 'render_dashboard_page' ),

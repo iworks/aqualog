@@ -29,30 +29,32 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$classes = array(
-	'aquarium-log-chemistry-item',
-	'aquarium-log-chemistry-item--' . $args['key'],
-	'param-importance-' . $args['importance'],
-);
-if ( empty( $args['last_test_date'] ) ) {
-	$classes[] = 'no-last-test-date';
-}
-$tooltip = $icon = '';
-switch ( $args['importance'] ) {
-	case 'critical':
-		$icon    = 'dashicons dashicons-info';
-		$tooltip = esc_html__( 'Critical parameter - requires close monitoring', 'iworks-aquarium-log' );
-		break;
-	case 'important':
-		$icon    = 'dashicons dashicons-info';
-		$tooltip = esc_html__( 'Important parameter - monitor regularly', 'iworks-aquarium-log' );
-		break;
-	case 'recommended':
-		$icon    = 'dashicons dashicons-info-outline';
-		$tooltip = esc_html__( 'Recommended parameter - good to track', 'iworks-aquarium-log' );
-		break;
-}
-?>
+
+function iworks_aquarium_log_template_chemistry_param( $args ) {
+	$classes = array(
+		'aquarium-log-chemistry-item',
+		'aquarium-log-chemistry-item--' . $args['key'],
+		'param-importance-' . $args['importance'],
+	);
+	if ( empty( $args['last_test_date'] ) ) {
+		$classes[] = 'no-last-test-date';
+	}
+	$tooltip = $icon = '';
+	switch ( $args['importance'] ) {
+		case 'critical':
+			$icon    = 'dashicons dashicons-info';
+			$tooltip = esc_html__( 'Critical parameter - requires close monitoring', 'iworks-aquarium-log' );
+			break;
+		case 'important':
+			$icon    = 'dashicons dashicons-info';
+			$tooltip = esc_html__( 'Important parameter - monitor regularly', 'iworks-aquarium-log' );
+			break;
+		case 'recommended':
+			$icon    = 'dashicons dashicons-info-outline';
+			$tooltip = esc_html__( 'Recommended parameter - good to track', 'iworks-aquarium-log' );
+			break;
+	}
+	?>
 <div
 	class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
 	data-key="<?php echo esc_attr( $args['key'] ); ?>"
@@ -110,3 +112,6 @@ switch ( $args['importance'] ) {
 		</div>
 	</div>
 </div>
+	<?php
+}
+iworks_aquarium_log_template_chemistry_param( $args );

@@ -191,7 +191,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 	 */
 	public function log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $date ) {
 		$param_name = $this->get_parameter_name( $param_key );
-		$message = sprintf(
+		$message    = sprintf(
 			/* translators: 1: parameter name, 2: parameter value, 3: measurement date */
 			esc_html__( 'Chemistry measurement added: %1$s = %2$s on %3$s', 'iworks-aquarium-log' ),
 			$param_name,
@@ -222,7 +222,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 	 */
 	public function log_chemistry_measurement_updated( $aquarium_id, $param_key, $old_value, $new_value, $date ) {
 		$param_name = $this->get_parameter_name( $param_key );
-		$message = sprintf(
+		$message    = sprintf(
 			/* translators: 1: parameter name, 2: old value, 3: new value, 4: measurement date */
 			esc_html__( 'Chemistry measurement updated: %1$s changed from %2$s to %3$s on %4$s', 'iworks-aquarium-log' ),
 			$param_name,
@@ -282,7 +282,7 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 		if ( null === $results ) {
 			return new WP_Error(
 				'query_failed',
-				__( 'Failed to retrieve log entries', 'iworks-aquarium-log' )
+				esc_html__( 'Failed to retrieve log entries', 'iworks-aquarium-log' )
 			);
 		}
 

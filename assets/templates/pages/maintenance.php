@@ -46,17 +46,17 @@ defined( 'ABSPATH' ) || exit;
 				<h2><?php esc_html_e( 'Recent Tasks', 'iworks-aquarium-log' ); ?></h2>
 				<div class="aquarium-log-tasks-list">
 					<?php if ( ! empty( $args['tasks'] ) ) : ?>
-						<?php foreach ( $args['tasks'] as $task ) : ?>
+						<?php foreach ( $args['tasks'] as $iworks_aquarium_log_task ) : ?>
 							<div class="aquarium-log-task-item">
 								<div class="task-header">
-									<h4><?php echo esc_html( $task['title'] ); ?></h4>
-									<span class="task-status status-<?php echo esc_attr( $task['status'] ); ?>">
-										<?php echo esc_html( $task['status'] ); ?>
+									<h4><?php echo esc_html( $iworks_aquarium_log_task['title'] ); ?></h4>
+									<span class="task-status status-<?php echo esc_attr( $iworks_aquarium_log_task['status'] ); ?>">
+										<?php echo esc_html( $iworks_aquarium_log_task['status'] ); ?>
 									</span>
-									<span class="task-date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $task['date'] ) ) ); ?></span>
+									<span class="task-date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $iworks_aquarium_log_task['date'] ) ) ); ?></span>
 								</div>
 								<div class="task-description">
-									<?php echo wp_kses_post( $task['description'] ); ?>
+									<?php echo wp_kses_post( $iworks_aquarium_log_task['description'] ); ?>
 								</div>
 							</div>
 						<?php endforeach; ?>

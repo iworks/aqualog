@@ -28,10 +28,10 @@ if ( 'aquarium' === filter_input( INPUT_GET, 'change' ) ) {
 	?>
 	<div class="aquarium-log-chemistry-container">
 		<?php
-		foreach ( $args['params'] as $param_key => $param ) {
-			load_template( dirname( __DIR__, 1 ) . '/elements/chemistry-param.php', false, $param );
-			?>
-		<?php } ?>
+		foreach ( $args['params'] as $iworks_aquarium_log_param_key => $iworks_aquarium_log_param ) {
+			load_template( dirname( __DIR__, 1 ) . '/elements/chemistry-param.php', false, $iworks_aquarium_log_param );
+		}
+		?>
 	</div>
 </div>
 	<?php

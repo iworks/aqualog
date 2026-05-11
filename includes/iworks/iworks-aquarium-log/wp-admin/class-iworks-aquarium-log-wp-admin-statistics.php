@@ -94,7 +94,7 @@ class iworks_aquarium_log_wp_admin_statistics extends iworks_aquarium_log_base {
 		$this->render_card(
 			'aquariums',
 			/* translators: Statistics card title for total aquariums */
-			__( 'Total Aquariums', 'iworks-aquarium-log' ),
+			esc_html__( 'Total Aquariums', 'iworks-aquarium-log' ),
 			wp_count_posts( 'iw_aquarium' )->publish,
 			'button'
 		);
@@ -121,7 +121,7 @@ class iworks_aquarium_log_wp_admin_statistics extends iworks_aquarium_log_base {
 		$this->render_card(
 			'water-entries',
 			/* translators: Statistics card title for water entries */
-			__( 'Water Entries', 'iworks-aquarium-log' ),
+			esc_html__( 'Water Entries', 'iworks-aquarium-log' ),
 			$count,
 			'chart-line'
 		);
@@ -149,7 +149,7 @@ class iworks_aquarium_log_wp_admin_statistics extends iworks_aquarium_log_base {
 		$this->render_card(
 			'ph-readings',
 			/* translators: Statistics card title for pH readings */
-			__( 'pH Readings', 'iworks-aquarium-log' ),
+			esc_html__( 'pH Readings', 'iworks-aquarium-log' ),
 			$count,
 			'clipboard'
 		);
@@ -173,7 +173,7 @@ class iworks_aquarium_log_wp_admin_statistics extends iworks_aquarium_log_base {
 		$this->render_card(
 			'maintenance',
 			/* translators: Statistics card title for maintenance tasks */
-			__( 'Maintenance Tasks', 'iworks-aquarium-log' ),
+			esc_html__( 'Maintenance Tasks', 'iworks-aquarium-log' ),
 			0,
 			'hammer'
 		);
