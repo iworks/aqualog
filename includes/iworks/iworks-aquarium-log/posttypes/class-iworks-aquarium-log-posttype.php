@@ -20,9 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
 
-abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
+abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 
 	/**
 	 * Post Type Name
@@ -78,11 +78,11 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		 * Settings
 		 */
 		$this->posttypes_names  = apply_filters(
-			'iworks/aqualog/posttypes_names/array',
+			'iworks/iworks-aquarium-log/posttypes_names/array',
 			$this->posttypes_names
 		);
 		$this->taxonomies_names = apply_filters(
-			'iworks/aqualog/taxonomies_names/array',
+			'iworks/iworks-aquarium-log/taxonomies_names/array',
 			$this->taxonomies_names
 		);
 	}
@@ -138,7 +138,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 				'post_status'    => 'publish',
 			)
 		);
-		$list[0]   = __( '&mdash; Select &mdash;', 'aqualog' );
+		$list[0]   = __( '&mdash; Select &mdash;', 'iworks-aquarium-log' );
 		$the_query = new WP_Query( $args );
 		foreach ( $the_query->posts as $post ) {
 			$list[ $post->ID ] = $post->post_title;
@@ -264,11 +264,11 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		);
 		printf(
 			'<input type="button" class="button button-upload" value="%s" />',
-			esc_attr__( 'Select Image', 'aqualog' ),
+			esc_attr__( 'Select Image', 'iworks-aquarium-log' ),
 		);
 		printf(
 			'<input type="button" value="%s" class="button button-delete%s">',
-			esc_attr__( 'Delete image', 'aqualog' ),
+			esc_attr__( 'Delete image', 'iworks-aquarium-log' ),
 			empty( $value ) ? ' hidden' : ''
 		);
 		echo '</p>';
@@ -318,7 +318,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			'<select name="%s">',
 			esc_attr( $one['name'] )
 		);
-		printf( '<option value="">%s</option>', esc_html__( '&mdash; Select &mdash;', 'aqualog' ) );
+		printf( '<option value="">%s</option>', esc_html__( '&mdash; Select &mdash;', 'iworks-aquarium-log' ) );
 		foreach ( $one['options'] as $option_value => $option_name ) {
 			printf(
 				'<option value="%s" %s>%s</option>',
@@ -384,7 +384,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			),
 		);
 		return apply_filters(
-			'iworks/aqualog/post/meta/field',
+			'iworks/iworks-aquarium-log/post/meta/field',
 			$field,
 			$post_id
 		);
@@ -437,14 +437,14 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 	protected function get_taxonomy( $taxonomy_name ) {
 		if ( ! isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
 			$this->taxonomies_names = apply_filters(
-				'iworks/aqualog/taxonomies_names/array',
+				'iworks/iworks-aquarium-log/taxonomies_names/array',
 				$this->taxonomies_names
 			);
 		}
 		if ( isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
 			return $this->taxonomies_names[ $taxonomy_name ];
 		}
-		return new WP_Error( 'taxonomy', esc_html__( 'Selected Taxonomy dosn\'t exists.', 'aqualog' ) );
+		return new WP_Error( 'taxonomy', esc_html__( 'Selected Taxonomy dosn\'t exists.', 'iworks-aquarium-log' ) );
 	}
 
 	/**
@@ -523,7 +523,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 				if ( $value ) {
 					update_post_meta( $post_id, $key, $value );
 				}
-				do_action( 'iworks/aqualog/postmeta/update', $post_id, $field, $key, $value );
+				do_action( 'iworks/iworks-aquarium-log/postmeta/update', $post_id, $field, $key, $value );
 			}
 		}
 	}
@@ -566,18 +566,18 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			'posttypes_names' => $this->posttypes_names,
 			'l10n'            => array(
 				'wp_media' => array(
-					'title'  => esc_html__( 'Select or Upload Media', 'aqualog' ),
+					'title'  => esc_html__( 'Select or Upload Media', 'iworks-aquarium-log' ),
 					'button' => array(
-						'text' => esc_html__( 'Use this Media', 'aqualog' ),
+						'text' => esc_html__( 'Use this Media', 'iworks-aquarium-log' ),
 					),
 				),
 			),
 		);
 		wp_localize_script(
 			strtolower( __CLASS__ ),
-			'iworks_aqualog',
+			'iworks_aquarium_log',
 			apply_filters(
-				'iworks/aqualog/wp_localize_script/admin',
+				'iworks/iworks-aquarium-log/wp_localize_script/admin',
 				$translation_array
 			)
 		);

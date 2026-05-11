@@ -2,7 +2,7 @@
 /**
  * Class SampleTest
  *
- * @package aqualog
+ * @package aquarium_log
  */
 
 /**

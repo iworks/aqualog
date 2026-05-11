@@ -1,8 +1,8 @@
 <?php
 /**
- * Database class for OPI Polls Server.
+ * Database class for Aquarium Log.
  *
- * @package OPI_Polls_Server
+ * @package Aquarium_Log
  * @since 1.0.0
  */
 
@@ -10,14 +10,14 @@
 defined( 'ABSPATH' ) || exit;
 
 // Include the base class.
-require_once dirname( __DIR__, 1 ) . '/class-iworks-aqualog-base.php';
+require_once dirname( __DIR__, 1 ) . '/class-iworks-aquarium-log-base.php';
 
 /**
- * Database class for OPI Polls Server.
+ * Database class for Aquarium Log.
  *
- * Handles all database operations for the OPI Polls Server plugin.
+ * Handles all database operations for the Aquarium Log plugin.
  */
-class iworks_aqualog_db extends iworks_aqualog_base {
+class iworks_aquarium_log_db extends iworks_aquarium_log_base {
 
 	/**
 	 * Option name for storing the database version.
@@ -28,7 +28,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	private string $_db_version = 'aqualog_db_version';
+	private string $_db_version = 'aquarium_log_db_version';
 
 	/**
 	 * Array of database table names without prefix.
@@ -40,10 +40,10 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 	 * @var string[]
 	 */
 	private array $table_names = array(
-		'aqualog_log',
-		'aqualog_chemistry',
-		'aqualog_maintenance',
-		'aqualog_dosing',
+		'aquarium_log_log',
+		'aquarium_log_chemistry',
+		'aquarium_log_maintenance',
+		'aquarium_log_dosing',
 	);
 	/**
 	 * Class constructor.
@@ -60,8 +60,8 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		/**
 		 * Aqualog hooks.
 		 */
-		add_action( 'iworks/aqualog/register_uninstall_hook', array( $this, 'drop_tables' ) );
-		add_action( 'iworks/aqualog/register_activation_hook', array( $this, 'db_install' ) );
+		add_action( 'iworks/iworks-aquarium-log/register_uninstall_hook', array( $this, 'drop_tables' ) );
+		add_action( 'iworks/iworks-aquarium-log/register_activation_hook', array( $this, 'db_install' ) );
 	}
 
 	/**
@@ -100,20 +100,20 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		$version_to_update = 1;
 		if ( $db_version < $version_to_update ) {
 			$aquarium_types = array(
-				_x( 'Biotope', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Brackish', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'High Tech', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Hobbyist', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Iwagumi', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Low Tech', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Marine', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Mizube', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Paludarium', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Pond', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Ragwork', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Ryuboku', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Shrimp', 'import terms to aquarium type', 'aqualog' ),
-				_x( 'Wabi Kusa', 'import terms to aquarium type', 'aqualog' ),
+				_x( 'Biotope', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Brackish', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'High Tech', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Hobbyist', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Iwagumi', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Low Tech', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Marine', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Mizube', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Paludarium', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Pond', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Ragwork', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Ryuboku', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Shrimp', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Wabi Kusa', 'import terms to aquarium type', 'iworks-aquarium-log' ),
 			);
 			foreach ( $aquarium_types as $aquarium_type ) {
 				wp_insert_term( $aquarium_type, 'iw_aquarium_group' );
@@ -126,7 +126,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		$version_to_update = 2;
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
-			$table_name      = $wpdb->prefix . 'aqualog_chemistry';
+			$table_name      = $wpdb->prefix . 'aquarium_log_chemistry';
 			$charset_collate = $wpdb->get_charset_collate();
 			$sql             = "CREATE TABLE  IF NOT EXISTS $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -137,8 +137,8 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 				created_at datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
 				PRIMARY KEY  (id),
 				KEY aquarium_id (aquarium_id),
-				KEY param (param_key),
-				KE measurement_date (measurement_date)
+				KEY param_key (param_key),
+				KEY measurement_date (measurement_date)
 			) $charset_collate;";
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
@@ -149,7 +149,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		$version_to_update = 3;
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
-			$table_name      = $wpdb->prefix . 'aqualog_maintenance';
+			$table_name      = $wpdb->prefix . 'aquarium_log_maintenance';
 			$charset_collate = $wpdb->get_charset_collate();
 			$sql             = "CREATE TABLE IF NOT EXISTS $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -164,9 +164,9 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 				updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update timestamp',
 				next_schedule_date datetime DEFAULT NULL COMMENT 'Next schedule date',
 				PRIMARY KEY (id),
-				KEY idx_aquarium_id (aquarium_id),
-				KEY idx_type (type),
-				KEY idx_status (status)
+				KEY aquarium_id (aquarium_id),
+				KEY type (type),
+				KEY status (status)
 			) $charset_collate;";
 			dbDelta( $sql );
 			update_option( $this->_db_version, $version_to_update );
@@ -177,21 +177,21 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		$version_to_update = 4;
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
-			$table_name      = $wpdb->prefix . 'aqualog_log';
+			$table_name      = $wpdb->prefix . 'aquarium_log_log';
 			$charset_collate = $wpdb->get_charset_collate();
 			$sql             = "CREATE TABLE IF NOT EXISTS $table_name (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				aquarium_id bigint(20) unsigned NOT NULL COMMENT 'Aquarium ID',
-				type varchar(50) NOT NULL DEFAULT '' COMMENT 'Log type identifier',
+				log_type varchar(50) NOT NULL DEFAULT '' COMMENT 'Log type identifier',
 				message text NOT NULL COMMENT 'Log message',
 				user_id bigint(20) unsigned DEFAULT NULL COMMENT 'User who performed action',
 				log_date datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Log timestamp',
 				details longtext DEFAULT NULL COMMENT 'Additional action details (JSON)',
 				PRIMARY KEY (id),
-				KEY idx_aquarium_id (aquarium_id),
-				KEY idx_type (type),
-				KEY idx_user_id (user_id),
-				KEY idx_log_date (log_date)
+				KEY aquarium_id (aquarium_id),
+				KEY log_type (log_type),
+				KEY user_id (user_id),
+				KEY log_date (log_date)
 			) $charset_collate;";
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );

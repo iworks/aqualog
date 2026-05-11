@@ -1,4 +1,4 @@
-.aqualog {
+.aquarium-log {
 	&-current {
 		&-aquarium {
 			padding: 10px;
@@ -148,7 +148,7 @@
 }
 
 .wrap {
-	&:has(.aqualog-current-aquarium) {
+	&:has(.aquarium-log-current-aquarium) {
 		margin-top: 0;
 	}
 }

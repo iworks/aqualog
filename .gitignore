@@ -11,7 +11,7 @@ package-lock.json
 
 # Compiled CSS files, needed to release not in repository
 assets/styles/
-assets/scripts/aqualog-*.js
+assets/scripts/iworks-aquarium-log-*.js
 
 # release
 release/

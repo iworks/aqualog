@@ -1,12 +1,12 @@
 <?php
 /**
- * AquaLog Post Types Class
+ * iWorks Aquarium Log Post Types Class
  *
  * This class handles the loading and management of custom post types
- * for the AquaLog.
+ * for the iWorks Aquarium Log.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026-PLUGIN_TILL_YEAR Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -22,16 +22,16 @@ if ( class_exists( 'iworks_wordpress_plugin_posttypes' ) ) {
 	return;
 }
 
-require_once dirname( __DIR__ ) . '/class-iworks-aqualog-base.php';
+require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-base.php';
 /**
  * iWorks WordPress Plugin Post Types Class
  *
  * This class manages the loading and initialization of custom post types
- * for the AquaLog.
+ * for the iWorks Aquarium Log.
  *
  * @since 1.0.0
  */
-class iworks_aqualog_posttypes extends iworks_aqualog_base {
+class iworks_aquarium_log_posttypes extends iworks_aquarium_log_base {
 	/**
 	 * Array of post type objects
 	 *
@@ -68,7 +68,7 @@ class iworks_aqualog_posttypes extends iworks_aqualog_base {
 			 * Validate the filename format
 			 * Only process files that match the expected pattern
 			 */
-			if ( ! preg_match( '/^class-iworks-aqualog-posttype-([a-z]+).php$/', $filename, $matches ) ) {
+			if ( ! preg_match( '/^class-iworks-aquarium-log-posttype-([a-z]+).php$/', $filename, $matches ) ) {
 				continue;
 			}
 
@@ -80,7 +80,7 @@ class iworks_aqualog_posttypes extends iworks_aqualog_base {
 			 * Create the filter name for this post type
 			 */
 			$filter = sprintf(
-				'aqualog/load/posttype/%s',
+				'iworks-aquarium-log/load/posttype/%s',
 				$posttype_name
 			);
 			/**
@@ -96,7 +96,7 @@ class iworks_aqualog_posttypes extends iworks_aqualog_base {
 				/**
 				 * Generate the class name
 				 */
-				$class_name = sprintf( 'iworks_aqualog_posttype_%s', $posttype_name );
+				$class_name = sprintf( 'iworks_aquarium_log_posttype_%s', $posttype_name );
 
 				/**
 				 * Initialize the post type class

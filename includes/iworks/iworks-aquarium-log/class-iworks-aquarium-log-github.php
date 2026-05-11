@@ -19,30 +19,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'iworks_aqualog_github' ) ) {
+if ( class_exists( 'iworks_aquarium_log_github' ) ) {
 	return;
 }
 
-class iworks_aqualog_github {
+class iworks_aquarium_log_github {
 
 	/**
 	 * Repository name
 	 *
 	 * @since 1.0.0
 	 */
-	private string $repository = 'iworks/aqualog';
+	private string $repository = 'iworks/iworks-aquarium-log';
 	/**
 	 * Plugin base name
 	 *
 	 * @since 1.0.0
 	 */
-	private string $basename = 'aqualog';
+	private string $basename = 'iworks_aquarium_log';
 	/**
 	 * Plugin file name
 	 *
 	 * @since 1.0.0
 	 */
-	private string $plugin_file = 'aqualog.php';
+	private string $plugin_file = 'iworks-aquarium-log.php';
 	/**
 	 * Github Response
 	 *
@@ -66,8 +66,8 @@ class iworks_aqualog_github {
 	 * @since 1.0.0
 	 */
 	public function action_init_load_plugin_textdomain() {
-		$dir = plugin_basename( dirname( dirname( dirname( __DIR__ ) ) ) ) . '/languages';
-		load_plugin_textdomain( 'aqualog', false, $dir );
+		$dir = plugin_basename( dirname( __DIR__, 3 ) ) . '/languages';
+		load_plugin_textdomain( 'iworks_aquarium_log', false, $dir );
 	}
 
 	/**
@@ -142,7 +142,7 @@ class iworks_aqualog_github {
 		if ( empty( $repo_info ) ) {
 			return $result;
 		}
-		$details = get_plugin_data( dirname( $this->base ) . '/aqualog.php' );
+		$details = get_plugin_data( dirname( $this->base ) . '/iworks-aquarium-log.php' );
 		// Create array to hold the plugin data
 		$plugin = array(
 			'name'              => $details['Name'],
@@ -268,4 +268,3 @@ class iworks_aqualog_github {
 		return $result;
 	}
 }
-

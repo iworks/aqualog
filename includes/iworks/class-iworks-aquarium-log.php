@@ -12,11 +12,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'iworks_aqualog' ) ) {
+if ( class_exists( 'iworks_aquarium_log' ) ) {
 	return;
 }
 
-require_once __DIR__ . '/class-iworks-aqualog-base.php';
+require_once __DIR__ . '/class-iworks-aquarium-log-base.php';
 
 /**
  * Main plugin class.
@@ -25,7 +25,7 @@ require_once __DIR__ . '/class-iworks-aqualog-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aqualog extends iworks_aqualog_base {
+class iworks_aquarium_log extends iworks_aquarium_log_base {
 
 	/**
 	 * Plugin objects container.
@@ -53,57 +53,57 @@ class iworks_aqualog extends iworks_aqualog_base {
 		/**
 		 * Enable aquarium post type
 		 */
-		add_filter( 'aqualog/load/posttype/aquarium', '__return_true' );
+		add_filter( 'iworks-aquarium-log/load/posttype/aquarium', '__return_true' );
 		/**
 		 * post types
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aqualog-posttypes.php';
+		$filename = $this->includes_directory . '/class-iworks-aquarium-log-posttypes.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['posttypes'] = new iworks_aqualog_posttypes();
+			$this->objects['posttypes'] = new iworks_aquarium_log_posttypes();
 		}
 		/**
 		 * load github class
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aqualog-github.php';
+		$filename = $this->includes_directory . '/class-iworks-aquarium-log-github.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['github'] = new iworks_aqualog_github();
+			$this->objects['github'] = new iworks_aquarium_log_github();
 		}
 		/**
 		 * admin
 		 */
 		if ( is_admin() ) {
-			$filename = $this->includes_directory . '/class-iworks-aqualog-wp-admin.php';
+			$filename = $this->includes_directory . '/class-iworks-aquarium-log-wp-admin.php';
 			if ( is_file( $filename ) ) {
 				include_once $filename;
-				$this->objects['wp-admin'] = new iworks_aqualog_wp_admin();
+				$this->objects['wp-admin'] = new iworks_aquarium_log_wp_admin();
 			}
 		}
 		/**
 		 * load db class
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aqualog-db.php';
+		$filename = $this->includes_directory . '/class-iworks-aquarium-log-db.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['db'] = new iworks_aqualog_db();
+			$this->objects['db'] = new iworks_aquarium_log_db();
 		}
 		/**
 		 * load logger class
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aqualog-logger.php';
+		$filename = $this->includes_directory . '/class-iworks-aquarium-log-logger.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['logger'] = new iworks_aqualog_logger();
+			$this->objects['logger'] = new iworks_aquarium_log_logger();
 		}
 		/**
 		 * register objects filter
 		 */
-		add_action( 'aqualog/register_objects', array( $this, 'register_objects' ), 10, 3 );
+		add_action( 'iworks-aquarium-log/register_objects', array( $this, 'register_objects' ), 10, 3 );
 		/**
 		 * is active?
 		 */
-		add_filter( 'aqualog/is_active', '__return_true' );
+		add_filter( 'iworks-aquarium-log/is_active', '__return_true' );
 	}
 
 	/**
@@ -136,8 +136,8 @@ class iworks_aqualog extends iworks_aqualog_base {
 		 */
 		if ( is_admin() ) {
 		} else {
-			$file = 'assets/styles/aqualog-frontend' . $this->dev . '.css';
-			wp_enqueue_style( 'aqualog', plugins_url( $file, $this->base ), array(), $this->get_version( $file ) );
+			$file = 'assets/styles/iworks-aquarium-log-frontend' . $this->dev . '.css';
+			wp_enqueue_style( 'iworks_aquarium_log', plugins_url( $file, $this->base ), array(), $this->get_version( $file ) );
 		}
 	}
 
@@ -154,7 +154,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 		$this->objects['db']->db_install();
 		$this->check_option_object();
 		$this->options->activate();
-		do_action( 'iworks/aqualog/register_activation_hook' );
+		do_action( 'iworks/iworks-aquarium-log/register_activation_hook' );
 	}
 
 	/**
@@ -168,7 +168,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 	public function register_deactivation_hook() {
 		$this->check_option_object();
 		$this->options->deactivate();
-		do_action( 'iworks/aqualog/register_deactivation_hook' );
+		do_action( 'iworks/iworks-aquarium-log/register_deactivation_hook' );
 	}
 
 	/**

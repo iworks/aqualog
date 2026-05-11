@@ -1,12 +1,12 @@
 <?php
 /**
- * AquaLog Activity Class
+ * iWorks Aquarium Log Activity Class
  *
- * Handles activity-related functionality for the AquaLog plugin.
+ * Handles activity-related functionality for the iWorks Aquarium Log plugin.
  * This includes displaying recent activity and managing activity logs.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -16,16 +16,16 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
 
 /**
- * AquaLog Activity Class
+ * iWorks Aquarium Log Activity Class
  *
- * Manages activity logging and display for the AquaLog plugin.
+ * Manages activity logging and display for the iWorks Aquarium Log plugin.
  *
  * @since 1.0.0
  */
-class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
+class iworks_aquarium_log_wp_admin_activity extends iworks_aquarium_log_base {
 
 	/**
 	 * Class constructor.
@@ -39,7 +39,7 @@ class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 		/**
 		 * WordPress Hooks
 		 */
-		add_action( 'aqualog/dashboard/recent_activity', array( $this, 'render_recent_activity' ) );
+		add_action( 'iworks-aquarium-log/dashboard/recent_activity', array( $this, 'render_recent_activity' ) );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 		 * @param array $activities Array of activity items.
 		 * @param int   $limit      Number of items requested.
 		 */
-		return apply_filters( 'aqualog/activity/recent_items', $activities, $limit );
+		return apply_filters( 'iworks-aquarium-log/activity/recent_items', $activities, $limit );
 	}
 
 	/**
@@ -101,13 +101,13 @@ class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 		$activities = $this->get_recent_activity();
 
 		if ( empty( $activities ) ) {
-			echo '<p>' . esc_html__( 'No recent activity found.', 'aqualog' ) . '</p>';
+			echo '<p>' . esc_html__( 'No recent activity found.', 'iworks-aquarium-log' ) . '</p>';
 			return;
 		}
 
 		foreach ( $activities as $activity ) {
 			?>
-			<div class="aqualog-activity-item">
+			<div class="aquarium-log-activity-item">
 				<strong>
 					<?php
 					if ( ! empty( $activity['edit_link'] ) ) {
@@ -118,11 +118,11 @@ class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 					?>
 				</strong>
 				<br>
-				<span class="aqualog-activity-meta">
+				<span class="aquarium-log-activity-meta">
 					<?php
 					printf(
 						/* translators: %1$s: date, %2$s: time */
-						esc_html__( 'Created on %1$s at %2$s', 'aqualog' ),
+						esc_html__( 'Created on %1$s at %2$s', 'iworks-aquarium-log' ),
 						esc_html( $activity['date'] ),
 						esc_html( $activity['time'] )
 					);

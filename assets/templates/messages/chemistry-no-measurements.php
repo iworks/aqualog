@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Chemistry no measurements message template.
@@ -12,6 +11,6 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <div class="notice notice-warning inline">
 	<p>
-		<?php esc_html_e( 'No measurements found. Please add your first water chemistry measurements to track your aquarium parameters.', 'aqualog' ); ?>
+		<?php esc_html_e( 'No measurements found. Please add your first water chemistry measurements to track your aquarium parameters.', 'iworks-aquarium-log' ); ?>
 	</p>
 </div>

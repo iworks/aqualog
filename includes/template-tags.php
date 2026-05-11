@@ -1,12 +1,12 @@
 <?php
 /**
- * AquaLog Template Tags
+ * iWorks Aquarium Log Template Tags
  *
- * This file contains template tags and utility functions for the AquaLog plugin.
+ * This file contains template tags and utility functions for the iWorks Aquarium Log plugin.
  * These functions can be used throughout the plugin templates and views.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) || exit;
  * @param string $range Type of range (danger, safety, ideal).
  * @return string HTML span element with inline styles for positioning.
  */
-function aqualog_chemistry_scale_item( $one, $range ) {
+function aquarium_log_chemistry_scale_item( $one, $range ) {
 	$min    = $one['range'][0];
 	$max    = $one['range'][1];
 	$length = ( $max - $min ) * 1000;
@@ -37,12 +37,12 @@ function aqualog_chemistry_scale_item( $one, $range ) {
 	return array( $start, $end );
 }
 
-function aqualog_get_scale( $args ) {
-	$danger   = aqualog_chemistry_scale_item( $args, 'danger' );
-	$safety   = aqualog_chemistry_scale_item( $args, 'safety' );
-	$ideal    = aqualog_chemistry_scale_item( $args, 'ideal' );
+function aquarium_log_get_scale( $args ) {
+	$danger   = aquarium_log_chemistry_scale_item( $args, 'danger' );
+	$safety   = aquarium_log_chemistry_scale_item( $args, 'safety' );
+	$ideal    = aquarium_log_chemistry_scale_item( $args, 'ideal' );
 	$content  = sprintf(
-		'<div class="aqualog-chemistry-item-body-scale-char"
+		'<div class="aquarium-log-chemistry-item-body-scale-char"
 		data-range-min="%s"
 		data-range-max="%s"
 		data-range-step="%s"',
@@ -54,11 +54,11 @@ function aqualog_get_scale( $args ) {
 	$content .= sprintf(
 		'style="background: linear-gradient(
 			to right,
-			var(--aqualog-settings-danger) %1$f%% %2$f%%,
-			var(--aqualog-settings-safety) %2$f%% %3$f%%,
-			var(--aqualog-settings-ideal) %3$f%% %4$f%%,
-			var(--aqualog-settings-safety) %4$f%% %5$f%%,
-			var(--aqualog-settings-danger) %5$f%% %6$f%%
+			var(--aquarium-log-settings-danger) %1$f%% %2$f%%,
+			var(--aquarium-log-settings-safety) %2$f%% %3$f%%,
+			var(--aquarium-log-settings-ideal) %3$f%% %4$f%%,
+			var(--aquarium-log-settings-safety) %4$f%% %5$f%%,
+			var(--aquarium-log-settings-danger) %5$f%% %6$f%%
 		);"',
 		$danger[0],
 		$safety[0],

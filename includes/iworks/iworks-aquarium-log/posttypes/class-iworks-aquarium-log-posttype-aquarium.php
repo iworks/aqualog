@@ -1,12 +1,12 @@
 <?php
 /**
- * AquaLog Aquarium Post Type Class
+ * iWorks Aquarium Log Aquarium Post Type Class
  *
  * This class handles the registration and management of the Aquarium custom post type
- * and its associated taxonomy for the AquaLog plugin.
+ * and its associated taxonomy for the iWorks Aquarium Log plugin.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -17,17 +17,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once 'class-iworks-aqualog-posttype.php';
+require_once 'class-iworks-aquarium-log-posttype.php';
 
 /**
- * AquaLog Aquarium Post Type Class
+ * iWorks Aquarium Log Aquarium Post Type Class
  *
  * Handles the registration and management of the Aquarium custom post type
  * and its associated taxonomy.
  *
  * @since 1.0.0
  */
-class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
+class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype {
 
 	/**
 	 * Terms list cache.
@@ -55,13 +55,13 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		/**
 		 * Set post type name.
 		 */
-		$this->posttype_name = preg_replace( '/^iworks_aqualog_posttype_/', '', __CLASS__ );
+		$this->posttype_name = preg_replace( '/^iworks_aquarium_log_posttype_/', '', __CLASS__ );
 		$this->register_class_custom_posttype_name( $this->posttype_name, 'iw' );
 
 		/**
 		 * Set taxonomy name.
 		 */
-		$this->taxonomy_name = preg_replace( '/^iworks_aqualog_posttype_/', '', __CLASS__ );
+		$this->taxonomy_name = preg_replace( '/^iworks_aquarium_log_posttype_/', '', __CLASS__ );
 		$this->register_class_custom_taxonomy_name( $this->taxonomy_name, 'iw', 'group' );
 
 		/**
@@ -81,16 +81,16 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		/**
 		 * iworks option class hooks.
 		 */
-		add_filter( 'index_iworks_aqualog_default_aquarium_id_data', array( $this, 'filter_index_iworks_aqualog_default_aquarium_data' ), 10, 3 );
+		add_filter( 'index_iworks_aquarium_log_default_aquarium_id_data', array( $this, 'filter_index_iworks_aquarium_log_default_aquarium_data' ), 10, 3 );
 		/**
-		 * AquaLog plugin hooks.
+		 * iWorks Aquarium Log plugin hooks.
 		 */
-		add_filter( 'aqualog/set/current_aquarium_id', array( $this, 'filter_set_current_aquarium_id' ) );
-		add_action( 'aqualog/dashboard/aquariums', array( $this, 'action_dashboard_aquariums' ) );
-		add_action( 'aqualog/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
-		add_filter( 'aqualog/load/template/args', array( $this, 'filter_load_template_args' ) );
-		add_filter( 'aqualog/wp-admin/chemistry_page_args', array( $this, 'filter_chemistry_page_args' ) );
-		add_filter( 'aqualog/wp-admin/dashboard/template_args', array( $this, 'filter_dashboard_template_args' ) );
+		add_filter( 'iworks-aquarium-log/set/current_aquarium_id', array( $this, 'filter_set_current_aquarium_id' ) );
+		add_action( 'iworks-aquarium-log/dashboard/aquariums', array( $this, 'action_dashboard_aquariums' ) );
+		add_action( 'iworks-aquarium-log/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
+		add_filter( 'iworks-aquarium-log/load/template/args', array( $this, 'filter_load_template_args' ) );
+		add_filter( 'iworks-aquarium-log/wp-admin/chemistry_page_args', array( $this, 'filter_chemistry_page_args' ) );
+		add_filter( 'iworks-aquarium-log/wp-admin/dashboard/template_args', array( $this, 'filter_dashboard_template_args' ) );
 	}
 
 	public function filter_load_template_args( $args ) {
@@ -143,7 +143,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			}
 			wp_reset_postdata();
 		} else {
-			echo '<p>' . esc_html__( 'No aquariums found.', 'aqualog' ) . '</p>';
+			echo '<p>' . esc_html__( 'No aquariums found.', 'iworks-aquarium-log' ) . '</p>';
 		}
 	}
 
@@ -162,7 +162,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		$title        = get_the_title();
 		$permalink    = get_permalink();
 		$updated_at   = get_post_meta( $post_id, $this->meta_name_related_updated_at, true );
-		$last_updated = $updated_at ? $this->get_time_elapsed_text( $updated_at ) : __( 'Never', 'aqualog' );
+		$last_updated = $updated_at ? $this->get_time_elapsed_text( $updated_at ) : __( 'Never', 'iworks-aquarium-log' );
 
 		// Get aquarium type
 		$types     = wp_get_post_terms( $post_id, $this->taxonomy_name );
@@ -172,37 +172,37 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		$capacity         = get_post_meta( $post_id, 'capacity', true );
 		$capacity_display = $capacity ? sprintf( '%s L', number_format_i18n( $capacity ) ) : '';
 		?>
-		<div class="aqualog-aquarium-item">
-			<div class="aqualog-aquarium-item-header">
-				<h3 class="aqualog-aquarium-title">
+		<div class="aquarium-log-aquarium-item">
+			<div class="aquarium-log-aquarium-item-header">
+				<h3 class="aquarium-log-aquarium-title">
 					<a href="<?php echo esc_url( $permalink ); ?>">
 						<?php echo esc_html( $title ); ?>
 					</a>
 				</h3>
 				<?php if ( $type_name ) : ?>
-					<span class="aqualog-aquarium-type"><?php echo esc_html( $type_name ); ?></span>
+					<span class="aquarium-log-aquarium-type"><?php echo esc_html( $type_name ); ?></span>
 				<?php endif; ?>
 			</div>
-			<div class="aqualog-aquarium-item-content">
-				<div class="aqualog-aquarium-info">
+			<div class="aquarium-log-aquarium-item-content">
+				<div class="aquarium-log-aquarium-info">
 					<?php if ( $capacity_display ) : ?>
-						<div class="aqualog-aquarium-capacity">
+						<div class="aquarium-log-aquarium-capacity">
 							<span class="dashicons dashicons-volume"></span>
 							<?php echo esc_html( $capacity_display ); ?>
 						</div>
 					<?php endif; ?>
-					<div class="aqualog-aquarium-updated">
+					<div class="aquarium-log-aquarium-updated">
 						<span class="dashicons dashicons-clock"></span>
-						<span class="label"><?php esc_html_e( 'Last updated:', 'aqualog' ); ?></span>
+						<span class="label"><?php esc_html_e( 'Last updated:', 'iworks-aquarium-log' ); ?></span>
 						<span class="value"><?php echo esc_html( $last_updated ); ?></span>
 					</div>
 				</div>
-				<div class="aqualog-aquarium-actions">
-					<a href="<?php echo esc_url( $permalink ); ?>" class="aqualog-button aqualog-button-small">
-						<?php esc_html_e( 'View Details', 'aqualog' ); ?>
+				<div class="aquarium-log-aquarium-actions">
+					<a href="<?php echo esc_url( $permalink ); ?>" class="aquarium-log-button aquarium-log-button-small">
+						<?php esc_html_e( 'View Details', 'iworks-aquarium-log' ); ?>
 					</a>
-					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ); ?>" class="aqualog-button aqualog-button-small aqualog-button-outline">
-						<?php esc_html_e( 'Edit', 'aqualog' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ); ?>" class="aquarium-log-button aquarium-log-button-small aquarium-log-button-outline">
+						<?php esc_html_e( 'Edit', 'iworks-aquarium-log' ); ?>
 					</a>
 				</div>
 			</div>
@@ -210,7 +210,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		<?php
 	}
 
-	public function filter_index_iworks_aqualog_default_aquarium_data( $data, $option_name, $default ) {
+	public function filter_index_iworks_aquarium_log_default_aquarium_data( $data, $option_name, $default ) {
 		$args     = array(
 			'post_type'      => $this->posttypes_names[ $this->posttype_name ],
 			'posts_per_page' => -1,
@@ -247,162 +247,162 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	public function action_init_settings() {
 		$this->meta_boxes[ $this->posttypes_names[ $this->posttype_name ] ] = array(
 			'aquarium-size' => array(
-				'title'  => __( 'Size', 'aqualog' ),
+				'title'  => __( 'Size', 'iworks-aquarium-log' ),
 				'fields' => array(
 					array(
 						'name'  => 'width',
 						'type'  => 'number',
-						'label' => esc_html__( 'Width', 'aqualog' ),
+						'label' => esc_html__( 'Width', 'iworks-aquarium-log' ),
 						'sufix' => 'cm',
 					),
 					array(
 						'name'  => 'height',
 						'type'  => 'number',
-						'label' => esc_html__( 'Height', 'aqualog' ),
+						'label' => esc_html__( 'Height', 'iworks-aquarium-log' ),
 						'sufix' => 'cm',
 					),
 					array(
 						'name'  => 'length',
 						'type'  => 'number',
-						'label' => esc_html__( 'Length', 'aqualog' ),
+						'label' => esc_html__( 'Length', 'iworks-aquarium-log' ),
 						'sufix' => 'cm',
 					),
 					'capacity'     => array(
 						'name'  => 'capacity',
 						'type'  => 'number',
-						'label' => esc_html__( 'Capacity', 'aqualog' ),
+						'label' => esc_html__( 'Capacity', 'iworks-aquarium-log' ),
 						'sufix' => 'L',
 					),
 					'water_volume' => array(
 						'name'  => 'water_volume',
 						'type'  => 'number',
-						'label' => esc_html__( 'Water Volume', 'aqualog' ),
+						'label' => esc_html__( 'Water Volume', 'iworks-aquarium-log' ),
 						'sufix' => 'L',
 					),
 				),
 			),
 			'aquarium-data' => array(
-				'title'  => __( 'Data', 'aqualog' ),
+				'title'  => __( 'Data', 'iworks-aquarium-log' ),
 				'fields' => array(
 					array(
 						'name'  => 'start_date',
 						'type'  => 'date',
-						'label' => esc_html__( 'Start Date', 'aqualog' ),
+						'label' => esc_html__( 'Start Date', 'iworks-aquarium-log' ),
 					),
 				),
 			),
 			'chemistry'     => array(
-				'title'  => __( 'Chemistry', 'aqualog' ),
+				'title'  => __( 'Chemistry', 'iworks-aquarium-log' ),
 				'fields' => array(
 					array(
 						'name'  => 'check_temp',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Temperature', 'aqualog' ),
+						'label' => esc_html__( 'Check Temperature', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_co2',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check CO₂', 'aqualog' ),
+						'label' => esc_html__( 'Check CO₂', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_ph',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check pH', 'aqualog' ),
+						'label' => esc_html__( 'Check pH', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_gh',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check GH', 'aqualog' ),
+						'label' => esc_html__( 'Check GH', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_kh',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check KH', 'aqualog' ),
+						'label' => esc_html__( 'Check KH', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_no3',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Nitrate (NO₃)', 'aqualog' ),
+						'label' => esc_html__( 'Check Nitrate (NO₃)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_po4',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Phosphate (PO₄)', 'aqualog' ),
+						'label' => esc_html__( 'Check Phosphate (PO₄)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_k',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Potassium (K)', 'aqualog' ),
+						'label' => esc_html__( 'Check Potassium (K)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_fe',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Iron (Fe)', 'aqualog' ),
+						'label' => esc_html__( 'Check Iron (Fe)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_ca',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Calcium (Ca)', 'aqualog' ),
+						'label' => esc_html__( 'Check Calcium (Ca)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_mg',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Magnesium (Mg)', 'aqualog' ),
+						'label' => esc_html__( 'Check Magnesium (Mg)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_nh3',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Ammonia (NH₃)', 'aqualog' ),
+						'label' => esc_html__( 'Check Ammonia (NH₃)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_no2',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Nitrite (NO₂)', 'aqualog' ),
+						'label' => esc_html__( 'Check Nitrite (NO₂)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_cl',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Chlorine (Cl)', 'aqualog' ),
+						'label' => esc_html__( 'Check Chlorine (Cl)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_cu',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Copper (Cu)', 'aqualog' ),
+						'label' => esc_html__( 'Check Copper (Cu)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_zn',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Zinc (Zn)', 'aqualog' ),
+						'label' => esc_html__( 'Check Zinc (Zn)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_mn',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Manganese (Mn)', 'aqualog' ),
+						'label' => esc_html__( 'Check Manganese (Mn)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_mo',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Molybdenum (Mo)', 'aqualog' ),
+						'label' => esc_html__( 'Check Molybdenum (Mo)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_zn',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Zinc (Zn)', 'aqualog' ),
+						'label' => esc_html__( 'Check Zinc (Zn)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_b',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Boron (B)', 'aqualog' ),
+						'label' => esc_html__( 'Check Boron (B)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_o2',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Oxygen (O₂)', 'aqualog' ),
+						'label' => esc_html__( 'Check Oxygen (O₂)', 'iworks-aquarium-log' ),
 					),
 					array(
 						'name'  => 'check_tds',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Total Dissolved Solids (TDS)', 'aqualog' ),
+						'label' => esc_html__( 'Check Total Dissolved Solids (TDS)', 'iworks-aquarium-log' ),
 					),
 				),
 			),
@@ -420,26 +420,26 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 */
 	public function action_init_register_post_type() {
 		$labels = array(
-			'name'               => _x( 'Aquariums', 'Post Type General Name', 'aqualog' ),
-			'singular_name'      => _x( 'Aquarium', 'Post Type Singular Name', 'aqualog' ),
-			'menu_name'          => _x( 'Aquariums', 'Menu Name', 'aqualog' ),
-			'name_admin_bar'     => _x( 'Aquarium', 'Admin Bar Name', 'aqualog' ),
-			'parent_item_colon'  => __( 'Parent Aquarium:', 'aqualog' ),
-			'all_items'          => __( 'Aquariums', 'aqualog' ),
-			'add_new_item'       => __( 'Add New Aquarium', 'aqualog' ),
-			'add_new'            => __( 'Add New', 'aqualog' ),
-			'new_item'           => __( 'New Aquarium', 'aqualog' ),
-			'edit_item'          => __( 'Edit Aquarium', 'aqualog' ),
-			'update_item'        => __( 'Update Aquarium', 'aqualog' ),
-			'view_item'          => __( 'View Aquarium', 'aqualog' ),
-			'search_items'       => __( 'Search Aquarium', 'aqualog' ),
-			'not_found'          => __( 'Not found', 'aqualog' ),
-			'not_found_in_trash' => __( 'Not found in Trash', 'aqualog' ),
+			'name'               => _x( 'Aquariums', 'Post Type General Name', 'iworks-aquarium-log' ),
+			'singular_name'      => _x( 'Aquarium', 'Post Type Singular Name', 'iworks-aquarium-log' ),
+			'menu_name'          => _x( 'Aquariums', 'Menu Name', 'iworks-aquarium-log' ),
+			'name_admin_bar'     => _x( 'Aquarium', 'Admin Bar Name', 'iworks-aquarium-log' ),
+			'parent_item_colon'  => __( 'Parent Aquarium:', 'iworks-aquarium-log' ),
+			'all_items'          => __( 'Aquariums', 'iworks-aquarium-log' ),
+			'add_new_item'       => __( 'Add New Aquarium', 'iworks-aquarium-log' ),
+			'add_new'            => __( 'Add New', 'iworks-aquarium-log' ),
+			'new_item'           => __( 'New Aquarium', 'iworks-aquarium-log' ),
+			'edit_item'          => __( 'Edit Aquarium', 'iworks-aquarium-log' ),
+			'update_item'        => __( 'Update Aquarium', 'iworks-aquarium-log' ),
+			'view_item'          => __( 'View Aquarium', 'iworks-aquarium-log' ),
+			'search_items'       => __( 'Search Aquarium', 'iworks-aquarium-log' ),
+			'not_found'          => __( 'Not found', 'iworks-aquarium-log' ),
+			'not_found_in_trash' => __( 'Not found in Trash', 'iworks-aquarium-log' ),
 		);
 
 		$args = array(
-			'label'               => __( 'Aquarium', 'aqualog' ),
-			'description'         => __( 'Aquariums', 'aqualog' ),
+			'label'               => __( 'Aquarium', 'iworks-aquarium-log' ),
+			'description'         => __( 'Aquariums', 'iworks-aquarium-log' ),
 			'labels'              => apply_filters( 'iworks/theme/register_post_type/aquarium/labels', $labels ),
 			'supports'            => apply_filters(
 				'iworks/theme/register_post_type/aquarium/subpackage',
@@ -463,7 +463,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			'show_in_rest'        => true,
 			'rest_base'           => apply_filters(
 				'iworks/theme/register_post_type/aquarium/rest_base',
-				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquariums' : __( 'aquariums', 'aqualog' )
+				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquariums' : __( 'aquariums', 'iworks-aquarium-log' )
 			),
 		);
 
@@ -487,23 +487,23 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 */
 	public function action_init_register_taxonomy() {
 		$labels = array(
-			'name'                       => _x( 'Aquarium Types', 'Taxonomy General Name', 'aqualog' ),
-			'singular_name'              => _x( 'Aquarium Type', 'Taxonomy Singular Name', 'aqualog' ),
-			'menu_name'                  => __( 'Types', 'aqualog' ),
-			'all_items'                  => __( 'All Aquarium Types', 'aqualog' ),
-			'parent_item'                => __( 'Parent Aquarium Type', 'aqualog' ),
-			'parent_item_colon'          => __( 'Parent Aquarium Type:', 'aqualog' ),
-			'new_item_name'              => __( 'New Aquarium Type Name', 'aqualog' ),
-			'add_new_item'               => __( 'Add New Aquarium Type', 'aqualog' ),
-			'edit_item'                  => __( 'Edit Aquarium Type', 'aqualog' ),
-			'update_item'                => __( 'Update Aquarium Type', 'aqualog' ),
-			'view_item'                  => __( 'View Aquarium Type', 'aqualog' ),
-			'separate_items_with_commas' => __( 'Separate Aquarium Types with commas', 'aqualog' ),
-			'add_or_remove_items'        => __( 'Add or remove Aquarium Types', 'aqualog' ),
-			'choose_from_most_used'      => __( 'Choose from the most used', 'aqualog' ),
-			'popular_items'              => __( 'Popular Aquarium Types', 'aqualog' ),
-			'search_items'               => __( 'Search Aquarium Types', 'aqualog' ),
-			'not_found'                  => __( 'Not Found', 'aqualog' ),
+			'name'                       => _x( 'Aquarium Types', 'Taxonomy General Name', 'iworks-aquarium-log' ),
+			'singular_name'              => _x( 'Aquarium Type', 'Taxonomy Singular Name', 'iworks-aquarium-log' ),
+			'menu_name'                  => __( 'Types', 'iworks-aquarium-log' ),
+			'all_items'                  => __( 'All Aquarium Types', 'iworks-aquarium-log' ),
+			'parent_item'                => __( 'Parent Aquarium Type', 'iworks-aquarium-log' ),
+			'parent_item_colon'          => __( 'Parent Aquarium Type:', 'iworks-aquarium-log' ),
+			'new_item_name'              => __( 'New Aquarium Type Name', 'iworks-aquarium-log' ),
+			'add_new_item'               => __( 'Add New Aquarium Type', 'iworks-aquarium-log' ),
+			'edit_item'                  => __( 'Edit Aquarium Type', 'iworks-aquarium-log' ),
+			'update_item'                => __( 'Update Aquarium Type', 'iworks-aquarium-log' ),
+			'view_item'                  => __( 'View Aquarium Type', 'iworks-aquarium-log' ),
+			'separate_items_with_commas' => __( 'Separate Aquarium Types with commas', 'iworks-aquarium-log' ),
+			'add_or_remove_items'        => __( 'Add or remove Aquarium Types', 'iworks-aquarium-log' ),
+			'choose_from_most_used'      => __( 'Choose from the most used', 'iworks-aquarium-log' ),
+			'popular_items'              => __( 'Popular Aquarium Types', 'iworks-aquarium-log' ),
+			'search_items'               => __( 'Search Aquarium Types', 'iworks-aquarium-log' ),
+			'not_found'                  => __( 'Not Found', 'iworks-aquarium-log' ),
 		);
 
 		$args = array(
@@ -521,7 +521,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			'show_in_menu'        => admin_url( add_query_arg( 'page', $this->wp_admin_slug, 'admin.php' ) ),
 			'rest_base'           => apply_filters(
 				'iworks/theme/register_taxonomy/aquarium/rest_base',
-				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquarium_types' : __( 'aquarium_types', 'aqualog' )
+				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquarium_types' : __( 'aquarium_types', 'iworks-aquarium-log' )
 			),
 		);
 		register_taxonomy(
@@ -543,8 +543,8 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	public function filter_wp_localize_script_iworks_theme( $data ) {
 		$data['i18n']['modules']['aquarium'] = array(
 			'button' => array(
-				'expand_all'   => esc_html__( 'Expand All', 'aqualog' ),
-				'collapse_all' => esc_html__( 'Collapse All', 'aqualog' ),
+				'expand_all'   => esc_html__( 'Expand All', 'iworks-aquarium-log' ),
+				'collapse_all' => esc_html__( 'Collapse All', 'iworks-aquarium-log' ),
 			),
 		);
 		return $data;
@@ -561,7 +561,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 * @return array Modified columns array with capacity column.
 	 */
 	public function filter_add_menu_order_column( $columns ) {
-		$columns['capacity'] = __( 'Capacity', 'aqualog' );
+		$columns['capacity'] = __( 'Capacity', 'iworks-aquarium-log' );
 		return $columns;
 	}
 
@@ -581,7 +581,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			case 'capacity':
 				$capacity = get_post_meta( $post_id, '_iw_aquarium-size_capacity', true );
 				if ( $capacity ) {
-					echo esc_html( $capacity ) . ' ' . esc_html__( 'L', 'aqualog' );
+					echo esc_html( $capacity ) . ' ' . esc_html__( 'L', 'iworks-aquarium-log' );
 				} else {
 					echo '&mdash;';
 				}
@@ -643,10 +643,10 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		$this->action_update_aquarium_related_updated( $post_id );
 
 		// Get logger instance
-		if ( ! class_exists( 'iworks_aqualog_logger' ) ) {
-			require_once dirname( __DIR__ ) . '/class-iworks-aqualog-logger.php';
+		if ( ! class_exists( 'iworks_aquarium_log_logger' ) ) {
+			require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-logger.php';
 		}
-		$logger = new iworks_aqualog_logger();
+		$logger = new iworks_aquarium_log_logger();
 
 		if ( $update ) {
 			// Log update
@@ -674,10 +674,10 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		}
 
 		// Get logger instance
-		if ( ! class_exists( 'iworks_aqualog_logger' ) ) {
-			require_once dirname( __DIR__ ) . '/class-iworks-aqualog-logger.php';
+		if ( ! class_exists( 'iworks_aquarium_log_logger' ) ) {
+			require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-logger.php';
 		}
-		$logger = new iworks_aqualog_logger();
+		$logger = new iworks_aquarium_log_logger();
 
 		$logger->log_aquarium_deleted( $post_id, $post->post_title );
 	}

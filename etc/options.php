@@ -1,12 +1,12 @@
 <?php
 /**
- * AquaLog Options Configuration
+ * iWorks Aquarium Log Options Configuration
  *
- * This file contains the configuration options for the AquaLog plugin.
+ * This file contains the configuration options for the iWorks Aquarium Log plugin.
  * It defines the structure of the plugin's options and settings pages.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -25,12 +25,12 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0.0
  * @return array Array of options configuration.
  */
-function iworks_aqualog_options() {
+function iworks_aquarium_log_options() {
 	// Initialize empty options array
 	$options = array();
 
 	// Set parent page for submenu items
-	$parent = 'aqualog-dashboard';
+	$parent = 'aquarium-log-dashboard';
 
 	// Main settings configuration
 	// Defines the structure of the main options page including:
@@ -45,7 +45,7 @@ function iworks_aqualog_options() {
 		'version'    => '0.0',
 
 		// Title of the options page
-		'page_title' => __( 'Settings', 'aqualog' ),
+		'page_title' => __( 'Settings', 'iworks-aquarium-log' ),
 
 		// Menu type for the options page
 		// Possible values: 'options', 'submenu', 'management', 'theme', 'posts',
@@ -63,18 +63,18 @@ function iworks_aqualog_options() {
 
 		// Array of options fields
 		'options'    => apply_filters(
-			'aqualog/etc/config/options',
+			'iworks-aquarium-log/etc/config/options',
 			array(
 				array(
 					'type'  => 'heading',
-					'label' => __( 'Modules', 'aqualog' ),
+					'label' => __( 'Modules', 'iworks-aquarium-log' ),
 					'since' => '1.0.0',
 				),
 				array(
 					'name'              => 'module_chemistry',
 					'type'              => 'checkbox',
-					'th'                => __( 'Chemistry', 'aqualog' ),
-					'description'       => __( 'Track water parameters and chemistry data.', 'aqualog' ),
+					'th'                => __( 'Chemistry', 'iworks-aquarium-log' ),
+					'description'       => __( 'Track water parameters and chemistry data.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -84,8 +84,8 @@ function iworks_aqualog_options() {
 				array(
 					'name'              => 'module_maintenance',
 					'type'              => 'checkbox',
-					'th'                => __( 'Maintenance', 'aqualog' ),
-					'description'       => __( 'Schedule and track maintenance tasks.', 'aqualog' ),
+					'th'                => __( 'Maintenance', 'iworks-aquarium-log' ),
+					'description'       => __( 'Schedule and track maintenance tasks.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -95,8 +95,8 @@ function iworks_aqualog_options() {
 				array(
 					'name'              => 'module_dosing',
 					'type'              => 'checkbox',
-					'th'                => __( 'Dosing', 'aqualog' ),
-					'description'       => __( 'Manage fertilizers and supplement dosing.', 'aqualog' ),
+					'th'                => __( 'Dosing', 'iworks-aquarium-log' ),
+					'description'       => __( 'Manage fertilizers and supplement dosing.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -106,8 +106,8 @@ function iworks_aqualog_options() {
 				array(
 					'name'              => 'module_equipment',
 					'type'              => 'checkbox',
-					'th'                => __( 'Equipment', 'aqualog' ),
-					'description'       => __( 'Track equipment status and schedules.', 'aqualog' ),
+					'th'                => __( 'Equipment', 'iworks-aquarium-log' ),
+					'description'       => __( 'Track equipment status and schedules.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -117,8 +117,8 @@ function iworks_aqualog_options() {
 				array(
 					'name'              => 'module_animals',
 					'type'              => 'checkbox',
-					'th'                => __( 'Animals', 'aqualog' ),
-					'description'       => __( 'Manage fish and aquatic livestock.', 'aqualog' ),
+					'th'                => __( 'Animals', 'iworks-aquarium-log' ),
+					'description'       => __( 'Manage fish and aquatic livestock.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -128,8 +128,8 @@ function iworks_aqualog_options() {
 				array(
 					'name'              => 'module_plants',
 					'type'              => 'checkbox',
-					'th'                => __( 'Plants', 'aqualog' ),
-					'description'       => __( 'Track aquatic plants and care needs.', 'aqualog' ),
+					'th'                => __( 'Plants', 'iworks-aquarium-log' ),
+					'description'       => __( 'Track aquatic plants and care needs.', 'iworks-aquarium-log' ),
 					'default'           => 1,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
@@ -139,29 +139,29 @@ function iworks_aqualog_options() {
 
 				array(
 					'type'  => 'heading',
-					'label' => __( 'Aquarium Settings', 'aqualog' ),
+					'label' => __( 'Aquarium Settings', 'iworks-aquarium-log' ),
 					'since' => '1.0.0',
 				),
 				array(
 					'name'              => 'default_aquarium_id',
 					'type'              => 'select',
-					'th'                => __( 'Default Aquarium', 'aqualog' ),
-					'description'       => __( 'Select the default aquarium to display.', 'aqualog' ),
+					'th'                => __( 'Default Aquarium', 'iworks-aquarium-log' ),
+					'description'       => __( 'Select the default aquarium to display.', 'iworks-aquarium-log' ),
 					'classes'           => array( 'small-text' ),
 					'sanitize_callback' => 'intval',
 					'since'             => '1.0.0',
 					'options'           => array(
-						'' => esc_html__( '--- Select ---', 'aqualog' ),
+						'' => esc_html__( '--- Select ---', 'iworks-aquarium-log' ),
 					),
 				),
 			)
 		),
 
 		// Array of metaboxes
-		'metaboxes'  => apply_filters( 'aqualog/etc/config/metaboxes', array() ),
+		'metaboxes'  => apply_filters( 'iworks-aquarium-log/etc/config/metaboxes', array() ),
 
 		// Array of subpages
-		'pages'      => apply_filters( 'aqualog/etc/config/pages', array() ),
+		'pages'      => apply_filters( 'iworks-aquarium-log/etc/config/pages', array() ),
 	);
 
 	/**
@@ -176,7 +176,7 @@ function iworks_aqualog_options() {
 		'temp' => array(
 			'name'        => 'Temperature',
 			'unit'        => '°C',
-			'description' => esc_html__( 'Water temperature', 'aqualog' ),
+			'description' => esc_html__( 'Water temperature', 'iworks-aquarium-log' ),
 			'range'       => array( 10, 40 ),
 			'danger'      => array( 15, 32 ),
 			'safety'      => array( 20, 28 ),
@@ -188,7 +188,7 @@ function iworks_aqualog_options() {
 		'ph'   => array(
 			'name'        => 'pH',
 			'unit'        => 'pH',
-			'description' => esc_html__( 'Acidity/Alkalinity level', 'aqualog' ),
+			'description' => esc_html__( 'Acidity/Alkalinity level', 'iworks-aquarium-log' ),
 			'range'       => array( 4, 10 ),
 			'danger'      => array( 4, 10 ),
 			'safety'      => array( 5.5, 7.5 ),
@@ -199,7 +199,7 @@ function iworks_aqualog_options() {
 		'gh'   => array(
 			'name'        => 'GH',
 			'unit'        => '°dH',
-			'description' => esc_html__( 'General Hardness', 'aqualog' ),
+			'description' => esc_html__( 'General Hardness', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 30 ),
 			'danger'      => array( 0, 30 ),
 			'safety'      => array( 2, 12 ),
@@ -210,7 +210,7 @@ function iworks_aqualog_options() {
 		'kh'   => array(
 			'name'        => 'KH',
 			'unit'        => '°dH',
-			'description' => esc_html__( 'Carbonate Hardness', 'aqualog' ),
+			'description' => esc_html__( 'Carbonate Hardness', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 20 ),
 			'danger'      => array( 0, 20 ),
 			'safety'      => array( 0, 20 ),
@@ -221,7 +221,7 @@ function iworks_aqualog_options() {
 		'no3'  => array(
 			'name'        => 'NO₃',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Nitrate', 'aqualog' ),
+			'description' => esc_html__( 'Nitrate', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 100 ),
 			'danger'      => array( 50, 100 ),
 			'safety'      => array( 0, 50 ),
@@ -232,7 +232,7 @@ function iworks_aqualog_options() {
 		'no2'  => array(
 			'name'        => 'NO₂',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Nitrite', 'aqualog' ),
+			'description' => esc_html__( 'Nitrite', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 2 ),
 			'danger'      => array( 0, 2 ),
 			'safety'      => array( 0, 0.25 ),
@@ -243,7 +243,7 @@ function iworks_aqualog_options() {
 		'nh3'  => array(
 			'name'        => 'NH₃',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Ammonia', 'aqualog' ),
+			'description' => esc_html__( 'Ammonia', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 2 ),
 			'danger'      => array( 0.02, 2 ),
 			'safety'      => array( 0, 0.02 ),
@@ -254,7 +254,7 @@ function iworks_aqualog_options() {
 		'po4'  => array(
 			'name'        => 'PO₄',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Phosphate', 'aqualog' ),
+			'description' => esc_html__( 'Phosphate', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 10 ),
 			'danger'      => array( 2, 10 ),
 			'safety'      => array( 0, 2 ),
@@ -265,7 +265,7 @@ function iworks_aqualog_options() {
 		'fe'   => array(
 			'name'        => 'Fe',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Iron', 'aqualog' ),
+			'description' => esc_html__( 'Iron', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 5 ),
 			'danger'      => array( 0, 5 ),
 			'safety'      => array( 0, 5 ),
@@ -276,7 +276,7 @@ function iworks_aqualog_options() {
 		'ca'   => array(
 			'name'        => 'Ca',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Calcium', 'aqualog' ),
+			'description' => esc_html__( 'Calcium', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 200 ),
 			'danger'      => array( 0, 200 ),
 			'safety'      => array( 10, 100 ),
@@ -287,7 +287,7 @@ function iworks_aqualog_options() {
 		'mg'   => array(
 			'name'        => 'Mg',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Magnesium', 'aqualog' ),
+			'description' => esc_html__( 'Magnesium', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 100 ),
 			'danger'      => array( 0, 100 ),
 			'safety'      => array( 2, 40 ),
@@ -298,7 +298,7 @@ function iworks_aqualog_options() {
 		'k'    => array(
 			'name'        => 'K',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Potassium', 'aqualog' ),
+			'description' => esc_html__( 'Potassium', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 100 ),
 			'danger'      => array( 0, 100 ),
 			'safety'      => array( 5, 50 ),
@@ -309,7 +309,7 @@ function iworks_aqualog_options() {
 		'tds'  => array(
 			'name'        => 'TDS',
 			'unit'        => 'ppm',
-			'description' => esc_html__( 'Total Dissolved Solids', 'aqualog' ),
+			'description' => esc_html__( 'Total Dissolved Solids', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 1000 ),
 			'danger'      => array( 25, 1000 ),
 			'safety'      => array( 50, 350 ),
@@ -320,7 +320,7 @@ function iworks_aqualog_options() {
 		'o2'   => array(
 			'name'        => 'O₂',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Oxygen', 'aqualog' ),
+			'description' => esc_html__( 'Oxygen', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 15 ),
 			'danger'      => array( 0, 15 ),
 			'safety'      => array( 4, 10 ),
@@ -330,7 +330,7 @@ function iworks_aqualog_options() {
 		'co2'  => array(
 			'name'        => 'CO₂',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Carbon Dioxide', 'aqualog' ),
+			'description' => esc_html__( 'Carbon Dioxide', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 50 ),
 			'danger'      => array( 0, 50 ),
 			'safety'      => array( 15, 40 ),
@@ -341,7 +341,7 @@ function iworks_aqualog_options() {
 		'cl'   => array(
 			'name'        => 'Cl',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Chlorine', 'aqualog' ),
+			'description' => esc_html__( 'Chlorine', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 5 ),
 			'danger'      => array( 0, 5 ),
 			'safety'      => array( 0, 0 ),
@@ -351,7 +351,7 @@ function iworks_aqualog_options() {
 		'cu'   => array(
 			'name'        => 'Cu',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Copper', 'aqualog' ),
+			'description' => esc_html__( 'Copper', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 2 ),
 			'danger'      => array( 0, 2 ),
 			'safety'      => array( 0, 0 ),
@@ -360,7 +360,7 @@ function iworks_aqualog_options() {
 		'zn'   => array(
 			'name'        => 'Zn',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Zinc', 'aqualog' ),
+			'description' => esc_html__( 'Zinc', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 0.5 ),
 			'danger'      => array( 0, 0.5 ),
 			'safety'      => array( 0, 0 ),
@@ -369,7 +369,7 @@ function iworks_aqualog_options() {
 		'mn'   => array(
 			'name'        => 'Mn',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Manganese', 'aqualog' ),
+			'description' => esc_html__( 'Manganese', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 0.5 ),
 			'danger'      => array( 0, 0.5 ),
 			'safety'      => array( 0, 0 ),
@@ -378,7 +378,7 @@ function iworks_aqualog_options() {
 		'mo'   => array(
 			'name'        => 'Mo',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Molybdenum', 'aqualog' ),
+			'description' => esc_html__( 'Molybdenum', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 0.1 ),
 			'danger'      => array( 0, 0.1 ),
 			'safety'      => array( 0, 0 ),
@@ -387,7 +387,7 @@ function iworks_aqualog_options() {
 		'b'    => array(
 			'name'        => 'B',
 			'unit'        => 'mg/L',
-			'description' => esc_html__( 'Boron', 'aqualog' ),
+			'description' => esc_html__( 'Boron', 'iworks-aquarium-log' ),
 			'range'       => array( 0, 10 ),
 			'danger'      => array( 0, 10 ),
 			'safety'      => array( 0, 0 ),
@@ -396,73 +396,73 @@ function iworks_aqualog_options() {
 	);
 
 	$options['frequencies'] = array(
-		'annually'        => esc_html__( 'Annually', 'aqualog' ),
-		'daily'           => esc_html__( 'Daily', 'aqualog' ),
-		'every_other_day' => esc_html__( 'Every other day', 'aqualog' ),
-		'monthly'         => esc_html__( 'Monthly', 'aqualog' ),
-		'on_demand'       => esc_html__( 'On demand', 'aqualog' ),
-		'other'           => esc_html__( 'Other', 'aqualog' ),
-		'quarterly'       => esc_html__( 'Quarterly', 'aqualog' ),
-		'semi_annually'   => esc_html__( 'Semi-annually', 'aqualog' ),
-		'twice_daily'     => esc_html__( 'Twice daily', 'aqualog' ),
-		'twice_monthly'   => esc_html__( 'Twice monthly', 'aqualog' ),
-		'weekly'          => esc_html__( 'Weekly', 'aqualog' ),
+		'annually'        => esc_html__( 'Annually', 'iworks-aquarium-log' ),
+		'daily'           => esc_html__( 'Daily', 'iworks-aquarium-log' ),
+		'every_other_day' => esc_html__( 'Every other day', 'iworks-aquarium-log' ),
+		'monthly'         => esc_html__( 'Monthly', 'iworks-aquarium-log' ),
+		'on_demand'       => esc_html__( 'On demand', 'iworks-aquarium-log' ),
+		'other'           => esc_html__( 'Other', 'iworks-aquarium-log' ),
+		'quarterly'       => esc_html__( 'Quarterly', 'iworks-aquarium-log' ),
+		'semi_annually'   => esc_html__( 'Semi-annually', 'iworks-aquarium-log' ),
+		'twice_daily'     => esc_html__( 'Twice daily', 'iworks-aquarium-log' ),
+		'twice_monthly'   => esc_html__( 'Twice monthly', 'iworks-aquarium-log' ),
+		'weekly'          => esc_html__( 'Weekly', 'iworks-aquarium-log' ),
 	);
 
 	$options['maintenance_tasks'] = array(
 		'algae_removal'          => array(
-			'title'       => esc_html__( 'Algae Removal', 'aqualog' ),
-			'description' => esc_html__( 'Remove algae from tank surfaces', 'aqualog' ),
+			'title'       => esc_html__( 'Algae Removal', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Remove algae from tank surfaces', 'iworks-aquarium-log' ),
 			'frequency'   => 'on_demand',
 		),
 		'equipment_inspection'   => array(
-			'title'       => esc_html__( 'Equipment Inspection', 'aqualog' ),
-			'description' => esc_html__( 'Inspect and clean equipment', 'aqualog' ),
+			'title'       => esc_html__( 'Equipment Inspection', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Inspect and clean equipment', 'iworks-aquarium-log' ),
 			'frequency'   => 'monthly',
 		),
 		'feeding'                => array(
-			'title'       => esc_html__( 'Feeding', 'aqualog' ),
-			'description' => esc_html__( 'Feed fish and monitor feeding schedule', 'aqualog' ),
+			'title'       => esc_html__( 'Feeding', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Feed fish and monitor feeding schedule', 'iworks-aquarium-log' ),
 			'frequency'   => 'daily',
 		),
 		'fertilization'          => array(
-			'title'       => esc_html__( 'Fertilization', 'aqualog' ),
-			'description' => esc_html__( 'Add fertilizers and nutrients', 'aqualog' ),
+			'title'       => esc_html__( 'Fertilization', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Add fertilizers and nutrients', 'iworks-aquarium-log' ),
 			'frequency'   => 'weekly',
 		),
 		'filter_cleaning'        => array(
-			'title'       => esc_html__( 'Filter Cleaning', 'aqualog' ),
-			'description' => esc_html__( 'Clean or replace filter media', 'aqualog' ),
+			'title'       => esc_html__( 'Filter Cleaning', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Clean or replace filter media', 'iworks-aquarium-log' ),
 			'frequency'   => 'monthly',
 		),
 		'glass_cleaning'         => array(
-			'title'       => esc_html__( 'Glass Cleaning', 'aqualog' ),
-			'description' => esc_html__( 'Clean aquarium glass and remove algae', 'aqualog' ),
+			'title'       => esc_html__( 'Glass Cleaning', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Clean aquarium glass and remove algae', 'iworks-aquarium-log' ),
 			'frequency'   => 'weekly',
 		),
 		'plant_trimming'         => array(
-			'title'       => esc_html__( 'Plant Trimming', 'aqualog' ),
-			'description' => esc_html__( 'Trim and maintain aquatic plants', 'aqualog' ),
+			'title'       => esc_html__( 'Plant Trimming', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Trim and maintain aquatic plants', 'iworks-aquarium-log' ),
 			'frequency'   => 'weekly',
 		),
 		'substrate_cleaning'     => array(
-			'title'       => esc_html__( 'Substrate Cleaning', 'aqualog' ),
-			'description' => esc_html__( 'Clean substrate and gravel', 'aqualog' ),
+			'title'       => esc_html__( 'Substrate Cleaning', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Clean substrate and gravel', 'iworks-aquarium-log' ),
 			'frequency'   => 'monthly',
 		),
 		'temperature_adjustment' => array(
-			'title'       => esc_html__( 'Temperature Adjustment', 'aqualog' ),
-			'description' => esc_html__( 'Check and adjust water temperature', 'aqualog' ),
+			'title'       => esc_html__( 'Temperature Adjustment', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Check and adjust water temperature', 'iworks-aquarium-log' ),
 			'frequency'   => 'daily',
 		),
 		'water_testing'          => array(
-			'title'       => esc_html__( 'Water Testing', 'aqualog' ),
-			'description' => esc_html__( 'Test water parameters', 'aqualog' ),
+			'title'       => esc_html__( 'Water Testing', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Test water parameters', 'iworks-aquarium-log' ),
 			'frequency'   => 'weekly',
 		),
 		'other'                  => array(
-			'title'       => esc_html__( 'Other', 'aqualog' ),
-			'description' => esc_html__( 'Other maintenance tasks', 'aqualog' ),
+			'title'       => esc_html__( 'Other', 'iworks-aquarium-log' ),
+			'description' => esc_html__( 'Other maintenance tasks', 'iworks-aquarium-log' ),
 			'frequency'   => 'as_needed',
 		),
 	);

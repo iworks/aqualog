@@ -1,13 +1,13 @@
 <?php
 /**
- * AquaLog Chemistry Class
+ * iWorks Aquarium Log Chemistry Class
  *
- * Handles all chemistry-related functionality for the AquaLog plugin.
+ * Handles all chemistry-related functionality for the iWorks Aquarium Log plugin.
  * This includes managing water parameter measurements, calculations,
  * and chemistry data storage/retrieval.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -17,17 +17,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
 
 /**
- * AquaLog Chemistry Class
+ * iWorks Aquarium Log Chemistry Class
  *
  * Manages water chemistry parameters, measurements, and calculations
  * for aquarium tracking and analysis.
  *
  * @since 1.0.0
  */
-class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
+class iworks_aquarium_log_wp_admin_maintenance extends iworks_aquarium_log_base {
 
 	/**
 	 * Available maintenance parameters with their properties.
@@ -51,8 +51,8 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		 *
 		 * @since 1.0.0
 		 */
-		add_action( 'aqualog/wp-admin/maintenance_page', array( $this, 'render_page' ) );
-		add_filter( 'aqualog/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
+		add_action( 'iworks-aquarium-log/wp-admin/maintenance_page', array( $this, 'render_page' ) );
+		add_filter( 'iworks-aquarium-log/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			true,
 			array(
 				'aquarium_id' => $this->current_aquarium_id,
-				'messages'    => apply_filters( 'aqualog/wp-admin/messages/files', array() ),
+				'messages'    => apply_filters( 'iworks-aquarium-log/wp-admin/messages/files', array() ),
 				'meta'        => get_post_meta( $this->current_aquarium_id ),
 				'tasks'       => array(),
 				'completed'   => array(),

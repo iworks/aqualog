@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: AquaLog
-Text Domain: aqualog
+Plugin Name: iWorks Aquarium Log
+Text Domain: iworks-aquarium-log
 Plugin URI: PLUGIN_URI
 Description: PLUGIN_TAGLINE
 Version: PLUGIN_VERSION
@@ -34,26 +34,26 @@ defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 // Define plugin version constant
 define( 'IWORKS_AQUALOG_VERSION', 'PLUGIN_VERSION' );
 // Define prefix for all plugin options and functions
-define( 'IWORKS_AQUALOG_PREFIX', 'iworks_aqualog_' );
+define( 'IWORKS_AQUALOG_PREFIX', 'iworks_aquarium_log_' );
 // Get the base directory path
-$aqualog_base = __DIR__;
+$aquarium_log_base = __DIR__;
 // Set vendor directory path (where core classes are located)
-$aqualog_vendor = $aqualog_base . '/includes';
+$aquarium_log_vendor = $aquarium_log_base . '/includes';
 
 /**
  * Load the main plugin class if it doesn't exist
  * This is the core class that handles all plugin functionality
  */
-if ( ! class_exists( 'iworks_aqualog' ) ) {
+if ( ! class_exists( 'iworks_aquarium_log' ) ) {
 	// Load the main plugin class from the includes directory
-	require_once $aqualog_vendor . '/iworks/class-iworks-aqualog.php';
+	require_once $aquarium_log_vendor . '/iworks/class-iworks-aquarium-log.php';
 }
 
 /**
  * Load configuration options
  * This file contains all plugin configuration settings
  */
-require_once $aqualog_base . '/etc/options.php';
+require_once $aquarium_log_base . '/etc/options.php';
 
 /**
  * Load the options class if it doesn't exist
@@ -61,10 +61,10 @@ require_once $aqualog_base . '/etc/options.php';
  */
 if ( ! class_exists( 'iworks_options' ) ) {
 	// Load the options class from the includes directory
-	require_once $aqualog_vendor . '/iworks/options/options.php';
+	require_once $aquarium_log_vendor . '/iworks/options/options.php';
 }
 
-require_once $aqualog_base . '/includes/template-tags.php';
+require_once $aquarium_log_base . '/includes/template-tags.php';
 
 /**
  * Initialize and get plugin options
@@ -72,42 +72,42 @@ require_once $aqualog_base . '/includes/template-tags.php';
  *
  * @return iworks_options The plugin options object
  */
-function iworks_aqualog_get_options() {
+function iworks_aquarium_log_get_options() {
 	// Use global variable to store options object
-	global $iworks_aqualog_options;
+	global $iworks_aquarium_log_options;
 
 	// Return existing options object if it exists
-	if ( is_object( $iworks_aqualog_options ) ) {
-		return $iworks_aqualog_options;
+	if ( is_object( $iworks_aquarium_log_options ) ) {
+		return $iworks_aquarium_log_options;
 	}
 
 	// Create new options object if it doesn't exist
-	$iworks_aqualog_options = new iworks_options();
+	$iworks_aquarium_log_options = new iworks_options();
 
 	// Set the function name for options
-	$iworks_aqualog_options->set_option_function_name( 'iworks_aqualog_options' );
+	$iworks_aquarium_log_options->set_option_function_name( 'iworks_aquarium_log_options' );
 	// Set the option prefix for all plugin options
-	$iworks_aqualog_options->set_option_prefix( IWORKS_AQUALOG_PREFIX );
+	$iworks_aquarium_log_options->set_option_prefix( IWORKS_AQUALOG_PREFIX );
 
 	// Set the plugin file name if the method exists
-	if ( method_exists( $iworks_aqualog_options, 'set_plugin' ) ) {
-		$iworks_aqualog_options->set_plugin( basename( __FILE__ ) );
+	if ( method_exists( $iworks_aquarium_log_options, 'set_plugin' ) ) {
+		$iworks_aquarium_log_options->set_plugin( basename( __FILE__ ) );
 	}
 
 	// Initialize the options
-	$iworks_aqualog_options->options_init();
+	$iworks_aquarium_log_options->options_init();
 
 	// Return the options object
-	return $iworks_aqualog_options;
+	return $iworks_aquarium_log_options;
 }
 
 // Initialize the main plugin class
-$iworks_aqualog = new iworks_aqualog();
+$iworks_aquarium_log = new iworks_aquarium_log();
 
 /**
  * Register plugin activation and deactivation hooks
  */
 // Register activation hook to run when plugin is activated
-register_activation_hook( __FILE__, array( $iworks_aqualog, 'register_activation_hook' ) );
+register_activation_hook( __FILE__, array( $iworks_aquarium_log, 'register_activation_hook' ) );
 // Register deactivation hook to run when plugin is deactivated
-register_deactivation_hook( __FILE__, array( $iworks_aqualog, 'register_deactivation_hook' ) );
+register_deactivation_hook( __FILE__, array( $iworks_aquarium_log, 'register_deactivation_hook' ) );

@@ -1,13 +1,13 @@
 <?php
 /**
- * AquaLog Chemistry Parameter Template
+ * iWorks Aquarium Log Chemistry Parameter Template
  *
  * This template displays a single chemistry parameter card with its value,
  * scale visualization, and importance indicator. It's used within the
  * chemistry page to show individual water chemistry parameters.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -30,8 +30,8 @@
 defined( 'ABSPATH' ) || exit;
 
 $classes = array(
-	'aqualog-chemistry-item',
-	'aqualog-chemistry-item--' . $args['key'],
+	'aquarium-log-chemistry-item',
+	'aquarium-log-chemistry-item--' . $args['key'],
 	'param-importance-' . $args['importance'],
 );
 if ( empty( $args['last_test_date'] ) ) {
@@ -41,15 +41,15 @@ $tooltip = $icon = '';
 switch ( $args['importance'] ) {
 	case 'critical':
 		$icon    = 'dashicons dashicons-info';
-		$tooltip = __( 'Critical parameter - requires close monitoring', 'aqualog' );
+		$tooltip = __( 'Critical parameter - requires close monitoring', 'iworks-aquarium-log' );
 		break;
 	case 'important':
 		$icon    = 'dashicons dashicons-info';
-		$tooltip = __( 'Important parameter - monitor regularly', 'aqualog' );
+		$tooltip = __( 'Important parameter - monitor regularly', 'iworks-aquarium-log' );
 		break;
 	case 'recommended':
 		$icon    = 'dashicons dashicons-info-outline';
-		$tooltip = __( 'Recommended parameter - good to track', 'aqualog' );
+		$tooltip = __( 'Recommended parameter - good to track', 'iworks-aquarium-log' );
 		break;
 }
 ?>
@@ -58,7 +58,7 @@ switch ( $args['importance'] ) {
 	data-key="<?php echo esc_attr( $args['key'] ); ?>"
 	data-value="<?php echo esc_attr( $args['value'] ); ?>"
 >
-	<div class="aqualog-chemistry-item-header">
+	<div class="aquarium-log-chemistry-item-header">
 		<?php if ( ! empty( $icon ) ) { ?>
 		<span class="<?php echo esc_attr( $icon ); ?>" title="<?php echo esc_attr( $tooltip ); ?>"></span>
 		<?php } ?>
@@ -71,7 +71,7 @@ switch ( $args['importance'] ) {
 		?>
 			</h3>
 	</div>
-	<div class="aqualog-chemistry-item-body">
+	<div class="aquarium-log-chemistry-item-body">
 		<p class="param-value param-value--<?php echo esc_attr( $args['value_class'] ); ?>">
 			<?php
 			if ( '' === $args['value'] ) {
@@ -101,9 +101,9 @@ switch ( $args['importance'] ) {
 			<span class="param-frequency">(<?php echo esc_html( $args['frequency'] ); ?>)</span>
 			<?php } ?>
 		</p>
-		<div class="aqualog-chemistry-item-body-scale">
-			<?php aqualog_get_scale( $args ); ?>
-			<div class="aqualog-chemistry-item-body-scale-legend">
+		<div class="aquarium-log-chemistry-item-body-scale">
+			<?php aquarium_log_get_scale( $args ); ?>
+			<div class="aquarium-log-chemistry-item-body-scale-legend">
 				<span class="legend-item--min"><?php echo esc_html( $args['range'][0] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
 				<span class="legend-item--max"><?php echo esc_html( $args['range'][1] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
 			</div>

@@ -2,10 +2,10 @@
 /**
  * Maintenance page template.
  *
- * Displays maintenance interface for AquaLog plugin.
+ * Displays maintenance interface for iWorks Aquarium Log plugin.
  * Includes forms for adding and managing maintenance tasks.
  *
- * @package    iWorks\AquaLog
+ * @package    iWorks\iWorks Aquarium Log
  * @subpackage Templates
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
@@ -16,44 +16,44 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 
-<div class="wrap aqualog-maintenance">
-	<?php do_action( 'aqualog/wp-admin/current-aquarium-bar' ); ?>
-	<h1 class="wp-heading-inline"><?php esc_html_e( 'Maintenance', 'aqualog' ); ?></h1>
+<div class="wrap aquarium-log-maintenance">
+	<?php do_action( 'iworks-aquarium-log/wp-admin/current-aquarium-bar' ); ?>
+	<h1 class="wp-heading-inline"><?php esc_html_e( 'Maintenance', 'iworks-aquarium-log' ); ?></h1>
 	
-	<div class="aqualog-dashboard-grid">
-		<div class="aqualog-stats-grid">
-			<div class="aqualog-stat-card">
+	<div class="aquarium-log-dashboard-grid">
+		<div class="aquarium-log-stats-grid">
+			<div class="aquarium-log-stat-card">
 				<span class="dashicons dashicons-clock"></span>
-				<div class="aqualog-stat-number"><?php echo esc_html( count( $args['tasks'] ?? 0 ) ); ?></div>
-				<div class="aqualog-stat-label"><?php esc_html_e( 'Total Tasks', 'aqualog' ); ?></div>
+				<div class="aquarium-log-stat-number"><?php echo esc_html( count( $args['tasks'] ?? 0 ) ); ?></div>
+				<div class="aquarium-log-stat-label"><?php esc_html_e( 'Total Tasks', 'iworks-aquarium-log' ); ?></div>
 			</div>
 			
-			<div class="aqualog-stat-card">
+			<div class="aquarium-log-stat-card">
 				<span class="dashicons dashicons-yes-alt"></span>
-				<div class="aqualog-stat-number"><?php echo esc_html( count( $args['completed'] ?? 0 ) ); ?></div>
-				<div class="aqualog-stat-label"><?php esc_html_e( 'Completed', 'aqualog' ); ?></div>
+				<div class="aquarium-log-stat-number"><?php echo esc_html( count( $args['completed'] ?? 0 ) ); ?></div>
+				<div class="aquarium-log-stat-label"><?php esc_html_e( 'Completed', 'iworks-aquarium-log' ); ?></div>
 			</div>
 			
-			<div class="aqualog-stat-card">
+			<div class="aquarium-log-stat-card">
 				<span class="dashicons dashicons-calendar-alt"></span>
-				<div class="aqualog-stat-number"><?php echo esc_html( count( $args['scheduled'] ?? 0 ) ); ?></div>
-				<div class="aqualog-stat-label"><?php esc_html_e( 'Scheduled', 'aqualog' ); ?></div>
+				<div class="aquarium-log-stat-number"><?php echo esc_html( count( $args['scheduled'] ?? 0 ) ); ?></div>
+				<div class="aquarium-log-stat-label"><?php esc_html_e( 'Scheduled', 'iworks-aquarium-log' ); ?></div>
 			</div>
 		</div>
 
-		<div class="aqualog-activity-section">
-			<div class="aqualog-card">
-				<h2><?php esc_html_e( 'Recent Tasks', 'aqualog' ); ?></h2>
-				<div class="aqualog-tasks-list">
+		<div class="aquarium-log-activity-section">
+			<div class="aquarium-log-card">
+				<h2><?php esc_html_e( 'Recent Tasks', 'iworks-aquarium-log' ); ?></h2>
+				<div class="aquarium-log-tasks-list">
 					<?php if ( ! empty( $args['tasks'] ) ) : ?>
 						<?php foreach ( $args['tasks'] as $task ) : ?>
-							<div class="aqualog-task-item">
+							<div class="aquarium-log-task-item">
 								<div class="task-header">
 									<h4><?php echo esc_html( $task['title'] ); ?></h4>
 									<span class="task-status status-<?php echo esc_attr( $task['status'] ); ?>">
 										<?php echo esc_html( $task['status'] ); ?>
 									</span>
-									<span class="task-date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $task['date'] ) )); ?></span>
+									<span class="task-date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $task['date'] ) ) ); ?></span>
 								</div>
 								<div class="task-description">
 									<?php echo wp_kses_post( $task['description'] ); ?>
@@ -61,29 +61,29 @@ defined( 'ABSPATH' ) || exit;
 							</div>
 						<?php endforeach; ?>
 					<?php else : ?>
-						<p><?php esc_html_e( 'No maintenance tasks yet. Start tracking your aquarium maintenance by adding your first task.', 'aqualog' ); ?></p>
+						<p><?php esc_html_e( 'No maintenance tasks yet. Start tracking your aquarium maintenance by adding your first task.', 'iworks-aquarium-log' ); ?></p>
 					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 
-		<div class="aqualog-quick-actions-section">
-			<div class="aqualog-card">
-				<h2><?php esc_html_e( 'Quick Actions', 'aqualog' ); ?></h2>
-				<div class="aqualog-actions-grid">
-					<a href="#" class="aqualog-action-card">
+		<div class="aquarium-log-quick-actions-section">
+			<div class="aquarium-log-card">
+				<h2><?php esc_html_e( 'Quick Actions', 'iworks-aquarium-log' ); ?></h2>
+				<div class="aquarium-log-actions-grid">
+					<a href="#" class="aquarium-log-action-card">
 						<span class="dashicons dashicons-plus"></span>
-						<span><?php esc_html_e( 'Add Task', 'aqualog' ); ?></span>
+						<span><?php esc_html_e( 'Add Task', 'iworks-aquarium-log' ); ?></span>
 					</a>
 					
-					<a href="#" class="aqualog-action-card">
+					<a href="#" class="aquarium-log-action-card">
 						<span class="dashicons dashicons-list-view"></span>
-						<span><?php esc_html_e( 'View All Tasks', 'aqualog' ); ?></span>
+						<span><?php esc_html_e( 'View All Tasks', 'iworks-aquarium-log' ); ?></span>
 					</a>
 					
-					<a href="#" class="aqualog-action-card">
+					<a href="#" class="aquarium-log-action-card">
 						<span class="dashicons dashicons-backup"></span>
-						<span><?php esc_html_e( 'Export Tasks', 'aqualog' ); ?></span>
+						<span><?php esc_html_e( 'Export Tasks', 'iworks-aquarium-log' ); ?></span>
 					</a>
 				</div>
 			</div>

@@ -1,13 +1,13 @@
 <?php
 /**
- * AquaLog Chemistry Class
+ * iWorks Aquarium Log Chemistry Class
  *
- * Handles all chemistry-related functionality for the AquaLog plugin.
+ * Handles all chemistry-related functionality for the iWorks Aquarium Log plugin.
  * This includes managing water parameter measurements, calculations,
  * and chemistry data storage/retrieval.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -17,17 +17,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
 
 /**
- * AquaLog Chemistry Class
+ * iWorks Aquarium Log Chemistry Class
  *
  * Manages water chemistry parameters, measurements, and calculations
  * for aquarium tracking and analysis.
  *
  * @since 1.0.0
  */
-class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
+class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 
 	/**
 	 * Available chemistry parameters with their properties.
@@ -60,14 +60,14 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		/**
 		 * AJAX handler for adding chemistry parameters.
 		 */
-		add_action( 'wp_ajax_aqualog_chemistry_add_param', array( $this, 'ajax_add_chemistry_param' ) );
+		add_action( 'wp_ajax_aquarium_log_chemistry_add_param', array( $this, 'ajax_add_chemistry_param' ) );
 		/**
 		 * Aqualog plugin action hook for chemistry page rendering.
 		 *
 		 * @since 1.0.0
 		 */
-		add_action( 'aqualog/wp-admin/chemistry_page', array( $this, 'render_page' ) );
-		add_filter( 'aqualog/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
+		add_action( 'iworks-aquarium-log/wp-admin/chemistry_page', array( $this, 'render_page' ) );
+		add_filter( 'iworks-aquarium-log/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
 	}
 
 	/**
@@ -101,7 +101,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			'pages',
 			true,
 			apply_filters(
-				'aqualog/wp-admin/chemistry_page_args',
+				'aquarium_log/wp-admin/chemistry_page_args',
 				array(
 					'aquarium_id'         => $this->current_aquarium_id,
 					'meta'                => get_post_meta( $this->current_aquarium_id ),
@@ -138,7 +138,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 					array(
 						'importance'     => 'default',
 						'key'            => $key,
-						'last_test_date' => esc_html__( 'Never tested!', 'aqualog' ),
+						'last_test_date' => esc_html__( 'Never tested!', 'iworks-aquarium-log' ),
 						'frequency'      => '',
 						'value'          => '',
 						'value_class'    => 'unknown',
@@ -167,7 +167,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			}
 		}
 		uasort( $parameters, array( $this, 'sort_parameters' ) );
-		$this->parameters[ $this->current_aquarium_id ] = apply_filters( 'aqualog/chemistry/parameters', $parameters );
+		$this->parameters[ $this->current_aquarium_id ] = apply_filters( 'iworks-aquarium-log/chemistry/parameters', $parameters );
 		return $this->parameters[ $this->current_aquarium_id ];
 	}
 
@@ -231,7 +231,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			return $this->latest_measurements[ $this->current_aquarium_id ];
 		}
 		global $wpdb;
-		$sql     = "SELECT t1.* FROM {$wpdb->aqualog_chemistry} t1 WHERE t1.aquarium_id = %d and t1.measurement_date = ( SELECT MAX(t2.measurement_date) FROM {$wpdb->aqualog_chemistry} t2 WHERE t2.param_key = t1.param_key)";
+		$sql     = "SELECT t1.* FROM {$wpdb->aquarium_log_chemistry} t1 WHERE t1.aquarium_id = %d and t1.measurement_date = ( SELECT MAX(t2.measurement_date) FROM {$wpdb->aquarium_log_chemistry} t2 WHERE t2.param_key = t1.param_key)";
 		$query   = $wpdb->prepare( $sql, $this->current_aquarium_id );
 		$results = $wpdb->get_results( $query, ARRAY_A );
 		if ( empty( $results ) || ! is_array( $results ) ) {
@@ -268,7 +268,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		if ( ! $parameter ) {
 			return array(
 				'status'  => 'error',
-				'message' => __( 'Unknown parameter', 'aqualog' ),
+				'message' => __( 'Unknown parameter', 'iworks-aquarium-log' ),
 			);
 		}
 
@@ -280,7 +280,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 				'status'  => 'warning',
 				'message' => sprintf(
 					/* translators: %1$s: range min, %2$s: range max, %3$s: unit */
-					__( 'Value is outside typical range (%1$s - %2$s %3$s)', 'aqualog' ),
+					__( 'Value is outside typical range (%1$s - %2$s %3$s)', 'iworks-aquarium-log' ),
 					$range[0],
 					$range[1],
 					$parameter['unit']
@@ -294,7 +294,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 				'status'  => 'info',
 				'message' => sprintf(
 					/* translators: %1$s: ideal min, %2$s: ideal max, %3$s: unit */
-					__( 'Value is outside ideal range (%1$s - %2$s %3$s)', 'aqualog' ),
+					__( 'Value is outside ideal range (%1$s - %2$s %3$s)', 'iworks-aquarium-log' ),
 					$ideal[0],
 					$ideal[1],
 					$parameter['unit']
@@ -304,7 +304,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 
 		return array(
 			'status'  => 'success',
-			'message' => __( 'Value is within ideal range', 'aqualog' ),
+			'message' => __( 'Value is within ideal range', 'iworks-aquarium-log' ),
 		);
 	}
 
@@ -326,10 +326,10 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		$parameters = $this->get_parameters();
 
 		?>
-		<div class="aqualog-chemistry-interface">
-			<div class="aqualog-chemistry-overview">
-				<h3><?php esc_html_e( 'Latest Measurements', 'aqualog' ); ?></h3>
-				<div class="aqualog-grid">
+		<div class="aquarium-log-chemistry-interface">
+			<div class="aquarium-log-chemistry-overview">
+				<h3><?php esc_html_e( 'Latest Measurements', 'iworks-aquarium-log' ); ?></h3>
+				<div class="aquarium-log-grid">
 					<?php foreach ( $latest_measurements as $measurement ) : ?>
 						<?php
 						$param = $this->get_parameter( $measurement->param );
@@ -338,7 +338,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 						}
 						$validation = $this->validate_value( $measurement->param, $measurement->value );
 						?>
-						<div class="aqualog-card aqualog-card-hover">
+						<div class="aquarium-log-card aquarium-log-card-hover">
 							<div class="parameter-header">
 								<h4><?php echo esc_html( $param['name'] ); ?></h4>
 								<span class="parameter-unit"><?php echo esc_html( $param['unit'] ); ?></span>
@@ -355,14 +355,14 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 				</div>
 			</div>
 
-			<div class="aqualog-chemistry-form">
-				<h3><?php esc_html_e( 'Add Measurement', 'aqualog' ); ?></h3>
-				<form id="aqualog-chemistry-form" class="aqualog-form">
+			<div class="aquarium-log-chemistry-form">
+				<h3><?php esc_html_e( 'Add Measurement', 'iworks-aquarium-log' ); ?></h3>
+				<form id="aquarium-log-chemistry-form" class="aquarium-log-form">
 					<div class="form-row">
 						<div class="form-group">
-							<label for="chemistry-param"><?php esc_html_e( 'Parameter', 'aqualog' ); ?></label>
+							<label for="chemistry-param"><?php esc_html_e( 'Parameter', 'iworks-aquarium-log' ); ?></label>
 							<select id="chemistry-param" name="param" required>
-								<option value=""><?php esc_html_e( 'Select parameter', 'aqualog' ); ?></option>
+								<option value=""><?php esc_html_e( 'Select parameter', 'iworks-aquarium-log' ); ?></option>
 								<?php foreach ( $parameters as $key => $param ) : ?>
 									<option value="<?php echo esc_attr( $key ); ?>">
 										<?php echo esc_html( $param['name'] ); ?> (<?php echo esc_html( $param['unit'] ); ?>)
@@ -371,17 +371,17 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="chemistry-value"><?php esc_html_e( 'Value', 'aqualog' ); ?></label>
+							<label for="chemistry-value"><?php esc_html_e( 'Value', 'iworks-aquarium-log' ); ?></label>
 							<input type="number" id="chemistry-value" name="value" step="0.01" required>
 						</div>
 						<div class="form-group">
-							<label for="chemistry-date"><?php esc_html_e( 'Date', 'aqualog' ); ?></label>
+							<label for="chemistry-date"><?php esc_html_e( 'Date', 'iworks-aquarium-log' ); ?></label>
 							<input type="datetime-local" id="chemistry-date" name="date" required>
 						</div>
 					</div>
 					<div class="form-actions">
-						<button type="submit" class="aqualog-button aqualog-button-primary">
-							<?php esc_html_e( 'Save Measurement', 'aqualog' ); ?>
+						<button type="submit" class="aquarium-log-button aquarium-log-button-primary">
+							<?php esc_html_e( 'Save Measurement', 'iworks-aquarium-log' ); ?>
 						</button>
 					</div>
 				</form>
@@ -401,11 +401,11 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		 */
 		$config = $this->options->get_group( 'chemistry' );
 		if ( ! array_key_exists( $key, $config ) ) {
-			wp_send_json_error( __( 'Invalid parameter', 'aqualog' ) );
+			wp_send_json_error( __( 'Invalid parameter', 'iworks-aquarium-log' ) );
 		}
 		global $wpdb;
 		$result = $wpdb->insert(
-			$wpdb->aqualog_chemistry,
+			$wpdb->aquarium_log_chemistry,
 			array(
 				'aquarium_id'      => $id,
 				'param_key'        => $key,
@@ -425,11 +425,11 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 
 			wp_send_json_success(
 				array(
-					'message' => __( 'Parameter added successfully', 'aqualog' ),
+					'message' => __( 'Parameter added successfully', 'iworks-aquarium-log' ),
 				)
 			);
 		}
-		wp_send_json_error( __( 'Failed to add parameter', 'aqualog' ) );
+		wp_send_json_error( __( 'Failed to add parameter', 'iworks-aquarium-log' ) );
 	}
 
 	/**
@@ -445,7 +445,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 
 		// Log the measurement
 		$measurement_date = current_time( 'mysql' );
-		$logger           = new iworks_aqualog_logger();
+		$logger           = new iworks_aquarium_log_logger();
 		$logger->log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $measurement_date );
 	}
 }

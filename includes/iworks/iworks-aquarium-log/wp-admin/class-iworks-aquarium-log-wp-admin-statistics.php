@@ -1,12 +1,12 @@
 <?php
 /**
- * AquaLog Statistics Class
+ * iWorks Aquarium Log Statistics Class
  *
- * Handles statistics-related functionality for the AquaLog plugin.
+ * Handles statistics-related functionality for the iWorks Aquarium Log plugin.
  * This includes dashboard statistics, data analysis, and reporting.
  *
  * @package    iWorks
- * @subpackage AquaLog
+ * @subpackage iWorks Aquarium Log
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -16,17 +16,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
 
 /**
- * AquaLog Statistics Class
+ * iWorks Aquarium Log Statistics Class
  *
- * Manages statistics and data analysis for the AquaLog plugin dashboard.
+ * Manages statistics and data analysis for the iWorks Aquarium Log plugin dashboard.
  * Provides statistical cards and data visualization components.
  *
  * @since 1.0.0
  */
-class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
+class iworks_aquarium_log_wp_admin_statistics extends iworks_aquarium_log_base {
 
 	/**
 	 * Class constructor.
@@ -45,10 +45,10 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 		 *
 		 * @since 1.0.0
 		 */
-		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_aquariums' ), 10 );
-		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_water_entries' ), 20 );
-		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_ph_readings' ), 30 );
-		add_action( 'aqualog/dashboard/statistics', array( $this, 'render_maintenance_tasks' ), 40 );
+		add_action( 'iworks-aquarium-log/dashboard/statistics', array( $this, 'render_aquariums' ), 10 );
+		add_action( 'iworks-aquarium-log/dashboard/statistics', array( $this, 'render_water_entries' ), 20 );
+		add_action( 'iworks-aquarium-log/dashboard/statistics', array( $this, 'render_ph_readings' ), 30 );
+		add_action( 'iworks-aquarium-log/dashboard/statistics', array( $this, 'render_maintenance_tasks' ), 40 );
 	}
 
 	/**
@@ -94,7 +94,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 		$this->render_card(
 			'aquariums',
 			/* translators: Statistics card title for total aquariums */
-			__( 'Total Aquariums', 'aqualog' ),
+			__( 'Total Aquariums', 'iworks-aquarium-log' ),
 			wp_count_posts( 'iw_aquarium' )->publish,
 			'button'
 		);
@@ -112,16 +112,16 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_water_entries() {
-		if ( false === apply_filters( 'aqualog/load/module/chemistry', false ) ) {
+		if ( false === apply_filters( 'iworks-aquarium-log/load/module/chemistry', false ) ) {
 			return;
 		}
 		global $wpdb;
-		$query = "SELECT COUNT(*) FROM {$wpdb->aqualog_chemistry}";
+		$query = "SELECT COUNT(*) FROM {$wpdb->aquarium_log_chemistry}";
 		$count = $wpdb->get_var( $query );
 		$this->render_card(
 			'water-entries',
 			/* translators: Statistics card title for water entries */
-			__( 'Water Entries', 'aqualog' ),
+			__( 'Water Entries', 'iworks-aquarium-log' ),
 			$count,
 			'chart-line'
 		);
@@ -139,17 +139,17 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_ph_readings() {
-		if ( false === apply_filters( 'aqualog/load/module/chemistry', false ) ) {
+		if ( false === apply_filters( 'iworks-aquarium-log/load/module/chemistry', false ) ) {
 			return;
 		}
 		global $wpdb;
-		$query = "SELECT COUNT(*) FROM {$wpdb->aqualog_chemistry} WHERE param_key = %s";
+		$query = "SELECT COUNT(*) FROM {$wpdb->aquarium_log_chemistry} WHERE param_key = %s";
 		$query = $wpdb->prepare( $query, 'ph' );
 		$count = $wpdb->get_var( $query );
 		$this->render_card(
 			'ph-readings',
 			/* translators: Statistics card title for pH readings */
-			__( 'pH Readings', 'aqualog' ),
+			__( 'pH Readings', 'iworks-aquarium-log' ),
 			$count,
 			'clipboard'
 		);
@@ -167,13 +167,13 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_maintenance_tasks() {
-		if ( false === apply_filters( 'aqualog/load/module/maintenance', false ) ) {
+		if ( false === apply_filters( 'iworks-aquarium-log/load/module/maintenance', false ) ) {
 			return;
 		}
 		$this->render_card(
 			'maintenance',
 			/* translators: Statistics card title for maintenance tasks */
-			__( 'Maintenance Tasks', 'aqualog' ),
+			__( 'Maintenance Tasks', 'iworks-aquarium-log' ),
 			0,
 			'hammer'
 		);
