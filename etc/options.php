@@ -154,6 +154,21 @@ function iworks_aquarium_log_options() {
 						'' => esc_html__( '--- Select ---', 'iworks-aquarium-log' ),
 					),
 				),
+				array(
+					'type'  => 'heading',
+					'label' => __( 'Plugin Settings', 'iworks-aquarium-log' ),
+					'since' => '1.0.0',
+				),
+				array(
+					'name'              => 'menu_position',
+					'type'              => 'number',
+					'th'                => __( 'Menu Position', 'iworks-aquarium-log' ),
+					'description'       => __( 'Set the position of the main menu item.', 'iworks-aquarium-log' ),
+					'classes'           => array( 'small-text' ),
+					'sanitize_callback' => 'intval',
+					'since'             => '1.0.0',
+					'default'           => 59,
+				),
 			)
 		),
 

@@ -101,7 +101,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 			'pages',
 			true,
 			apply_filters(
-				'aquarium_log/wp-admin/chemistry_page_args',
+				'iworks-aquarium-log/wp-admin/chemistry/args',
 				array(
 					'aquarium_id'         => $this->current_aquarium_id,
 					'meta'                => get_post_meta( $this->current_aquarium_id ),

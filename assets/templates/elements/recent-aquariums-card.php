@@ -18,9 +18,11 @@ $all_aquariums    = array();
 if ( isset( $args['recent_aquariums'] ) && is_array( $args['recent_aquariums'] ) ) {
 	$recent_aquariums = $args['recent_aquariums'];
 }
-
 if ( isset( $args['all_aquariums'] ) && is_array( $args['all_aquariums'] ) ) {
 	$all_aquariums = $args['all_aquariums'];
+	if ( empty( $recent_aquariums ) ) {
+		$recent_aquariums = $all_aquariums;
+	}
 }
 
 // Check if we have more than 5 aquariums total

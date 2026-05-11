@@ -88,25 +88,20 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		add_filter( 'iworks-aquarium-log/set/current_aquarium_id', array( $this, 'filter_set_current_aquarium_id' ) );
 		add_action( 'iworks-aquarium-log/dashboard/aquariums', array( $this, 'action_dashboard_aquariums' ) );
 		add_action( 'iworks-aquarium-log/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
-		add_filter( 'iworks-aquarium-log/load/template/args', array( $this, 'filter_load_template_args' ) );
-		add_filter( 'iworks-aquarium-log/wp-admin/chemistry_page_args', array( $this, 'filter_chemistry_page_args' ) );
-		add_filter( 'iworks-aquarium-log/wp-admin/dashboard/template_args', array( $this, 'filter_dashboard_template_args' ) );
+		add_filter( 'iworks-aquarium-log/load/template/args', array( $this, 'add_page_args' ) );
 	}
 
-	public function filter_load_template_args( $args ) {
+	public function add_page_args( $args ) {
 		return wp_parse_args(
 			$args,
 			array(
-				'counters' => array(
+				'recent_aquariums' => $this->get_last(),
+				'all_aquariums'    => $this->get_all(),
+				'counters'         => array(
 					'aquariums' => $this->get_aquariums_count(),
 				),
 			)
 		);
-	}
-
-	public function filter_chemistry_page_args( $args ) {
-		$args['recent_aquariums'] = $this->get_last();
-		return $args;
 	}
 
 	/**
@@ -130,6 +125,14 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 			'meta_key'       => $this->meta_name_related_updated_at,
 			'orderby'        => 'meta_value',
 			'order'          => 'DESC',
+		);
+		return get_posts( $wp_query_args );
+	}
+
+	private function get_all() {
+		$wp_query_args = array(
+			'post_type'      => $this->posttypes_names[ $this->posttype_name ],
+			'posts_per_page' => -1,
 		);
 		return get_posts( $wp_query_args );
 	}

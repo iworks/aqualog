@@ -437,6 +437,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * @return  void
 	 */
 	public function register_admin_menu() {
+		$this->check_option_object();
 		// Main menu item
 		$slug = add_menu_page(
 			/* translators: Main menu page title */
@@ -447,7 +448,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 			$this->wp_admin_slug,
 			array( $this, 'render_dashboard_page' ),
 			$this->get_base64_svg_icon(),
-			25
+			$this->options->get_option( 'menu_position' )
 		);
 		add_action( 'load-' . $slug, array( $this, 'admin_enqueue_assets' ) );
 
@@ -584,7 +585,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * to render the chemistry interface.
 	 *
 	 * @since 1.0.0
-	 * @action aquarium_log/wp-admin/chemistry_page
+	 * @action iworks-aquarium-log/wp-admin/chemistry_page
 	 * @return  void
 	 */
 	public function render_chemistry_page() {
@@ -598,7 +599,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * to render the maintenance interface.
 	 *
 	 * @since 1.0.0
-	 * @action aquarium_log/wp-admin/maintenance_page
+	 * @action iworks-aquarium-log/wp-admin/maintenance_page
 	 * @return  void
 	 */
 	public function render_maintenance_page() {
@@ -611,7 +612,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * Outputs the current aquarium selection bar in the admin interface.
 	 *
 	 * @since 1.0.0
-	 * @action aquarium_log/wp-admin/current-aquarium-bar
+	 * @action iworks-aquarium-log/wp-admin/current-aquarium-bar
 	 * @return  void
 	 */
 	public function current_aquarium_bar() {
