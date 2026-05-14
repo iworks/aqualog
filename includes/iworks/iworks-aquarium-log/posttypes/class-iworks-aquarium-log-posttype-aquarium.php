@@ -104,6 +104,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		return wp_parse_args(
 			$args,
 			array(
+				'aquarium'         => $this->maybe_get_current_aquarium(),
 				'aquarium_id'      => $this->current_aquarium_id,
 				'recent_aquariums' => $this->get_last(),
 				'all_aquariums'    => $this->get_all(),
@@ -111,6 +112,25 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 					'aquariums' => $this->get_aquariums_count(),
 				),
 			)
+		);
+	}
+
+	/**
+	 * Get the current aquarium or an empty array if no aquarium is selected.
+	 *
+	 * @return array|WP_Post The current aquarium or an empty array.
+	 */
+	private function maybe_get_current_aquarium() {
+		if ( ! $this->current_aquarium_id ) {
+			return array();
+		}
+		$post = get_post( $this->current_aquarium_id, ARRAY_A );
+		if ( ! $post ) {
+			return array();
+		}
+		return array(
+			'post' => $post,
+			'meta' => get_post_meta( $this->current_aquarium_id ),
 		);
 	}
 
