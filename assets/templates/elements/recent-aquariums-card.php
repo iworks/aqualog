@@ -146,30 +146,3 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 		<?php endif; ?>
 	</div>
 </div>
-<script>
-jQuery(document).ready(function($) {
-	$('.aquarium-log-dropdown-toggle').on('click', function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		
-		var $dropdown = $(this).closest('.aquarium-log-dropdown');
-		var $menu = $dropdown.find('.aquarium-log-dropdown-menu');
-		
-		// Close other dropdowns
-		$('.aquarium-log-dropdown-menu').not($menu).removeClass('is-open');
-		
-		// Toggle current dropdown
-		$menu.toggleClass('is-open');
-	});
-	
-	// Close dropdowns when clicking outside
-	$(document).on('click', function() {
-		$('.aquarium-log-dropdown-menu').removeClass('is-open');
-	});
-	
-	// Prevent dropdown menu clicks from closing the menu
-	$('.aquarium-log-dropdown-menu').on('click', function(e) {
-		e.stopPropagation();
-	});
-});
-</script>

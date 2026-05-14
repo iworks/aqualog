@@ -454,6 +454,9 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 	 * @param bool $update Whether this is an existing post being updated or not.
 	 */
 	public function action_save_post_meta( $post_id, $post, $update ) {
+		/**
+		 * NONCE CHECK is few lines bellow, in 503 line.
+		 */
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
@@ -490,7 +493,8 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 		foreach ( $this->meta_boxes[ $post_type ] as $group => $meta_box_data ) {
 			if ( ! isset( $meta_box_data['fields'] ) ) {
 				continue;
-			}
+			}:90
+
 			if ( ! is_array( $meta_box_data['fields'] ) ) {
 				continue;
 			}

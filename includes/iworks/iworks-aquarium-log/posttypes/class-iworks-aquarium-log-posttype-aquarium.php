@@ -740,7 +740,11 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 			if ( is_array( $new_terms ) ) {
 				$new_term_names = array();
 				foreach ( $new_terms as $term_id ) {
-					$term = get_term( $term_id );
+					/**
+					 * sanitize term_id (from _POST)
+					 */
+					$term_id = intval( $term_id );
+					$term    = get_term( $term_id );
 					if ( $term && ! is_wp_error( $term ) ) {
 						$new_term_names[] = $term->name;
 					}
