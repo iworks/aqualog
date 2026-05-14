@@ -493,7 +493,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 		foreach ( $this->meta_boxes[ $post_type ] as $group => $meta_box_data ) {
 			if ( ! isset( $meta_box_data['fields'] ) ) {
 				continue;
-			}:90
+			}
 
 			if ( ! is_array( $meta_box_data['fields'] ) ) {
 				continue;
