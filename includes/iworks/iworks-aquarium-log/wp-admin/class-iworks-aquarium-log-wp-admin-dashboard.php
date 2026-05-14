@@ -59,14 +59,25 @@ class iworks_aquarium_log_wp_admin_dashboard extends iworks_aquarium_log_base {
 	}
 
 	public function render_page() {
+		$this->set_current_aquarium_id();
+		$args = apply_filters(
+			'iworks-aquarium-log/wp-admin/dashboard/args',
+			array()
+		);
+		if ( $this->current_aquarium_id ) {
+			$this->load_template(
+				'aquarium',
+				'pages',
+				true,
+				$args,
+			);
+			return;
+		}
 		$this->load_template(
 			'dashboard',
 			'pages',
 			true,
-			apply_filters(
-				'iworks-aquarium-log/wp-admin/dashboard/args',
-				array()
-			)
+			$args,
 		);
 	}
 

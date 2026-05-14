@@ -93,10 +93,18 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		add_filter( 'iworks-aquarium-log/load/template/args', array( $this, 'add_page_args' ) );
 	}
 
+	/**
+	 * Add page arguments to the template.
+	 *
+	 * @param array $args The page arguments.
+	 * @return array The updated page arguments.
+	 */
 	public function add_page_args( $args ) {
+		$this->set_current_aquarium_id();
 		return wp_parse_args(
 			$args,
 			array(
+				'aquarium_id'      => $this->current_aquarium_id,
 				'recent_aquariums' => $this->get_last(),
 				'all_aquariums'    => $this->get_all(),
 				'counters'         => array(
