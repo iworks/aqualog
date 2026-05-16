@@ -1,0 +1,23 @@
+.aquarium-log-event {
+    &s {
+    }
+    display: grid;
+    grid-template-columns: 48px auto;
+    gap: 10px;
+    padding-bottom: 20px;
+
+    &-icon {
+        width: 48px;
+        height: 48px;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        svg {
+            width: 50%;
+            height: 50%;
+        }
+    }
+
+}

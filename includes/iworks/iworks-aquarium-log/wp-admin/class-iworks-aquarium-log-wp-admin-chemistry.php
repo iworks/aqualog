@@ -188,10 +188,8 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 			'recommended' => 3,
 			'default'     => 4,
 		);
-
-		$importance_a = isset( $importance_order[ $a['importance'] ] ) ? $importance_order[ $a['importance'] ] : 5;
-		$importance_b = isset( $importance_order[ $b['importance'] ] ) ? $importance_order[ $b['importance'] ] : 5;
-
+		$importance_a     = isset( $importance_order[ $a['importance'] ] ) ? $importance_order[ $a['importance'] ] : 5;
+		$importance_b     = isset( $importance_order[ $b['importance'] ] ) ? $importance_order[ $b['importance'] ] : 5;
 		if ( $importance_a === $importance_b ) {
 			return strcmp( $a['key'], $b['key'] );
 		}
@@ -306,88 +304,6 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 			'status'  => 'success',
 			'message' => esc_html__( 'Value is within ideal range', 'iworks-aquarium-log' ),
 		);
-	}
-
-	/**
-	 * Render chemistry interface.
-	 *
-	 * Outputs the chemistry management interface for the current aquarium.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function render_chemistry_interface() {
-		$this->set_current_aquarium_id();
-		if ( ! $this->current_aquarium_id ) {
-			return;
-		}
-
-		$parameters = $this->get_parameters();
-
-		?>
-		<div class="aquarium-log-chemistry-interface">
-			<div class="aquarium-log-chemistry-overview">
-				<h3><?php esc_html_e( 'Latest Measurements', 'iworks-aquarium-log' ); ?></h3>
-				<div class="aquarium-log-grid">
-					<?php foreach ( $latest_measurements as $measurement ) : ?>
-						<?php
-						$param = $this->get_parameter( $measurement->param );
-						if ( ! $param ) {
-							continue;
-						}
-						$validation = $this->validate_value( $measurement->param, $measurement->value );
-						?>
-						<div class="aquarium-log-card aquarium-log-card-hover">
-							<div class="parameter-header">
-								<h4><?php echo esc_html( $param['name'] ); ?></h4>
-								<span class="parameter-unit"><?php echo esc_html( $param['unit'] ); ?></span>
-							</div>
-							<div class="parameter-value">
-								<span class="value"><?php echo esc_html( $measurement->value ); ?></span>
-								<span class="status status-<?php echo esc_attr( $validation['status'] ); ?>"></span>
-							</div>
-							<div class="parameter-date">
-								<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $measurement->date ) ) ); ?>
-							</div>
-						</div>
-					<?php endforeach; ?>
-				</div>
-			</div>
-
-			<div class="aquarium-log-chemistry-form">
-				<h3><?php esc_html_e( 'Add Measurement', 'iworks-aquarium-log' ); ?></h3>
-				<form id="aquarium-log-chemistry-form" class="aquarium-log-form">
-					<div class="form-row">
-						<div class="form-group">
-							<label for="chemistry-param"><?php esc_html_e( 'Parameter', 'iworks-aquarium-log' ); ?></label>
-							<select id="chemistry-param" name="param" required>
-								<option value=""><?php esc_html_e( 'Select parameter', 'iworks-aquarium-log' ); ?></option>
-								<?php foreach ( $parameters as $key => $param ) : ?>
-									<option value="<?php echo esc_attr( $key ); ?>">
-										<?php echo esc_html( $param['name'] ); ?> (<?php echo esc_html( $param['unit'] ); ?>)
-									</option>
-								<?php endforeach; ?>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="chemistry-value"><?php esc_html_e( 'Value', 'iworks-aquarium-log' ); ?></label>
-							<input type="number" id="chemistry-value" name="value" step="0.01" required>
-						</div>
-						<div class="form-group">
-							<label for="chemistry-date"><?php esc_html_e( 'Date', 'iworks-aquarium-log' ); ?></label>
-							<input type="datetime-local" id="chemistry-date" name="date" required>
-						</div>
-					</div>
-					<div class="form-actions">
-						<button type="submit" class="aquarium-log-button aquarium-log-button-primary">
-							<?php esc_html_e( 'Save Measurement', 'iworks-aquarium-log' ); ?>
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
-		<?php
 	}
 
 	public function ajax_add_chemistry_param() {

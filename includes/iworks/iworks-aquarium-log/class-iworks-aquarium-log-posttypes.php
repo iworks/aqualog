@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Prevent multiple class definitions
  */
-if ( class_exists( 'iworks_wordpress_plugin_posttypes' ) ) {
+if ( class_exists( 'iworks_aquarium_log_posttypes' ) ) {
 	return;
 }
 

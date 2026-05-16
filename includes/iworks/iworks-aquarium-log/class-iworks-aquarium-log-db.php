@@ -60,8 +60,8 @@ class iworks_aquarium_log_db extends iworks_aquarium_log_base {
 		/**
 		 * Aqualog hooks.
 		 */
-		add_action( 'iworks/iworks-aquarium-log/register_uninstall_hook', array( $this, 'drop_tables' ) );
-		add_action( 'iworks/iworks-aquarium-log/register_activation_hook', array( $this, 'db_install' ) );
+		add_action( 'iworks/aquarium-log/register_uninstall_hook', array( $this, 'drop_tables' ) );
+		add_action( 'iworks/aquarium-log/register_activation_hook', array( $this, 'db_install' ) );
 	}
 
 	/**
@@ -187,6 +187,7 @@ class iworks_aquarium_log_db extends iworks_aquarium_log_base {
 				user_id bigint(20) unsigned DEFAULT NULL COMMENT 'User who performed action',
 				log_date datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Log timestamp',
 				details longtext DEFAULT NULL COMMENT 'Additional action details (JSON)',
+
 				PRIMARY KEY (id),
 				KEY aquarium_id (aquarium_id),
 				KEY log_type (log_type),

@@ -39,19 +39,6 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 	protected string $taxonomy_name;
 
 	/**
-	 * Media Option Name
-	 *
-	 * @since 1.0.0
-	 */
-	protected string $option_name_media = '_iw_media';
-
-	protected array $posttypes_names = array();
-
-	protected array $taxonomies_names = array();
-
-	protected array $meta_boxes = array();
-
-	/**
 	 * post meta prefix
 	 */
 	protected $post_meta_prefix = '_';
@@ -74,17 +61,6 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 		add_action( 'load-post-new.php', array( $this, 'action_load_admin_maybe_enqueue_assets' ) );
 		add_action( 'load-post.php', array( $this, 'action_load_admin_maybe_enqueue_assets' ) );
 		add_action( 'save_post', array( $this, 'action_save_post_meta' ), 10, 3 );
-		/**
-		 * Settings
-		 */
-		$this->posttypes_names  = apply_filters(
-			'iworks/iworks-aquarium-log/posttypes_names/array',
-			$this->posttypes_names
-		);
-		$this->taxonomies_names = apply_filters(
-			'iworks/iworks-aquarium-log/taxonomies_names/array',
-			$this->taxonomies_names
-		);
 	}
 
 	abstract public function action_init_register_post_type();
@@ -384,7 +360,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			),
 		);
 		return apply_filters(
-			'iworks/iworks-aquarium-log/post/meta/field',
+			'iworks/aquarium-log/post/meta/field',
 			$field,
 			$post_id
 		);
@@ -436,7 +412,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 	protected function get_taxonomy( $taxonomy_name ) {
 		if ( ! isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
 			$this->taxonomies_names = apply_filters(
-				'iworks/iworks-aquarium-log/taxonomies_names/array',
+				'iworks/aquarium-log/taxonomies_names/array',
 				$this->taxonomies_names
 			);
 		}
@@ -526,7 +502,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 				if ( $value ) {
 					update_post_meta( $post_id, $key, $value );
 				}
-				do_action( 'iworks/iworks-aquarium-log/postmeta/update', $post_id, $field, $key, $value );
+				do_action( 'iworks/aquarium-log/postmeta/update', $post_id, $field, $key, $value );
 			}
 		}
 	}
@@ -580,7 +556,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			strtolower( __CLASS__ ),
 			'iworks_aquarium_log',
 			apply_filters(
-				'iworks/iworks-aquarium-log/wp_localize_script/admin',
+				'iworks/aquarium-log/wp_localize_script/admin',
 				$translation_array
 			)
 		);
@@ -642,5 +618,61 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			$this->posttypes_names[ $this->posttype_name ],
 			$feature
 		);
+	}
+
+	protected function get_all_meta( $post_id ) {
+		$meta = array();
+		/*
+		 * In production code, $slug should be set only once in the plugin,
+		 * preferably as a class property, rather than in each function that needs it.
+		 */
+		$post_type = get_post_type( $post_id );
+		/**
+		 *  If this isn't a correct post, don't update it.
+		 */
+		if ( $this->posttypes_names[ $this->posttype_name ] !== $post_type ) {
+			return $meta;
+		}
+		foreach ( $this->meta_boxes[ $post_type ] as $group => $meta_box_data ) {
+			if ( ! isset( $meta_box_data['fields'] ) ) {
+				continue;
+			}
+
+			if ( ! is_array( $meta_box_data['fields'] ) ) {
+				continue;
+			}
+			/**
+			 * handle fields
+			 */
+			foreach ( $meta_box_data['fields'] as $field ) {
+				$key   = $this->get_post_meta_name( $field['name'], $group );
+				$value = get_post_meta( $post_id, $key, true );
+				switch ( $field['type'] ) {
+					case 'date':
+						if ( empty( $value ) ) {
+							$value = '&mdash;';
+						} else {
+							$value = date_i18n( get_option( 'date_format' ), strtotime( $value ) );
+						}
+						break;
+				}
+				/**
+				 * exceptions
+				 */
+				if ( 'date' === $group ) {
+					switch ( $field['name'] ) {
+						case 'updated':
+							if ( empty( $value ) ) {
+								$value = '&mdash;';
+							} else {
+								$value = date_i18n( get_option( 'date_format' ), strtotime( $value ) );
+							}
+							break;
+					}
+				}
+				$meta[ $key ] = $value;
+			}
+		}
+		return $meta;
 	}
 }

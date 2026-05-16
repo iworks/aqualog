@@ -168,8 +168,22 @@ class iworks_aquarium_log_base {
 	 */
 	protected ?int $current_aquarium_id = null;
 
-
+	/**
+	 * Logger object
+	 */
 	protected object $logger;
+
+	/**
+	 * Media Option Name
+	 *
+	 * @since 1.0.0
+	 */
+	protected string $option_name_media = '_iw_media';
+
+	protected array $posttypes_names = array();
+
+	protected array $taxonomies_names = array();
+
 	/**
 	 * Constructor for the base class.
 	 *
@@ -212,6 +226,17 @@ class iworks_aquarium_log_base {
 		/**
 		 * WordPress Hooks
 		 */
+		/**
+		 * Settings
+		 */
+		$this->posttypes_names  = apply_filters(
+			'iworks/aquarium-log/posttypes_names/array',
+			$this->posttypes_names
+		);
+		$this->taxonomies_names = apply_filters(
+			'iworks/aquarium-log/taxonomies_names/array',
+			$this->taxonomies_names
+		);
 	}
 
 	/**
@@ -445,7 +470,7 @@ class iworks_aquarium_log_base {
 		return array(
 			'published' => '2026-05-21',
 			'version'   => 'PLUGIN_VERSION',
-			'github'    => 'https://github.com/iworks/iworks-aquarium-log',
+			'github'    => 'https://github.com/iworks/aquarium-log',
 		);
 	}
 

@@ -49,6 +49,65 @@ class iworks_aquarium_log_logger extends iworks_aquarium_log_base {
 	private function init_hooks() {
 		// Register the main logging action
 		add_action( 'iworks-aquarium-log/log_action', array( $this, 'log_action' ), 10, 5 );
+		add_filter( 'iworks-aquarium-log/load/template/args', array( $this, 'add_args' ), 10, 1 );
+		add_action( 'iworks-aquarium-log/aquarium/events/latest', array( $this, 'action_show_aquarium_latest_events' ) );
+	}
+
+	public function action_show_aquarium_latest_events( $aquarium_id ) {
+		$template_event = $this->get_template_file( 'aquarium-event-event', 'elements' );
+		$template_date  = $this->get_template_file( 'aquarium-event-date', 'elements' );
+		$events         = $this->get_last_events( $aquarium_id );
+		$format         = get_option( 'date_format' );
+		$date           = '';
+		foreach ( $events as $event ) {
+			$event['date']    = date_i18n( $format, strtotime( $event['log_date'] ) );
+			$event['details'] = json_decode( $event['details'], true );
+			if ( $date !== $event['date'] ) {
+				$date = $event['date'];
+				load_template( $template_date, false, $event );
+			}
+			load_template( $template_event, false, $event );
+		}
+	}
+
+	/**
+	 * Add arguments to template args
+	 *
+	 * @since 1.0.0
+	 * @param array $args Template arguments
+	 * @return array Updated template arguments
+	 */
+	public function add_args( $args ) {
+		$this->set_current_aquarium_id();
+		$args['logger'] = $this->maybe_get_log_for_current_aquarium();
+		return $args;
+	}
+	/**
+	 * Get the current aquarium or an empty array if no aquarium is selected.
+	*
+	 * @return array|WP_Post The current aquarium or an empty array.
+	 */
+	private function maybe_get_log_for_current_aquarium() {
+		if ( ! $this->current_aquarium_id ) {
+			return array();
+		}
+		$post = get_post( $this->current_aquarium_id, ARRAY_A );
+		if ( ! $post ) {
+			return array();
+		}
+		return array(
+			'configuration' => array(),
+			'events'        => $this->get_last_events( $this->current_aquarium_id ),
+		);
+	}
+
+	private function get_last_events( $aquarium_id ) {
+		global $wpdb;
+		$query = $wpdb->prepare(
+			"SELECT * FROM {$wpdb->aquarium_log_log} WHERE aquarium_id = %d ORDER BY log_date DESC LIMIT 10",
+			$aquarium_id
+		);
+		return $wpdb->get_results( $query, ARRAY_A );
 	}
 
 	/**

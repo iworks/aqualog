@@ -30,17 +30,6 @@ require_once 'class-iworks-aquarium-log-posttype.php';
 class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype {
 
 	/**
-	 * Terms list cache.
-	 *
-	 * @since 1.0.0
-	 * @var array $list Cached array of taxonomy terms.
-	 */
-	private $list = array();
-
-
-	private string $meta_name_related_updated_at = '_related_updated_at';
-
-	/**
 	 * Constructor.
 	 *
 	 * Sets up the post type name, taxonomy name, and registers WordPress hooks.
@@ -279,7 +268,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 	 */
 	public function action_init_settings() {
 		$this->meta_boxes[ $this->posttypes_names[ $this->posttype_name ] ] = array(
-			'size'      => array(
+			'size' => array(
 				'title'  => esc_html__( 'Size', 'iworks-aquarium-log' ),
 				'fields' => array(
 					array(
@@ -314,7 +303,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 					),
 				),
 			),
-			'date'      => array(
+			'date' => array(
 				'title'  => esc_html__( 'Dates', 'iworks-aquarium-log' ),
 				'fields' => array(
 					array(
@@ -328,12 +317,12 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 						'label' => esc_html__( 'End Date', 'iworks-aquarium-log' ),
 					),
 					array(
-						'name' => 'updated',
-						'type' => 'hidden',
+						'name'  => 'updated',
+						'type'  => 'hidden',
 					),
 				),
 			),
-			'chemistry' => array(
+			'chemistry'     => array(
 				'title'  => esc_html__( 'Chemistry', 'iworks-aquarium-log' ),
 				'fields' => array(
 					array(

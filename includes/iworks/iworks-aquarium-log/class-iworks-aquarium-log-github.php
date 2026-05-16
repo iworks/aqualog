@@ -30,7 +30,7 @@ class iworks_aquarium_log_github {
 	 *
 	 * @since 1.0.0
 	 */
-	private string $repository = 'iworks/iworks-aquarium-log';
+	private string $repository = 'iworks/aquarium-log';
 	/**
 	 * Plugin base name
 	 *
