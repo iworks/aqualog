@@ -63,7 +63,7 @@ module.exports = function(grunt) {
 			'!assets/scripts/src/**',
 			'!assets/scss/**',
 			'!assets/styles/frontend/**',
-			'!includes/iworks/iworks-aquarium-log/class-iworks-aquarium-log-github.php',
+			'!includes/iworks/aqualog/class-iworks-aqualog-github.php',
 			'!includes/pro/**',
 			'!languages/*.mo',
 			'!languages/*.po',
