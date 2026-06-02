@@ -50,6 +50,8 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 	 */
 	protected bool $load_plugin_admin_assets = false;
 
+	protected array $meta_boxes = array();
+
 	public function __construct() {
 		parent::__construct();
 		/**
