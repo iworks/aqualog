@@ -350,6 +350,11 @@ module.exports = function(grunt) {
 				src: ['**/*.tmp', '**/.afpDeleted*', '**/.DS_Store'],
 				dot: true,
 				filter: 'isFile'
+			},
+			compiled: {
+				src: ['assets/scripts/*.js', 'assets/styles/*.css', 'assets/styles/**/*.css', 'languages/*.mo'],
+				dot: true,
+				filter: 'isFile'
 			}
 		},
 
@@ -369,6 +374,7 @@ module.exports = function(grunt) {
 						'report-msgid-bugs-to': 'http://iworks.pl',
 						'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
 					},
+					exclude: ['node_modules', '.git', '.sass-cache', 'release'],
 					type: 'wp-plugin',
 					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
 					updatePoFiles: true // Whether to update PO files in the same directory as the POT file.
@@ -449,7 +455,7 @@ module.exports = function(grunt) {
 
 		checktextdomain: {
 			options: {
-				text_domain: ['PLUGIN_NAME', 'IWORKS_RATE_TEXTDOMAIN', 'IWORKS_OPTIONS_TEXTDOMAIN'],
+				text_domain: ['<%= pkg.name %>', 'PLUGIN_NAME', 'IWORKS_RATE_TEXTDOMAIN', 'IWORKS_OPTIONS_TEXTDOMAIN'],
 				keywords: [ //List keyword specifications
 					'__:1,2d',
 					'_e:1,2d',
