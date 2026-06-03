@@ -3,7 +3,7 @@
  * Chemistry Form Header Template
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0

@@ -1,12 +1,12 @@
 <?php
 /**
- * iWorks Aquarium Log Taxonomies Class
+ * Aqualog Taxonomies Class
  *
  * This class handles the loading and management of custom taxonomies
- * for the iWorks Aquarium Log.
+ * for the Aqualog.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026-PLUGIN_TILL_YEAR Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -27,7 +27,7 @@ require_once dirname( __DIR__ ) . '/class-iworks-aqualog-base.php';
  * iWorks WordPress Plugin Taxonomies Class
  *
  * This class manages the loading and initialization of custom taxonomies
- * for the iWorks Aquarium Log.
+ * for the Aqualog.
  *
  * @since 1.0.0
  */

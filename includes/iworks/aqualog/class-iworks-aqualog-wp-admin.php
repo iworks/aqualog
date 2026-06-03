@@ -1,12 +1,12 @@
 <?php
 /**
- * iWorks Aquarium Log Admin Class
+ * Aqualog Admin Class
  *
- * Handles all WordPress admin-specific functionality for the iWorks Aquarium Log plugin.
+ * Handles all WordPress admin-specific functionality for the Aqualog plugin.
  * This includes settings management, asset registration, menu creation,
  * and admin interface rendering.
  *
- * @package    iWorks\iWorks Aquarium Log
+ * @package    iWorks\Aqualog
  * @subpackage Admin
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
@@ -23,7 +23,7 @@ if ( class_exists( 'iworks_aqualog_wp_admin' ) ) {
 require_once dirname( __DIR__ ) . '/class-iworks-aqualog-base.php';
 
 /**
- * Admin functionality for iWorks Aquarium Log.
+ * Admin functionality for Aqualog.
  *
  * This class handles all admin-specific functionality including:
  * - Plugin settings and options management
@@ -428,7 +428,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Register admin menu.
 	 *
-	 * Creates the main iWorks Aquarium Log admin menu and submenu items.
+	 * Creates the main Aqualog admin menu and submenu items.
 	 * Includes Dashboard, Chemistry, Maintenance, Notes, Aquariums, and Help pages.
 	 * Uses filter to control which submenu items are loaded.
 	 *
@@ -441,9 +441,9 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		// Main menu item
 		$slug = add_menu_page(
 			/* translators: Main menu page title */
-			esc_html__( 'iWorks Aquarium Log Dashboard', 'PLUGIN_NAME' ),
+			esc_html__( 'Aqualog Dashboard', 'PLUGIN_NAME' ),
 			/* translators: Main menu item title */
-			esc_html__( 'iWorks Aquarium Log', 'PLUGIN_NAME' ),
+			esc_html__( 'Aqualog', 'PLUGIN_NAME' ),
 			$this->capability,
 			$this->wp_admin_slug,
 			array( $this, 'render_dashboard_page' ),
@@ -459,6 +459,13 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				'slug'              => $this->wp_admin_slug,
 				'callback'          => array( $this, 'render_dashboard_page' ),
 				'module_load_check' => 'skip',
+			),
+			array(
+				/* translators: Dashboard submenu title */
+				'title'                => esc_html__( 'Current Tank', 'PLUGIN_NAME' ),
+				'slug'                 => 'aqualog-current-tank',
+				'callback'             => array( $this, 'render_current_tank_page' ),
+				'module_load_callback' => array( $this, 'check_current_tank_module_show_menu_page' ),
 			),
 			array(
 				/* translators: Chemistry submenu title */
@@ -525,6 +532,14 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				}
 				add_filter( 'iworks/aqualog/load/module/' . $module, '__return_true' );
 			}
+			if ( isset( $submenu['module_load_callback'] ) ) {
+				if ( ! is_callable( $submenu['module_load_callback'] ) ) {
+					continue;
+				}
+				if ( ! $submenu['module_load_callback']() ) {
+					continue;
+				}
+			}
 			$slug = add_submenu_page(
 				$this->wp_admin_slug,
 				$submenu['title'],
@@ -540,7 +555,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Render dashboard page.
 	 *
-	 * Displays the main iWorks Aquarium Log dashboard with statistics and overview.
+	 * Displays the main Aqualog dashboard with statistics and overview.
 	 * Loads dashboard template if available.
 	 *
 	 * @since 1.0.0
@@ -551,9 +566,22 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	}
 
 	/**
+	 * Render Current Tank page.
+	 *
+	 * Displays the main Aqualog dashboard with statistics and overview.
+	 * Loads dashboard template if available.
+	 *
+	 * @since 1.0.0
+	 * @return  void
+	 */
+	public function render_current_tank_page() {
+		do_action( 'iworks/aqualog/wp-admin/page/aquarium' );
+	}
+
+	/**
 	 * Render help page.
 	 *
-	 * Displays the iWorks Aquarium Log help and support page with documentation links.
+	 * Displays the Aqualog help and support page with documentation links.
 	 *
 	 * @since 1.0.0
 	 * @return  void
@@ -567,7 +595,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			?>
 			<div class="aqualog-card">
 				<h3><?php esc_html_e( 'Getting Started', 'PLUGIN_NAME' ); ?></h3>
-				<p><?php esc_html_e( 'Welcome to iWorks Aquarium Log! Here are some resources to help you get started:', 'PLUGIN_NAME' ); ?></p>
+				<p><?php esc_html_e( 'Welcome to Aqualog! Here are some resources to help you get started:', 'PLUGIN_NAME' ); ?></p>
 				<ul>
 					<li><a href="<?php echo esc_url( 'https://wordpress.org/plugins/aqualog/' ); ?>" target="_blank"><?php esc_html_e( 'Plugin Documentation', 'PLUGIN_NAME' ); ?></a></li>
 					<li><a href="<?php echo esc_url( 'https://wordpress.org/support/plugin/aqualog/' ); ?>" target="_blank"><?php esc_html_e( 'Support Forum', 'PLUGIN_NAME' ); ?></a></li>
@@ -661,5 +689,16 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		}
 		$content .= '</div>';
 		return $content;
+	}
+
+	/**
+	 * Check if current tank module should be shown in menu page.
+	 *
+	 * @since 1.0.0
+	 * @return bool True if module should be shown, false otherwise.
+	 */
+	private function check_current_tank_module_show_menu_page() {
+		$this->set_current_aquarium_id();
+		return boolval( $this->current_aquarium_id );
 	}
 }

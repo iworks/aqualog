@@ -556,7 +556,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 		);
 		wp_localize_script(
 			strtolower( __CLASS__ ),
-			'iworks_aquarium_log',
+			'iworks_aqualog',
 			apply_filters(
 				'iworks/aqualog/wp_localize_script/admin',
 				$translation_array

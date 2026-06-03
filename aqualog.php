@@ -102,12 +102,12 @@ function iworks_aqualog_get_options() {
 }
 
 // Initialize the main plugin class
-$iworks_aquarium_log = new iworks_aquarium_log();
+$iworks_aqualog = new iworks_aqualog();
 
 /**
  * Register plugin activation and deactivation hooks
  */
 // Register activation hook to run when plugin is activated
-register_activation_hook( __FILE__, array( $iworks_aquarium_log, 'register_activation_hook' ) );
+register_activation_hook( __FILE__, array( $iworks_aqualog, 'register_activation_hook' ) );
 // Register deactivation hook to run when plugin is deactivated
-register_deactivation_hook( __FILE__, array( $iworks_aquarium_log, 'register_deactivation_hook' ) );
+register_deactivation_hook( __FILE__, array( $iworks_aqualog, 'register_deactivation_hook' ) );

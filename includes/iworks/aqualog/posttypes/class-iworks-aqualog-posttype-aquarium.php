@@ -1,12 +1,12 @@
 <?php
 /**
- * iWorks Aquarium Log Aquarium Post Type Class
+ * Aqualog Aquarium Post Type Class
  *
  * This class handles the registration and management of the Aquarium custom post type
- * and its associated taxonomy for the iWorks Aquarium Log plugin.
+ * and its associated taxonomy for the Aqualog plugin.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 require_once 'class-iworks-aqualog-posttype.php';
 
 /**
- * iWorks Aquarium Log Aquarium Post Type Class
+ * Aqualog Aquarium Post Type Class
  *
  * Handles the registration and management of the Aquarium custom post type
  * and its associated taxonomy.
@@ -85,7 +85,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		 */
 		add_filter( 'index_iworks_aqualog_default_aquarium_id_data', array( $this, 'filter_index_iworks_aqualog_default_aquarium_data' ), 10, 3 );
 		/**
-		 * iWorks Aquarium Log plugin hooks.
+		 * Aqualog plugin hooks.
 		 */
 		add_filter( 'iworks/aqualog/set/current_aquarium_id', array( $this, 'filter_set_current_aquarium_id' ) );
 		add_action( 'iworks/aqualog/dashboard/aquariums', array( $this, 'action_dashboard_aquariums' ) );

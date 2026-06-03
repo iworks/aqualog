@@ -1,12 +1,12 @@
 <?php
 /**
- * iWorks iWorks Aquarium Log Base Class
+ * iWorks Aqualog Base Class
  *
- * This is the base class for the iWorks Aquarium Log plugin, providing
+ * This is the base class for the Aqualog plugin, providing
  * common functionality and properties used throughout the plugin.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -23,9 +23,9 @@ if ( class_exists( 'iworks_aqualog_base' ) ) {
 }
 
 /**
- * iWorks iWorks Aquarium Log Base Class
+ * iWorks Aqualog Base Class
  *
- * This class provides the foundation for the iWorks Aquarium Log plugin,
+ * This class provides the foundation for the Aqualog plugin,
  * offering essential properties and methods used throughout the plugin.
  *
  * @since 1.0.0
@@ -170,6 +170,9 @@ class iworks_aqualog_base {
 
 	/**
 	 * Logger object
+	 *
+	 * @since 1.0.0
+	 * @var object $logger Instance of the logger class
 	 */
 	protected object $logger;
 
@@ -177,11 +180,24 @@ class iworks_aqualog_base {
 	 * Media Option Name
 	 *
 	 * @since 1.0.0
+	 * @var string $option_name_media Option name for media settings
 	 */
 	protected string $option_name_media = '_iworks_aqualog_media';
 
+	/**
+	 * Post types names array
+	 *
+	 * @since 1.0.0
+	 * @var array $posttypes_names Array of post type names
+	 */
 	protected array $posttypes_names = array();
 
+	/**
+	 * Taxonomies names array
+	 *
+	 * @since 1.0.0
+	 * @var array $taxonomies_names Array of taxonomy names
+	 */
 	protected array $taxonomies_names = array();
 
 	/**
@@ -753,6 +769,16 @@ class iworks_aqualog_base {
 		}
 	}
 
+	/**
+	 * Check if a module is enabled.
+	 *
+	 * Determines whether a specific module is enabled in the plugin options.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @param string $module Module name to check (with or without 'module_' prefix).
+	 * @return bool True if module is enabled, false otherwise.
+	 */
 	protected function is_module_enabled( $module ) {
 		$this->check_option_object();
 		if ( ! preg_match( '/^module_/', $module ) ) {
@@ -761,6 +787,16 @@ class iworks_aqualog_base {
 		return boolval( $this->options->get_option( $module ) );
 	}
 
+	/**
+	 * Get sanitized nonce value from request.
+	 *
+	 * Retrieves and sanitizes a nonce value from POST or GET request.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @param string $nonce_name The nonce field name. Default '_wpnonce'.
+	 * @return string Sanitized nonce value or empty string if not found.
+	 */
 	protected function get_snitized_nonce_value( $nonce_name = '_wpnonce' ) {
 		$value = sanitize_text_field( wp_unslash( filter_input( INPUT_POST, $nonce_name ) ) );
 		if ( $value ) {

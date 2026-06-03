@@ -1,13 +1,13 @@
 <?php
 /**
- * iWorks Aquarium Log Dashboard Class
+ * Aqualog Dashboard Class
  *
- * Handles all dashboard-related functionality for the iWorks Aquarium Log plugin.
+ * Handles all dashboard-related functionality for the Aqualog plugin.
  * This includes managing dashboard widgets, statistics display, and
  * dashboard message handling.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -20,10 +20,10 @@ defined( 'ABSPATH' ) || exit;
 require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 /**
- * iWorks Aquarium Log Dashboard Class
+ * Aqualog Dashboard Class
  *
  * Manages dashboard functionality including statistics, recent activity,
- * and dashboard message handling for the iWorks Aquarium Log plugin.
+ * and dashboard message handling for the Aqualog plugin.
  *
  * @since 1.0.0
  */
@@ -64,15 +64,6 @@ class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 			'iworks/aqualog/wp-admin/dashboard/args',
 			array()
 		);
-		if ( $this->current_aquarium_id ) {
-			$this->load_template(
-				'aquarium',
-				'pages',
-				true,
-				$args,
-			);
-			return;
-		}
 		$this->load_template(
 			'dashboard',
 			'pages',

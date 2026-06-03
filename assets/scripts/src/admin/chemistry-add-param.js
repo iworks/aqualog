@@ -1,11 +1,11 @@
 /**
- * iWorks Aquarium Log Chemistry Add Parameter JavaScript
+ * Aqualog Chemistry Add Parameter JavaScript
  *
  * Handles the chemistry form for adding/editing water chemistry parameters.
  * Uses WordPress wp.template for dynamic form rendering and AJAX submission.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -21,22 +21,22 @@
 	var field_value_class = '.aqualog-chemistry-item-body-scale-value';
 
 	// Initialize chemistry form functionality
-	window.iworks_aquarium_log = window.iworks_aquarium_log || {};
-	window.iworks_aquarium_log.chemistry = window.iworks_aquarium_log.chemistry || {};
+	window.iworks_aqualog = window.iworks_aqualog || {};
+	window.iworks_aqualog.chemistry = window.iworks_aqualog.chemistry || {};
 
 	/**
 	 * Store form data for template rendering
 	 */
-	window.iworks_aquarium_log.chemistry.formData = {};
+	window.iworks_aqualog.chemistry.formData = {};
 
 	/**
 	 * Set form data and render the chemistry form
 	 *
 	 * @param {Object} data Form data including parameters, values, etc.
 	 */
-	window.iworks_aquarium_log.chemistry.setFormData = function(data) {
-		window.iworks_aquarium_log.chemistry.formData = data;
-		data.style = window.iworks_aquarium_log.chemistry.getScaleStyle();
+	window.iworks_aqualog.chemistry.setFormData = function(data) {
+		window.iworks_aqualog.chemistry.formData = data;
+		data.style = window.iworks_aqualog.chemistry.getScaleStyle();
 		data.range_step = Math.min((data.range[1] - data.range[0]) / 50, 10);
 		if (data.range_step > 0.05 && data.range_step < 0.5) {
 			data.range_step = 0.1;
@@ -50,11 +50,11 @@
 		data.range_step = Math.round(data.range_step * 100) / 100;
 		data.step_big = data.range_step * 10;
 		data.step_small = data.range_step * 2;
-		window.iworks_aquarium_log.chemistry.formData = data;
+		window.iworks_aqualog.chemistry.formData = data;
 	};
 
-	window.iworks_aquarium_log.chemistry.scaleItem = function(range) {
-		var args = window.iworks_aquarium_log.chemistry.formData;
+	window.iworks_aqualog.chemistry.scaleItem = function(range) {
+		var args = window.iworks_aqualog.chemistry.formData;
 		var min = args.range[0];
 		var max = args.range[1];
 		var length = (max - min) * 1000;
@@ -63,10 +63,10 @@
 		return [start, end];
 	};
 
-	window.iworks_aquarium_log.chemistry.getScaleStyle = function() {
-		var danger = window.iworks_aquarium_log.chemistry.scaleItem('danger');
-		var safety = window.iworks_aquarium_log.chemistry.scaleItem('safety');
-		var ideal = window.iworks_aquarium_log.chemistry.scaleItem('ideal');
+	window.iworks_aqualog.chemistry.getScaleStyle = function() {
+		var danger = window.iworks_aqualog.chemistry.scaleItem('danger');
+		var safety = window.iworks_aqualog.chemistry.scaleItem('safety');
+		var ideal = window.iworks_aqualog.chemistry.scaleItem('ideal');
 		var style = 'background: linear-gradient(';
 		style += 'to right,';
 		style += 'var(--aqualog-settings-danger) ' + danger[0] + '% ' + safety[0] + '%,';
@@ -80,28 +80,28 @@
 	/**
 	 * Render the chemistry form using wp.template
 	 */
-	window.iworks_aquarium_log.chemistry.renderForm = function() {
-		if (!window.iworks_aquarium_log.chemistry.formData) {
-			window.console.warn('iWorks Aquarium Log: No form data available for rendering');
+	window.iworks_aqualog.chemistry.renderForm = function() {
+		if (!window.iworks_aqualog.chemistry.formData) {
+			window.console.warn('Aqualog: No form data available for rendering');
 			return;
 		}
 		var template = wp.template('aqualog-chemistry-form');
 		var formHTML = template(
-			window.iworks_aquarium_log.chemistry.formData
+			window.iworks_aqualog.chemistry.formData
 		);
 
 		$('.aqualog-modal').html(formHTML);
 
 		// Initialize form handlers
-		window.iworks_aquarium_log.chemistry.initializeForm();
+		window.iworks_aqualog.chemistry.initializeForm();
 	};
 
 	/**
 	 * Initialize form event handlers and validation
 	 */
-	window.iworks_aquarium_log.chemistry.initializeForm = function() {
+	window.iworks_aqualog.chemistry.initializeForm = function() {
 		var $form = $('#aqualog-chemistry-measurement-form');
-		var args = window.iworks_aquarium_log.chemistry.formData;
+		var args = window.iworks_aqualog.chemistry.formData;
 
 		if (!$form.length) {
 			return;
@@ -110,7 +110,7 @@
 		// Handle form submission
 		$form.on('submit', function(e) {
 			e.preventDefault();
-			window.iworks_aquarium_log.chemistry.submitForm($(this));
+			window.iworks_aqualog.chemistry.submitForm($(this));
 		});
 
 		// Clear error state on input
@@ -158,7 +158,7 @@
 	 * @param {jQuery} $form Form element
 	 * @return {boolean} True if valid, false otherwise
 	 */
-	window.iworks_aquarium_log.chemistry.validateForm = function($form) {
+	window.iworks_aqualog.chemistry.validateForm = function($form) {
 		var isValid = true;
 
 		$form.find(field_value_class).each(function() {
@@ -183,49 +183,49 @@
 	 *
 	 * @param {jQuery} $form Form element
 	 */
-	window.iworks_aquarium_log.chemistry.submitForm = function($form) {
+	window.iworks_aqualog.chemistry.submitForm = function($form) {
 		var $submit = $form.find('.aqualog-form-submit');
 		var originalText = $submit.html();
 
 		// Validate form
-		if (!window.iworks_aquarium_log.chemistry.validateForm($form)) {
-			window.iworks_aquarium_log.showNotice('error', window.iworks_aquarium_log.i18n.messages.invalidValues);
+		if (!window.iworks_aqualog.chemistry.validateForm($form)) {
+			window.iworks_aqualog.showNotice('error', window.iworks_aqualog.i18n.messages.invalidValues);
 			return;
 		}
 
 		// Show loading state
 		$submit.prop('disabled', true)
-			.html('<span class="dashicons dashicons-update spin"></span> ' + window.iworks_aquarium_log.i18n.messages.saving);
+			.html('<span class="dashicons dashicons-update spin"></span> ' + window.iworks_aqualog.i18n.messages.saving);
 
 		// Submit via AJAX
 		$.ajax({
-			url: window.iworks_aquarium_log.ajax_url,
+			url: window.iworks_aqualog.ajax_url,
 			type: 'POST',
 			data: {
 				action: 'aquarium_log_chemistry_add_param',
-				_wpnonce: window.iworks_aquarium_log.nonces.chemistry.add_param,
+				_wpnonce: window.iworks_aqualog.nonces.chemistry.add_param,
 				value: $form.find(field_value_class).val(),
-				key: window.iworks_aquarium_log.chemistry.formData.key,
+				key: window.iworks_aqualog.chemistry.formData.key,
 				id: $form.data('aquarium-id'),
 			},
 			success: function(response) {
 				if (response.success) {
 					// Show success message
-					window.iworks_aquarium_log.showNotice('success', response.data.message);
+					window.iworks_aqualog.showNotice('success', response.data.message);
 
 					// Close form after delay
 					window.setTimeout(function() {
-						window.iworks_aquarium_log.chemistry.closeForm();
+						window.iworks_aqualog.chemistry.closeForm();
 						// Reload page to show updated values
 						window.location.reload();
 					}, 1500);
 				} else {
 					// Show error message
-					window.iworks_aquarium_log.showNotice('error', response.data.message);
+					window.iworks_aqualog.showNotice('error', response.data.message);
 				}
 			},
 			error: function() {
-				window.iworks_aquarium_log.showNotice('error', window.iworks_aquarium_log.i18n.messages.saveError);
+				window.iworks_aqualog.showNotice('error', window.iworks_aqualog.i18n.messages.saveError);
 			},
 			complete: function() {
 				// Restore button state
@@ -237,12 +237,12 @@
 	/**
 	 * Close chemistry form
 	 */
-	window.iworks_aquarium_log.chemistry.closeForm = function() {
+	window.iworks_aqualog.chemistry.closeForm = function() {
 		// Check if form is in modal
 		var $modal = $('.aqualog-modal');
 		if ($modal.length) {
 			// Close modal instead
-			window.iworks_aquarium_log.chemistry.closeModal();
+			window.iworks_aqualog.chemistry.closeModal();
 		} else {
 			// Close standalone form
 			$('.aqualog-chemistry-form').fadeOut(300, function() {
@@ -257,7 +257,7 @@
 	 * @param {string} type Notice type (success, error, warning)
 	 * @param {string} message Notice message
 	 */
-	window.iworks_aquarium_log.showNotice = function(type, message) {
+	window.iworks_aqualog.showNotice = function(type, message) {
 		var noticeClass = 'notice-' + type;
 		var $notice = $('<div class="notice is-dismissible ' + noticeClass + '"><p>' + message + '</p></div>');
 
@@ -283,7 +283,7 @@
 	/**
 	 * Show chemistry form as modal
 	 */
-	window.iworks_aquarium_log.chemistry.showModal = function() {
+	window.iworks_aqualog.chemistry.showModal = function() {
 		// Create modal overlay
 		var $overlay = $('<div class="aqualog-modal-overlay"></div>');
 		var $modal = $('<div class="aqualog-modal"></div>');
@@ -297,7 +297,7 @@
 		$('body').append($overlay).append($modal);
 
 		// Render form inside modal
-		window.iworks_aquarium_log.chemistry.renderForm();
+		window.iworks_aqualog.chemistry.renderForm();
 
 		// Move form into modal
 		$('.aqualog-chemistry-form').appendTo($modal);
@@ -308,13 +308,13 @@
 
 		// Handle overlay click to close
 		$overlay.on('click', function() {
-			window.iworks_aquarium_log.chemistry.closeModal();
+			window.iworks_aqualog.chemistry.closeModal();
 		});
 
 		// Handle escape key to close
 		$(document).on('keydown.aqualog-modal', function(e) {
 			if (e.keyCode === 27) { // Escape key
-				window.iworks_aquarium_log.chemistry.closeModal();
+				window.iworks_aqualog.chemistry.closeModal();
 			}
 		});
 	};
@@ -322,7 +322,7 @@
 	/**
 	 * Close chemistry form modal
 	 */
-	window.iworks_aquarium_log.chemistry.closeModal = function() {
+	window.iworks_aqualog.chemistry.closeModal = function() {
 		var $overlay = $('.aqualog-modal-overlay');
 		var $modal = $('.aqualog-modal');
 
@@ -347,12 +347,12 @@
 			e.preventDefault();
 			e.stopPropagation();
 
-			window.iworks_aquarium_log.chemistry.setFormData(
-				window.iworks_aquarium_log.chemistry.params[$(this).data('key')]
+			window.iworks_aqualog.chemistry.setFormData(
+				window.iworks_aqualog.chemistry.params[$(this).data('key')]
 			);
 
 			// Show modal with form
-			window.iworks_aquarium_log.chemistry.showModal();
+			window.iworks_aqualog.chemistry.showModal();
 		});
 	});
 

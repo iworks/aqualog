@@ -1,12 +1,12 @@
 <?php
 /**
- * iWorks Aquarium Log Template Tags
+ * Aqualog Template Tags
  *
- * This file contains template tags and utility functions for the iWorks Aquarium Log plugin.
+ * This file contains template tags and utility functions for the Aqualog plugin.
  * These functions can be used throughout the plugin templates and views.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0

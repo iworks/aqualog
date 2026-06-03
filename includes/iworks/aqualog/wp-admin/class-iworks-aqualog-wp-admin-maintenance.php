@@ -1,13 +1,13 @@
 <?php
 /**
- * iWorks Aquarium Log Chemistry Class
+ * Aqualog Chemistry Class
  *
- * Handles all chemistry-related functionality for the iWorks Aquarium Log plugin.
+ * Handles all chemistry-related functionality for the Aqualog plugin.
  * This includes managing water parameter measurements, calculations,
  * and chemistry data storage/retrieval.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 /**
- * iWorks Aquarium Log Chemistry Class
+ * Aqualog Chemistry Class
  *
  * Manages water chemistry parameters, measurements, and calculations
  * for aquarium tracking and analysis.

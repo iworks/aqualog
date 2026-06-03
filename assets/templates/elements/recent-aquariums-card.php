@@ -6,7 +6,7 @@
  * and a dropdown list for additional aquariums if there are more.
  *
  * @since 1.0.0
- * @package iWorks Aquarium Log
+ * @package Aqualog
  */
 
 defined( 'ABSPATH' ) || exit;

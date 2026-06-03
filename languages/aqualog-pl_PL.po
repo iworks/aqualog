@@ -110,7 +110,7 @@ msgstr ""
 #: assets/templates/pages/aquarium.php:35
 #: assets/templates/pages/dashboard.php:13
 #: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:444
-msgid "iWorks Aquarium Log Dashboard"
+msgid "Aqualog Dashboard"
 msgstr ""
 
 #: assets/templates/pages/aquarium.php:50
@@ -636,7 +636,7 @@ msgstr ""
 
 #. translators: Main menu item title
 #: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:446
-msgid "iWorks Aquarium Log"
+msgid "Aqualog"
 msgstr ""
 
 #. translators: Dashboard submenu title
@@ -679,7 +679,7 @@ msgstr ""
 
 #: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:570
 msgid ""
-"Welcome to iWorks Aquarium Log! Here are some resources to help you get "
+"Welcome to Aqualog! Here are some resources to help you get "
 "started:"
 msgstr ""
 

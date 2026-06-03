@@ -1,13 +1,13 @@
 <?php
 /**
- * iWorks Aquarium Log Chemistry Parameter Template
+ * Aqualog Chemistry Parameter Template
  *
  * This template displays a single chemistry parameter card with its value,
  * scale visualization, and importance indicator. It's used within the
  * chemistry page to show individual water chemistry parameters.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0

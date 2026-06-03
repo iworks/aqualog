@@ -1,15 +1,15 @@
 <?php
 /**
- * iWorks Aquarium Log Logger Class
+ * Aqualog Logger Class
  *
- * Handles logging of various actions and events within the iWorks Aquarium Log plugin.
+ * Handles logging of various actions and events within the Aqualog plugin.
  * Provides a centralized logging system for tracking user activities,
  * system events, and important changes.
  *
  * @since      1.0.0
- * @package    iWorks Aquarium Log
- * @subpackage iWorks Aquarium Log/Includes
- * @author     iWorks Aquarium Log Team
+ * @package    Aqualog
+ * @subpackage Aqualog/Includes
+ * @author     Aqualog Team
  */
 
 defined( 'ABSPATH' ) || exit;

@@ -374,7 +374,6 @@ module.exports = function(grunt) {
 						'report-msgid-bugs-to': 'http://iworks.pl',
 						'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
 					},
-					exclude: ['node_modules', '.git', '.sass-cache', 'release'],
 					type: 'wp-plugin',
 					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
 					updatePoFiles: true // Whether to update PO files in the same directory as the POT file.

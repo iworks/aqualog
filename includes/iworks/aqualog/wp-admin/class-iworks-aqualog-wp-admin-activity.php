@@ -1,12 +1,12 @@
 <?php
 /**
- * iWorks Aquarium Log Activity Class
+ * Aqualog Activity Class
  *
- * Handles activity-related functionality for the iWorks Aquarium Log plugin.
+ * Handles activity-related functionality for the Aqualog plugin.
  * This includes displaying recent activity and managing activity logs.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -19,9 +19,9 @@ defined( 'ABSPATH' ) || exit;
 require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 /**
- * iWorks Aquarium Log Activity Class
+ * Aqualog Activity Class
  *
- * Manages activity logging and display for the iWorks Aquarium Log plugin.
+ * Manages activity logging and display for the Aqualog plugin.
  *
  * @since 1.0.0
  */

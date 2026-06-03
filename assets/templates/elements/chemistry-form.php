@@ -1,13 +1,13 @@
 <?php
 /**
- * iWorks Aquarium Log Chemistry Form Template
+ * Aqualog Chemistry Form Template
  *
  * This template displays a form for entering or editing chemistry parameter values.
  * It includes input fields for selected parameters with validation and submission handling.
  * Uses WordPress wp.template for JavaScript templating.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0

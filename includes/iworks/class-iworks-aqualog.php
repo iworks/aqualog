@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'iworks_aquarium_log' ) ) {
+if ( class_exists( 'iworks_aqualog' ) ) {
 	return;
 }
 
@@ -25,7 +25,7 @@ require_once __DIR__ . '/class-iworks-aqualog-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log extends iworks_aqualog_base {
+class iworks_aqualog extends iworks_aqualog_base {
 
 	/**
 	 * Plugin objects container.
@@ -178,7 +178,7 @@ class iworks_aquarium_log extends iworks_aqualog_base {
 		$this->options->deactivate();
 		do_action( 'iworks/aqualog/register_deactivation_hook' );
 	}
-	
+
 	/**
 	 * Add aquarium_id query var.
 	 *

@@ -5,7 +5,7 @@
  * This template displays the aquarium dashboard with information about a specific
  * aquarium, including its dimensions, operation period, and recent events.
  *
- * @package    iWorks_Aquarium_Log
+ * @package    iworks_aqualog
  * @subpackage Templates
  * @since      1.0.0
  *
@@ -21,18 +21,14 @@ if ( empty( $args ) || ! is_array( $args ) || ! isset( $args['aquarium_id'] ) ) 
 	esc_html_e( 'Invalid aquarium ID.', 'PLUGIN_NAME' );
 	return;
 }
-
-
 if ( ! $args['aquarium']['post'] ) {
 	esc_html_e( 'Aquarium not found.', 'PLUGIN_NAME' );
 	return;
 }
-
-
 ?>
-
 <div class="wrap">
-	<h1 class="wp-heading-inline"><?php esc_html_e( 'iWorks Aquarium Log Dashboard', 'PLUGIN_NAME' ); ?></h1>
+	<?php do_action( 'iworks/aqualog/wp-admin/current-aquarium-bar' ); ?>
+	<h1 class="wp-heading-inline"><?php esc_html_e( 'Aqualog Dashboard', 'PLUGIN_NAME' ); ?></h1>
 	<?php
 	/**
 	 * Fires before the aquarium dashboard content.

@@ -1,12 +1,12 @@
 <?php
 /**
- * iWorks Aquarium Log Statistics Class
+ * Aqualog Statistics Class
  *
- * Handles statistics-related functionality for the iWorks Aquarium Log plugin.
+ * Handles statistics-related functionality for the Aqualog plugin.
  * This includes dashboard statistics, data analysis, and reporting.
  *
  * @package    iWorks
- * @subpackage iWorks Aquarium Log
+ * @subpackage Aqualog
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
@@ -19,9 +19,9 @@ defined( 'ABSPATH' ) || exit;
 require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 /**
- * iWorks Aquarium Log Statistics Class
+ * Aqualog Statistics Class
  *
- * Manages statistics and data analysis for the iWorks Aquarium Log plugin dashboard.
+ * Manages statistics and data analysis for the Aqualog plugin dashboard.
  * Provides statistical cards and data visualization components.
  *
  * @since 1.0.0

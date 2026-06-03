@@ -2,10 +2,10 @@
 /**
  * Maintenance page template.
  *
- * Displays maintenance interface for iWorks Aquarium Log plugin.
+ * Displays maintenance interface for Aqualog plugin.
  * Includes forms for adding and managing maintenance tasks.
  *
- * @package    iWorks\iWorks Aquarium Log
+ * @package    iWorks\Aqualog
  * @subpackage Templates
  * @author     Marcin Pietrzak <marcin@iworks.pl>
  * @copyright  2026 Marcin Pietrzak

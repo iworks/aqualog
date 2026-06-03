@@ -10,7 +10,8 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <div class="wrap">
-	<h1 class="wp-heading-inline"><?php esc_html_e( 'iWorks Aquarium Log Dashboard', 'PLUGIN_NAME' ); ?></h1>
+	<?php do_action( 'iworks/aqualog/wp-admin/current-aquarium-bar' ); ?>
+	<h1 class="wp-heading-inline"><?php esc_html_e( 'Aqualog Dashboard', 'PLUGIN_NAME' ); ?></h1>
 	<?php do_action( 'iworks/aqualog/dashboard/before' ); ?>
 			
 	<section class="aqualog-dashboard-section aqualog-dashboard-grid">

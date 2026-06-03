@@ -15,9 +15,9 @@ jQuery(function($) {
 
 		// Create a new media frame
 		frame = wp.media({
-			title: window.iworks_aquarium_log.l10n.wp_media.title,
+			title: window.iworks_aqualog.l10n.wp_media.title,
 			button: {
-				text: window.iworks_aquarium_log.l10n.wp_media.button.text
+				text: window.iworks_aqualog.l10n.wp_media.button.text
 			},
 			multiple: false // Set to true to allow multiple files to be selected
 		});
