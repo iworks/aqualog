@@ -9,9 +9,9 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<div class="wrap aquarium-log-chemistry">
-	<?php do_action( 'iworks-aquarium-log/wp-admin/current-aquarium-bar' ); ?>
-	<h1 class="wp-heading-inline"><?php esc_html_e( 'Chemistry', 'iworks-aquarium-log' ); ?></h1>
+<div class="wrap aqualog-chemistry">
+	<?php do_action( 'iworks/aqualog/wp-admin/current-aquarium-bar' ); ?>
+	<h1 class="wp-heading-inline"><?php esc_html_e( 'Chemistry', 'PLUGIN_NAME' ); ?></h1>
 <?php
 if ( 'aquarium' === filter_input( INPUT_GET, 'change' ) ) {
 	load_template( $args['messages']['select-aquarium'], true, $args );
@@ -26,10 +26,10 @@ if ( 'aquarium' === filter_input( INPUT_GET, 'change' ) ) {
 		load_template( $args['messages']['chemistry-no-measurements'] );
 	}
 	?>
-	<div class="aquarium-log-chemistry-container">
+	<div class="aqualog-chemistry-container">
 		<?php
-		foreach ( $args['params'] as $iworks_aquarium_log_param_key => $iworks_aquarium_log_param ) {
-			load_template( dirname( __DIR__, 1 ) . '/elements/chemistry-param.php', false, $iworks_aquarium_log_param );
+		foreach ( $args['params'] as $iworks_aqualog_param_key => $iworks_aqualog_param ) {
+			load_template( dirname( __DIR__, 1 ) . '/elements/chemistry-param.php', false, $iworks_aqualog_param );
 		}
 		?>
 	</div>

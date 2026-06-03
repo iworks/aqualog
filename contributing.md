@@ -7,9 +7,9 @@ Following these guidelines will help us get back to you more quickly, and will s
 
 ## Use the issue tracker
 
-The [issue tracker](https://github.com/iworks/iworks-aquarium-log/issues) is the preferred channel for [bug reports](#bugs), [features requests](#features) and [submitting pull requests](#pull-requests), but please respect the following restrictions:
+The [issue tracker](https://github.com/iworks/aqualog/issues) is the preferred channel for [bug reports](#bugs), [features requests](#features) and [submitting pull requests](#pull-requests), but please respect the following restrictions:
 
-* Support issues or usage questions that are not bugs should be posted on the [Plugin Support Forum](http://wordpress.org/support/plugin/iworks-aquarium-log/).
+* Support issues or usage questions that are not bugs should be posted on the [Plugin Support Forum](http://wordpress.org/support/plugin/iworks-aqualog).
 * Please **do not** derail or troll issues. Keep the discussion on topic and respect the opinions of others.
 * Make sure to read all the [labels below](#tracker-labels) to avoid confusion on status of each issue
 
@@ -58,7 +58,7 @@ Guidelines for bug reports:
 
 1. **Check if the bug has already been fixed** &mdash; Someone may already be on top of it, so try to reproduce it using the latest from the `master` branch.
 
-2. **Use the [GitHub issue search](https://github.com/iworks/iworks-aquarium-log/search?type=Issues)** &mdash; Someone might already know about it, so please check if the issue has already been reported.
+2. **Use the [GitHub issue search](https://github.com/iworks/aqualog/search?type=Issues)** &mdash; Someone might already know about it, so please check if the issue has already been reported.
 
 3. **Isolate the problem** &mdash; The better you can determine exactly what behavior(s) cause the issue, the faster and more effectively it can be resolved. “I’m getting an error message.” is not a good bug report. A good bug report shouldn't leave others needing to contact you for more information.
 
@@ -92,7 +92,7 @@ Building something great means choosing features carefully especially because it
 Good pull requests &mdash; patches, improvements, new features &mdash; are a fantastic help.
 They should remain focused in scope and avoid containing unrelated commits.
 
-**Please ask first** before embarking on any significant pull request (e.g. implementing features, refactoring code), otherwise you risk spending a lot of time working on something that the project's developers might not want to merge into the project. You can solicit feedback and opinions in an open enhancement issue, or [create a new one](https://github.com/iworks/iworks-aquarium-log/issues/new).
+**Please ask first** before embarking on any significant pull request (e.g. implementing features, refactoring code), otherwise you risk spending a lot of time working on something that the project's developers might not want to merge into the project. You can solicit feedback and opinions in an open enhancement issue, or [create a new one](https://github.com/iworks/aqualog/issues/new).
 
 Please use the [git flow for pull requests](#git-flow) and follow [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/) before submitting your work. Adhering to these guidelines is the best way to get your work included in Simple SEO Improvements.
 
@@ -103,11 +103,11 @@ Please use the [git flow for pull requests](#git-flow) and follow [WordPress Cod
 
    ```bash
    # Clone your fork of the repo into the current directory
-   git clone git@github.com:<YOUR_USERNAME>/iworks-aquarium-log.git
+   git clone git@github.com:<YOUR_USERNAME>/aqualog.git
    # Navigate to the newly cloned directory
-   cd aquarium_log
+   cd aqualog
    # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/iworks/iworks-aquarium-log
+   git remote add upstream https://github.com/iworks/aqualog
    ```
 
 2. If you cloned a while ago, get the latest changes from upstream:

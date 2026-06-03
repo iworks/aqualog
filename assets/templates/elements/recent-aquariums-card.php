@@ -30,46 +30,46 @@ if ( isset( $args['all_aquariums'] ) && is_array( $args['all_aquariums'] ) ) {
 $has_more             = count( $all_aquariums ) > 5;
 $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 ?>
-<h2><?php esc_html_e( 'Select Aquarium', 'iworks-aquarium-log' ); ?></h2>
-<div class="aquarium-log-card aquarium-log-recent-aquariums-card">
-	<div class="aquarium-log-card-header">
-		<h3 class="aquarium-log-card-title">
+<h2><?php esc_html_e( 'Select Aquarium', 'PLUGIN_NAME' ); ?></h2>
+<div class="aqualog-card aqualog-recent-aquariums-card">
+	<div class="aqualog-card-header">
+		<h3 class="aqualog-card-title">
 			<span class="dashicons dashicons-buddicons-groups"></span>
-			<?php esc_html_e( 'Recent Aquariums', 'iworks-aquarium-log' ); ?>
+			<?php esc_html_e( 'Recent Aquariums', 'PLUGIN_NAME' ); ?>
 		</h3>
 		<?php if ( $has_more ) : ?>
-			<div class="aquarium-log-card-actions">
-				<div class="aquarium-log-dropdown">
-					<button class="aquarium-log-dropdown-toggle aquarium-log-button aquarium-log-button-small aquarium-log-button-outline" type="button">
+			<div class="aqualog-card-actions">
+				<div class="aqualog-dropdown">
+					<button class="aqualog-dropdown-toggle aqualog-button aqualog-button-small aqualog-button-outline" type="button">
 						<span class="dashicons dashicons-arrow-down-alt2"></span>
-						<?php esc_html_e( 'More', 'iworks-aquarium-log' ); ?>
+						<?php esc_html_e( 'More', 'PLUGIN_NAME' ); ?>
 					</button>
-					<div class="aquarium-log-dropdown-menu">
-						<div class="aquarium-log-dropdown-header">
-							<?php esc_html_e( 'All Aquariums', 'iworks-aquarium-log' ); ?>
+					<div class="aqualog-dropdown-menu">
+						<div class="aqualog-dropdown-header">
+							<?php esc_html_e( 'All Aquariums', 'PLUGIN_NAME' ); ?>
 						</div>
-						<div class="aquarium-log-dropdown-content">
+						<div class="aqualog-dropdown-content">
 							<?php foreach ( $additional_aquariums as $aquarium ) : ?>
-								<a href="<?php echo esc_url( get_permalink( $aquarium->ID ) ); ?>" class="aquarium-log-dropdown-item">
-									<div class="aquarium-log-dropdown-item-title">
+								<a href="<?php echo esc_url( get_permalink( $aquarium->ID ) ); ?>" class="aqualog-dropdown-item">
+									<div class="aqualog-dropdown-item-title">
 										<?php echo esc_html( $aquarium->post_title ); ?>
 									</div>
-									<div class="aquarium-log-dropdown-item-meta">
+									<div class="aqualog-dropdown-item-meta">
 										<?php
 										$updated_at = get_post_meta( $aquarium->ID, '_related_updated_at', true );
 										if ( $updated_at ) {
 											echo esc_html( $this->get_time_elapsed_text_seconds( $updated_at ) );
 										} else {
-											esc_html_e( 'Never updated', 'iworks-aquarium-log' );
+											esc_html_e( 'Never updated', 'PLUGIN_NAME' );
 										}
 										?>
 									</div>
 								</a>
 							<?php endforeach; ?>
 						</div>
-						<div class="aquarium-log-dropdown-footer">
-							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=iw_aquarium' ) ); ?>" class="aquarium-log-button aquarium-log-button-small">
-								<?php esc_html_e( 'View All Aquariums', 'iworks-aquarium-log' ); ?>
+						<div class="aqualog-dropdown-footer">
+							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=iw_aquarium' ) ); ?>" class="aqualog-button aqualog-button-small">
+								<?php esc_html_e( 'View All Aquariums', 'PLUGIN_NAME' ); ?>
 							</a>
 						</div>
 					</div>
@@ -78,11 +78,11 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 		<?php endif; ?>
 	</div>
 
-	<div class="aquarium-log-card-content">
+	<div class="aqualog-card-content">
 		<?php
 		if ( ! empty( $recent_aquariums ) ) :
 			?>
-			<div class="aquarium-log-aquariums-list">
+			<div class="aqualog-aquariums-list">
 				<?php
 				foreach ( $recent_aquariums as $aquarium ) {
 					setup_postdata( $aquarium );
@@ -90,7 +90,7 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 					$title        = $aquarium->post_title;
 					$permalink    = get_permalink( $post_id );
 					$updated_at   = get_post_meta( $post_id, '_related_updated_at', true );
-					$last_updated = $updated_at ? $updated_at : esc_html__( 'Never', 'iworks-aquarium-log' );
+					$last_updated = $updated_at ? $updated_at : esc_html__( 'Never', 'PLUGIN_NAME' );
 
 					// Get aquarium type
 					$types     = wp_get_post_terms( $post_id, 'iw_aquarium_group' );
@@ -101,27 +101,27 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 					$capacity_display = $capacity ? sprintf( '%s L', number_format_i18n( $capacity ) ) : '';
 					$url              = remove_query_arg( 'change', add_query_arg( 'aquarium_id', $post_id ) );
 					?>
-					<a class="aquarium-log-aquarium-item" href="<?php echo esc_url( $url ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
-						<div class="aquarium-log-aquarium-thumbnail <?php echo has_post_thumbnail( $post_id ) ? 'has-thumbnail' : 'no-thumbnail'; ?>">
+					<a class="aqualog-aquarium-item" href="<?php echo esc_url( $url ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
+						<div class="aqualog-aquarium-thumbnail <?php echo has_post_thumbnail( $post_id ) ? 'has-thumbnail' : 'no-thumbnail'; ?>">
 						<?php
 						if ( has_post_thumbnail( $post_id ) ) {
-							echo get_the_post_thumbnail( $post_id, 'thumbnail', array( 'class' => 'aquarium-log-aquarium-thumbnail-img' ) );
+							echo get_the_post_thumbnail( $post_id, 'thumbnail', array( 'class' => 'aqualog-aquarium-thumbnail-img' ) );
 						}
 						?>
 							</div>
-						<div class="aquarium-log-aquarium-info">
-							<h3 class="aquarium-log-aquarium-title"><?php echo esc_html( $title ); ?></h3>
+						<div class="aqualog-aquarium-info">
+							<h3 class="aqualog-aquarium-title"><?php echo esc_html( $title ); ?></h3>
 							<?php if ( $type_name ) : ?>
-								<p class="aquarium-log-aquarium-type"><?php echo esc_html( $type_name ); ?></p>
+								<p class="aqualog-aquarium-type"><?php echo esc_html( $type_name ); ?></p>
 							<?php endif; ?>
-							<div class="aquarium-log-aquarium-meta">
+							<div class="aqualog-aquarium-meta">
 								<?php if ( $capacity_display ) : ?>
-									<span class="aquarium-log-aquarium-capacity">
+									<span class="aqualog-aquarium-capacity">
 										<span class="dashicons dashicons-volume"></span>
 										<?php echo esc_html( $capacity_display ); ?>
 									</span>
 								<?php endif; ?>
-								<span class="aquarium-log-aquarium-updated">
+								<span class="aqualog-aquarium-updated">
 									<span class="dashicons dashicons-clock"></span>
 									<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $last_updated ) ) ); ?>
 								</span>
@@ -135,11 +135,11 @@ $additional_aquariums = $has_more ? array_slice( $all_aquariums, 5 ) : array();
 				?>
 			</div>
 		<?php else : ?>
-			<div class="aquarium-log-empty-state">
-				<p><?php esc_html_e( 'No aquariums found.', 'iworks-aquarium-log' ); ?></p>
+			<div class="aqualog-empty-state">
+				<p><?php esc_html_e( 'No aquariums found.', 'PLUGIN_NAME' ); ?></p>
 				<?php if ( current_user_can( 'edit_posts' ) ) : ?>
-					<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=iw_aquarium' ) ); ?>" class="aquarium-log-button aquarium-log-button-primary">
-						<?php esc_html_e( 'Create Your First Aquarium', 'iworks-aquarium-log' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=iw_aquarium' ) ); ?>" class="aqualog-button aqualog-button-primary">
+						<?php esc_html_e( 'Create Your First Aquarium', 'PLUGIN_NAME' ); ?>
 					</a>
 				<?php endif; ?>
 			</div>

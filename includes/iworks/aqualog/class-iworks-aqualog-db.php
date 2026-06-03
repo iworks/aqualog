@@ -10,14 +10,14 @@
 defined( 'ABSPATH' ) || exit;
 
 // Include the base class.
-require_once dirname( __DIR__, 1 ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__, 1 ) . '/class-iworks-aqualog-base.php';
 
 /**
  * Database class for Aquarium Log.
  *
  * Handles all database operations for the Aquarium Log plugin.
  */
-class iworks_aquarium_log_db extends iworks_aquarium_log_base {
+class iworks_aqualog_db extends iworks_aqualog_base {
 
 	/**
 	 * Option name for storing the database version.
@@ -60,8 +60,8 @@ class iworks_aquarium_log_db extends iworks_aquarium_log_base {
 		/**
 		 * Aqualog hooks.
 		 */
-		add_action( 'iworks/aquarium-log/register_uninstall_hook', array( $this, 'drop_tables' ) );
-		add_action( 'iworks/aquarium-log/register_activation_hook', array( $this, 'db_install' ) );
+		add_action( 'iworks/aqualog/register_uninstall_hook', array( $this, 'drop_tables' ) );
+		add_action( 'iworks/aqualog/register_activation_hook', array( $this, 'db_install' ) );
 	}
 
 	/**
@@ -100,20 +100,20 @@ class iworks_aquarium_log_db extends iworks_aquarium_log_base {
 		$version_to_update = 1;
 		if ( $db_version < $version_to_update ) {
 			$aquarium_types = array(
-				_x( 'Biotope', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Brackish', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'High Tech', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Hobbyist', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Iwagumi', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Low Tech', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Marine', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Mizube', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Paludarium', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Pond', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Ragwork', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Ryuboku', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Shrimp', 'import terms to aquarium type', 'iworks-aquarium-log' ),
-				_x( 'Wabi Kusa', 'import terms to aquarium type', 'iworks-aquarium-log' ),
+				_x( 'Biotope', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Brackish', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'High Tech', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Hobbyist', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Iwagumi', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Low Tech', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Marine', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Mizube', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Paludarium', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Pond', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Ragwork', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Ryuboku', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Shrimp', 'import terms to aquarium type', 'PLUGIN_NAME' ),
+				_x( 'Wabi Kusa', 'import terms to aquarium type', 'PLUGIN_NAME' ),
 			);
 			foreach ( $aquarium_types as $aquarium_type ) {
 				wp_insert_term( $aquarium_type, 'iw_aquarium_group' );

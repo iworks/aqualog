@@ -16,11 +16,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'iworks_aquarium_log_wp_admin' ) ) {
+if ( class_exists( 'iworks_aqualog_wp_admin' ) ) {
 	return;
 }
 
-require_once dirname( __DIR__ ) . '/class-aquarium-log-base.php';
+require_once dirname( __DIR__ ) . '/class-iworks-aqualog-base.php';
 
 /**
  * Admin functionality for iWorks Aquarium Log.
@@ -35,7 +35,7 @@ require_once dirname( __DIR__ ) . '/class-aquarium-log-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
+class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 
 	/**
 	 * The capability required to access plugin admin features.
@@ -62,7 +62,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * Also loads admin classes dynamically from the wp-admin directory.
 	 *
 	 * @since 1.0.0
-	 * @see   iworks_aquarium_log_base::__construct()
+	 * @see   iworks_aqualog_base::__construct()
 	 * @uses  load_admin_classes()
 	 */
 	public function __construct() {
@@ -82,7 +82,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		 *
 		 * @since 1.0.0
 		 */
-		add_filter( 'iworks-aquarium-log/etc/config/metaboxes', array( $this, 'filter_iworks_options_add_meta_boxes' ) );
+		add_filter( 'iworks/aqualog/etc/config/metaboxes', array( $this, 'filter_iworks_options_add_meta_boxes' ) );
 		/**
 		 * Load admin classes from wp-admin directory.
 		 *
@@ -106,11 +106,11 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 			/**
 			 * Validate filename format using regex pattern.
 			 *
-			 * Only processes files that match the pattern 'class-iworks-aquarium-log-wp-admin-{name}.php'.
+			 * Only processes files that match the pattern 'class-iworks-aqualog-wp-admin-{name}.php'.
 			 *
 			 * @since 1.0.0
 			 */
-			if ( ! preg_match( '/^class-iworks-aquarium-log-wp-admin-([a-z]+).php$/', $filename, $matches ) ) {
+			if ( ! preg_match( '/^class-iworks-aqualog-wp-admin-([a-z]+).php$/', $filename, $matches ) ) {
 				continue;
 			}
 			/**
@@ -131,22 +131,22 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 			 *
 			 * @since 1.0.0
 			 */
-			$class_name = sprintf( 'iworks_aquarium_log_wp_admin_%s', $admin_name );
+			$class_name = sprintf( 'iworks_aqualog_wp_admin_%s', $admin_name );
 
 			/**
 			 * Initialize admin class instance.
 			 *
 			 * @since 1.0.0
 			 */
-			do_action( 'iworks-aquarium-log/register_objects', $admin_name, 'wp-admin', new $class_name() );
+			do_action( 'iworks/aqualog/register_objects', $admin_name, 'wp-admin', new $class_name() );
 		}
 		/**
 		 * Register additional plugin hooks.
 		 *
 		 * @since 1.0.0
 		 */
-		add_action( 'iworks-aquarium-log/wp-admin/current-aquarium-bar', array( $this, 'current_aquarium_bar' ) );
-		add_filter( 'iworks-aquarium-log/wp-admin/messages/files', array( $this, 'read_messages_files' ) );
+		add_action( 'iworks/aqualog/wp-admin/current-aquarium-bar', array( $this, 'current_aquarium_bar' ) );
+		add_filter( 'iworks/aqualog/wp-admin/messages/files', array( $this, 'read_messages_files' ) );
 	}
 
 	public function read_messages_files( $messages ) {
@@ -181,13 +181,13 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 */
 	public function filter_iworks_options_add_meta_boxes( $metaboxes ) {
 		$metaboxes['assistance'] = array(
-			'title'    => /* translators: Meta box title for assistance section */ esc_html__( 'Have a question or need help?', 'iworks-aquarium-log' ),
+			'title'    => /* translators: Meta box title for assistance section */ esc_html__( 'Have a question or need help?', 'PLUGIN_NAME' ),
 			'callback' => array( $this, 'need_assistance' ),
 			'context'  => 'side',
 			'priority' => 'core',
 		);
 		$metaboxes['love']       = array(
-			'title'    => /* translators: Meta box title for plugin appreciation section */ esc_html__( 'Enjoying this plugin?', 'iworks-aquarium-log' ),
+			'title'    => /* translators: Meta box title for plugin appreciation section */ esc_html__( 'Enjoying this plugin?', 'PLUGIN_NAME' ),
 			'callback' => array( $this, 'loved_this_plugin' ),
 			'context'  => 'side',
 			'priority' => 'core',
@@ -204,16 +204,16 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * @return void
 	 */
 	public function loved_this_plugin() {
-		$content = apply_filters( 'iworks_rate_love', '', 'iworks-aquarium-log' );
+		$content = apply_filters( 'iworks_rate_love', '', 'PLUGIN_NAME' );
 		if ( ! empty( $content ) ) {
 			echo wp_kses_post( $content );
 			return;
 		}
 		?>
-<p><?php esc_html_e( 'Help others discover it—share the link with your friends and community!', 'iworks-aquarium-log' ); ?></p>
+<p><?php esc_html_e( 'Help others discover it—share the link with your friends and community!', 'PLUGIN_NAME' ); ?></p>
 <ul>
-	<li><a target="_blank" href="<?php echo esc_url( _x( 'https://wordpress.org/support/plugin/iworks-aquarium-log/reviews/#new-post', 'link to add new review page on WordPress.org', 'iworks-aquarium-log' ) ); ?>"><?php esc_html_e( 'Give it a five stars on WordPress.org', 'iworks-aquarium-log' ); ?></a></li>
-	<li><a target="_blank" href="<?php echo esc_url( _x( 'https://wordpress.org/plugins/iworks-aquarium-log/', 'plugin home page on WordPress.org', 'iworks-aquarium-log' ) ); ?>"><?php esc_html_e( 'Link to it so others can easily find it', 'iworks-aquarium-log' ); ?></a></li>
+	<li><a target="_blank" href="<?php echo esc_url( _x( 'https://wordpress.org/support/plugin/aqualog/reviews/#new-post', 'link to add new review page on WordPress.org', 'PLUGIN_NAME' ) ); ?>"><?php esc_html_e( 'Give it a five stars on WordPress.org', 'PLUGIN_NAME' ); ?></a></li>
+	<li><a target="_blank" href="<?php echo esc_url( _x( 'https://wordpress.org/plugins/aqualog/', 'plugin home page on WordPress.org', 'PLUGIN_NAME' ) ); ?>"><?php esc_html_e( 'Link to it so others can easily find it', 'PLUGIN_NAME' ); ?></a></li>
 </ul>
 		<?php
 	}
@@ -227,16 +227,16 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * @return void
 	 */
 	public function need_assistance() {
-		$content = apply_filters( 'iworks_rate_assistance', '', 'iworks-aquarium-log' );
+		$content = apply_filters( 'iworks_rate_assistance', '', 'PLUGIN_NAME' );
 		if ( ! empty( $content ) ) {
 			echo wp_kses_post( $content );
 			return;
 		}
 
 		?>
-<p><?php esc_html_e( 'We’re here for you! Send us a message and we’ll get back to you as soon as possible.', 'iworks-aquarium-log' ); ?></p>
+<p><?php esc_html_e( 'We’re here for you! Send us a message and we’ll get back to you as soon as possible.', 'PLUGIN_NAME' ); ?></p>
 <ul>
-	<li><a target="_blank" href="<?php echo esc_url( _x( 'https://wordpress.org/support/plugin/iworks-aquarium-log/', 'link to support forum on WordPress.org', 'iworks-aquarium-log' ) ); ?>"><?php esc_html_e( 'WordPress Help Forum', 'iworks-aquarium-log' ); ?></a></li>
+	<li><a target="_blank" href="<?php echo esc_url( _x( 'https://wordpress.org/support/plugin/aqualog/', 'link to support forum on WordPress.org', 'PLUGIN_NAME' ) ); ?>"><?php esc_html_e( 'WordPress Help Forum', 'PLUGIN_NAME' ); ?></a></li>
 </ul>
 		<?php
 	}
@@ -249,7 +249,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 *
 	 * @since 1.0.0
 	 * @action wp_loaded
-	 * @see    iworks_aquarium_log_base::check_option_object()
+	 * @see    iworks_aqualog_base::check_option_object()
 	 * @see    iworks_options::options_init()
 	 * @return   void
 	 */
@@ -284,7 +284,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		);
 		// Register admin script
 		$name = $this->dir . '-admin';
-		$file = 'assets/scripts/iworks-aquarium-log-admin' . $this->dev . '.js';
+		$file = 'assets/scripts/aqualog-admin' . $this->dev . '.js';
 		wp_register_script(
 			$name,
 			plugins_url( $file, $this->plugin_file_path ),
@@ -295,7 +295,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 				'strategy'  => 'defer',
 			)
 		);
-		$file = 'assets/styles/iworks-aquarium-log-admin' . $this->dev . '.css';
+		$file = 'assets/styles/aqualog-admin' . $this->dev . '.css';
 		wp_register_style(
 			$name,
 			plugins_url( $file, $this->plugin_file_path ),
@@ -311,28 +311,28 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		 * @since 1.0.0
 		 */
 		$data = apply_filters(
-			'iworks-aquarium-log/wp-admin/wp_localize_script',
+			'iworks/aqualog/wp-admin/wp_localize_script',
 			array(
 				'ajax_url'    => admin_url( 'admin-ajax.php' ),
 				'nonces'      => array(),
 				'i18n'        => array(
 					'messages' => array(
-						'loading'       => /* translators: Loading message */ esc_html__( 'Loading…', 'iworks-aquarium-log' ),
-						'saving'        => /* translators: Saving message */ esc_html__( 'Saving…', 'iworks-aquarium-log' ),
-						'saveError'     => /* translators: Error message when saving fails */ esc_html__( 'An error occurred while saving. Please try again.', 'iworks-aquarium-log' ),
-						'invalidValues' => /* translators: Validation error message */ esc_html__( 'Please correct the highlighted fields and try again.', 'iworks-aquarium-log' ),
+						'loading'       => /* translators: Loading message */ esc_html__( 'Loading…', 'PLUGIN_NAME' ),
+						'saving'        => /* translators: Saving message */ esc_html__( 'Saving…', 'PLUGIN_NAME' ),
+						'saveError'     => /* translators: Error message when saving fails */ esc_html__( 'An error occurred while saving. Please try again.', 'PLUGIN_NAME' ),
+						'invalidValues' => /* translators: Validation error message */ esc_html__( 'Please correct the highlighted fields and try again.', 'PLUGIN_NAME' ),
 					),
 				),
 				'chemistry'   => array(),
 				'maintenance' => array(),
 			)
 		);
-		wp_localize_script( $name, 'iworks_aquarium_log', $data );
+		wp_localize_script( $name, 'iworks_aqualog', $data );
 	}
 
 	/**
 	 * Filters the array of row meta for the plugin in the Plugins list table.
-	 *
+	*
 	 * This method adds custom links to the plugin's row in the WordPress admin Plugins page.
 	 * It adds:
 	 * 1. A 'Settings' link (for non-multisite installations with proper capabilities)
@@ -349,7 +349,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * @return string[] Array of plugin row links with our custom links added.
 	 */
 	public function plugin_row_meta( $links, $file ) {
-		if ( $this->dir . '/iworks-aquarium-log.php' == $file ) {
+		if ( $this->dir . '/aqualog.php' == $file ) {
 			if ( ! is_multisite() && current_user_can( $this->capability ) ) {
 				$links[] = sprintf(
 					'<a href="%s">%s</a>',
@@ -362,7 +362,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 						)
 					),
 					/* translators: Settings menu item */
-						esc_html__( 'Settings', 'iworks-aquarium-log' )
+						esc_html__( 'Settings', 'PLUGIN_NAME' )
 				);
 			}
 			/* start:free */
@@ -371,14 +371,14 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 				esc_url(
 					add_query_arg(
 						array(
-							'utm_source' => 'iworks-aquarium-log',
+							'utm_source' => 'aqualog',
 							'utm_medium' => 'plugin-row-donate-link',
 						),
 						'https://ko-fi.com/iworks'
 					)
 				),
 				/* translators: Donate menu item */
-						esc_html__( 'Donate', 'iworks-aquarium-log' )
+						esc_html__( 'Donate', 'PLUGIN_NAME' )
 			);
 			/* end:free */
 			$links[] = sprintf(
@@ -386,14 +386,14 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 				esc_url(
 					add_query_arg(
 						array(
-							'utm_source' => 'iworks-aquarium-log',
+							'utm_source' => 'aqualog',
 							'utm_medium' => 'plugin-row-github-link',
 						),
-						'https://github.com/iworks.pl/iworks-aquarium-log'
+						'https://github.com/iworks.pl/aqualog'
 					)
 				),
 				/* translators: GitHub menu item */
-						esc_html__( 'GitHub', 'iworks-aquarium-log' )
+				esc_html__( 'GitHub', 'PLUGIN_NAME' )
 			);
 		}
 		return $links;
@@ -420,7 +420,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 			// Fallback to dashicon if file cannot be read
 			return 'dashicons-button';
 		}
-
+		//vg_content = str_replace( '<svg', '<svg fill="#fff"', $svg_content );
 		$base64 = base64_encode( $svg_content );
 		return 'data:image/svg+xml;base64,' . $base64;
 	}
@@ -441,9 +441,9 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		// Main menu item
 		$slug = add_menu_page(
 			/* translators: Main menu page title */
-			esc_html__( 'iWorks Aquarium Log Dashboard', 'iworks-aquarium-log' ),
+			esc_html__( 'iWorks Aquarium Log Dashboard', 'PLUGIN_NAME' ),
 			/* translators: Main menu item title */
-			esc_html__( 'iWorks Aquarium Log', 'iworks-aquarium-log' ),
+			esc_html__( 'iWorks Aquarium Log', 'PLUGIN_NAME' ),
 			$this->capability,
 			$this->wp_admin_slug,
 			array( $this, 'render_dashboard_page' ),
@@ -455,75 +455,75 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		$submenus = array(
 			array(
 				/* translators: Dashboard submenu title */
-				'title'             => esc_html__( 'Dashboard', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Dashboard', 'PLUGIN_NAME' ),
 				'slug'              => $this->wp_admin_slug,
 				'callback'          => array( $this, 'render_dashboard_page' ),
 				'module_load_check' => 'skip',
 			),
 			array(
 				/* translators: Chemistry submenu title */
-				'title'             => esc_html__( 'Dosings', 'iworks-aquarium-log' ),
-				'slug'              => 'aquarium-log-dosings',
+				'title'             => esc_html__( 'Dosings', 'PLUGIN_NAME' ),
+				'slug'              => 'aqualog-dosings',
 				'callback'          => array( $this, 'render_dosings_page' ),
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Chemistry submenu title */
-				'title'             => esc_html__( 'Chemistry', 'iworks-aquarium-log' ),
-				'slug'              => 'aquarium-log-chemistry',
+				'title'             => esc_html__( 'Chemistry', 'PLUGIN_NAME' ),
+				'slug'              => 'aqualog-chemistry',
 				'callback'          => array( $this, 'render_chemistry_page' ),
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Maintenance submenu title */
-				'title'             => esc_html__( 'Maintenance', 'iworks-aquarium-log' ),
-				'slug'              => 'aquarium-log-maintenance',
+				'title'             => esc_html__( 'Maintenance', 'PLUGIN_NAME' ),
+				'slug'              => 'aqualog-maintenance',
 				'callback'          => array( $this, 'render_maintenance_page' ),
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Notes submenu title */
-				'title'             => esc_html__( 'Notes', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Notes', 'PLUGIN_NAME' ),
 				'slug'              => 'edit.php?post_type=iw_note',
 				'callback'          => null,
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Equipment submenu title */
-				'title'             => esc_html__( 'Equipment', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Equipment', 'PLUGIN_NAME' ),
 				'slug'              => 'edit.php?post_type=iw_equipment',
 				'callback'          => null,
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Plants submenu title */
-				'title'             => esc_html__( 'Plants', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Plants', 'PLUGIN_NAME' ),
 				'slug'              => 'edit.php?post_type=iw_plant',
 				'callback'          => null,
 				'module_load_check' => 'check',
 			),
 			array(
 				/* translators: Aquariums submenu title */
-				'title'             => esc_html__( 'Aquariums', 'iworks-aquarium-log' ),
+				'title'             => esc_html__( 'Aquariums', 'PLUGIN_NAME' ),
 				'slug'              => 'edit.php?post_type=iw_aquarium',
 				'callback'          => null,
 				'module_load_check' => 'skip',
 			),
 			array(
 				/* translators: Help submenu title */
-				'title'             => esc_html__( 'Help', 'iworks-aquarium-log' ),
-				'slug'              => 'aquarium-log-help',
+				'title'             => esc_html__( 'Help', 'PLUGIN_NAME' ),
+				'slug'              => 'aqualog-help',
 				'callback'          => array( $this, 'render_help_page' ),
 				'module_load_check' => 'skip',
 			),
 		);
 		foreach ( $submenus as $submenu ) {
 			if ( 'check' === $submenu['module_load_check'] ) {
-				$module = str_replace( 'aquarium-log-', '', $submenu['slug'] );
+				$module = str_replace( 'aqualog-', '', $submenu['slug'] );
 				if ( ! $this->is_module_enabled( $module ) ) {
 					continue;
 				}
-				add_filter( 'iworks-aquarium-log/load/module/' . $module, '__return_true' );
+				add_filter( 'iworks/aqualog/load/module/' . $module, '__return_true' );
 			}
 			$slug = add_submenu_page(
 				$this->wp_admin_slug,
@@ -547,7 +547,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * @return  void
 	 */
 	public function render_dashboard_page() {
-		do_action( 'iworks-aquarium-log/wp-admin/page/dashboard' );
+		do_action( 'iworks/aqualog/wp-admin/page/dashboard' );
 	}
 
 	/**
@@ -563,15 +563,15 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		<div class="wrap">
 			<?php
 			/* translators: Help & Support page title */
-			$this->html_title( esc_html__( 'Help & Support', 'iworks-aquarium-log' ) );
+			$this->html_title( esc_html__( 'Help & Support', 'PLUGIN_NAME' ) );
 			?>
-			<div class="aquarium-log-card">
-				<h3><?php esc_html_e( 'Getting Started', 'iworks-aquarium-log' ); ?></h3>
-				<p><?php esc_html_e( 'Welcome to iWorks Aquarium Log! Here are some resources to help you get started:', 'iworks-aquarium-log' ); ?></p>
+			<div class="aqualog-card">
+				<h3><?php esc_html_e( 'Getting Started', 'PLUGIN_NAME' ); ?></h3>
+				<p><?php esc_html_e( 'Welcome to iWorks Aquarium Log! Here are some resources to help you get started:', 'PLUGIN_NAME' ); ?></p>
 				<ul>
-					<li><a href="<?php echo esc_url( 'https://wordpress.org/plugins/iworks-aquarium-log/' ); ?>" target="_blank"><?php esc_html_e( 'Plugin Documentation', 'iworks-aquarium-log' ); ?></a></li>
-					<li><a href="<?php echo esc_url( 'https://wordpress.org/support/plugin/iworks-aquarium-log/' ); ?>" target="_blank"><?php esc_html_e( 'Support Forum', 'iworks-aquarium-log' ); ?></a></li>
-					<li><a href="<?php echo esc_url( 'https://wordpress.org/support/plugin/iworks-aquarium-log/reviews/' ); ?>" target="_blank"><?php esc_html_e( 'Leave a Review', 'iworks-aquarium-log' ); ?></a></li>
+					<li><a href="<?php echo esc_url( 'https://wordpress.org/plugins/aqualog/' ); ?>" target="_blank"><?php esc_html_e( 'Plugin Documentation', 'PLUGIN_NAME' ); ?></a></li>
+					<li><a href="<?php echo esc_url( 'https://wordpress.org/support/plugin/aqualog/' ); ?>" target="_blank"><?php esc_html_e( 'Support Forum', 'PLUGIN_NAME' ); ?></a></li>
+					<li><a href="<?php echo esc_url( 'https://wordpress.org/support/plugin/aqualog/reviews/' ); ?>" target="_blank"><?php esc_html_e( 'Leave a Review', 'PLUGIN_NAME' ); ?></a></li>
 				</ul>
 			</div>
 		</div>
@@ -585,11 +585,11 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * to render the chemistry interface.
 	 *
 	 * @since 1.0.0
-	 * @action iworks-aquarium-log/wp-admin/chemistry_page
+	 * @action iworks/aqualog/wp-admin/chemistry_page
 	 * @return  void
 	 */
 	public function render_chemistry_page() {
-		do_action( 'iworks-aquarium-log/wp-admin/chemistry_page' );
+		do_action( 'iworks/aqualog/wp-admin/chemistry_page' );
 	}
 
 	/**
@@ -599,11 +599,11 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * to render the maintenance interface.
 	 *
 	 * @since 1.0.0
-	 * @action iworks-aquarium-log/wp-admin/maintenance_page
+	 * @action iworks/aqualog/wp-admin/maintenance_page
 	 * @return  void
 	 */
 	public function render_maintenance_page() {
-		do_action( 'iworks-aquarium-log/wp-admin/maintenance_page' );
+		do_action( 'iworks/aqualog/wp-admin/maintenance_page' );
 	}
 
 	/**
@@ -612,7 +612,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 	 * Outputs the current aquarium selection bar in the admin interface.
 	 *
 	 * @since 1.0.0
-	 * @action iworks-aquarium-log/wp-admin/current-aquarium-bar
+	 * @action iworks/aqualog/wp-admin/current-aquarium-bar
 	 * @return  void
 	 */
 	public function current_aquarium_bar() {
@@ -633,7 +633,7 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 		$count   = intval( wp_count_posts( 'iw_aquarium' )->publish );
 		$content = '';
 		$id      = 0;
-		$title   = /* translators: Default text when no aquarium is selected */ esc_html__( 'no aquarium selected.', 'iworks-aquarium-log' );
+		$title   = /* translators: Default text when no aquarium is selected */ esc_html__( 'no aquarium selected.', 'PLUGIN_NAME' );
 		if ( empty( $this->current_aquarium_id ) ) {
 		} else {
 			$aquarium = get_post( $this->current_aquarium_id );
@@ -645,17 +645,17 @@ class iworks_aquarium_log_wp_admin extends iworks_aquarium_log_base {
 				);
 			}
 		}
-		$content .= '<div class="aquarium-log-current-aquarium">';
-		$content .= '<span class="aquarium-log-current-aquarium-label">';
-		$content .= /* translators: Label for current aquarium display */ esc_html__( 'Current Aquarium:', 'iworks-aquarium-log' );
+		$content .= '<div class="aqualog-current-aquarium">';
+		$content .= '<span class="aqualog-current-aquarium-label">';
+		$content .= /* translators: Label for current aquarium display */ esc_html__( 'Current Aquarium:', 'PLUGIN_NAME' );
 		$content .= ' ';
 		$content .= $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$content .= '</span>';
 		$content .= ' ';
 		if ( 1 < $count ) {
-			$content .= '<span class="aquarium-log-current-aquarium-change">';
+			$content .= '<span class="aqualog-current-aquarium-change">';
 			$content .= '<a href="' . esc_url( add_query_arg( 'change', 'aquarium' ) ) . '">';
-			$content .= /* translators: Link text to change aquarium */ esc_html__( 'Change Aquarium', 'iworks-aquarium-log' );
+			$content .= /* translators: Link text to change aquarium */ esc_html__( 'Change Aquarium', 'PLUGIN_NAME' );
 			$content .= '</a>';
 			$content .= '</span>';
 		}

@@ -14,7 +14,7 @@ window.iworks_aquarium_log.setAquariumCookie = function(aquariumId) {
  * Initialize aquarium item click handlers
  */
 window.iworks_aquarium_log.initAquariumItems = function() {
-	var aquariumItems = document.querySelectorAll('a.aquarium-log-aquarium-item');
+	var aquariumItems = document.querySelectorAll('a.aqualog-aquarium-item');
 
 	aquariumItems.forEach(function(item) {
 		item.addEventListener('click', function(e) {

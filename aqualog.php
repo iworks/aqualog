@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: iWorks Aquarium Log
-Text Domain: iworks-aquarium-log
+Plugin Name: iWorks Aquarium Tracker: Water Parameters, Reminders & Notes
+Text Domain: aqualog
 Plugin URI: PLUGIN_URI
 Description: PLUGIN_TAGLINE
 Version: PLUGIN_VERSION
@@ -34,26 +34,26 @@ defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 // Define plugin version constant
 define( 'IWORKS_AQUALOG_VERSION', 'PLUGIN_VERSION' );
 // Define prefix for all plugin options and functions
-define( 'IWORKS_AQUALOG_PREFIX', 'iworks_aquarium_log_' );
+define( 'IWORKS_AQUALOG_PREFIX', 'iworks_aqualog_' );
 // Get the base directory path
-$iworks_aquarium_log_base = __DIR__;
+$iworks_aqualog_base = __DIR__;
 // Set vendor directory path (where core classes are located)
-$iworks_aquarium_log_vendor = $iworks_aquarium_log_base . '/includes';
+$iworks_aqualog_vendor = $iworks_aqualog_base . '/includes';
 
 /**
  * Load the main plugin class if it doesn't exist
  * This is the core class that handles all plugin functionality
  */
-if ( ! class_exists( 'iworks_aquarium_log' ) ) {
+if ( ! class_exists( 'iworks_aqualog' ) ) {
 	// Load the main plugin class from the includes directory
-	require_once $iworks_aquarium_log_vendor . '/iworks/class-iworks-aquarium-log.php';
+	require_once $iworks_aqualog_vendor . '/iworks/class-iworks-aqualog.php';
 }
 
 /**
  * Load configuration options
  * This file contains all plugin configuration settings
  */
-require_once $iworks_aquarium_log_base . '/etc/options.php';
+require_once $iworks_aqualog_base . '/etc/options.php';
 
 /**
  * Load the options class if it doesn't exist
@@ -61,10 +61,10 @@ require_once $iworks_aquarium_log_base . '/etc/options.php';
  */
 if ( ! class_exists( 'iworks_options' ) ) {
 	// Load the options class from the includes directory
-	require_once $iworks_aquarium_log_vendor . '/iworks/options/options.php';
+	require_once $iworks_aqualog_vendor . '/iworks/options/options.php';
 }
 
-require_once $iworks_aquarium_log_base . '/includes/template-tags.php';
+require_once $iworks_aqualog_base . '/includes/template-tags.php';
 
 /**
  * Initialize and get plugin options
@@ -72,33 +72,33 @@ require_once $iworks_aquarium_log_base . '/includes/template-tags.php';
  *
  * @return iworks_options The plugin options object
  */
-function iworks_aquarium_log_get_options() {
+function iworks_aqualog_get_options() {
 	// Use global variable to store options object
-	global $iworks_aquarium_log_options;
+	global $iworks_aqualog_options;
 
 	// Return existing options object if it exists
-	if ( is_object( $iworks_aquarium_log_options ) ) {
-		return $iworks_aquarium_log_options;
+	if ( is_object( $iworks_aqualog_options ) ) {
+		return $iworks_aqualog_options;
 	}
 
 	// Create new options object if it doesn't exist
-	$iworks_aquarium_log_options = new iworks_options();
+	$iworks_aqualog_options = new iworks_options();
 
 	// Set the function name for options
-	$iworks_aquarium_log_options->set_option_function_name( 'iworks_aquarium_log_options' );
+	$iworks_aqualog_options->set_option_function_name( 'iworks_aqualog_options' );
 	// Set the option prefix for all plugin options
-	$iworks_aquarium_log_options->set_option_prefix( IWORKS_AQUALOG_PREFIX );
+	$iworks_aqualog_options->set_option_prefix( IWORKS_AQUALOG_PREFIX );
 
 	// Set the plugin file name if the method exists
-	if ( method_exists( $iworks_aquarium_log_options, 'set_plugin' ) ) {
-		$iworks_aquarium_log_options->set_plugin( basename( __FILE__ ) );
+	if ( method_exists( $iworks_aqualog_options, 'set_plugin' ) ) {
+		$iworks_aqualog_options->set_plugin( basename( __FILE__ ) );
 	}
 
 	// Initialize the options
-	$iworks_aquarium_log_options->options_init();
+	$iworks_aqualog_options->options_init();
 
 	// Return the options object
-	return $iworks_aquarium_log_options;
+	return $iworks_aqualog_options;
 }
 
 // Initialize the main plugin class

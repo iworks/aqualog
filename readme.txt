@@ -1,4 +1,4 @@
-=== iWorks Aquarium Log ===
+=== iWorks Aquarium Tracker: Water Parameters, Reminders & Notes ===
 Contributors: iworks
 Donate link: https://ko-fi.com/iworks?utm_source=aqualog&utm_medium=readme-donate
 Tags: PLUGIN_TAGS

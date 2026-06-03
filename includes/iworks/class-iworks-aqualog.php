@@ -16,7 +16,7 @@ if ( class_exists( 'iworks_aquarium_log' ) ) {
 	return;
 }
 
-require_once __DIR__ . '/class-iworks-aquarium-log-base.php';
+require_once __DIR__ . '/class-iworks-aqualog-base.php';
 
 /**
  * Main plugin class.
@@ -25,7 +25,7 @@ require_once __DIR__ . '/class-iworks-aquarium-log-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log extends iworks_aquarium_log_base {
+class iworks_aquarium_log extends iworks_aqualog_base {
 
 	/**
 	 * Plugin objects container.
@@ -53,65 +53,65 @@ class iworks_aquarium_log extends iworks_aquarium_log_base {
 		/**
 		 * Enable aquarium post type
 		 */
-		add_filter( 'iworks-aquarium-log/load/posttype/aquarium', '__return_true' );
+		add_filter( 'iworks/aqualog/load/posttype/aquarium', '__return_true' );
 		/**
 		 * post types
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aquarium-log-posttypes.php';
+		$filename = $this->includes_directory . '/class-iworks-aqualog-posttypes.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['posttypes'] = new iworks_aquarium_log_posttypes();
+			$this->objects['posttypes'] = new iworks_aqualog_posttypes();
 		}
 		/**
 		 * taxonomies
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aquarium-log-taxonomies.php';
+		$filename = $this->includes_directory . '/class-iworks-aqualog-taxonomies.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['taxonomies'] = new iworks_aquarium_log_taxonomies();
+			$this->objects['taxonomies'] = new iworks_aqualog_taxonomies();
 		}
 		/**
 		 * load github class
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aquarium-log-github.php';
+		$filename = $this->includes_directory . '/class-iworks-aqualog-github.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['github'] = new iworks_aquarium_log_github();
+			$this->objects['github'] = new iworks_aqualog_github();
 		}
 		/**
 		 * admin
 		 */
 		if ( is_admin() ) {
-			$filename = $this->includes_directory . '/class-iworks-aquarium-log-wp-admin.php';
+			$filename = $this->includes_directory . '/class-iworks-aqualog-wp-admin.php';
 			if ( is_file( $filename ) ) {
 				include_once $filename;
-				$this->objects['wp-admin'] = new iworks_aquarium_log_wp_admin();
+				$this->objects['wp-admin'] = new iworks_aqualog_wp_admin();
 			}
 		}
 		/**
 		 * load db class
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aquarium-log-db.php';
+		$filename = $this->includes_directory . '/class-iworks-aqualog-db.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['db'] = new iworks_aquarium_log_db();
+			$this->objects['db'] = new iworks_aqualog_db();
 		}
 		/**
 		 * load logger class
 		 */
-		$filename = $this->includes_directory . '/class-iworks-aquarium-log-logger.php';
+		$filename = $this->includes_directory . '/class-iworks-aqualog-logger.php';
 		if ( is_file( $filename ) ) {
 			include_once $filename;
-			$this->objects['logger'] = new iworks_aquarium_log_logger();
+			$this->objects['logger'] = new iworks_aqualog_logger();
 		}
 		/**
 		 * register objects filter
 		 */
-		add_action( 'iworks-aquarium-log/register_objects', array( $this, 'register_objects' ), 10, 3 );
+		add_action( 'iworks/aqualog/register_objects', array( $this, 'register_objects' ), 10, 3 );
 		/**
 		 * is active?
 		 */
-		add_filter( 'iworks-aquarium-log/is_active', '__return_true' );
+		add_filter( 'iworks/aqualog/is_active', '__return_true' );
 	}
 
 	/**
@@ -144,8 +144,8 @@ class iworks_aquarium_log extends iworks_aquarium_log_base {
 		 */
 		if ( is_admin() ) {
 		} else {
-			$file = 'assets/styles/iworks-aquarium-log-frontend' . $this->dev . '.css';
-			wp_enqueue_style( 'iworks_aquarium_log', plugins_url( $file, $this->base ), array(), $this->get_version( $file ) );
+			$file = 'assets/styles/aqualog-frontend' . $this->dev . '.css';
+			wp_enqueue_style( 'iworks_aqualog', plugins_url( $file, $this->base ), array(), $this->get_version( $file ) );
 		}
 	}
 
@@ -162,7 +162,7 @@ class iworks_aquarium_log extends iworks_aquarium_log_base {
 		$this->objects['db']->db_install();
 		$this->check_option_object();
 		$this->options->activate();
-		do_action( 'iworks/aquarium-log/register_activation_hook' );
+		do_action( 'iworks/aqualog/register_activation_hook' );
 	}
 
 	/**
@@ -176,9 +176,9 @@ class iworks_aquarium_log extends iworks_aquarium_log_base {
 	public function register_deactivation_hook() {
 		$this->check_option_object();
 		$this->options->deactivate();
-		do_action( 'iworks/aquarium-log/register_deactivation_hook' );
+		do_action( 'iworks/aqualog/register_deactivation_hook' );
 	}
-
+	
 	/**
 	 * Add aquarium_id query var.
 	 *

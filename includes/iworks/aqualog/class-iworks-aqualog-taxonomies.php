@@ -18,11 +18,11 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Prevent multiple class definitions
  */
-if ( class_exists( 'iworks_aquarium_log_taxonomies' ) ) {
+if ( class_exists( 'iworks_aqualog_taxonomies' ) ) {
 	return;
 }
 
-require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__ ) . '/class-iworks-aqualog-base.php';
 /**
  * iWorks WordPress Plugin Taxonomies Class
  *
@@ -31,7 +31,7 @@ require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_taxonomies extends iworks_aquarium_log_base {
+class iworks_aqualog_taxonomies extends iworks_aqualog_base {
 
 	/**
 	 * Array of taxonomy objects
@@ -69,7 +69,7 @@ class iworks_aquarium_log_taxonomies extends iworks_aquarium_log_base {
 			 * Validate the filename format
 			 * Only process files that match the expected pattern
 			 */
-			if ( ! preg_match( '/^class-iworks-aquarium-log-taxonomy-([a-z]+).php$/', $filename, $matches ) ) {
+			if ( ! preg_match( '/^class-iworks-aqualog-taxonomy-([a-z]+).php$/', $filename, $matches ) ) {
 				continue;
 			}
 
@@ -81,7 +81,7 @@ class iworks_aquarium_log_taxonomies extends iworks_aquarium_log_base {
 			 * Create the filter name for this taxonomy
 			 */
 			$filter = sprintf(
-				'iworks-aquarium-log/load/taxonomy/%s',
+				'iworks/aqualog/load/taxonomy/%s',
 				$taxonomy_name
 			);
 			/**
@@ -97,7 +97,7 @@ class iworks_aquarium_log_taxonomies extends iworks_aquarium_log_base {
 				/**
 				 * Generate the class name
 				 */
-				$class_name = sprintf( 'iworks_aquarium_log_taxonomy_%s', $taxonomy_name );
+				$class_name = sprintf( 'iworks_aqualog_taxonomy_%s', $taxonomy_name );
 
 				/**
 				 * Initialize the taxonomy class

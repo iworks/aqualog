@@ -20,9 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
-abstract class iworks_aquarium_log_taxonomy extends iworks_aquarium_log_base {
+abstract class iworks_aqualog_taxonomy extends iworks_aqualog_base {
 
 	/**
 	 * Taxonomy Name
@@ -74,13 +74,13 @@ abstract class iworks_aquarium_log_taxonomy extends iworks_aquarium_log_base {
 	protected function get_taxonomy( $taxonomy_name ) {
 		if ( ! isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
 			$this->taxonomies_names = apply_filters(
-				'iworks/aquarium-log/taxonomies_names/array',
+				'iworks/aqualog/taxonomies_names/array',
 				$this->taxonomies_names
 			);
 		}
 		if ( isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
 			return $this->taxonomies_names[ $taxonomy_name ];
 		}
-		return new WP_Error( 'taxonomy', esc_html__( 'Selected Taxonomy dosn\'t exists.', 'iworks-aquarium-log' ) );
+		return new WP_Error( 'taxonomy', esc_html__( 'Selected Taxonomy dosn\'t exists.', 'PLUGIN_NAME' ) );
 	}
 }

@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 /**
  * iWorks Aquarium Log Activity Class
@@ -25,7 +25,7 @@ require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_wp_admin_activity extends iworks_aquarium_log_base {
+class iworks_aqualog_wp_admin_activity extends iworks_aqualog_base {
 
 	/**
 	 * Class constructor.
@@ -39,7 +39,7 @@ class iworks_aquarium_log_wp_admin_activity extends iworks_aquarium_log_base {
 		/**
 		 * WordPress Hooks
 		 */
-		add_action( 'iworks-aquarium-log/dashboard/recent_activity', array( $this, 'render_recent_activity' ) );
+		add_action( 'iworks/aqualog/dashboard/recent_activity', array( $this, 'render_recent_activity' ) );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class iworks_aquarium_log_wp_admin_activity extends iworks_aquarium_log_base {
 		 * @param array $activities Array of activity items.
 		 * @param int   $limit      Number of items requested.
 		 */
-		return apply_filters( 'iworks-aquarium-log/activity/recent_items', $activities, $limit );
+		return apply_filters( 'iworks/aqualog/activity/recent_items', $activities, $limit );
 	}
 
 	/**
@@ -101,13 +101,13 @@ class iworks_aquarium_log_wp_admin_activity extends iworks_aquarium_log_base {
 		$activities = $this->get_recent_activity();
 
 		if ( empty( $activities ) ) {
-			echo '<p>' . esc_html__( 'No recent activity found.', 'iworks-aquarium-log' ) . '</p>';
+			echo '<p>' . esc_html__( 'No recent activity found.', 'PLUGIN_NAME' ) . '</p>';
 			return;
 		}
 
 		foreach ( $activities as $activity ) {
 			?>
-			<div class="aquarium-log-activity-item">
+			<div class="aqualog-activity-item">
 				<strong>
 					<?php
 					if ( ! empty( $activity['edit_link'] ) ) {
@@ -118,11 +118,11 @@ class iworks_aquarium_log_wp_admin_activity extends iworks_aquarium_log_base {
 					?>
 				</strong>
 				<br>
-				<span class="aquarium-log-activity-meta">
+				<span class="aqualog-activity-meta">
 					<?php
 					printf(
 						/* translators: %1$s: date, %2$s: time */
-						esc_html__( 'Created on %1$s at %2$s', 'iworks-aquarium-log' ),
+						esc_html__( 'Created on %1$s at %2$s', 'PLUGIN_NAME' ),
 						esc_html( $activity['date'] ),
 						esc_html( $activity['time'] )
 					);

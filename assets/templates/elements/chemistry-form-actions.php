@@ -12,13 +12,13 @@
  */
 defined( 'ABSPATH' ) || exit;
 ?>
-<div class="aquarium-log-form-actions">
-	<button type="submit" class="button button-primary aquarium-log-form-submit">
+<div class="aqualog-form-actions">
+	<button type="submit" class="button button-primary aqualog-form-submit">
 		<span class="dashicons dashicons-saved"></span>
-		<?php esc_html_e( 'Save Measurements', 'iworks-aquarium-log' ); ?>
+		<?php esc_html_e( 'Save Measurements', 'PLUGIN_NAME' ); ?>
 	</button>
 	
-	<button type="button" class="button aquarium-log-form-cancel" onclick="window.iworks_aquarium_log.chemistry.closeForm()">
-		<?php esc_html_e( 'Cancel', 'iworks-aquarium-log' ); ?>
+	<button type="button" class="button aqualog-form-cancel" onclick="window.iworks_aquarium_log.chemistry.closeForm()">
+		<?php esc_html_e( 'Cancel', 'PLUGIN_NAME' ); ?>
 	</button>
 </div>

@@ -9,8 +9,8 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<div class="aquarium-log-stat-card aquarium-log-stat-card--<?php echo esc_attr( $args['class'] ); ?>">
+<div class="aqualog-stat-card aqualog-stat-card--<?php echo esc_attr( $args['class'] ); ?>">
 	<span class="dashicons dashicons-<?php echo esc_attr( $args['icon'] ); ?>"></span>
-	<div class="aquarium-log-stat-number"><?php echo esc_html( $args['value'] ); ?></div>
-	<div class="aquarium-log-stat-label"><?php echo esc_html( $args['title'] ); ?></div>
+	<div class="aqualog-stat-number"><?php echo esc_html( $args['value'] ); ?></div>
+	<div class="aqualog-stat-label"><?php echo esc_html( $args['title'] ); ?></div>
 </div>

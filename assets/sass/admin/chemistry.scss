@@ -1,16 +1,16 @@
-.aquarium-log-chemistry {
+.aqualog-chemistry {
 	&-container {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--aquarium-log-settings-gap);
+		gap: var(--aqualog-settings-gap);
 	}
 
 	&-item {
 		width: 200px;
-		background-color: var(--aquarium-log-settings-bg);
-		padding: var(--aquarium-log-settings-padding-s);
-		border: 1px solid var(--aquarium-log-settings-border);
-		border-radius: var(--aquarium-log-settings-radius);
+		background-color: var(--aqualog-settings-bg);
+		padding: var(--aqualog-settings-padding-s);
+		border: 1px solid var(--aqualog-settings-border);
+		border-radius: var(--aqualog-settings-radius);
 
 		&:hover {
 			cursor: pointer;
@@ -37,12 +37,12 @@
 		&-body {
 			&-scale {
 				&-char {
-					background-color: var(--aquarium-log-settings-border);
+					background-color: var(--aqualog-settings-border);
 					display: block;
 					height: 10px;
 					width: 100%;
 					position: relative;
-					margin: var(--aquarium-log-settings-margin-m) 0 var(--aquarium-log-settings-margin-s) 0;
+					margin: var(--aqualog-settings-margin-m) 0 var(--aqualog-settings-margin-s) 0;
 
 					.scale-item {
 						position: absolute;
@@ -66,7 +66,7 @@
 				&-legend {
 					display: flex;
 					justify-content: space-between;
-					padding-bottom: var(--aquarium-log-settings-padding-l);
+					padding-bottom: var(--aqualog-settings-padding-l);
 				}
 
 				&-button {
@@ -78,8 +78,8 @@
 					border: none;
 					cursor: pointer;
 					gap: 5px;
-					border: 1px solid var(--aquarium-log-settings-border);
-					border-radius: var(--aquarium-log-settings-radius);
+					border: 1px solid var(--aqualog-settings-border);
+					border-radius: var(--aqualog-settings-radius);
 					padding: 5px;
 					line-height: 1;
 
@@ -91,7 +91,7 @@
 					&s {
 						padding: 20px 0;
 						display: flex;
-						gap: var(--aquarium-log-settings-gap);
+						gap: var(--aqualog-settings-gap);
 					}
 				}
 
@@ -121,21 +121,21 @@
 				text-align: center;
 
 				&--danger {
-					color: var(--aquarium-log-settings-danger);
+					color: var(--aqualog-settings-danger);
 				}
 
 				&--safety {
-					color: var(--aquarium-log-settings-safety);
+					color: var(--aqualog-settings-safety);
 				}
 
 				&--ideal {
-					color: var(--aquarium-log-settings-ideal);
+					color: var(--aqualog-settings-ideal);
 				}
 			}
 		}
 
 		&.param-importance-default {
-			.aquarium-log-chemistry-item-header {
+			.aqualog-chemistry-item-header {
 				display: block;
 			}
 
@@ -143,12 +143,12 @@
 	}
 
 	.dashicons {
-		color: var(--aquarium-log-settings-border);
+		color: var(--aqualog-settings-border);
 	}
 }
 
 // Modal styles
-.aquarium-log {
+.aqualog {
 	&-modal-overlay {
 		position: fixed;
 		top: 0;
@@ -175,10 +175,10 @@
 		z-index: 100001;
 		display: none;
 
-		.aquarium-log-chemistry-form {
+		.aqualog-chemistry-form {
 			margin: 0;
 
-			.aquarium-log-card {
+			.aqualog-card {
 				border: none;
 				box-shadow: none;
 				margin: 0;

@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Prevent multiple class definitions.
  */
-if ( class_exists( 'iworks_aquarium_log_base' ) ) {
+if ( class_exists( 'iworks_aqualog_base' ) ) {
 	return;
 }
 
@@ -30,7 +30,7 @@ if ( class_exists( 'iworks_aquarium_log_base' ) ) {
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_base {
+class iworks_aqualog_base {
 
 	/**
 	 * Developer mode flag
@@ -158,7 +158,7 @@ class iworks_aquarium_log_base {
 	 * @since 1.0.0
 	 * @var string $wp_admin_slug The WP Admin slug
 	 */
-	protected string $wp_admin_slug = 'aquarium-log-dashboard';
+	protected string $wp_admin_slug = 'aqualog-dashboard';
 
 	/**
 	 * Current aquarium ID.
@@ -178,7 +178,7 @@ class iworks_aquarium_log_base {
 	 *
 	 * @since 1.0.0
 	 */
-	protected string $option_name_media = '_iw_media';
+	protected string $option_name_media = '_iworks_aqualog_media';
 
 	protected array $posttypes_names = array();
 
@@ -217,12 +217,12 @@ class iworks_aquarium_log_base {
 		 * plugin ID
 		 */
 		$this->plugin_file_dir  = dirname( $this->base, 2 );
-		$this->plugin_file_path = $this->plugin_file_dir . '/iworks-aquarium-log.php';
+		$this->plugin_file_path = $this->plugin_file_dir . '/iworks-aqualog.php';
 		$this->plugin_file      = plugin_basename( $this->plugin_file_path );
 		/**
 		 * plugin includes directory
 		 */
-		$this->includes_directory = __DIR__ . '/iworks-aquarium-log';
+		$this->includes_directory = __DIR__ . '/aqualog';
 		/**
 		 * WordPress Hooks
 		 */
@@ -230,11 +230,11 @@ class iworks_aquarium_log_base {
 		 * Settings
 		 */
 		$this->posttypes_names  = apply_filters(
-			'iworks/aquarium-log/posttypes_names/array',
+			'iworks/aqualog/posttypes_names/array',
 			$this->posttypes_names
 		);
 		$this->taxonomies_names = apply_filters(
-			'iworks/aquarium-log/taxonomies_names/array',
+			'iworks/aqualog/taxonomies_names/array',
 			$this->taxonomies_names
 		);
 	}
@@ -445,7 +445,7 @@ class iworks_aquarium_log_base {
 		if ( is_a( $this->options, 'iworks_options' ) ) {
 			return;
 		}
-		$this->options = iworks_aquarium_log_get_options();
+		$this->options = iworks_aqualog_get_options();
 	}
 
 	/**
@@ -468,9 +468,9 @@ class iworks_aquarium_log_base {
 	 */
 	public function get_stub_data() {
 		return array(
-			'published' => '2026-05-21',
-			'version'   => 'PLUGIN_VERSION',
-			'github'    => 'https://github.com/iworks/aquarium-log',
+			'published' => '2026-06-19',
+			'version'   => '1.0.0',
+			'github'    => 'https://github.com/iworks/aqualog',
 		);
 	}
 
@@ -588,7 +588,7 @@ class iworks_aquarium_log_base {
 			$this->current_aquarium_id = $default_aquarium_id;
 			return;
 		}
-		$this->current_aquarium_id = apply_filters( 'iworks-aquarium-log/set/current_aquarium_id', 0 );
+		$this->current_aquarium_id = apply_filters( 'iworks/aqualog/set/current_aquarium_id', 0 );
 	}
 
 	/**
@@ -636,18 +636,18 @@ class iworks_aquarium_log_base {
 		$days_diff = intval( ( $current_timestamp - $measurement_timestamp ) / ( 24 * 60 * 60 ) );
 
 		if ( $days_diff === 0 ) {
-			return esc_html__( 'Today', 'iworks-aquarium-log' );
+			return esc_html__( 'Today', 'PLUGIN_NAME' );
 		}
 		if ( $days_diff === 1 ) {
-			return esc_html__( 'Yesterday', 'iworks-aquarium-log' );
+			return esc_html__( 'Yesterday', 'PLUGIN_NAME' );
 		}
 		if ( $days_diff > 6 ) {
 			$weeks = floor( $days_diff / 7 );
 			/* translators: %s: number of weeks */
-			return sprintf( _n( '%s week ago', '%s weeks ago', $weeks, 'iworks-aquarium-log' ), number_format_i18n( $weeks ) );
+			return sprintf( _n( '%s week ago', '%s weeks ago', $weeks, 'PLUGIN_NAME' ), number_format_i18n( $weeks ) );
 		}
 		/* translators: %s: number of days */
-		return sprintf( _n( '%s day ago', '%s days ago', $days_diff, 'iworks-aquarium-log' ), number_format_i18n( $days_diff ) );
+		return sprintf( _n( '%s day ago', '%s days ago', $days_diff, 'PLUGIN_NAME' ), number_format_i18n( $days_diff ) );
 	}
 
 
@@ -661,7 +661,7 @@ class iworks_aquarium_log_base {
 	 */
 	protected function get_time_elapsed_text_seconds( $datetime ) {
 		if ( ! $datetime ) {
-			return esc_html__( 'Never', 'iworks-aquarium-log' );
+			return esc_html__( 'Never', 'PLUGIN_NAME' );
 		}
 
 		$time = strtotime( $datetime );
@@ -670,34 +670,34 @@ class iworks_aquarium_log_base {
 
 		if ( $diff < MINUTE_IN_SECONDS ) {
 			/* translators: %s: number of seconds */
-			return sprintf( _n( '%s second ago', '%s seconds ago', $diff, 'iworks-aquarium-log' ), number_format_i18n( $diff ) );
+			return sprintf( _n( '%s second ago', '%s seconds ago', $diff, 'PLUGIN_NAME' ), number_format_i18n( $diff ) );
 		}
 
 		$minutes = floor( $diff / MINUTE_IN_SECONDS );
 		if ( $minutes < 60 ) {
 			/* translators: %s: number of minutes */
-			return sprintf( _n( '%s minute ago', '%s minutes ago', $minutes, 'iworks-aquarium-log' ), number_format_i18n( $minutes ) );
+			return sprintf( _n( '%s minute ago', '%s minutes ago', $minutes, 'PLUGIN_NAME' ), number_format_i18n( $minutes ) );
 		}
 
 		$hours = floor( $diff / HOUR_IN_SECONDS );
 		if ( $hours < 24 ) {
 			/* translators: %s: number of hours */
-			return sprintf( _n( '%s hour ago', '%s hours ago', $hours, 'iworks-aquarium-log' ), number_format_i18n( $hours ) );
+			return sprintf( _n( '%s hour ago', '%s hours ago', $hours, 'PLUGIN_NAME' ), number_format_i18n( $hours ) );
 		}
 
 		$days = floor( $diff / DAY_IN_SECONDS );
 		if ( $days === 1 ) {
-			return esc_html__( 'Yesterday', 'iworks-aquarium-log' );
+			return esc_html__( 'Yesterday', 'PLUGIN_NAME' );
 		}
 
 		if ( $days > 6 ) {
 			$weeks = floor( $days / 7 );
 			/* translators: %s: number of weeks */
-			return sprintf( _n( '%s week ago', '%s weeks ago', $weeks, 'iworks-aquarium-log' ), number_format_i18n( $weeks ) );
+			return sprintf( _n( '%s week ago', '%s weeks ago', $weeks, 'PLUGIN_NAME' ), number_format_i18n( $weeks ) );
 		}
 
 		/* translators: %s: number of days */
-		return sprintf( _n( '%s day ago', '%s days ago', $days, 'iworks-aquarium-log' ), number_format_i18n( $days ) );
+		return sprintf( _n( '%s day ago', '%s days ago', $days, 'PLUGIN_NAME' ), number_format_i18n( $days ) );
 	}
 
 	/**
@@ -715,11 +715,11 @@ class iworks_aquarium_log_base {
 		if ( $filename ) {
 			load_template(
 				$filename,
-				apply_filters( 'iworks-aquarium-log/load/template/once', $load_once ),
+				apply_filters( 'iworks/aqualog/load/template/once', $load_once ),
 				wp_parse_args(
-					apply_filters( 'iworks-aquarium-log/load/template/args', $args ),
+					apply_filters( 'iworks/aqualog/load/template/args', $args ),
 					array(
-						'messages' => apply_filters( 'iworks-aquarium-log/wp-admin/messages/files', array() ),
+						'messages' => apply_filters( 'iworks/aqualog/wp-admin/messages/files', array() ),
 						'counters' => array(
 							'aquariums' => 0,
 						),
@@ -730,7 +730,7 @@ class iworks_aquarium_log_base {
 		}
 		$this->simple_history_logger_helper(
 			/* translators: {file}: template file name, {group}: template group name (do not translate placeholders)*/
-			esc_html__( 'Template file not found: {file} ({group}).', 'iworks-aquarium-log' ),
+			esc_html__( 'Template file not found: {file} ({group}).', 'PLUGIN_NAME' ),
 			array(
 				'file'  => $file,
 				'group' => $group,
@@ -743,7 +743,7 @@ class iworks_aquarium_log_base {
 				wpautop(
 					sprintf(
 						/* translators: %1$s: template file name, %2$s: template group name */
-						esc_html__( 'Template file not found: %1$s (%2$s).', 'iworks-aquarium-log' ),
+						esc_html__( 'Template file not found: %1$s (%2$s).', 'PLUGIN_NAME' ),
 						esc_html( $file ),
 						esc_html( $group )
 					)

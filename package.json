@@ -1,10 +1,10 @@
 {
     "name": "aqualog",
-    "title": "iWorks Aquarium Log",
-    "tagline": "Keep your tank in tune.",
-    "description": "Effortless WordPress plugin for aquarium pros and hobbyists. Track multiple tanks with pH, nitrates, temp, and custom parameters. Tag maintenance like water changes, set reminders, and add notes with photos. Multi-tank dashboards, trend charts, and email alerts keep everything on point. Log smarter – watch your tanks flourish!",
-    "version": "0.0.3",
-    "homepage": "http://aquarium-log.iworks.pl/",
+    "title": "iWorks Aquarium Tracker: Water Parameters, Reminders & Notes",
+    "tagline": "Keep your tank in tune!",
+    "description": "Effortless plugin for aquarium pros and hobbyists. Track multiple tanks with pH, nitrates, temp, and custom parameters. Tag maintenance like water changes, set reminders, and add notes with photos. Multi-tank dashboards, trend charts, and email alerts keep everything on point. Log smarter – watch your tanks flourish!",
+    "version": "1.0.0",
+    "homepage": "http://iworks.pl/plugins/aqualog/",
     "repository": {
         "type": "git",
         "url": "git@github.com:iworks/aqualog.git",
@@ -16,7 +16,13 @@
         "chemistry",
         "maintenance",
         "reminders",
-        "notes"
+        "notes",
+
+        "alerts",
+        "charts",
+        "dashboard",
+        "multi tank",
+        "tracker"
     ],
     "contributors": [
         {

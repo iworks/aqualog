@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 /**
  * iWorks Aquarium Log Chemistry Class
@@ -27,7 +27,7 @@ require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
+class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 
 	/**
 	 * Available chemistry parameters with their properties.
@@ -66,8 +66,8 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 		 *
 		 * @since 1.0.0
 		 */
-		add_action( 'iworks-aquarium-log/wp-admin/chemistry_page', array( $this, 'render_page' ) );
-		add_filter( 'iworks-aquarium-log/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
+		add_action( 'iworks/aqualog/wp-admin/chemistry_page', array( $this, 'render_page' ) );
+		add_filter( 'iworks/aqualog/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
 	}
 
 	/**
@@ -101,7 +101,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 			'pages',
 			true,
 			apply_filters(
-				'iworks-aquarium-log/wp-admin/chemistry/args',
+				'iworks/aqualog/wp-admin/chemistry/args',
 				array(
 					'aquarium_id'         => $this->current_aquarium_id,
 					'meta'                => get_post_meta( $this->current_aquarium_id ),
@@ -138,7 +138,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 					array(
 						'importance'     => 'default',
 						'key'            => $key,
-						'last_test_date' => esc_html__( 'Never tested!', 'iworks-aquarium-log' ),
+						'last_test_date' => esc_html__( 'Never tested!', 'PLUGIN_NAME' ),
 						'frequency'      => '',
 						'value'          => '',
 						'value_class'    => 'unknown',
@@ -167,7 +167,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 			}
 		}
 		uasort( $parameters, array( $this, 'sort_parameters' ) );
-		$this->parameters[ $this->current_aquarium_id ] = apply_filters( 'iworks-aquarium-log/chemistry/parameters', $parameters );
+		$this->parameters[ $this->current_aquarium_id ] = apply_filters( 'iworks/aqualog/chemistry/parameters', $parameters );
 		return $this->parameters[ $this->current_aquarium_id ];
 	}
 
@@ -266,7 +266,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 		if ( ! $parameter ) {
 			return array(
 				'status'  => 'error',
-				'message' => esc_html__( 'Unknown parameter', 'iworks-aquarium-log' ),
+				'message' => esc_html__( 'Unknown parameter', 'PLUGIN_NAME' ),
 			);
 		}
 
@@ -278,7 +278,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 				'status'  => 'warning',
 				'message' => sprintf(
 					/* translators: %1$s: range min, %2$s: range max, %3$s: unit */
-					esc_html__( 'Value is outside typical range (%1$s - %2$s %3$s)', 'iworks-aquarium-log' ),
+					esc_html__( 'Value is outside typical range (%1$s - %2$s %3$s)', 'PLUGIN_NAME' ),
 					$range[0],
 					$range[1],
 					$parameter['unit']
@@ -292,7 +292,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 				'status'  => 'info',
 				'message' => sprintf(
 					/* translators: %1$s: ideal min, %2$s: ideal max, %3$s: unit */
-					esc_html__( 'Value is outside ideal range (%1$s - %2$s %3$s)', 'iworks-aquarium-log' ),
+					esc_html__( 'Value is outside ideal range (%1$s - %2$s %3$s)', 'PLUGIN_NAME' ),
 					$ideal[0],
 					$ideal[1],
 					$parameter['unit']
@@ -302,7 +302,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 
 		return array(
 			'status'  => 'success',
-			'message' => esc_html__( 'Value is within ideal range', 'iworks-aquarium-log' ),
+			'message' => esc_html__( 'Value is within ideal range', 'PLUGIN_NAME' ),
 		);
 	}
 
@@ -317,7 +317,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 		 */
 		$config = $this->options->get_group( 'chemistry' );
 		if ( ! array_key_exists( $key, $config ) ) {
-			wp_send_json_error( esc_html__( 'Invalid parameter', 'iworks-aquarium-log' ) );
+			wp_send_json_error( esc_html__( 'Invalid parameter', 'PLUGIN_NAME' ) );
 		}
 		global $wpdb;
 		$result = $wpdb->insert(
@@ -341,11 +341,11 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 
 			wp_send_json_success(
 				array(
-					'message' => esc_html__( 'Parameter added successfully', 'iworks-aquarium-log' ),
+					'message' => esc_html__( 'Parameter added successfully', 'PLUGIN_NAME' ),
 				)
 			);
 		}
-		wp_send_json_error( esc_html__( 'Failed to add parameter', 'iworks-aquarium-log' ) );
+		wp_send_json_error( esc_html__( 'Failed to add parameter', 'PLUGIN_NAME' ) );
 	}
 
 	/**
@@ -361,7 +361,7 @@ class iworks_aquarium_log_wp_admin_chemistry extends iworks_aquarium_log_base {
 
 		// Log the measurement
 		$measurement_date = current_time( 'mysql' );
-		$logger           = new iworks_aquarium_log_logger();
+		$logger           = new iworks_aqualog_logger();
 		$logger->log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $measurement_date );
 	}
 }

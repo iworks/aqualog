@@ -19,30 +19,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'iworks_aquarium_log_github' ) ) {
+if ( class_exists( 'iworks_aqualog_github' ) ) {
 	return;
 }
 
-class iworks_aquarium_log_github {
+class iworks_aqualog_github {
 
 	/**
 	 * Repository name
 	 *
 	 * @since 1.0.0
 	 */
-	private string $repository = 'iworks/aquarium-log';
+	private string $repository = 'iworks/aqualog';
 	/**
 	 * Plugin base name
 	 *
 	 * @since 1.0.0
 	 */
-	private string $basename = 'iworks_aquarium_log';
+	private string $basename = 'aqualog';
 	/**
 	 * Plugin file name
 	 *
 	 * @since 1.0.0
 	 */
-	private string $plugin_file = 'iworks-aquarium-log.php';
+	private string $plugin_file = 'aqualog.php';
 	/**
 	 * Github Response
 	 *
@@ -54,7 +54,7 @@ class iworks_aquarium_log_github {
 		/**
 		 * WordPress Hooks
 		 */
-		add_action( 'init', array( $this, 'action_init_load_plugin_textdomain' ) );
+		add_action( 'init', array( $this, 'action_init_load_aqualog' ) );
 		add_filter( 'plugins_api', array( $this, 'plugin_popup' ), 10, 3 );
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'modify_transient' ) );
 		add_filter( 'upgrader_post_install', array( $this, 'install_update' ), 10, 3 );
@@ -65,9 +65,9 @@ class iworks_aquarium_log_github {
 	 *
 	 * @since 1.0.0
 	 */
-	public function action_init_load_plugin_textdomain() {
+	public function action_init_load_aqualog() {
 		$dir = plugin_basename( dirname( __DIR__, 3 ) ) . '/languages';
-		load_plugin_textdomain( 'iworks_aquarium_log', false, $dir );
+		load_plugin_textdomain( 'aqualog', false, $dir );
 	}
 
 	/**
@@ -142,7 +142,7 @@ class iworks_aquarium_log_github {
 		if ( empty( $repo_info ) ) {
 			return $result;
 		}
-		$details = get_plugin_data( dirname( $this->base ) . '/iworks-aquarium-log.php' );
+		$details = get_plugin_data( dirname( $this->base ) . '/aqualog.php' );
 		// Create array to hold the plugin data
 		$plugin = array(
 			'name'              => $details['Name'],

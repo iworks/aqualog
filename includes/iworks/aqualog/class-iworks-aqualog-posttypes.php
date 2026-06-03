@@ -18,11 +18,11 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Prevent multiple class definitions
  */
-if ( class_exists( 'iworks_aquarium_log_posttypes' ) ) {
+if ( class_exists( 'iworks_aqualog_posttypes' ) ) {
 	return;
 }
 
-require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__ ) . '/class-iworks-aqualog-base.php';
 /**
  * iWorks WordPress Plugin Post Types Class
  *
@@ -31,7 +31,7 @@ require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_posttypes extends iworks_aquarium_log_base {
+class iworks_aqualog_posttypes extends iworks_aqualog_base {
 	/**
 	 * Array of post type objects
 	 *
@@ -68,7 +68,7 @@ class iworks_aquarium_log_posttypes extends iworks_aquarium_log_base {
 			 * Validate the filename format
 			 * Only process files that match the expected pattern
 			 */
-			if ( ! preg_match( '/^class-iworks-aquarium-log-posttype-([a-z]+).php$/', $filename, $matches ) ) {
+			if ( ! preg_match( '/^class-iworks-aqualog-posttype-([a-z]+).php$/', $filename, $matches ) ) {
 				continue;
 			}
 
@@ -80,7 +80,7 @@ class iworks_aquarium_log_posttypes extends iworks_aquarium_log_base {
 			 * Create the filter name for this post type
 			 */
 			$filter = sprintf(
-				'iworks-aquarium-log/load/posttype/%s',
+				'iworks/aqualog/load/posttype/%s',
 				$posttype_name
 			);
 			/**
@@ -96,7 +96,7 @@ class iworks_aquarium_log_posttypes extends iworks_aquarium_log_base {
 				/**
 				 * Generate the class name
 				 */
-				$class_name = sprintf( 'iworks_aquarium_log_posttype_%s', $posttype_name );
+				$class_name = sprintf( 'iworks_aqualog_posttype_%s', $posttype_name );
 
 				/**
 				 * Initialize the post type class

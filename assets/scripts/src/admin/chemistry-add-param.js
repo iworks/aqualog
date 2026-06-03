@@ -18,7 +18,7 @@
 (function($) {
 	'use strict';
 
-	var field_value_class = '.aquarium-log-chemistry-item-body-scale-value';
+	var field_value_class = '.aqualog-chemistry-item-body-scale-value';
 
 	// Initialize chemistry form functionality
 	window.iworks_aquarium_log = window.iworks_aquarium_log || {};
@@ -69,11 +69,11 @@
 		var ideal = window.iworks_aquarium_log.chemistry.scaleItem('ideal');
 		var style = 'background: linear-gradient(';
 		style += 'to right,';
-		style += 'var(--aquarium-log-settings-danger) ' + danger[0] + '% ' + safety[0] + '%,';
-		style += 'var(--aquarium-log-settings-safety) ' + safety[0] + '% ' + ideal[0] + '%,';
-		style += 'var(--aquarium-log-settings-ideal) ' + ideal[0] + '% ' + ideal[1] + '%,';
-		style += 'var(--aquarium-log-settings-safety) ' + ideal[1] + '% ' + safety[1] + '%,';
-		style += 'var(--aquarium-log-settings-danger) ' + safety[1] + '% 100%);';
+		style += 'var(--aqualog-settings-danger) ' + danger[0] + '% ' + safety[0] + '%,';
+		style += 'var(--aqualog-settings-safety) ' + safety[0] + '% ' + ideal[0] + '%,';
+		style += 'var(--aqualog-settings-ideal) ' + ideal[0] + '% ' + ideal[1] + '%,';
+		style += 'var(--aqualog-settings-safety) ' + ideal[1] + '% ' + safety[1] + '%,';
+		style += 'var(--aqualog-settings-danger) ' + safety[1] + '% 100%);';
 		return style;
 	};
 
@@ -85,12 +85,12 @@
 			window.console.warn('iWorks Aquarium Log: No form data available for rendering');
 			return;
 		}
-		var template = wp.template('aquarium-log-chemistry-form');
+		var template = wp.template('aqualog-chemistry-form');
 		var formHTML = template(
 			window.iworks_aquarium_log.chemistry.formData
 		);
 
-		$('.aquarium-log-modal').html(formHTML);
+		$('.aqualog-modal').html(formHTML);
 
 		// Initialize form handlers
 		window.iworks_aquarium_log.chemistry.initializeForm();
@@ -100,7 +100,7 @@
 	 * Initialize form event handlers and validation
 	 */
 	window.iworks_aquarium_log.chemistry.initializeForm = function() {
-		var $form = $('#aquarium-log-chemistry-measurement-form');
+		var $form = $('#aqualog-chemistry-measurement-form');
 		var args = window.iworks_aquarium_log.chemistry.formData;
 
 		if (!$form.length) {
@@ -127,13 +127,13 @@
 			.attr('step', args.range_step)
 			.on('input change keyup keydown paste cut focus blur', function() {
 				var value = $(this).val();
-				$form.find('.aquarium-log-chemistry-item-body-scale-slider').slider('value', value);
+				$form.find('.aqualog-chemistry-item-body-scale-slider').slider('value', value);
 			});
 		/**
 		 * Initialize slider
 		 */
 		if ($.fn.slider) {
-			$form.find('.aquarium-log-chemistry-item-body-scale-slider').slider({
+			$form.find('.aqualog-chemistry-item-body-scale-slider').slider({
 				min: args.range[0],
 				max: args.range[1],
 				step: args.range_step,
@@ -143,12 +143,12 @@
 				}
 			});
 		}
-		$('.aquarium-log-chemistry-item-body-scale-button').on('click', function() {
+		$('.aqualog-chemistry-item-body-scale-button').on('click', function() {
 			var value = $(this).data('value');
 			var current = parseFloat($form.find(field_value_class).val()) || 0;
 			var new_value = current + parseFloat(value);
 			$form.find(field_value_class).val(new_value);
-			$form.find('.aquarium-log-chemistry-item-body-scale-slider').slider('value', new_value);
+			$form.find('.aqualog-chemistry-item-body-scale-slider').slider('value', new_value);
 		});
 	};
 
@@ -184,7 +184,7 @@
 	 * @param {jQuery} $form Form element
 	 */
 	window.iworks_aquarium_log.chemistry.submitForm = function($form) {
-		var $submit = $form.find('.aquarium-log-form-submit');
+		var $submit = $form.find('.aqualog-form-submit');
 		var originalText = $submit.html();
 
 		// Validate form
@@ -239,13 +239,13 @@
 	 */
 	window.iworks_aquarium_log.chemistry.closeForm = function() {
 		// Check if form is in modal
-		var $modal = $('.aquarium-log-modal');
+		var $modal = $('.aqualog-modal');
 		if ($modal.length) {
 			// Close modal instead
 			window.iworks_aquarium_log.chemistry.closeModal();
 		} else {
 			// Close standalone form
-			$('.aquarium-log-chemistry-form').fadeOut(300, function() {
+			$('.aqualog-chemistry-form').fadeOut(300, function() {
 				$(this).remove();
 			});
 		}
@@ -262,9 +262,9 @@
 		var $notice = $('<div class="notice is-dismissible ' + noticeClass + '"><p>' + message + '</p></div>');
 
 		// Insert notice at the top of the form or page
-		var $target = $('.aquarium-log-chemistry-form').find('.aquarium-log-card-header');
+		var $target = $('.aqualog-chemistry-form').find('.aqualog-card-header');
 		if ($target.length) {
-			$('.aquarium-log-chemistry-form').find('.notice').detach();
+			$('.aqualog-chemistry-form').find('.notice').detach();
 			$notice.insertAfter($target);
 		} else {
 			$notice.insertBefore('.wrap h1');
@@ -285,13 +285,13 @@
 	 */
 	window.iworks_aquarium_log.chemistry.showModal = function() {
 		// Create modal overlay
-		var $overlay = $('<div class="aquarium-log-modal-overlay"></div>');
-		var $modal = $('<div class="aquarium-log-modal"></div>');
+		var $overlay = $('<div class="aqualog-modal-overlay"></div>');
+		var $modal = $('<div class="aqualog-modal"></div>');
 
 		/**
 		 * Remove any existing modals to prevent duplicates
 		 */
-		$('.aquarium-log-modal-overlay, .aquarium-log-modal').remove();
+		$('.aqualog-modal-overlay, .aqualog-modal').remove();
 
 		// Append to body
 		$('body').append($overlay).append($modal);
@@ -300,7 +300,7 @@
 		window.iworks_aquarium_log.chemistry.renderForm();
 
 		// Move form into modal
-		$('.aquarium-log-chemistry-form').appendTo($modal);
+		$('.aqualog-chemistry-form').appendTo($modal);
 
 		// Show modal with animation
 		$overlay.fadeIn(300);
@@ -312,7 +312,7 @@
 		});
 
 		// Handle escape key to close
-		$(document).on('keydown.aquarium-log-modal', function(e) {
+		$(document).on('keydown.aqualog-modal', function(e) {
 			if (e.keyCode === 27) { // Escape key
 				window.iworks_aquarium_log.chemistry.closeModal();
 			}
@@ -323,8 +323,8 @@
 	 * Close chemistry form modal
 	 */
 	window.iworks_aquarium_log.chemistry.closeModal = function() {
-		var $overlay = $('.aquarium-log-modal-overlay');
-		var $modal = $('.aquarium-log-modal');
+		var $overlay = $('.aqualog-modal-overlay');
+		var $modal = $('.aqualog-modal');
 
 		if ($overlay.length || $modal.length) {
 			// Fade out and remove
@@ -336,14 +336,14 @@
 			});
 
 			// Remove event listeners
-			$(document).off('keydown.aquarium-log-modal');
+			$(document).off('keydown.aqualog-modal');
 		}
 	};
 
 	// Initialize when DOM is ready
 	$(document).ready(function() {
 		// Bind click handler to chemistry items
-		$(document).on('click', '.aquarium-log-chemistry-item', function(e) {
+		$(document).on('click', '.aqualog-chemistry-item', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 

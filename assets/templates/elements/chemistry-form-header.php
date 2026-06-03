@@ -12,7 +12,7 @@
  */
 defined( 'ABSPATH' ) || exit;
 ?>
-<div class="aquarium-log-card-header">
+<div class="aqualog-card-header">
 	<h2>{{ data.description }} ({{ data.name }})</h2>
-	<span class="aquarium-log-card-header__date"><?php echo esc_html( date_i18n( get_option( 'date_format' ) ) ); ?></span>
+	<span class="aqualog-card-header__date"><?php echo esc_html( date_i18n( get_option( 'date_format' ) ) ); ?></span>
 </div>

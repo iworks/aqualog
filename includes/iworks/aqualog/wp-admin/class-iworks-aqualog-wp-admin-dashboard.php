@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 /**
  * iWorks Aquarium Log Dashboard Class
@@ -27,7 +27,7 @@ require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_wp_admin_dashboard extends iworks_aquarium_log_base {
+class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 
 	/**
 	 * Available dashboard widgets with their properties.
@@ -54,14 +54,14 @@ class iworks_aquarium_log_wp_admin_dashboard extends iworks_aquarium_log_base {
 		 *
 		 * @since 1.0.0
 		 */
-		add_action( 'iworks-aquarium-log/wp-admin/page/dashboard', array( $this, 'render_page' ) );
-		add_filter( 'iworks-aquarium-log/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
+		add_action( 'iworks/aqualog/wp-admin/page/dashboard', array( $this, 'render_page' ) );
+		add_filter( 'iworks/aqualog/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
 	}
 
 	public function render_page() {
 		$this->set_current_aquarium_id();
 		$args = apply_filters(
-			'iworks-aquarium-log/wp-admin/dashboard/args',
+			'iworks/aqualog/wp-admin/dashboard/args',
 			array()
 		);
 		if ( $this->current_aquarium_id ) {

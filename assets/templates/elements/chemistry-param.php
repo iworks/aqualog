@@ -31,9 +31,9 @@ defined( 'ABSPATH' ) || exit;
 
 
 	$classes = array(
-		'aquarium-log-chemistry-item',
-		'aquarium-log-chemistry-item--' . $args['key'],
-		'param-importance-' . $args['importance'],
+		'aqualog-chemistry-item',
+		'aqualog-chemistry-item--' . $args['key'],
+		'aqualog-param-importance-' . $args['importance'],
 	);
 	if ( empty( $args['last_test_date'] ) ) {
 		$classes[] = 'no-last-test-date';
@@ -42,15 +42,15 @@ defined( 'ABSPATH' ) || exit;
 	switch ( $args['importance'] ) {
 		case 'critical':
 			$icon    = 'dashicons dashicons-info';
-			$tooltip = esc_html__( 'Critical parameter - requires close monitoring', 'iworks-aquarium-log' );
+			$tooltip = esc_html__( 'Critical parameter - requires close monitoring', 'PLUGIN_NAME' );
 			break;
 		case 'important':
 			$icon    = 'dashicons dashicons-info';
-			$tooltip = esc_html__( 'Important parameter - monitor regularly', 'iworks-aquarium-log' );
+			$tooltip = esc_html__( 'Important parameter - monitor regularly', 'PLUGIN_NAME' );
 			break;
 		case 'recommended':
 			$icon    = 'dashicons dashicons-info-outline';
-			$tooltip = esc_html__( 'Recommended parameter - good to track', 'iworks-aquarium-log' );
+			$tooltip = esc_html__( 'Recommended parameter - good to track', 'PLUGIN_NAME' );
 			break;
 	}
 	?>
@@ -59,7 +59,7 @@ defined( 'ABSPATH' ) || exit;
 	data-key="<?php echo esc_attr( $args['key'] ); ?>"
 	data-value="<?php echo esc_attr( $args['value'] ); ?>"
 >
-	<div class="aquarium-log-chemistry-item-header">
+	<div class="aqualog-chemistry-item-header">
 		<?php if ( ! empty( $icon ) ) { ?>
 		<span class="<?php echo esc_attr( $icon ); ?>" title="<?php echo esc_attr( $tooltip ); ?>"></span>
 		<?php } ?>
@@ -72,7 +72,7 @@ defined( 'ABSPATH' ) || exit;
 		?>
 			</h3>
 	</div>
-	<div class="aquarium-log-chemistry-item-body">
+	<div class="aqualog-chemistry-item-body">
 		<p class="param-value param-value--<?php echo esc_attr( $args['value_class'] ); ?>">
 			<?php
 			if ( '' === $args['value'] ) {
@@ -102,9 +102,9 @@ defined( 'ABSPATH' ) || exit;
 			<span class="param-frequency">(<?php echo esc_html( $args['frequency'] ); ?>)</span>
 			<?php } ?>
 		</p>
-		<div class="aquarium-log-chemistry-item-body-scale">
-			<?php iworks_aquarium_log_get_scale( $args ); ?>
-			<div class="aquarium-log-chemistry-item-body-scale-legend">
+		<div class="aqualog-chemistry-item-body-scale">
+			<?php iworks_aqualog_get_scale( $args ); ?>
+			<div class="aqualog-chemistry-item-body-scale-legend">
 				<span class="legend-item--min"><?php echo esc_html( $args['range'][0] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
 				<span class="legend-item--max"><?php echo esc_html( $args['range'][1] ); ?> <?php echo esc_html( $args['unit'] ); ?></span>
 			</div>

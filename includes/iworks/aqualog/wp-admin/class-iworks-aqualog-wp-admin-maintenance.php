@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
 /**
  * iWorks Aquarium Log Chemistry Class
@@ -27,7 +27,7 @@ require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_wp_admin_maintenance extends iworks_aquarium_log_base {
+class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 
 	/**
 	 * Available maintenance parameters with their properties.
@@ -51,8 +51,8 @@ class iworks_aquarium_log_wp_admin_maintenance extends iworks_aquarium_log_base 
 		 *
 		 * @since 1.0.0
 		 */
-		add_action( 'iworks-aquarium-log/wp-admin/maintenance_page', array( $this, 'render_page' ) );
-		add_filter( 'iworks-aquarium-log/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
+		add_action( 'iworks/aqualog/wp-admin/maintenance_page', array( $this, 'render_page' ) );
+		add_filter( 'iworks/aqualog/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class iworks_aquarium_log_wp_admin_maintenance extends iworks_aquarium_log_base 
 			true,
 			array(
 				'aquarium_id' => $this->current_aquarium_id,
-				'messages'    => apply_filters( 'iworks-aquarium-log/wp-admin/messages/files', array() ),
+				'messages'    => apply_filters( 'iworks/aqualog/wp-admin/messages/files', array() ),
 				'meta'        => get_post_meta( $this->current_aquarium_id ),
 				'tasks'       => array(),
 				'completed'   => array(),

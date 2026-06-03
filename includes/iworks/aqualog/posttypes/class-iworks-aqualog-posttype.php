@@ -20,9 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __DIR__, 2 ) . '/class-iworks-aquarium-log-base.php';
+require_once dirname( __DIR__, 2 ) . '/class-iworks-aqualog-base.php';
 
-abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
+abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 
 	/**
 	 * Post Type Name
@@ -116,7 +116,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 				'post_status'    => 'publish',
 			)
 		);
-		$list[0]   = esc_html__( '&mdash; Select &mdash;', 'iworks-aquarium-log' );
+		$list[0]   = esc_html__( '&mdash; Select &mdash;', 'PLUGIN_NAME' );
 		$the_query = new WP_Query( $args );
 		foreach ( $the_query->posts as $post ) {
 			$list[ $post->ID ] = $post->post_title;
@@ -242,11 +242,11 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 		);
 		printf(
 			'<input type="button" class="button button-upload" value="%s" />',
-			esc_attr__( 'Select Image', 'iworks-aquarium-log' ),
+			esc_attr__( 'Select Image', 'PLUGIN_NAME' ),
 		);
 		printf(
 			'<input type="button" value="%s" class="button button-delete%s">',
-			esc_attr__( 'Delete image', 'iworks-aquarium-log' ),
+			esc_attr__( 'Delete image', 'PLUGIN_NAME' ),
 			empty( $value ) ? ' hidden' : ''
 		);
 		echo '</p>';
@@ -296,7 +296,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			'<select name="%s">',
 			esc_attr( $one['name'] )
 		);
-		printf( '<option value="">%s</option>', esc_html__( '&mdash; Select &mdash;', 'iworks-aquarium-log' ) );
+		printf( '<option value="">%s</option>', esc_html__( '&mdash; Select &mdash;', 'PLUGIN_NAME' ) );
 		foreach ( $one['options'] as $option_value => $option_name ) {
 			printf(
 				'<option value="%s" %s>%s</option>',
@@ -362,7 +362,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			),
 		);
 		return apply_filters(
-			'iworks/aquarium-log/post/meta/field',
+			'iworks/aqualog/post/meta/field',
 			$field,
 			$post_id
 		);
@@ -414,14 +414,14 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 	protected function get_taxonomy( $taxonomy_name ) {
 		if ( ! isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
 			$this->taxonomies_names = apply_filters(
-				'iworks/aquarium-log/taxonomies_names/array',
+				'iworks/aqualog/taxonomies_names/array',
 				$this->taxonomies_names
 			);
 		}
 		if ( isset( $this->taxonomies_names[ $taxonomy_name ] ) ) {
 			return $this->taxonomies_names[ $taxonomy_name ];
 		}
-		return new WP_Error( 'taxonomy', esc_html__( 'Selected Taxonomy dosn\'t exists.', 'iworks-aquarium-log' ) );
+		return new WP_Error( 'taxonomy', esc_html__( 'Selected Taxonomy dosn\'t exists.', 'PLUGIN_NAME' ) );
 	}
 
 	/**
@@ -504,7 +504,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 				if ( $value ) {
 					update_post_meta( $post_id, $key, $value );
 				}
-				do_action( 'iworks/aquarium-log/postmeta/update', $post_id, $field, $key, $value );
+				do_action( 'iworks/aqualog/postmeta/update', $post_id, $field, $key, $value );
 			}
 		}
 	}
@@ -547,9 +547,9 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			'posttypes_names' => $this->posttypes_names,
 			'l10n'            => array(
 				'wp_media' => array(
-					'title'  => esc_html__( 'Select or Upload Media', 'iworks-aquarium-log' ),
+					'title'  => esc_html__( 'Select or Upload Media', 'PLUGIN_NAME' ),
 					'button' => array(
-						'text' => esc_html__( 'Use this Media', 'iworks-aquarium-log' ),
+						'text' => esc_html__( 'Use this Media', 'PLUGIN_NAME' ),
 					),
 				),
 			),
@@ -558,7 +558,7 @@ abstract class iworks_aquarium_log_posttype extends iworks_aquarium_log_base {
 			strtolower( __CLASS__ ),
 			'iworks_aquarium_log',
 			apply_filters(
-				'iworks/aquarium-log/wp_localize_script/admin',
+				'iworks/aqualog/wp_localize_script/admin',
 				$translation_array
 			)
 		);

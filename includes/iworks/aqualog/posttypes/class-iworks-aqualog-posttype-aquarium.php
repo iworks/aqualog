@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once 'class-iworks-aquarium-log-posttype.php';
+require_once 'class-iworks-aqualog-posttype.php';
 
 /**
  * iWorks Aquarium Log Aquarium Post Type Class
@@ -27,7 +27,7 @@ require_once 'class-iworks-aquarium-log-posttype.php';
  *
  * @since 1.0.0
  */
-class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype {
+class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 
 	/**
 	 * Terms list cache.
@@ -56,13 +56,13 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		/**
 		 * Set post type name.
 		 */
-		$this->posttype_name = preg_replace( '/^iworks_aquarium_log_posttype_/', '', __CLASS__ );
+		$this->posttype_name = preg_replace( '/^iworks_aqualog_posttype_/', '', __CLASS__ );
 		$this->register_class_custom_posttype_name( $this->posttype_name, 'iw' );
 
 		/**
 		 * Set taxonomy name.
 		 */
-		$this->taxonomy_name = preg_replace( '/^iworks_aquarium_log_posttype_/', '', __CLASS__ );
+		$this->taxonomy_name = preg_replace( '/^iworks_aqualog_posttype_/', '', __CLASS__ );
 		$this->register_class_custom_taxonomy_name( $this->taxonomy_name, 'iw', 'group' );
 
 		/**
@@ -83,14 +83,14 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		/**
 		 * iworks option class hooks.
 		 */
-		add_filter( 'index_iworks_aquarium_log_default_aquarium_id_data', array( $this, 'filter_index_iworks_aquarium_log_default_aquarium_data' ), 10, 3 );
+		add_filter( 'index_iworks_aqualog_default_aquarium_id_data', array( $this, 'filter_index_iworks_aqualog_default_aquarium_data' ), 10, 3 );
 		/**
 		 * iWorks Aquarium Log plugin hooks.
 		 */
-		add_filter( 'iworks-aquarium-log/set/current_aquarium_id', array( $this, 'filter_set_current_aquarium_id' ) );
-		add_action( 'iworks-aquarium-log/dashboard/aquariums', array( $this, 'action_dashboard_aquariums' ) );
-		add_action( 'iworks-aquarium-log/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
-		add_filter( 'iworks-aquarium-log/load/template/args', array( $this, 'add_page_args' ) );
+		add_filter( 'iworks/aqualog/set/current_aquarium_id', array( $this, 'filter_set_current_aquarium_id' ) );
+		add_action( 'iworks/aqualog/dashboard/aquariums', array( $this, 'action_dashboard_aquariums' ) );
+		add_action( 'iworks/aqualog/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
+		add_filter( 'iworks/aqualog/load/template/args', array( $this, 'add_page_args' ) );
 	}
 
 	/**
@@ -176,7 +176,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 			}
 			wp_reset_postdata();
 		} else {
-			echo '<p>' . esc_html__( 'No aquariums found.', 'iworks-aquarium-log' ) . '</p>';
+			echo '<p>' . esc_html__( 'No aquariums found.', 'PLUGIN_NAME' ) . '</p>';
 		}
 	}
 
@@ -195,7 +195,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		$title        = get_the_title();
 		$permalink    = get_permalink();
 		$updated_at   = get_post_meta( $post_id, $this->meta_name_related_updated_at, true );
-		$last_updated = $updated_at ? $this->get_time_elapsed_text( $updated_at ) : esc_html__( 'Never', 'iworks-aquarium-log' );
+		$last_updated = $updated_at ? $this->get_time_elapsed_text( $updated_at ) : esc_html__( 'Never', 'PLUGIN_NAME' );
 
 		// Get aquarium type
 		$types     = wp_get_post_terms( $post_id, $this->taxonomy_name );
@@ -205,37 +205,37 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		$capacity         = get_post_meta( $post_id, 'capacity', true );
 		$capacity_display = $capacity ? sprintf( '%s L', number_format_i18n( $capacity ) ) : '';
 		?>
-		<div class="aquarium-log-aquarium-item">
-			<div class="aquarium-log-aquarium-item-header">
-				<h3 class="aquarium-log-aquarium-title">
+		<div class="aqualog-aquarium-item">
+			<div class="aqualog-aquarium-item-header">
+				<h3 class="aqualog-aquarium-title">
 					<a href="<?php echo esc_url( $permalink ); ?>">
 						<?php echo esc_html( $title ); ?>
 					</a>
 				</h3>
 				<?php if ( $type_name ) : ?>
-					<span class="aquarium-log-aquarium-type"><?php echo esc_html( $type_name ); ?></span>
+					<span class="aqualog-aquarium-type"><?php echo esc_html( $type_name ); ?></span>
 				<?php endif; ?>
 			</div>
-			<div class="aquarium-log-aquarium-item-content">
-				<div class="aquarium-log-aquarium-info">
+			<div class="aqualog-aquarium-item-content">
+				<div class="aqualog-aquarium-info">
 					<?php if ( $capacity_display ) : ?>
-						<div class="aquarium-log-aquarium-capacity">
+						<div class="aqualog-aquarium-capacity">
 							<span class="dashicons dashicons-volume"></span>
 							<?php echo esc_html( $capacity_display ); ?>
 						</div>
 					<?php endif; ?>
-					<div class="aquarium-log-aquarium-updated">
+					<div class="aqualog-aquarium-updated">
 						<span class="dashicons dashicons-clock"></span>
-						<span class="label"><?php esc_html_e( 'Last updated:', 'iworks-aquarium-log' ); ?></span>
+						<span class="label"><?php esc_html_e( 'Last updated:', 'PLUGIN_NAME' ); ?></span>
 						<span class="value"><?php echo esc_html( $last_updated ); ?></span>
 					</div>
 				</div>
-				<div class="aquarium-log-aquarium-actions">
-					<a href="<?php echo esc_url( $permalink ); ?>" class="aquarium-log-button aquarium-log-button-small">
-						<?php esc_html_e( 'View Details', 'iworks-aquarium-log' ); ?>
+				<div class="aqualog-aquarium-actions">
+					<a href="<?php echo esc_url( $permalink ); ?>" class="aqualog-button aqualog-button-small">
+						<?php esc_html_e( 'View Details', 'PLUGIN_NAME' ); ?>
 					</a>
-					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ); ?>" class="aquarium-log-button aquarium-log-button-small aquarium-log-button-outline">
-						<?php esc_html_e( 'Edit', 'iworks-aquarium-log' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ); ?>" class="aqualog-button aqualog-button-small aqualog-button-outline">
+						<?php esc_html_e( 'Edit', 'PLUGIN_NAME' ); ?>
 					</a>
 				</div>
 			</div>
@@ -243,7 +243,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		<?php
 	}
 
-	public function filter_index_iworks_aquarium_log_default_aquarium_data( $data, $option_name, $default ) {
+	public function filter_index_iworks_aqualog_default_aquarium_data( $data, $option_name, $default ) {
 		$args     = array(
 			'post_type'      => $this->posttypes_names[ $this->posttype_name ],
 			'posts_per_page' => -1,
@@ -280,52 +280,52 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 	public function action_init_settings() {
 		$this->meta_boxes[ $this->posttypes_names[ $this->posttype_name ] ] = array(
 			'size'      => array(
-				'title'  => esc_html__( 'Size', 'iworks-aquarium-log' ),
+				'title'  => esc_html__( 'Size', 'PLUGIN_NAME' ),
 				'fields' => array(
 					array(
 						'name'  => 'width',
 						'type'  => 'number',
-						'label' => esc_html__( 'Width', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Width', 'PLUGIN_NAME' ),
 						'sufix' => 'cm',
 					),
 					array(
 						'name'  => 'height',
 						'type'  => 'number',
-						'label' => esc_html__( 'Height', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Height', 'PLUGIN_NAME' ),
 						'sufix' => 'cm',
 					),
 					array(
 						'name'  => 'depth',
 						'type'  => 'number',
-						'label' => esc_html__( 'Depth', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Depth', 'PLUGIN_NAME' ),
 						'sufix' => 'cm',
 					),
 					'capacity'     => array(
 						'name'  => 'capacity',
 						'type'  => 'number',
-						'label' => esc_html__( 'Capacity', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Capacity', 'PLUGIN_NAME' ),
 						'sufix' => 'L',
 					),
 					'water_volume' => array(
 						'name'  => 'water_volume',
 						'type'  => 'number',
-						'label' => esc_html__( 'Water Volume', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Water Volume', 'PLUGIN_NAME' ),
 						'sufix' => 'L',
 					),
 				),
 			),
 			'date'      => array(
-				'title'  => esc_html__( 'Dates', 'iworks-aquarium-log' ),
+				'title'  => esc_html__( 'Dates', 'PLUGIN_NAME' ),
 				'fields' => array(
 					array(
 						'name'  => 'started',
 						'type'  => 'date',
-						'label' => esc_html__( 'Start Date', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Start Date', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'closed',
 						'type'  => 'date',
-						'label' => esc_html__( 'End Date', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'End Date', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name' => 'updated',
@@ -334,117 +334,117 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 				),
 			),
 			'chemistry' => array(
-				'title'  => esc_html__( 'Chemistry', 'iworks-aquarium-log' ),
+				'title'  => esc_html__( 'Chemistry', 'PLUGIN_NAME' ),
 				'fields' => array(
 					array(
 						'name'  => 'check_temp',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Temperature', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Temperature', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_co2',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check CO₂', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check CO₂', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_ph',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check pH', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check pH', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_gh',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check GH', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check GH', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_kh',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check KH', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check KH', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_no3',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Nitrate (NO₃)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Nitrate (NO₃)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_po4',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Phosphate (PO₄)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Phosphate (PO₄)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_k',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Potassium (K)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Potassium (K)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_fe',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Iron (Fe)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Iron (Fe)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_ca',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Calcium (Ca)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Calcium (Ca)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_mg',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Magnesium (Mg)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Magnesium (Mg)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_nh3',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Ammonia (NH₃)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Ammonia (NH₃)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_no2',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Nitrite (NO₂)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Nitrite (NO₂)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_cl',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Chlorine (Cl)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Chlorine (Cl)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_cu',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Copper (Cu)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Copper (Cu)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_zn',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Zinc (Zn)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Zinc (Zn)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_mn',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Manganese (Mn)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Manganese (Mn)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_mo',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Molybdenum (Mo)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Molybdenum (Mo)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_zn',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Zinc (Zn)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Zinc (Zn)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_b',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Boron (B)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Boron (B)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_o2',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Oxygen (O₂)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Oxygen (O₂)', 'PLUGIN_NAME' ),
 					),
 					array(
 						'name'  => 'check_tds',
 						'type'  => 'checkbox',
-						'label' => esc_html__( 'Check Total Dissolved Solids (TDS)', 'iworks-aquarium-log' ),
+						'label' => esc_html__( 'Check Total Dissolved Solids (TDS)', 'PLUGIN_NAME' ),
 					),
 				),
 			),
@@ -462,26 +462,26 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 	 */
 	public function action_init_register_post_type() {
 		$labels = array(
-			'name'               => esc_html_x( 'Aquariums', 'Post Type General Name', 'iworks-aquarium-log' ),
-			'singular_name'      => esc_html_x( 'Aquarium', 'Post Type Singular Name', 'iworks-aquarium-log' ),
-			'menu_name'          => esc_html_x( 'Aquariums', 'Menu Name', 'iworks-aquarium-log' ),
-			'name_admin_bar'     => esc_html_x( 'Aquarium', 'Admin Bar Name', 'iworks-aquarium-log' ),
-			'parent_item_colon'  => esc_html__( 'Parent Aquarium:', 'iworks-aquarium-log' ),
-			'all_items'          => esc_html__( 'Aquariums', 'iworks-aquarium-log' ),
-			'add_new_item'       => esc_html__( 'Add New Aquarium', 'iworks-aquarium-log' ),
-			'add_new'            => esc_html__( 'Add New', 'iworks-aquarium-log' ),
-			'new_item'           => esc_html__( 'New Aquarium', 'iworks-aquarium-log' ),
-			'edit_item'          => esc_html__( 'Edit Aquarium', 'iworks-aquarium-log' ),
-			'update_item'        => esc_html__( 'Update Aquarium', 'iworks-aquarium-log' ),
-			'view_item'          => esc_html__( 'View Aquarium', 'iworks-aquarium-log' ),
-			'search_items'       => esc_html__( 'Search Aquarium', 'iworks-aquarium-log' ),
-			'not_found'          => esc_html__( 'Not found', 'iworks-aquarium-log' ),
-			'not_found_in_trash' => esc_html__( 'Not found in Trash', 'iworks-aquarium-log' ),
+			'name'               => esc_html_x( 'Aquariums', 'Post Type General Name', 'PLUGIN_NAME' ),
+			'singular_name'      => esc_html_x( 'Aquarium', 'Post Type Singular Name', 'PLUGIN_NAME' ),
+			'menu_name'          => esc_html_x( 'Aquariums', 'Menu Name', 'PLUGIN_NAME' ),
+			'name_admin_bar'     => esc_html_x( 'Aquarium', 'Admin Bar Name', 'PLUGIN_NAME' ),
+			'parent_item_colon'  => esc_html__( 'Parent Aquarium:', 'PLUGIN_NAME' ),
+			'all_items'          => esc_html__( 'Aquariums', 'PLUGIN_NAME' ),
+			'add_new_item'       => esc_html__( 'Add New Aquarium', 'PLUGIN_NAME' ),
+			'add_new'            => esc_html__( 'Add New', 'PLUGIN_NAME' ),
+			'new_item'           => esc_html__( 'New Aquarium', 'PLUGIN_NAME' ),
+			'edit_item'          => esc_html__( 'Edit Aquarium', 'PLUGIN_NAME' ),
+			'update_item'        => esc_html__( 'Update Aquarium', 'PLUGIN_NAME' ),
+			'view_item'          => esc_html__( 'View Aquarium', 'PLUGIN_NAME' ),
+			'search_items'       => esc_html__( 'Search Aquarium', 'PLUGIN_NAME' ),
+			'not_found'          => esc_html__( 'Not found', 'PLUGIN_NAME' ),
+			'not_found_in_trash' => esc_html__( 'Not found in Trash', 'PLUGIN_NAME' ),
 		);
 
 		$args = array(
-			'label'               => esc_html__( 'Aquarium', 'iworks-aquarium-log' ),
-			'description'         => esc_html__( 'Aquariums', 'iworks-aquarium-log' ),
+			'label'               => esc_html__( 'Aquarium', 'PLUGIN_NAME' ),
+			'description'         => esc_html__( 'Aquariums', 'PLUGIN_NAME' ),
 			'labels'              => apply_filters( 'iworks/theme/register_post_type/aquarium/labels', $labels ),
 			'supports'            => apply_filters(
 				'iworks/theme/register_post_type/aquarium/subpackage',
@@ -505,7 +505,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 			'show_in_rest'        => true,
 			'rest_base'           => apply_filters(
 				'iworks/theme/register_post_type/aquarium/rest_base',
-				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquariums' : esc_attr__( 'aquariums', 'iworks-aquarium-log' )
+				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquariums' : esc_attr__( 'aquariums', 'PLUGIN_NAME' )
 			),
 		);
 
@@ -529,23 +529,23 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 	 */
 	public function action_init_register_taxonomy() {
 		$labels = array(
-			'name'                       => esc_html_x( 'Aquarium Types', 'Taxonomy General Name', 'iworks-aquarium-log' ),
-			'singular_name'              => esc_html_x( 'Aquarium Type', 'Taxonomy Singular Name', 'iworks-aquarium-log' ),
-			'menu_name'                  => esc_html__( 'Types', 'iworks-aquarium-log' ),
-			'all_items'                  => esc_html__( 'All Aquarium Types', 'iworks-aquarium-log' ),
-			'parent_item'                => esc_html__( 'Parent Aquarium Type', 'iworks-aquarium-log' ),
-			'parent_item_colon'          => esc_html__( 'Parent Aquarium Type:', 'iworks-aquarium-log' ),
-			'new_item_name'              => esc_html__( 'New Aquarium Type Name', 'iworks-aquarium-log' ),
-			'add_new_item'               => esc_html__( 'Add New Aquarium Type', 'iworks-aquarium-log' ),
-			'edit_item'                  => esc_html__( 'Edit Aquarium Type', 'iworks-aquarium-log' ),
-			'update_item'                => esc_html__( 'Update Aquarium Type', 'iworks-aquarium-log' ),
-			'view_item'                  => esc_html__( 'View Aquarium Type', 'iworks-aquarium-log' ),
-			'separate_items_with_commas' => esc_html__( 'Separate Aquarium Types with commas', 'iworks-aquarium-log' ),
-			'add_or_remove_items'        => esc_html__( 'Add or remove Aquarium Types', 'iworks-aquarium-log' ),
-			'choose_from_most_used'      => esc_html__( 'Choose from the most used', 'iworks-aquarium-log' ),
-			'popular_items'              => esc_html__( 'Popular Aquarium Types', 'iworks-aquarium-log' ),
-			'search_items'               => esc_html__( 'Search Aquarium Types', 'iworks-aquarium-log' ),
-			'not_found'                  => esc_html__( 'Not Found', 'iworks-aquarium-log' ),
+			'name'                       => esc_html_x( 'Aquarium Types', 'Taxonomy General Name', 'PLUGIN_NAME' ),
+			'singular_name'              => esc_html_x( 'Aquarium Type', 'Taxonomy Singular Name', 'PLUGIN_NAME' ),
+			'menu_name'                  => esc_html__( 'Types', 'PLUGIN_NAME' ),
+			'all_items'                  => esc_html__( 'All Aquarium Types', 'PLUGIN_NAME' ),
+			'parent_item'                => esc_html__( 'Parent Aquarium Type', 'PLUGIN_NAME' ),
+			'parent_item_colon'          => esc_html__( 'Parent Aquarium Type:', 'PLUGIN_NAME' ),
+			'new_item_name'              => esc_html__( 'New Aquarium Type Name', 'PLUGIN_NAME' ),
+			'add_new_item'               => esc_html__( 'Add New Aquarium Type', 'PLUGIN_NAME' ),
+			'edit_item'                  => esc_html__( 'Edit Aquarium Type', 'PLUGIN_NAME' ),
+			'update_item'                => esc_html__( 'Update Aquarium Type', 'PLUGIN_NAME' ),
+			'view_item'                  => esc_html__( 'View Aquarium Type', 'PLUGIN_NAME' ),
+			'separate_items_with_commas' => esc_html__( 'Separate Aquarium Types with commas', 'PLUGIN_NAME' ),
+			'add_or_remove_items'        => esc_html__( 'Add or remove Aquarium Types', 'PLUGIN_NAME' ),
+			'choose_from_most_used'      => esc_html__( 'Choose from the most used', 'PLUGIN_NAME' ),
+			'popular_items'              => esc_html__( 'Popular Aquarium Types', 'PLUGIN_NAME' ),
+			'search_items'               => esc_html__( 'Search Aquarium Types', 'PLUGIN_NAME' ),
+			'not_found'                  => esc_html__( 'Not Found', 'PLUGIN_NAME' ),
 		);
 
 		$args = array(
@@ -563,7 +563,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 			'show_in_menu'        => admin_url( add_query_arg( 'page', $this->wp_admin_slug, 'admin.php' ) ),
 			'rest_base'           => apply_filters(
 				'iworks/theme/register_taxonomy/aquarium/rest_base',
-				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquarium_types' : esc_attr__( 'aquarium_types', 'iworks-aquarium-log' )
+				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquarium_types' : esc_attr__( 'aquarium_types', 'PLUGIN_NAME' )
 			),
 		);
 		register_taxonomy(
@@ -585,8 +585,8 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 	public function filter_wp_localize_script_iworks_theme( $data ) {
 		$data['i18n']['modules']['aquarium'] = array(
 			'button' => array(
-				'expand_all'   => esc_html__( 'Expand All', 'iworks-aquarium-log' ),
-				'collapse_all' => esc_html__( 'Collapse All', 'iworks-aquarium-log' ),
+				'expand_all'   => esc_html__( 'Expand All', 'PLUGIN_NAME' ),
+				'collapse_all' => esc_html__( 'Collapse All', 'PLUGIN_NAME' ),
 			),
 		);
 		return $data;
@@ -603,7 +603,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 	 * @return array Modified columns array with capacity column.
 	 */
 	public function filter_add_menu_order_column( $columns ) {
-		$columns['capacity'] = esc_html__( 'Capacity', 'iworks-aquarium-log' );
+		$columns['capacity'] = esc_html__( 'Capacity', 'PLUGIN_NAME' );
 		return $columns;
 	}
 
@@ -623,7 +623,7 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 			case 'capacity':
 				$capacity = get_post_meta( $post_id, '_iw_aquarium-size_capacity', true );
 				if ( $capacity ) {
-					echo esc_html( $capacity ) . ' ' . esc_html__( 'L', 'iworks-aquarium-log' );
+					echo esc_html( $capacity ) . ' ' . esc_html__( 'L', 'PLUGIN_NAME' );
 				} else {
 					echo '&mdash;';
 				}
@@ -693,10 +693,10 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		$this->action_update_aquarium_related_updated( $post_id );
 
 		// Get logger instance
-		if ( ! class_exists( 'iworks_aquarium_log_logger' ) ) {
-			require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-logger.php';
+		if ( ! class_exists( 'iworks_aqualog_logger' ) ) {
+			require_once dirname( __DIR__ ) . '/class-iworks-aqualog-logger.php';
 		}
-		$logger = new iworks_aquarium_log_logger();
+		$logger = new iworks_aqualog_logger();
 
 		if ( $update ) {
 			// Log update
@@ -724,10 +724,10 @@ class iworks_aquarium_log_posttype_aquarium extends iworks_aquarium_log_posttype
 		}
 
 		// Get logger instance
-		if ( ! class_exists( 'iworks_aquarium_log_logger' ) ) {
-			require_once dirname( __DIR__ ) . '/class-iworks-aquarium-log-logger.php';
+		if ( ! class_exists( 'iworks_aqualog_logger' ) ) {
+			require_once dirname( __DIR__ ) . '/class-iworks-aqualog-logger.php';
 		}
-		$logger = new iworks_aquarium_log_logger();
+		$logger = new iworks_aqualog_logger();
 
 		$logger->log_aquarium_deleted( $post_id, $post->post_title );
 	}
