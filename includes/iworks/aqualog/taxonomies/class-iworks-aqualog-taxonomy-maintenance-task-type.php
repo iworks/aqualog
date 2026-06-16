@@ -661,7 +661,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 * @return void
 	 */
 	public function log_aquarium_changes( $post_id, $post, $update ) {
-		$nonce_value  = $this->get_snitized_nonce_value();
+		$nonce_value  = $this->get_nonce_value_and_sanitize_it();
 		$nonce_action = 'update-post_' . $post_id;
 
 		// Verify nonce for security

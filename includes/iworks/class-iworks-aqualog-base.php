@@ -201,6 +201,14 @@ class iworks_aqualog_base {
 	protected array $taxonomies_names = array();
 
 	/**
+	 * Current aquarium nonce action.
+	 *
+	 * @since 1.0.0
+	 * @var string $current_aquarium_nonce_action Current aquarium nonce action.
+	 */
+	protected string $current_aquarium_nonce_action = 'set_current_aquarium_id';
+
+	/**
 	 * Constructor for the base class.
 	 *
 	 * Initializes all necessary properties and sets up the plugin environment
@@ -257,7 +265,7 @@ class iworks_aqualog_base {
 
 	/**
 	 * Get the plugin version.
-	 *
+	*
 	 * Returns either the current version or a timestamp/file hash in dev mode.
 	 *
 	 * @since 1.0.0
@@ -570,12 +578,18 @@ class iworks_aqualog_base {
 	 * @return void
 	 */
 	protected function set_current_aquarium_id() {
-		$this->current_aquarium_id = 0;
+		/**
+		 * check nonce
+		 */
+		$nonce_value = $this->get_nonce_value_and_sanitize_it();
+		if ( ! wp_verify_nonce( $nonce_value, $this->current_aquarium_nonce_action ) ) {
+			return;
+		}
 		/**
 		 * check _GET for aquarium_id
 		 */
 		$aquarium_id = intval( filter_input( INPUT_GET, 'aquarium_id', FILTER_VALIDATE_INT ) );
-		if ( $aquarium_id ) {
+		if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
 			$this->current_aquarium_id = $aquarium_id;
 			return;
 		}
@@ -583,7 +597,7 @@ class iworks_aqualog_base {
 		 * check _POST for aquarium_id
 		 */
 		$aquarium_id = intval( filter_input( INPUT_POST, 'aquarium_id', FILTER_VALIDATE_INT ) );
-		if ( $aquarium_id ) {
+		if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
 			$this->current_aquarium_id = $aquarium_id;
 			return;
 		}
@@ -591,7 +605,7 @@ class iworks_aqualog_base {
 		 * check COOKIE for aquarium_id
 		 */
 		$aquarium_id = intval( filter_input( INPUT_COOKIE, 'aquarium_id', FILTER_VALIDATE_INT ) );
-		if ( $aquarium_id ) {
+		if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
 			$this->current_aquarium_id = $aquarium_id;
 			return;
 		}
@@ -739,6 +753,9 @@ class iworks_aqualog_base {
 						'counters' => array(
 							'aquariums' => 0,
 						),
+						'nonces'   => array(
+							'set_current_aquarium' => wp_create_nonce( $this->current_aquarium_nonce_action ),
+						),
 					)
 				)
 			);
@@ -797,7 +814,7 @@ class iworks_aqualog_base {
 	 * @param string $nonce_name The nonce field name. Default '_wpnonce'.
 	 * @return string Sanitized nonce value or empty string if not found.
 	 */
-	protected function get_snitized_nonce_value( $nonce_name = '_wpnonce' ) {
+	protected function get_nonce_value_and_sanitize_it( $nonce_name = '_wpnonce' ) {
 		$value = sanitize_text_field( wp_unslash( filter_input( INPUT_POST, $nonce_name ) ) );
 		if ( $value ) {
 			return $value;

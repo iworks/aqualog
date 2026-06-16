@@ -91,6 +91,30 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		add_action( 'iworks/aqualog/dashboard/aquariums', array( $this, 'action_dashboard_aquariums' ) );
 		add_action( 'iworks/aqualog/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
 		add_filter( 'iworks/aqualog/load/template/args', array( $this, 'add_page_args' ) );
+		add_filter( 'iworks/aqualog/post_type/aquarium/check/id', array( $this, 'filter_check_aquarium_id' ), 10, 2 );
+	}
+
+	/**
+	 * Check if the given aquarium ID is valid.
+	 *
+	 * @param int $aquarium_id The aquarium ID to check.
+	 * @return bool True if the aquarium ID is valid, false otherwise.
+	 */
+	public function check_is_aquarium_by_id( $aquarium_id ) {
+		if ( empty( $aquarium_id ) ) {
+			return false;
+		}
+		return get_post_type( $aquarium_id ) === $this->posttypes_names[ $this->posttype_name ];
+	}
+
+	/**
+	 * Check if the given aquarium ID is valid.
+	 *
+	 * @param int $aquarium_id The aquarium ID to check.
+	 * @return bool True if the aquarium ID is valid, false otherwise.
+	 */
+	public function filter_check_aquarium_id( $status, $aquarium_id ) {
+		return $this->check_is_aquarium_by_id( $aquarium_id );
 	}
 
 	/**
@@ -672,7 +696,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 * @return void
 	 */
 	public function log_aquarium_changes( $post_id, $post, $update ) {
-		$nonce_value  = $this->get_snitized_nonce_value();
+		$nonce_value  = $this->get_nonce_value_and_sanitize_it();
 		$nonce_action = 'update-post_' . $post_id;
 
 		// Verify nonce for security

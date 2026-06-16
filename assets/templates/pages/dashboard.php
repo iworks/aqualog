@@ -36,7 +36,15 @@ if ( $args['recent_aquariums'] ) {
 		// Get aquarium capacity if available
 		$capacity         = get_post_meta( $post_id, 'capacity', true );
 		$capacity_display = $capacity ? sprintf( '%s L', number_format_i18n( $capacity ) ) : '';
-		$url              = remove_query_arg( 'change', add_query_arg( 'aquarium_id', $post_id ) );
+		$url              = remove_query_arg(
+			'change',
+			add_query_arg(
+				array(
+					'aquarium_id' => $post_id,
+					'_wpnonce'    => $args['nonces']['set_current_aquarium'],
+				)
+			)
+		);
 		?>
 					<a class="aqualog-aquarium-item" href="<?php echo esc_url( $url ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
 						<div class="aqualog-aquarium-thumbnail <?php echo has_post_thumbnail( $post_id ) ? 'has-thumbnail' : 'no-thumbnail'; ?>">

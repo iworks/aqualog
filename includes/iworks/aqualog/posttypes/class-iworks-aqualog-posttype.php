@@ -389,7 +389,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			return;
 		}
 		foreach ( $this->meta_boxes[ $post_type ] as $id => $data ) {
-			$nonce_value = $this->get_snitized_nonce_value( $this->get_post_meta_name( $id ) );
+			$nonce_value = $this->get_nonce_value_and_sanitize_it( $this->get_post_meta_name( $id ) );
 			if ( ! wp_verify_nonce( $nonce_value, $this->nonce_value ) ) {
 				return;
 			}
@@ -479,7 +479,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			/**
 			 * check nonce
 			 */
-			$nonce_value = $this->get_snitized_nonce_value( $this->get_post_meta_name( $group ) );
+			$nonce_value = $this->get_nonce_value_and_sanitize_it( $this->get_post_meta_name( $group ) );
 			if ( ! wp_verify_nonce( $nonce_value, $group ) ) {
 				continue;
 			}
