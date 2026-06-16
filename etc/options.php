@@ -86,7 +86,7 @@ function iworks_aqualog_options() {
 					'type'              => 'checkbox',
 					'th'                => esc_html__( 'Maintenance', 'PLUGIN_NAME' ),
 					'description'       => esc_html__( 'Schedule and track maintenance tasks.', 'PLUGIN_NAME' ),
-					'default'           => 1,
+					'default'           => 0,
 					'sanitize_callback' => 'absint',
 					'classes'           => array( 'switch-button' ),
 					'group'             => 'modules',

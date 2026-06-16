@@ -465,6 +465,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				'title'                => esc_html__( 'Current Tank', 'PLUGIN_NAME' ),
 				'slug'                 => 'aqualog-current-tank',
 				'callback'             => array( $this, 'render_current_tank_page' ),
+				'module_load_check'    => 'module_load_callback',
 				'module_load_callback' => array( $this, 'check_current_tank_module_show_menu_page' ),
 			),
 			array(

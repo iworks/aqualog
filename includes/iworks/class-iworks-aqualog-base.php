@@ -578,47 +578,64 @@ class iworks_aqualog_base {
 	 * @return void
 	 */
 	protected function set_current_aquarium_id() {
+		$current_aquarium_id = $this->current_aquarium_id;
+		$check               = true;
 		/**
-		 * check nonce
+		 * check _GET or _POST for aquarium_id - it requires nonce verification
 		 */
-		$nonce_value = $this->get_nonce_value_and_sanitize_it();
-		if ( ! wp_verify_nonce( $nonce_value, $this->current_aquarium_nonce_action ) ) {
-			return;
+		if ( $check ) {
+			/**
+			 * check nonce
+			 */
+			$nonce_value = $this->get_nonce_value_and_sanitize_it();
+			if ( wp_verify_nonce( $nonce_value, $this->current_aquarium_nonce_action ) ) {
+				/**
+				 * check _GET for aquarium_id
+				 */
+				$aquarium_id = intval( filter_input( INPUT_GET, 'aquarium_id', FILTER_VALIDATE_INT ) );
+				if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
+					$this->current_aquarium_id = $aquarium_id;
+					$check                     = false;
+				}
+				/**
+				 * check _POST for aquarium_id
+				 */
+				if ( $check ) {
+					$aquarium_id = intval( filter_input( INPUT_POST, 'aquarium_id', FILTER_VALIDATE_INT ) );
+					if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
+						$this->current_aquarium_id = $aquarium_id;
+						$check                     = false;
+					}
+				}
+			}
 		}
 		/**
-		 * check _GET for aquarium_id
+		 * check user meta for aquarium_id
 		 */
-		$aquarium_id = intval( filter_input( INPUT_GET, 'aquarium_id', FILTER_VALIDATE_INT ) );
-		if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
-			$this->current_aquarium_id = $aquarium_id;
-			return;
-		}
-		/**
-		 * check _POST for aquarium_id
-		 */
-		$aquarium_id = intval( filter_input( INPUT_POST, 'aquarium_id', FILTER_VALIDATE_INT ) );
-		if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
-			$this->current_aquarium_id = $aquarium_id;
-			return;
-		}
-		/**
-		 * check COOKIE for aquarium_id
-		 */
-		$aquarium_id = intval( filter_input( INPUT_COOKIE, 'aquarium_id', FILTER_VALIDATE_INT ) );
-		if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
-			$this->current_aquarium_id = $aquarium_id;
-			return;
+		if ( $check ) {
+			$aquarium_id = intval( get_user_meta( get_current_user_id(), 'aqualog_current_aquarium_id', true ) );
+			if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $aquarium_id ) ) {
+				$this->current_aquarium_id = $aquarium_id;
+				$check                     = false;
+			}
 		}
 		/**
 		 * check options for default aquarium ID
 		 */
-		$this->check_option_object();
-		$default_aquarium_id = $this->options->get_option( 'default_aquarium_id' );
-		if ( ! empty( $default_aquarium_id ) ) {
-			$this->current_aquarium_id = $default_aquarium_id;
-			return;
+		if ( $check ) {
+			$this->check_option_object();
+			$default_aquarium_id = $this->options->get_option( 'default_aquarium_id' );
+			if ( apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $default_aquarium_id ) ) {
+				$this->current_aquarium_id = $default_aquarium_id;
+			}
 		}
-		$this->current_aquarium_id = apply_filters( 'iworks/aqualog/set/current_aquarium_id', 0 );
+		$this->current_aquarium_id = apply_filters( 'iworks/aqualog/set/current_aquarium_id', $this->current_aquarium_id );
+		/**
+		 * update user meta
+		 */
+		if ( is_user_logged_in() ) {
+			update_user_meta( get_current_user_id(), 'aqualog_current_aquarium_id', $this->current_aquarium_id );
+		}
 	}
 
 	/**

@@ -33,6 +33,7 @@
 				grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 				gap: 10px;
 			}
+
 			h3 {
 				margin-top: 0;
 			}
@@ -42,11 +43,13 @@
 				flex-direction: column;
 				gap: 20px;
 				margin-bottom: 20px;
+
 				&--dimensions,
 				&--capacity {
 					flex-direction: row;
 					justify-content: space-between;
 				}
+
 				&--capacity {
 					border-bottom: 1px solid #ccd0d4;
 					padding-bottom: 20px;
@@ -54,23 +57,28 @@
 			}
 
 			$icon_size: 40px;
+
 			&-cell {
 				display: grid;
 				gap: 5px;
 				grid-template-columns: $icon_size auto;
 				grid-template-areas: "icon label" "icon value";
+
 				svg {
 					grid-area: icon;
 					width: $icon_size;
 					height: $icon_size;
 				}
+
 				span {
 					&.dashicons {
 						grid-area: icon;
 					}
+
 					&.label {
 						grid-area: label;
 					}
+
 					&.value {
 						grid-area: value;
 						font-weight: 600;
@@ -176,6 +184,10 @@
 			display: grid;
 			grid-template-columns: $aq-thumbnail-size auto;
 			align-items: start;
+
+			&.current {
+				border-color: var(--wp-admin-theme-color);
+			}
 
 			&:hover {
 				border-color: var(--wp-admin-theme-color);

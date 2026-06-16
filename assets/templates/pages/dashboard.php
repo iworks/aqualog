@@ -45,8 +45,13 @@ if ( $args['recent_aquariums'] ) {
 				)
 			)
 		);
+		$classes          = array( 'aqualog-aquarium-item' );
+		if ( isset( $args['aquarium_id'] ) && $post_id === $args['aquarium_id'] ) {
+			$classes[] = 'current';
+			$url       = remove_query_arg( 'change', add_query_arg( 'page', 'aqualog-current-tank', $url ) );
+		}
 		?>
-					<a class="aqualog-aquarium-item" href="<?php echo esc_url( $url ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
+					<a class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" href="<?php echo esc_url( $url ); ?>" data-aquarium-id="<?php echo esc_attr( $post_id ); ?>">
 						<div class="aqualog-aquarium-thumbnail <?php echo has_post_thumbnail( $post_id ) ? 'has-thumbnail' : 'no-thumbnail'; ?>">
 			<?php
 			if ( has_post_thumbnail( $post_id ) ) {
