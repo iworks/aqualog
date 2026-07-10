@@ -45,7 +45,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 * @since 1.0.0
 	 * @var   string
 	 */
-	private string $capability = 'manage_options';
+	private string $capability = 'editor';
 
 	/**
 	 * User meta key for dashboard message dismissal.
