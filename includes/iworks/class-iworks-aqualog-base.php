@@ -102,7 +102,7 @@ class iworks_aqualog_base {
 	 * @since 1.0.0
 	 * @var string $capability Required capability for plugin settings
 	 */
-	private string $capability = 'manage_options';
+	protected string $capability = 'manage_options';
 
 	/**
 	 * Plugin version
@@ -265,11 +265,12 @@ class iworks_aqualog_base {
 
 	/**
 	 * Get the plugin version.
-	*
+	 *
 	 * Returns either the current version or a timestamp/file hash in dev mode.
 	 *
 	 * @since 1.0.0
 	 * @access public
+	 *
 	 * @param string|null $file Optional file path for hash generation.
 	 * @return string Version string or timestamp/hash.
 	 */
@@ -508,8 +509,10 @@ class iworks_aqualog_base {
 	 *
 	 * @since 1.0.0
 	 * @access protected
+	 *
 	 * @param string $message Log message.
-	 * @param array $data Additional log data.
+	 * @param array  $data    Additional log data.
+	 * @param string $level   Log level: 'debug', 'warning', or 'notice'. Default 'notice'.
 	 * @return void
 	 */
 	protected function simple_history_logger_helper( $message, $data, $level = 'notice' ) {
@@ -553,12 +556,12 @@ class iworks_aqualog_base {
 		}
 	}
 	/**
-	 * Enqueue dashboard styles.
+	 * Enqueue dashboard assets.
 	 *
-	 * Loads the CSS styles for the dashboard page.
+	 * Loads the CSS styles and JavaScript for the dashboard page.
 	 *
 	 * @since 1.0.0
-	 * @access private
+	 * @access public
 	 * @return void
 	 */
 	public function admin_enqueue_assets() {
@@ -701,10 +704,15 @@ class iworks_aqualog_base {
 	/**
 	 * Get time elapsed text for dashboard display.
 	 *
+	 * Calculates the time elapsed from a MySQL datetime string and returns
+	 * a human-readable text format (e.g., '5 minutes ago', '2 hours ago').
+	 * Handles seconds, minutes, hours, days, and weeks.
+	 *
 	 * @since 1.0.0
+	 * @access protected
 	 *
 	 * @param string $datetime MySQL datetime string.
-	 * @return string Time elapsed text.
+	 * @return string Human-readable time elapsed text.
 	 */
 	protected function get_time_elapsed_text_seconds( $datetime ) {
 		if ( ! $datetime ) {
@@ -750,11 +758,17 @@ class iworks_aqualog_base {
 	/**
 	 * Load a template file.
 	 *
+	 * Loads a template file from the assets/templates directory.
+	 * Passes default arguments including messages, counters, and nonces to the template.
+	 * Logs an error if the template file is not found.
+	 *
 	 * @since 1.0.0
-	 * @param string $file Template file name.
-	 * @param string $group Template group name.
-	 * @param bool $load_once Whether to load the template only once.
-	 * @param array $args Arguments to pass to the template.
+	 * @access protected
+	 *
+	 * @param string $file       Template file name (without .php extension).
+	 * @param string $group      Template group directory name. Default empty.
+	 * @param bool   $load_once  Whether to use require_once or require. Default true.
+	 * @param array  $args       Additional arguments to pass to the template. Default empty array.
 	 * @return void
 	 */
 	protected function load_template( $file, $group = '', $load_once = true, array $args = array() ) {

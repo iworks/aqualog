@@ -38,16 +38,6 @@ require_once dirname( __DIR__ ) . '/class-iworks-aqualog-base.php';
 class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 
 	/**
-	 * The capability required to access plugin admin features.
-	 *
-	 * Users must have this capability to access admin pages and settings.
-	 *
-	 * @since 1.0.0
-	 * @var   string
-	 */
-	private string $capability = 'editor';
-
-	/**
 	 * User meta key for dashboard message dismissal.
 	 *
 	 * @since 1.0.0
@@ -149,6 +139,18 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		add_filter( 'iworks/aqualog/wp-admin/messages/files', array( $this, 'read_messages_files' ) );
 	}
 
+	/**
+	 * Read and register message template files.
+	 *
+	 * Scans the messages templates directory for PHP files and loads them
+	 * into the messages array. Skips index.php files.
+	 *
+	 * @since 1.0.0
+	 * @filter iworks/aqualog/wp-admin/messages/files
+	 *
+	 * @param array $messages Existing messages array.
+	 * @return array Updated messages array with template contents.
+	 */
 	public function read_messages_files( $messages ) {
 		$files = glob( $this->plugin_file_dir . '/assets/templates/messages/*.php' );
 		foreach ( $files as $file ) {
@@ -161,6 +163,17 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 		return $messages;
 	}
 
+	/**
+	 * Initialize plugin settings on WordPress init hook.
+	 *
+	 * Performs initialization tasks including:
+	 * - Checking if the options object is properly initialized
+	 * - Setting the current aquarium ID from user preferences
+	 *
+	 * @since 1.0.0
+	 * @action init
+	 * @return void
+	 */
 	public function action_init() {
 		$this->check_option_object();
 		/**
@@ -420,7 +433,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			// Fallback to dashicon if file cannot be read
 			return 'dashicons-button';
 		}
-		//vg_content = str_replace( '<svg', '<svg fill="#fff"', $svg_content );
+		// $svg_content = str_replace( '<svg', '<svg fill="#fff"', $svg_content );
 		$base64 = base64_encode( $svg_content );
 		return 'data:image/svg+xml;base64,' . $base64;
 	}
@@ -439,19 +452,23 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	public function register_admin_menu() {
 		$this->check_option_object();
 		// Main menu item
-		$slug = add_menu_page(
+		$args = array(
 			/* translators: Main menu page title */
 			esc_html__( 'Aqualog Dashboard', 'PLUGIN_NAME' ),
 			/* translators: Main menu item title */
 			esc_html__( 'Aqualog', 'PLUGIN_NAME' ),
-			$this->capability,
+			$this->get_capability(),
 			$this->wp_admin_slug,
 			array( $this, 'render_dashboard_page' ),
 			$this->get_base64_svg_icon(),
-			$this->options->get_option( 'menu_position' )
+			$this->options->get_option( 'menu_position' ),
 		);
+		$slug = call_user_func_array( 'add_menu_page', $args );
 		add_action( 'load-' . $slug, array( $this, 'admin_enqueue_assets' ) );
-
+		/**
+		 * @since 1.0.0
+		 * @var array $submenus
+		 */
 		$submenus = array(
 			array(
 				/* translators: Dashboard submenu title */
@@ -462,7 +479,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 			),
 			array(
 				/* translators: Dashboard submenu title */
-				'title'                => esc_html__( 'Current Tank', 'PLUGIN_NAME' ),
+				'title'                => esc_html__( 'Current Aquarium', 'PLUGIN_NAME' ),
 				'slug'                 => 'aqualog-current-tank',
 				'callback'             => array( $this, 'render_current_tank_page' ),
 				'module_load_check'    => 'module_load_callback',
@@ -622,6 +639,20 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	}
 
 	/**
+	 * Render dosings page.
+	 *
+	 * Triggers the dosings page action to allow other components
+	 * to render the dosings interface.
+	 *
+	 * @since 1.0.0
+	 * @action iworks/aqualog/wp-admin/dosings_page
+	 * @return  void
+	 */
+	public function render_dosings_page() {
+		do_action( 'iworks/aqualog/wp-admin/dosings_page' );
+	}
+
+	/**
 	 * Render maintenance page.
 	 *
 	 * Triggers the maintenance page action to allow other components
@@ -695,11 +726,35 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	/**
 	 * Check if current tank module should be shown in menu page.
 	 *
+	 * Determines whether the "Current Aquarium" menu item should be displayed
+	 * based on whether a current aquarium ID is set.
+	 *
 	 * @since 1.0.0
-	 * @return bool True if module should be shown, false otherwise.
+	 *
+	 * @return bool True if a current aquarium is selected, false otherwise.
 	 */
 	private function check_current_tank_module_show_menu_page() {
 		$this->set_current_aquarium_id();
 		return boolval( $this->current_aquarium_id );
+	}
+
+	/**
+	 * Get capability required for admin menu access.
+	 *
+	 * Returns the appropriate capability based on the page type.
+	 * Settings pages require 'manage_options', while other pages
+	 * use the capability defined in plugin options.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $page Page identifier. Default 'any'. Use 'settings' for settings pages.
+	 * @return string Capability required to access the admin menu.
+	 */
+	protected function get_capability( $page = 'any' ) {
+		if ( 'settings' === $page ) {
+			return 'manage_options';
+		}
+		$this->check_option_object();
+		return apply_filters( 'iworks/aqualog/capability', $this->options->get_option( 'capability' ), $page );
 	}
 }

@@ -169,6 +169,23 @@ function iworks_aqualog_options() {
 					'since'             => '1.0.0',
 					'default'           => 59,
 				),
+				array(
+					'name'              => 'capability',
+					'type'              => 'select',
+					'th'                => esc_html__( 'Capability', 'PLUGIN_NAME' ),
+					'description'       => esc_html__( 'Set the capability required to access the plugin.', 'PLUGIN_NAME' ),
+					'classes'           => array( 'small-text' ),
+					'sanitize_callback' => 'sanitize_text_field',
+					'since'             => '1.0.0',
+					'default'           => 'editor',
+					'options'           => array(
+						''                     => esc_html__( '--- Select ---', 'PLUGIN_NAME' ),
+						'manage_options'       => esc_html__( 'Administrator', 'PLUGIN_NAME' ),
+						'edit_pages'           => esc_html__( 'Editor', 'PLUGIN_NAME' ),
+						'edit_published_posts' => esc_html__( 'Author', 'PLUGIN_NAME' ),
+						'edit_posts'           => esc_html__( 'Contributor', 'PLUGIN_NAME' ),
+					),
+				),
 			)
 		),
 

@@ -37,7 +37,14 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 */
 	private $list = array();
 
-
+	/**
+	 * Meta key for related updated timestamp.
+	 *
+	 * Stores the timestamp when aquarium-related data was last updated.
+	 *
+	 * @since 1.0.0
+	 * @var string $meta_name_related_updated_at Meta key name for related updated timestamp.
+	 */
 	private string $meta_name_related_updated_at = '_related_updated_at';
 
 	/**
@@ -160,18 +167,44 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 
 	/**
 	 * Get the count of aquariums.
-	*
-	 * @return int The count of aquariums.
+	 *
+	 * Returns the number of published aquarium posts.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return int The count of published aquariums.
 	 */
 	public function get_aquariums_count() {
 		$count = wp_count_posts( $this->posttypes_names[ $this->posttype_name ] );
 		return $count ? $count->publish : 0;
 	}
 
+	/**
+	 * Update aquarium related timestamp.
+	 *
+	 * Updates the meta field storing when aquarium-related data was last modified.
+	 *
+	 * @since 1.0.0
+	 * @action iworks/aqualog/update/aquarium/related_updated
+	 *
+	 * @param int $aquarium_id The aquarium post ID.
+	 * @return void
+	 */
 	public function action_update_aquarium_related_updated( $aquarium_id ) {
 		update_post_meta( $aquarium_id, $this->meta_name_related_updated_at, current_time( 'mysql' ) );
 	}
 
+	/**
+	 * Get recent aquariums.
+	 *
+	 * Retrieves the most recently updated aquariums, ordered by related update timestamp.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param int $limit Number of aquariums to retrieve. Default 10.
+	 * @return array Array of aquarium post objects.
+	 */
 	private function get_last( $limit = 10 ) {
 		$wp_query_args = array(
 			'post_type'      => $this->posttypes_names[ $this->posttype_name ],
@@ -183,6 +216,15 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		return get_posts( $wp_query_args );
 	}
 
+	/**
+	 * Get all aquariums.
+	 *
+	 * Retrieves all published aquarium posts.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @return array Array of all aquarium post objects.
+	 */
 	private function get_all() {
 		$wp_query_args = array(
 			'post_type'      => $this->posttypes_names[ $this->posttype_name ],
@@ -191,6 +233,15 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		return get_posts( $wp_query_args );
 	}
 
+	/**
+	 * Render aquariums on dashboard.
+	 *
+	 * Displays recent aquariums on the Aqualog dashboard.
+	 *
+	 * @since 1.0.0
+	 * @action iworks/aqualog/dashboard/aquariums
+	 * @return void
+	 */
 	public function action_dashboard_aquariums() {
 		$posts = $this->get_last();
 		if ( $posts ) {
@@ -204,6 +255,14 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		}
 	}
 
+	/**
+	 * Render content after dashboard aquariums.
+	 *
+	 * Placeholder for content to display after the aquariums list on dashboard.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
 	public function action_dashboard_aquariums_after() {
 		// TODO: Implement dashboard aquariums after action
 	}
@@ -267,6 +326,19 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		<?php
 	}
 
+	/**
+	 * Filter default aquarium index data.
+	 *
+	 * Populates the default aquarium selection data with all available aquariums.
+	 *
+	 * @since 1.0.0
+	 * @filter index_iworks_aqualog_default_aquarium_id_data
+	 *
+	 * @param array  $data        Existing data array.
+	 * @param string $option_name Option name.
+	 * @param mixed  $default     Default value.
+	 * @return array Updated data array with aquarium IDs and titles.
+	 */
 	public function filter_index_iworks_aqualog_default_aquarium_data( $data, $option_name, $default ) {
 		$args     = array(
 			'post_type'      => $this->posttypes_names[ $this->posttype_name ],
@@ -282,6 +354,16 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		return $data;
 	}
 
+	/**
+	 * Enqueue admin assets for aquarium post type.
+	 *
+	 * Loads admin styles and scripts when editing aquarium posts.
+	 *
+	 * @since 1.0.0
+	 * @action load-post.php
+	 * @action load-post-new.php
+	 * @return void
+	 */
 	public function post_type_admin_enqueue_assets() {
 		if ( ! function_exists( 'get_current_screen' ) ) {
 			return;
@@ -481,6 +563,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 * Registers the Aquarium post type with WordPress.
 	 *
 	 * @since 1.0.0
+	 * @action init
 	 * @access public
 	 * @return void
 	 */
@@ -490,7 +573,6 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			'singular_name'      => esc_html_x( 'Aquarium', 'Post Type Singular Name', 'PLUGIN_NAME' ),
 			'menu_name'          => esc_html_x( 'Aquariums', 'Menu Name', 'PLUGIN_NAME' ),
 			'name_admin_bar'     => esc_html_x( 'Aquarium', 'Admin Bar Name', 'PLUGIN_NAME' ),
-			'parent_item_colon'  => esc_html__( 'Parent Aquarium:', 'PLUGIN_NAME' ),
 			'all_items'          => esc_html__( 'Aquariums', 'PLUGIN_NAME' ),
 			'add_new_item'       => esc_html__( 'Add New Aquarium', 'PLUGIN_NAME' ),
 			'add_new'            => esc_html__( 'Add New', 'PLUGIN_NAME' ),
@@ -515,7 +597,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 					'thumbnail',
 				),
 			),
-			'hierarchical'        => true,
+			'hierarchical'        => false,
 			'public'              => true,
 			'exclude_from_search' => false,
 			'show_ui'             => true,
@@ -529,7 +611,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			'show_in_rest'        => true,
 			'rest_base'           => apply_filters(
 				'iworks/theme/register_post_type/aquarium/rest_base',
-				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquariums' : esc_attr__( 'aquariums', 'PLUGIN_NAME' )
+				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquarium' : esc_attr( _x( 'aquariums', 'rest base', 'PLUGIN_NAME' ) )
 			),
 		);
 
@@ -548,6 +630,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 * Registers the taxonomy for organizing aquariums into groups.
 	 *
 	 * @since 1.0.0
+	 * @action init
 	 * @access public
 	 * @return void
 	 */
@@ -574,7 +657,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 
 		$args = array(
 			'labels'              => apply_filters( 'iworks/theme/register_post_type/aquarium/labels', $labels ),
-			'hierarchical'        => true,
+			'hierarchical'        => false,
 			'public'              => true,
 			'exclude_from_search' => false,
 			'rewrite'             => false,
@@ -587,7 +670,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			'show_in_menu'        => admin_url( add_query_arg( 'page', $this->wp_admin_slug, 'admin.php' ) ),
 			'rest_base'           => apply_filters(
 				'iworks/theme/register_taxonomy/aquarium/rest_base',
-				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquarium_types' : esc_attr__( 'aquarium_types', 'PLUGIN_NAME' )
+				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquarium-type' : esc_attr( _x( 'aquarium-type', 'rest base', 'PLUGIN_NAME' ) )
 			),
 		);
 		register_taxonomy(
@@ -602,7 +685,9 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 * Adds aquarium-specific translations to the localized script data.
 	 *
 	 * @since 1.0.0
+	 * @filter wp_localize_script_iworks_theme
 	 * @access public
+	 *
 	 * @param array $data The existing localized data.
 	 * @return array The modified localized data with aquarium translations.
 	 */
@@ -622,7 +707,9 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 * Adds capacity column to the aquarium post type list.
 	 *
 	 * @since 1.0.0
+	 * @filter manage_{post_type}_posts_columns
 	 * @access public
+	 *
 	 * @param array $columns The existing columns array.
 	 * @return array Modified columns array with capacity column.
 	 */
@@ -634,11 +721,13 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	/**
 	 * Display custom column values in aquarium post list.
 	 *
-	 * Handles display of capacity and menu order columns.
+	 * Handles display of capacity column in the aquarium post type list.
 	 *
 	 * @since 1.0.0
+	 * @action manage_{post_type}_posts_custom_column
 	 * @access public
-	 * @param string $column The column name.
+	 *
+	 * @param string $column  The column name.
 	 * @param int    $post_id The post ID.
 	 * @return void
 	 */
@@ -658,10 +747,13 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	/**
 	 * Set current aquarium ID.
 	 *
-	 * Sets the current aquarium ID based on the post type.
+	 * Filters the current aquarium ID. If no aquarium is set and only one
+	 * aquarium exists, automatically selects that aquarium.
 	 *
 	 * @since 1.0.0
+	 * @filter iworks/aqualog/set/current_aquarium_id
 	 * @access public
+	 *
 	 * @param int $current_aquarium_id The current aquarium ID.
 	 * @return int The modified aquarium ID.
 	 */
@@ -689,7 +781,12 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	/**
 	 * Log aquarium changes on save.
 	 *
+	 * Logs aquarium creation or update events using the logger class.
+	 * Updates the related timestamp and records changes to title, content, and taxonomy.
+	 *
 	 * @since 1.0.0
+	 * @action save_post_{post_type}
+	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
 	 * @param bool    $update  Whether this is an update.
@@ -735,7 +832,11 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	/**
 	 * Log aquarium deletion.
 	 *
+	 * Logs aquarium deletion events using the logger class.
+	 *
 	 * @since 1.0.0
+	 * @action wp_trash_post
+	 *
 	 * @param int $post_id Post ID.
 	 * @return void
 	 */
@@ -759,9 +860,14 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	/**
 	 * Get post changes for logging.
 	 *
+	 * Compares post data before and after save to detect changes
+	 * in title, content, and taxonomy terms.
+	 *
 	 * @since 1.0.0
+	 * @access private
+	 *
 	 * @param int $post_id Post ID.
-	 * @return array Array of changes.
+	 * @return array Array of detected changes with old and new values.
 	 */
 	private function get_post_changes( $post_id ) {
 		$post_before = get_post( $post_id );
