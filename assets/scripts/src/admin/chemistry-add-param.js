@@ -193,6 +193,7 @@
 			return;
 		}
 
+
 		// Show loading state
 		$submit.prop('disabled', true)
 			.html('<span class="dashicons dashicons-update spin"></span> ' + window.iworks_aqualog.i18n.messages.saving);
@@ -204,6 +205,7 @@
 			data: {
 				action: 'aquarium_log_chemistry_add_param',
 				_wpnonce: window.iworks_aqualog.nonces.chemistry.add_param,
+				date: $form.closest('.aqualog-card').find('input[name="date"]').val(),
 				value: $form.find(field_value_class).val(),
 				key: window.iworks_aqualog.chemistry.formData.key,
 				id: $form.data('aquarium-id'),

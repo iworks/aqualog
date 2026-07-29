@@ -312,6 +312,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		$value = sanitize_text_field( filter_input( INPUT_POST, 'value' ) );
 		$key   = sanitize_key( filter_input( INPUT_POST, 'key' ) );
 		$id    = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
+		$date  = sanitize_text_field( filter_input( INPUT_POST, 'date' ) );
 		/**
 		 * sanitize
 		 */
@@ -320,25 +321,30 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			wp_send_json_error( esc_html__( 'Invalid parameter', 'PLUGIN_NAME' ) );
 		}
 		global $wpdb;
-		$result = $wpdb->insert(
-			$wpdb->aquarium_log_chemistry,
+		/**
+		 * Filter the data before inserting into the database.
+		 *
+		 * @since 1.0.0
+		 * @param array $data The data to insert.
+		 * @return array The filtered data.
+		 */
+		$data   = apply_filters(
+			'iworks/aqualog/chemistry/sql/insert/data',
 			array(
 				'aquarium_id'      => $id,
 				'param_key'        => $key,
 				'param_value'      => $value,
-				'measurement_date' => current_time( 'mysql' ),
-			),
-			array(
-				'%d',
-				'%s',
-				'%f',
-				'%s',
+				'measurement_date' => date( 'Y-m-d H:i:s', strtotime( $date ) ),
 			)
+		);
+		$result = $wpdb->insert(
+			$wpdb->aquarium_log_chemistry,
+			$data,
+			array( '%d', '%s', '%f', '%s' )
 		);
 		if ( $result ) {
 			// Log the chemistry measurement addition
 			$this->log_chemistry_measurement( $id, $key, $value );
-
 			wp_send_json_success(
 				array(
 					'message' => esc_html__( 'Parameter added successfully', 'PLUGIN_NAME' ),
