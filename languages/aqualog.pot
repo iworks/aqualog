@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.0.1\n"
+"Project-Id-Version: 0.0.2\n"
 "Report-Msgid-Bugs-To: http://iworks.pl\n"
-"POT-Creation-Date: 2026-07-10 08:31:40+00:00\n"
+"POT-Creation-Date: 2026-07-29 04:28:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -71,14 +71,14 @@ msgstr ""
 
 #: assets/templates/elements/recent-aquariums-card.php:93
 #: assets/templates/pages/dashboard.php:30
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:222
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:281
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:187
-#: includes/iworks/class-iworks-aqualog-base.php:711
+#: includes/iworks/class-iworks-aqualog-base.php:719
 msgid "Never"
 msgstr ""
 
 #: assets/templates/elements/recent-aquariums-card.php:139
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:203
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:254
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:168
 msgid "No aquariums found."
 msgstr ""
@@ -108,7 +108,7 @@ msgstr ""
 
 #: assets/templates/pages/aquarium.php:31
 #: assets/templates/pages/dashboard.php:14
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:444
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:457
 #. translators: Main menu page title
 msgid "Aqualog Dashboard"
 msgstr ""
@@ -158,8 +158,8 @@ msgid "Events"
 msgstr ""
 
 #: assets/templates/pages/chemistry.php:14 etc/options.php:76
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:480
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:361
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:497
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:443
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:326
 #. translators: Chemistry submenu title
 msgid "Chemistry"
@@ -191,7 +191,7 @@ msgid "View All"
 msgstr ""
 
 #: assets/templates/pages/dashboard.php:132 etc/options.php:48
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:365
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:378
 #: includes/iworks/rate/rate.php:159
 #. translators: Settings menu item
 msgid "Settings"
@@ -202,7 +202,7 @@ msgid "Documentation"
 msgstr ""
 
 #: assets/templates/pages/maintenance.php:21 etc/options.php:87
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:487
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:504
 #. translators: Maintenance submenu title
 msgid "Maintenance"
 msgstr ""
@@ -262,7 +262,7 @@ msgid "Manage fertilizers and supplement dosing."
 msgstr ""
 
 #: etc/options.php:109
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:501
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:518
 #. translators: Equipment submenu title
 msgid "Equipment"
 msgstr ""
@@ -280,7 +280,7 @@ msgid "Manage fish and aquatic livestock."
 msgstr ""
 
 #: etc/options.php:131
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:508
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:525
 #. translators: Plants submenu title
 msgid "Plants"
 msgstr ""
@@ -301,7 +301,7 @@ msgstr ""
 msgid "Select the default aquarium to display."
 msgstr ""
 
-#: etc/options.php:154
+#: etc/options.php:154 etc/options.php:182
 msgid "--- Select ---"
 msgstr ""
 
@@ -317,215 +317,239 @@ msgstr ""
 msgid "Set the position of the main menu item."
 msgstr ""
 
-#: etc/options.php:194
+#: etc/options.php:175
+msgid "Capability"
+msgstr ""
+
+#: etc/options.php:176
+msgid "Set the capability required to access the plugin."
+msgstr ""
+
+#: etc/options.php:183
+msgid "Administrator"
+msgstr ""
+
+#: etc/options.php:184
+msgid "Editor"
+msgstr ""
+
+#: etc/options.php:185
+msgid "Author"
+msgstr ""
+
+#: etc/options.php:186
+msgid "Contributor"
+msgstr ""
+
+#: etc/options.php:211
 msgid "Water temperature"
 msgstr ""
 
-#: etc/options.php:206
+#: etc/options.php:223
 msgid "Acidity/Alkalinity level"
 msgstr ""
 
-#: etc/options.php:217
+#: etc/options.php:234
 msgid "General Hardness"
 msgstr ""
 
-#: etc/options.php:228
+#: etc/options.php:245
 msgid "Carbonate Hardness"
 msgstr ""
 
-#: etc/options.php:239
+#: etc/options.php:256
 msgid "Nitrate"
 msgstr ""
 
-#: etc/options.php:250
+#: etc/options.php:267
 msgid "Nitrite"
 msgstr ""
 
-#: etc/options.php:261
+#: etc/options.php:278
 msgid "Ammonia"
 msgstr ""
 
-#: etc/options.php:272
+#: etc/options.php:289
 msgid "Phosphate"
 msgstr ""
 
-#: etc/options.php:283
+#: etc/options.php:300
 msgid "Iron"
 msgstr ""
 
-#: etc/options.php:294
+#: etc/options.php:311
 msgid "Calcium"
 msgstr ""
 
-#: etc/options.php:305
+#: etc/options.php:322
 msgid "Magnesium"
 msgstr ""
 
-#: etc/options.php:316
+#: etc/options.php:333
 msgid "Potassium"
 msgstr ""
 
-#: etc/options.php:327
+#: etc/options.php:344
 msgid "Total Dissolved Solids"
 msgstr ""
 
-#: etc/options.php:338
+#: etc/options.php:355
 msgid "Oxygen"
 msgstr ""
 
-#: etc/options.php:348
+#: etc/options.php:365
 msgid "Carbon Dioxide"
 msgstr ""
 
-#: etc/options.php:359
+#: etc/options.php:376
 msgid "Chlorine"
 msgstr ""
 
-#: etc/options.php:369
+#: etc/options.php:386
 msgid "Copper"
 msgstr ""
 
-#: etc/options.php:378
+#: etc/options.php:395
 msgid "Zinc"
 msgstr ""
 
-#: etc/options.php:387
+#: etc/options.php:404
 msgid "Manganese"
 msgstr ""
 
-#: etc/options.php:396
+#: etc/options.php:413
 msgid "Molybdenum"
 msgstr ""
 
-#: etc/options.php:405
+#: etc/options.php:422
 msgid "Boron"
 msgstr ""
 
-#: etc/options.php:414
+#: etc/options.php:431
 msgid "Annually"
 msgstr ""
 
-#: etc/options.php:415
+#: etc/options.php:432
 msgid "Daily"
 msgstr ""
 
-#: etc/options.php:416
+#: etc/options.php:433
 msgid "Every other day"
 msgstr ""
 
-#: etc/options.php:417
+#: etc/options.php:434
 msgid "Monthly"
 msgstr ""
 
-#: etc/options.php:418
+#: etc/options.php:435
 msgid "On demand"
 msgstr ""
 
-#: etc/options.php:419 etc/options.php:479
+#: etc/options.php:436 etc/options.php:496
 msgid "Other"
 msgstr ""
 
-#: etc/options.php:420
+#: etc/options.php:437
 msgid "Quarterly"
 msgstr ""
 
-#: etc/options.php:421
+#: etc/options.php:438
 msgid "Semi-annually"
 msgstr ""
 
-#: etc/options.php:422
+#: etc/options.php:439
 msgid "Twice daily"
 msgstr ""
 
-#: etc/options.php:423
+#: etc/options.php:440
 msgid "Twice monthly"
 msgstr ""
 
-#: etc/options.php:424
+#: etc/options.php:441
 msgid "Weekly"
 msgstr ""
 
-#: etc/options.php:429
+#: etc/options.php:446
 msgid "Algae Removal"
 msgstr ""
 
-#: etc/options.php:430
+#: etc/options.php:447
 msgid "Remove algae from tank surfaces"
 msgstr ""
 
-#: etc/options.php:434
+#: etc/options.php:451
 msgid "Equipment Inspection"
 msgstr ""
 
-#: etc/options.php:435
+#: etc/options.php:452
 msgid "Inspect and clean equipment"
 msgstr ""
 
-#: etc/options.php:439
+#: etc/options.php:456
 msgid "Feeding"
 msgstr ""
 
-#: etc/options.php:440
+#: etc/options.php:457
 msgid "Feed fish and monitor feeding schedule"
 msgstr ""
 
-#: etc/options.php:444
+#: etc/options.php:461
 msgid "Fertilization"
 msgstr ""
 
-#: etc/options.php:445
+#: etc/options.php:462
 msgid "Add fertilizers and nutrients"
 msgstr ""
 
-#: etc/options.php:449
+#: etc/options.php:466
 msgid "Filter Cleaning"
 msgstr ""
 
-#: etc/options.php:450
+#: etc/options.php:467
 msgid "Clean or replace filter media"
 msgstr ""
 
-#: etc/options.php:454
+#: etc/options.php:471
 msgid "Glass Cleaning"
 msgstr ""
 
-#: etc/options.php:455
+#: etc/options.php:472
 msgid "Clean aquarium glass and remove algae"
 msgstr ""
 
-#: etc/options.php:459
+#: etc/options.php:476
 msgid "Plant Trimming"
 msgstr ""
 
-#: etc/options.php:460
+#: etc/options.php:477
 msgid "Trim and maintain aquatic plants"
 msgstr ""
 
-#: etc/options.php:464
+#: etc/options.php:481
 msgid "Substrate Cleaning"
 msgstr ""
 
-#: etc/options.php:465
+#: etc/options.php:482
 msgid "Clean substrate and gravel"
 msgstr ""
 
-#: etc/options.php:469
+#: etc/options.php:486
 msgid "Temperature Adjustment"
 msgstr ""
 
-#: etc/options.php:470
+#: etc/options.php:487
 msgid "Check and adjust water temperature"
 msgstr ""
 
-#: etc/options.php:474
+#: etc/options.php:491
 msgid "Water Testing"
 msgstr ""
 
-#: etc/options.php:475
+#: etc/options.php:492
 msgid "Test water parameters"
 msgstr ""
 
-#: etc/options.php:480
+#: etc/options.php:497
 msgid "Other maintenance tasks"
 msgstr ""
 
@@ -572,467 +596,452 @@ msgstr ""
 msgid "Failed to retrieve log entries"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:184
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:197
 #. translators: Meta box title for assistance section
 msgid "Have a question or need help?"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:190
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:203
 #. translators: Meta box title for plugin appreciation section
 msgid "Enjoying this plugin?"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:213
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:226
 msgid "Help others discover it—share the link with your friends and community!"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:215
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:228
 msgid "Give it a five stars on WordPress.org"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:216
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:229
 msgid "Link to it so others can easily find it"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:237
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:250
 msgid ""
 "We’re here for you! Send us a message and we’ll get back to you as soon as "
 "possible."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:239
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:252
 msgid "WordPress Help Forum"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:320
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:333
 #. translators: Loading message
 msgid "Loading…"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:321
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:334
 #. translators: Saving message
 msgid "Saving…"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:322
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:335
 #. translators: Error message when saving fails
 msgid "An error occurred while saving. Please try again."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:323
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:336
 #. translators: Validation error message
 msgid "Please correct the highlighted fields and try again."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:381
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:394
 #. translators: Donate menu item
 msgid "Donate"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:396
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:409
 #. translators: GitHub menu item
 msgid "GitHub"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:446
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:459
 #. translators: Main menu item title
 msgid "Aqualog"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:458
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:475
 #. translators: Dashboard submenu title
 msgid "Dashboard"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:465
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:482
 #. translators: Dashboard submenu title
-msgid "Current Tank"
+msgid "Current Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:473
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:490
 #. translators: Chemistry submenu title
 msgid "Dosings"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:494
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:511
 #. translators: Notes submenu title
 msgid "Notes"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:515
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:494
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:508
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:532
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:576
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:590
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:459
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:473
 #. translators: Aquariums submenu title
 msgid "Aquariums"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:522
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:539
 #. translators: Help submenu title
 msgid "Help"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:595
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:612
 #. translators: Help & Support page title
 msgid "Help & Support"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:598
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:615
 msgid "Getting Started"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:599
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:616
 msgid "Welcome to Aqualog! Here are some resources to help you get started:"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:601
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:618
 msgid "Plugin Documentation"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:602
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:619
 msgid "Support Forum"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:603
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:620
 msgid "Leave a Review"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:665
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:696
 #. translators: Default text when no aquarium is selected
 msgid "no aquarium selected."
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:679
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:710
 #. translators: Label for current aquarium display
 msgid "Current Aquarium:"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:687
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:718
 #. translators: Link text to change aquarium
 msgid "Change Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:253
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:312
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:218
 msgid "Last updated:"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:259
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:318
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:224
 msgid "View Details"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:262
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:321
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:227
 msgid "Edit"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:307
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:389
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:272
 msgid "Size"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:312
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:394
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:277
 msgid "Width"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:318
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:400
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:283
 msgid "Height"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:324
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:406
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:289
 msgid "Depth"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:330
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:630
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:412
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:717
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:295
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:595
 msgid "Capacity"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:336
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:418
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:301
 msgid "Water Volume"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:342
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:424
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:307
 msgid "Dates"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:347
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:429
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:312
 msgid "Start Date"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:352
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:434
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:317
 msgid "End Date"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:366
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:448
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:331
 msgid "Check Temperature"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:371
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:453
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:336
 msgid "Check CO₂"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:376
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:458
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:341
 msgid "Check pH"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:381
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:463
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:346
 msgid "Check GH"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:386
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:468
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:351
 msgid "Check KH"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:391
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:473
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:356
 msgid "Check Nitrate (NO₃)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:396
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:478
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:361
 msgid "Check Phosphate (PO₄)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:401
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:483
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:366
 msgid "Check Potassium (K)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:406
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:488
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:371
 msgid "Check Iron (Fe)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:411
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:493
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:376
 msgid "Check Calcium (Ca)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:416
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:498
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:381
 msgid "Check Magnesium (Mg)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:421
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:503
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:386
 msgid "Check Ammonia (NH₃)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:426
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:508
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:391
 msgid "Check Nitrite (NO₂)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:431
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:513
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:396
 msgid "Check Chlorine (Cl)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:436
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:518
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:401
 msgid "Check Copper (Cu)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:441
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:456
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:523
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:538
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:406
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:421
 msgid "Check Zinc (Zn)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:446
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:528
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:411
 msgid "Check Manganese (Mn)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:451
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:533
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:416
 msgid "Check Molybdenum (Mo)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:461
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:543
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:426
 msgid "Check Boron (B)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:466
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:548
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:431
 msgid "Check Oxygen (O₂)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:471
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:553
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:436
 msgid "Check Total Dissolved Solids (TDS)"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:493
-#: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:458
-msgid "Parent Aquarium:"
-msgstr ""
-
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:495
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:577
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:460
 msgid "Add New Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:496
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:578
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:461
 msgid "Add New"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:497
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:579
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:462
 msgid "New Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:498
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:580
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:463
 msgid "Edit Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:499
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:581
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:464
 msgid "Update Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:500
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:582
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:465
 msgid "View Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:501
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:583
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:466
 msgid "Search Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:502
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:584
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:467
 msgid "Not found"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:503
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:585
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:468
 msgid "Not found in Trash"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:507
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:589
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:472
 msgid "Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:532
-#: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:497
-msgid "aquariums"
-msgstr ""
-
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:558
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:641
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:523
 msgid "Types"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:559
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:642
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:524
 msgid "All Aquarium Types"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:560
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:643
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:525
 msgid "Parent Aquarium Type"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:561
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:644
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:526
 msgid "Parent Aquarium Type:"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:562
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:645
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:527
 msgid "New Aquarium Type Name"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:563
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:646
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:528
 msgid "Add New Aquarium Type"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:564
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:647
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:529
 msgid "Edit Aquarium Type"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:565
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:648
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:530
 msgid "Update Aquarium Type"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:566
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:649
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:531
 msgid "View Aquarium Type"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:567
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:650
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:532
 msgid "Separate Aquarium Types with commas"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:568
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:651
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:533
 msgid "Add or remove Aquarium Types"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:569
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:652
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:534
 msgid "Choose from the most used"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:570
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:653
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:535
 msgid "Popular Aquarium Types"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:571
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:654
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:536
 msgid "Search Aquarium Types"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:572
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:655
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:537
 msgid "Not Found"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:590
-#: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:555
-msgid "aquarium_types"
-msgstr ""
-
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:612
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:697
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:577
 msgid "Expand All"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:613
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:698
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:578
 msgid "Collapse All"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:650
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:739
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:615
 msgid "L"
 msgstr ""
@@ -1066,6 +1075,18 @@ msgstr ""
 msgid "Use this Media"
 msgstr ""
 
+#: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:458
+msgid "Parent Aquarium:"
+msgstr ""
+
+#: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:497
+msgid "aquariums"
+msgstr ""
+
+#: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:555
+msgid "aquarium_types"
+msgstr ""
+
 #: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-activity.php:104
 msgid "No recent activity found."
 msgstr ""
@@ -1097,15 +1118,15 @@ msgstr ""
 msgid "Value is within ideal range"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:320
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:321
 msgid "Invalid parameter"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:344
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:350
 msgid "Parameter added successfully"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:348
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:354
 msgid "Failed to add parameter"
 msgstr ""
 
@@ -1129,59 +1150,59 @@ msgstr ""
 msgid "Maintenance Tasks"
 msgstr ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:686
+#: includes/iworks/class-iworks-aqualog-base.php:689
 msgid "Today"
 msgstr ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:689
-#: includes/iworks/class-iworks-aqualog-base.php:737
+#: includes/iworks/class-iworks-aqualog-base.php:692
+#: includes/iworks/class-iworks-aqualog-base.php:745
 msgid "Yesterday"
 msgstr ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:694
-#: includes/iworks/class-iworks-aqualog-base.php:743
+#: includes/iworks/class-iworks-aqualog-base.php:697
+#: includes/iworks/class-iworks-aqualog-base.php:751
 #. translators: %s: number of weeks
 msgid "%s week ago"
 msgid_plural "%s weeks ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:697
-#: includes/iworks/class-iworks-aqualog-base.php:747
+#: includes/iworks/class-iworks-aqualog-base.php:700
+#: includes/iworks/class-iworks-aqualog-base.php:755
 #. translators: %s: number of days
 msgid "%s day ago"
 msgid_plural "%s days ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:720
+#: includes/iworks/class-iworks-aqualog-base.php:728
 #. translators: %s: number of seconds
 msgid "%s second ago"
 msgid_plural "%s seconds ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:726
+#: includes/iworks/class-iworks-aqualog-base.php:734
 #. translators: %s: number of minutes
 msgid "%s minute ago"
 msgid_plural "%s minutes ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:732
+#: includes/iworks/class-iworks-aqualog-base.php:740
 #. translators: %s: number of hours
 msgid "%s hour ago"
 msgid_plural "%s hours ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:783
+#: includes/iworks/class-iworks-aqualog-base.php:797
 #. translators: {file}: template file name, {group}: template group name (do
 #. not translate placeholders)
 msgid "Template file not found: {file} ({group})."
 msgstr ""
 
-#: includes/iworks/class-iworks-aqualog-base.php:796
+#: includes/iworks/class-iworks-aqualog-base.php:810
 #. translators: %1$s: template file name, %2$s: template group name
 msgid "Template file not found: %1$s (%2$s)."
 msgstr ""
@@ -1488,52 +1509,62 @@ msgctxt "import terms to aquarium type"
 msgid "Wabi Kusa"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:215
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:228
 msgctxt "link to add new review page on WordPress.org"
 msgid "https://wordpress.org/support/plugin/aqualog/reviews/#new-post"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:216
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:229
 msgctxt "plugin home page on WordPress.org"
 msgid "https://wordpress.org/plugins/aqualog/"
 msgstr ""
 
-#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:239
+#: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:252
 msgctxt "link to support forum on WordPress.org"
 msgid "https://wordpress.org/support/plugin/aqualog/"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:489
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:572
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:454
 msgctxt "Post Type General Name"
 msgid "Aquariums"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:490
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:573
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:455
 msgctxt "Post Type Singular Name"
 msgid "Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:491
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:574
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:456
 msgctxt "Menu Name"
 msgid "Aquariums"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:492
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:575
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:457
 msgctxt "Admin Bar Name"
 msgid "Aquarium"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:556
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:614
+msgctxt "rest base"
+msgid "aquariums"
+msgstr ""
+
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:673
+msgctxt "rest base"
+msgid "aquarium-type"
+msgstr ""
+
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:639
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:521
 msgctxt "Taxonomy General Name"
 msgid "Aquarium Types"
 msgstr ""
 
-#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:557
+#: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:640
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:522
 msgctxt "Taxonomy Singular Name"
 msgid "Aquarium Type"
