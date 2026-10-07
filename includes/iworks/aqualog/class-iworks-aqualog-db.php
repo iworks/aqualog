@@ -186,6 +186,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 				message text NOT NULL COMMENT 'Log message',
 				user_id bigint(20) unsigned DEFAULT NULL COMMENT 'User who performed action',
 				log_date datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Log timestamp',
+				created_at datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Log creation timestamp',
 				details longtext DEFAULT NULL COMMENT 'Additional action details (JSON)',
 
 				PRIMARY KEY (id),

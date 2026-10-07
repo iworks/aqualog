@@ -314,6 +314,10 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		$id    = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
 		$date  = sanitize_text_field( filter_input( INPUT_POST, 'date' ) );
 		/**
+		 * convert date to datetime
+		 */
+		$measurement_date = date( 'Y-m-d H:i:s', strtotime( $date ) );
+		/**
 		 * sanitize
 		 */
 		$config = $this->options->get_group( 'chemistry' );
@@ -334,7 +338,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 				'aquarium_id'      => $id,
 				'param_key'        => $key,
 				'param_value'      => $value,
-				'measurement_date' => date( 'Y-m-d H:i:s', strtotime( $date ) ),
+				'measurement_date' => $measurement_date,
 			)
 		);
 		$result = $wpdb->insert(
@@ -344,7 +348,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		);
 		if ( $result ) {
 			// Log the chemistry measurement addition
-			$this->log_chemistry_measurement( $id, $key, $value );
+			$this->log_chemistry_measurement( $id, $key, $value, $measurement_date );
 			wp_send_json_success(
 				array(
 					'message' => esc_html__( 'Parameter added successfully', 'PLUGIN_NAME' ),
@@ -361,12 +365,13 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 	 * @param int    $aquarium_id Aquarium ID.
 	 * @param string $param_key   Parameter key.
 	 * @param float  $param_value Parameter value.
+	 * @param string $measurement_date Measurement date.
 	 * @return void
 	 */
-	private function log_chemistry_measurement( $aquarium_id, $param_key, $param_value ) {
+	private function log_chemistry_measurement( $aquarium_id, $param_key, $param_value, $measurement_date = null ) {
 
 		// Log the measurement
-		$measurement_date = current_time( 'mysql' );
+		$measurement_date = $measurement_date ?: current_time( 'mysql' );
 		$logger           = new iworks_aqualog_logger();
 		$logger->log_chemistry_measurement_added( $aquarium_id, $param_key, $param_value, $measurement_date );
 	}

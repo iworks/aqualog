@@ -121,7 +121,7 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 	 * @param int|null    $user_id     User ID (null for current user)
 	 * @return bool|WP_Error           True on success, WP_Error on failure
 	 */
-	public function log_action( $type, $aquarium_id, $message, $details = array(), $user_id = null ) {
+	public function log_action( $type, $aquarium_id, $message, $details = array(), $user_id = null, $log_date = null ) {
 		global $wpdb;
 
 		// Validate log type
@@ -150,11 +150,11 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 		$table_name = $wpdb->prefix . 'aquarium_log_log';
 		$data       = array(
 			'aquarium_id' => absint( $aquarium_id ),
-			'type'        => sanitize_key( $type ),
+			'log_type'    => sanitize_key( $type ),
 			'message'     => wp_kses_post( $message ),
 			'details'     => ! empty( $details ) ? wp_json_encode( $details ) : null,
 			'user_id'     => absint( $user_id ),
-			'log_date'    => current_time( 'mysql' ),
+			'log_date'    => $log_date ? $log_date : current_time( 'mysql' ),
 		);
 
 		// Insert log entry
@@ -265,7 +265,7 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 			'measurement_date' => $date,
 		);
 
-		return $this->log_action( 'chemistry', $aquarium_id, $message, $details );
+		return $this->log_action( 'chemistry', $aquarium_id, $message, $details, null, $date );
 	}
 
 	/**
