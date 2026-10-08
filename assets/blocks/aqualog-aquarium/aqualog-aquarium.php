@@ -25,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @see https://make.wordpress.org/core/2024/10/17/new-block-type-registration-apis-to-improve-performance-in-wordpress-6-7/
  */
 function create_block_aqualog_aquarium_block_init( $attributes = array() ) {
-	l($attributes);
 	wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
 }
 add_action( 'init', 'create_block_aqualog_aquarium_block_init' );

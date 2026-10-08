@@ -955,8 +955,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		if ( ! $this->check_is_aquarium_by_id( $aquarium_id ) ) {
 			return $content;
 		}
-		$content .= get_the_title( $aquarium_id );
-
+		$template = $this->load_template( 'single-aquarium-link', 'blocks', array( 'aquarium_id' => $aquarium_id ) );
 		return $content;
 	}
 }
