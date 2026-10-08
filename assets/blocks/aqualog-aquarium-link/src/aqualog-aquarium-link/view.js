@@ -21,5 +21,5 @@
  */
 
 /* eslint-disable no-console */
-console.log( 'Hello World! (from create-block-aqualog-aquarium block)' );
+console.log( 'Hello World! (from create-block-aqualog-aquarium-link block)' );
 /* eslint-enable no-console */

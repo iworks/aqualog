@@ -1,14 +1,14 @@
 <?php
 // This file is generated. Do not modify it manually.
 return array(
-	'aqualog-aquarium' => array(
+	'aqualog-aquarium-link' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'create-block/aqualog-aquarium',
+		'name' => 'create-block/aqualog-aquarium-link',
 		'version' => '0.1.0',
-		'title' => 'Aqualog: Aquarium',
+		'title' => 'Aqualog: Aquarium Link',
 		'category' => 'widgets',
-		'description' => 'Aqualog: Single aquarium block.',
+		'description' => 'Aqualog: Single aquarium link.',
 		'example' => array(
 			
 		),
