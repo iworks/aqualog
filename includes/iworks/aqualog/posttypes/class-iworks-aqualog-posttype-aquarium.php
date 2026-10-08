@@ -607,13 +607,19 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 			'show_in_admin_bar'   => false,
 			'show_in_nav_menus'   => true,
 			'can_export'          => true,
-			'has_archive'         => false,
+			'has_archive'         => true,
 			'publicly_queryable'  => true,
 			'capability_type'     => 'post',
 			'show_in_rest'        => true,
 			'rest_base'           => apply_filters(
 				'iworks/theme/register_post_type/aquarium/rest_base',
 				defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquarium' : esc_attr( _x( 'aquariums', 'rest base', 'PLUGIN_NAME' ) )
+			),
+			'rewrite'             => apply_filters(
+				'iworks/theme/register_post_type/aquarium/rewrites',
+				array(
+					'slug' => defined( 'ICL_SITEPRESS_VERSION' ) ? 'aquariums' : esc_attr( _x( 'aquariums', 'rewrite slug', 'PLUGIN_NAME' ) ),
+				)
 			),
 		);
 
