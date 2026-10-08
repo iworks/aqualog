@@ -81,6 +81,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		add_filter( 'wp_localize_script_iworks_theme', array( $this, 'filter_wp_localize_script_iworks_theme' ) );
 		add_action( 'load-post.php', array( $this, 'post_type_admin_enqueue_assets' ) );
 		add_action( 'load-post-new.php', array( $this, 'post_type_admin_enqueue_assets' ) );
+		add_action( 'init', array( $this, 'action_init_register_gutenberg_blocks' ) );
 		/**
 		 * Logging hooks.
 		 */
@@ -99,6 +100,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 		add_action( 'iworks/aqualog/update/aquarium/related_updated', array( $this, 'action_update_aquarium_related_updated' ) );
 		add_filter( 'iworks/aqualog/load/template/args', array( $this, 'add_page_args' ) );
 		add_filter( 'iworks/aqualog/post_type/aquarium/check/id', array( $this, 'filter_check_aquarium_id' ), 10, 2 );
+		add_filter( 'iworks/aqualog/aquarium/the_content', array( $this, 'filter_aquarium_the_content_get_aquarium_content' ), 10, 2 );
 	}
 
 	/**
@@ -920,4 +922,42 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 
 		return $changes;
 	}
+
+	/**
+	 * Register Gutenberg blocks for aquarium post type.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function action_init_register_gutenberg_blocks() {
+		if ( ! function_exists( 'register_block_type' ) ) {
+			return;
+		}
+		register_block_type( $this->plugin_file_dir . '/assets/blocks/aquarium' );
+	}
+
+	/**
+	 * Get aquarium content.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param string $content The content.
+	 * @param int $aquarium_id The aquarium ID.
+	 * @return string The aquarium content.
+	 */
+	public function filter_aquarium_the_content_get_aquarium_content( $content, $aquarium_id ) {
+		if ( empty( $aquarium_id ) ) {
+			return $content;
+		}
+		if ( ! $this->check_is_aquarium_by_id( $aquarium_id ) ) {
+			return $content;
+		}
+		$content .= get_the_title( $aquarium_id );
+
+		return $content;
+	}
 }
+

@@ -105,6 +105,16 @@ class iworks_aqualog extends iworks_aqualog_base {
 			$this->objects['logger'] = new iworks_aqualog_logger();
 		}
 		/**
+		 * load blocks
+		 */
+		if ( function_exists( 'register_block_type' ) ) {
+			$dir   = $this->plugin_file_dir . '/assets/blocks';
+			$files = glob( $dir . '/*/*.php' );
+			foreach ( $files as $file ) {
+				include_once $file;
+			}
+		}
+		/**
 		 * register objects filter
 		 */
 		add_action( 'iworks/aqualog/register_objects', array( $this, 'register_objects' ), 10, 3 );
