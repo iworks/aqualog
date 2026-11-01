@@ -22,11 +22,11 @@ defined( 'ABSPATH' ) || exit;
 	
 	<div class="aqualog-dashboard-grid">
 		<div class="aqualog-stats-grid">
-			<div class="aqualog-stat-card">
+			<a class="aqualog-stat-card" href="<?php echo esc_url( admin_url( 'admin.php?page=aqualog-maintenance&view=list' ) ); ?>">
 				<span class="dashicons dashicons-clock"></span>
 				<div class="aqualog-stat-number"><?php echo esc_html( count( $args['tasks'] ?? 0 ) ); ?></div>
 				<div class="aqualog-stat-label"><?php esc_html_e( 'Total Tasks', 'PLUGIN_NAME' ); ?></div>
-			</div>
+			</a>
 			
 			<div class="aqualog-stat-card">
 				<span class="dashicons dashicons-yes-alt"></span>
@@ -48,14 +48,14 @@ defined( 'ABSPATH' ) || exit;
 					<?php if ( ! empty( $args['tasks'] ) ) : ?>
 						<?php foreach ( $args['tasks'] as $iworks_aqualog_task ) : ?>
 							<div class="aqualog-task-item">
-								<div class="task-header">
+								<div class="aqualog-task-header">
 									<h4><?php echo esc_html( $iworks_aqualog_task['title'] ); ?></h4>
-									<span class="task-status status-<?php echo esc_attr( $iworks_aqualog_task['status'] ); ?>">
+									<span class="aqualog-task-status status-<?php echo esc_attr( $iworks_aqualog_task['status'] ); ?>">
 										<?php echo esc_html( $iworks_aqualog_task['status'] ); ?>
 									</span>
-									<span class="task-date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $iworks_aqualog_task['date'] ) ) ); ?></span>
+									<span class="aqualog-task-date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $iworks_aqualog_task['date'] ) ) ); ?></span>
 								</div>
-								<div class="task-description">
+								<div class="aqualog-task-description">
 									<?php echo wp_kses_post( $iworks_aqualog_task['description'] ); ?>
 								</div>
 							</div>
@@ -71,10 +71,10 @@ defined( 'ABSPATH' ) || exit;
 			<div class="aqualog-card">
 				<h2><?php esc_html_e( 'Quick Actions', 'PLUGIN_NAME' ); ?></h2>
 				<div class="aqualog-actions-grid">
-					<a href="#" class="aqualog-action-card">
+					<button type="button" class="aqualog-action-card" id="aqualog-add-task-trigger">
 						<span class="dashicons dashicons-plus"></span>
 						<span><?php esc_html_e( 'Add Task', 'PLUGIN_NAME' ); ?></span>
-					</a>
+					</button>
 
 					<a href="#" class="aqualog-action-card">
 						<span class="dashicons dashicons-plus"></span>
@@ -101,6 +101,11 @@ defined( 'ABSPATH' ) || exit;
 
 	</div>
 </div>
+
+<?php
+// Load the maintenance form template (wp.template block, rendered by JS into a modal).
+load_template( dirname( __DIR__, 1 ) . '/elements/maintenance-form.php', false, $args );
+?>
 
 <!-- Add Note Modal -->
 <div id="aqualog-add-note-modal" class="aqualog-modal" style="display: none;">

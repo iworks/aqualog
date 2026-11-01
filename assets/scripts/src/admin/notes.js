@@ -1,7 +1,9 @@
+/* global window, jQuery, document, alert, location */
+
 /**
  * @file
  * Notes Admin Script
- * 
+ *
  * @since 1.0.0
  */
 
@@ -30,22 +32,22 @@ jQuery(document).ready(function($) {
 		formData += '&post_type=iw_note';
 
 		$.ajax({
-			url: aqualog.ajax_url,
+			url: window.iworks_aqualog.ajax_url,
 			type: 'POST',
 			data: formData,
 			success: function(response) {
 				if (response.success) {
 					$('#aqualog-add-note-modal').hide();
 					$('#aqualog-add-note-form')[0].reset();
-					alert('<?php esc_html_e( 'Note added successfully!', 'PLUGIN_NAME' ); ?>');
+					alert(window.iworks_aqualog.i18n.messages.noteAdded);
 					// Reload page to show new note
 					location.reload();
 				} else {
-					alert('<?php esc_html_e( 'Error adding note. Please try again.', 'PLUGIN_NAME' ); ?>');
+					alert(window.iworks_aqualog.i18n.messages.noteError);
 				}
 			},
 			error: function() {
-				alert('<?php esc_html_e( 'Error adding note. Please try again.', 'PLUGIN_NAME' ); ?>');
+				alert(window.iworks_aqualog.i18n.messages.noteError);
 			}
 		});
 	});

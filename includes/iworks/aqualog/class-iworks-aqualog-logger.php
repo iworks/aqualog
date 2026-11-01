@@ -302,6 +302,38 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 	}
 
 	/**
+	 * Log maintenance task addition
+	 *
+	 * @since 1.0.0
+	 * @param int    $aquarium_id Aquarium ID
+	 * @param string $title       Task title
+	 * @param string $type        Task type key
+	 * @param string $date        Task date
+	 * @return bool|WP_Error
+	 */
+	public function log_maintenance_added( $aquarium_id, $title, $type, $date = null ) {
+		$this->check_option_object();
+		$config      = $this->options->get_group( 'maintenance_tasks' );
+		$type_name   = isset( $config[ $type ]['title'] ) ? $config[ $type ]['title'] : $type;
+		$date        = $date ?: current_time( 'mysql' );
+		$message     = sprintf(
+			/* translators: 1: task title, 2: task type name, 3: task date */
+			esc_html__( 'Maintenance task added: %1$s (%2$s) on %3$s', 'PLUGIN_NAME' ),
+			$title,
+			$type_name,
+			$date
+		);
+		$details = array(
+			'action'     => 'add_task',
+			'task_title' => $title,
+			'task_type'  => $type,
+			'task_date'  => $date,
+		);
+
+		return $this->log_action( 'maintenance', $aquarium_id, $message, $details, null, $date );
+	}
+
+	/**
 	 * Get parameter name from key
 	 *
 	 * @since 1.0.0

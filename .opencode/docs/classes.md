@@ -140,6 +140,32 @@ Every file: `defined( 'ABSPATH' ) || exit;` + `class_exists` guard + own
   maintenance, statistics; e.g. the dashboard class hooks
   `iworks/aqualog/wp-admin/page/dashboard` (render) and
   `iworks/aqualog/wp-admin/wp_localize_script` (extra JS data).
+- **Maintenance add-task flow** (`wp-admin/class-iworks-aqualog-wp-admin-maintenance.php`)
+  mirrors the chemistry one: AJAX `wp_ajax_aquarium_log_maintenance_add_task`
+  (nonce `nonces.maintenance.add` = `get_meta_name( 'maintenance_add' )`),
+  inputs `id`/`type` (validated against the `maintenance_tasks` option group)/
+  `title` (falls back to the task-type title)/`description`/`status`
+  (`pending|in_progress|completed`)/`date` → `start_date`; inserts into
+  `$wpdb->aquarium_log_maintenance` with the
+  `iworks/aqualog/maintenance/sql/insert/data` filter and logs via
+  `iworks_aqualog_logger::log_maintenance_added()`. The class also provides
+  `get_tasks()` / `get_scheduled_tasks()` (Recent Tasks list + stat cards) and
+  localizes the task-type list under `iworks_aqualog.maintenance.tasks`. JS:
+  `assets/scripts/src/admin/maintenance-add-task.js` renders the
+  `tmpl-aqualog-maintenance-form` wp.template
+  (`assets/templates/elements/maintenance-form.php`) into a modal, triggered by
+  the `#aqualog-add-task-trigger` quick action; styles in
+  `assets/sass/admin/maintenance.scss` (registered in the Gruntfile
+  `css_files_compile` map).
+- **Maintenance list view** (`wp-admin/class-iworks-aqualog-maintenance-list-table.php`,
+  `iworks_aqualog_maintenance_list_table extends WP_List_Table`, required by the
+  maintenance class): rendered on
+  `admin.php?page=aqualog-maintenance&view=list` (the "Total Tasks" stat card
+  links there). Status views with counts, title search, sortable columns,
+  pagination (20/page, `iworks/aqualog/maintenance/list/per_page` filter),
+  single + bulk delete (nonce `aqualog_maintenance_delete` /
+  `bulk-maintenance-tasks`, redirect with `deleted=N`), aquarium column links
+  to the post edit screen.
 - **`class-iworks-aqualog-db.php`** — DB layer: option
   `aquarium_log_db_version`, `$table_names` array (names get the `$wpdb`
   prefix and are registered with `$wpdb` so they are reachable as

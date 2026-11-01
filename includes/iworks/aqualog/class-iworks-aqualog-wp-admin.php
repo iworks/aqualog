@@ -334,6 +334,8 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 						'saving'        => /* translators: Saving message */ esc_html__( 'Saving…', 'PLUGIN_NAME' ),
 						'saveError'     => /* translators: Error message when saving fails */ esc_html__( 'An error occurred while saving. Please try again.', 'PLUGIN_NAME' ),
 						'invalidValues' => /* translators: Validation error message */ esc_html__( 'Please correct the highlighted fields and try again.', 'PLUGIN_NAME' ),
+						'noteAdded'     => /* translators: Success message after adding a note */ esc_html__( 'Note added successfully!', 'PLUGIN_NAME' ),
+						'noteError'     => /* translators: Error message when adding a note fails */ esc_html__( 'Error adding note. Please try again.', 'PLUGIN_NAME' ),
 					),
 				),
 				'chemistry'   => array(),

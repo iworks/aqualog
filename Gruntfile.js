@@ -92,6 +92,7 @@ module.exports = function(grunt) {
 			'assets/styles/admin/dashboard.css': ['assets/sass/admin/dashboard.scss'],
 			'assets/styles/admin/chemistry.css': ['assets/sass/admin/chemistry.scss'],
 			'assets/styles/admin/events.css': ['assets/sass/admin/events.scss'],
+			'assets/styles/admin/maintenance.css': ['assets/sass/admin/maintenance.scss'],
 		},
 		css_files_concat: {
 			'assets/styles/<%= pkg.name %>-admin.css': ['assets/styles/admin/*.css']
