@@ -55,6 +55,10 @@ class iworks_aqualog extends iworks_aqualog_base {
 		 */
 		add_filter( 'iworks/aqualog/load/posttype/aquarium', '__return_true' );
 		/**
+		 * Enable note post type
+		 */
+		add_filter( 'iworks/aqualog/load/posttype/note', '__return_true' );
+		/**
 		 * post types
 		 */
 		$filename = $this->includes_directory . '/class-iworks-aqualog-posttypes.php';

@@ -44,6 +44,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		'aquarium_log_chemistry',
 		'aquarium_log_maintenance',
 		'aquarium_log_dosing',
+		'aquarium_log_reminder',
 	);
 	/**
 	 * Class constructor.
@@ -119,6 +120,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 				wp_insert_term( $aquarium_type, 'iw_aquarium_group' );
 			}
 			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
 		}
 		/**
 		 * chemistry table
@@ -142,6 +144,8 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 			) $charset_collate;";
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
+			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
 		}
 		/**
 		 * maintenance table
@@ -170,6 +174,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 			) $charset_collate;";
 			dbDelta( $sql );
 			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
 		}
 		/**
 		 * maintenance log table
@@ -198,6 +203,34 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
 			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
+		}
+		/**
+		 * Create reminder table
+		 */
+		$version_to_update = 5;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$table_name      = $wpdb->prefix . 'aquarium_log_reminder';
+			$charset_collate = $wpdb->get_charset_collate();
+			$sql             = "CREATE TABLE IF NOT EXISTS $table_name (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				user_id bigint(20) unsigned NOT NULL COMMENT 'User ID',
+				aquarium_id bigint(20) unsigned NOT NULL COMMENT 'Aquarium ID',
+				reminder_type varchar(50) NOT NULL DEFAULT '' COMMENT 'Reminder type identifier',
+				reminder_date datetime DEFAULT NULL COMMENT 'Reminder date',
+				reminder_interval int(11) DEFAULT NULL COMMENT 'Reminder interval in days',
+				created_at datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+				updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update timestamp',
+				PRIMARY KEY (id),
+				KEY user_id (user_id),
+				KEY aquarium_id (aquarium_id),
+				KEY reminder_type (reminder_type)
+			) $charset_collate;";
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			dbDelta( $sql );
+			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
 		}
 	}
 
