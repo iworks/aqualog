@@ -24,3 +24,4 @@ tests/php/.phpunit.result.cache
 
 # agent scratch files
 .opencode/tmp/
+o

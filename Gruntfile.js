@@ -24,6 +24,7 @@ module.exports = function(grunt) {
 	 */
 	var excludeCopyFiles = [
 		'**',
+        '!o',
 		'!**/AGENTS.md',
 		'!AGENTS.md',
 		'!**/.opencode/**',
