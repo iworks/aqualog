@@ -1,72 +1,80 @@
-# Build — Grunt
+# Build — Bun bundler
 
 > Toolchain, tasks, pipeline, placeholders, release ZIPs, translations, tests.
 > Read only when working on the build.
 
 ## Toolchain
 
-- npm + Grunt 1.x (`Gruntfile.js`); tasks loaded via `load-grunt-tasks` from
-  `package.json` `devDependencies` (grunt-contrib-concat/uglify/sass/cssmin/
-  compress/copy/clean/watch, grunt-replace, grunt-wp-i18n, grunt-checktextdomain,
-  grunt-potomo, grunt-phpunit). If grunt misbehaves: delete `node_modules`,
-  run `npm install`.
-- Ruby sass (grunt-contrib-sass, `style: expanded`, no source maps,
-  unix newlines). PHP ≥ 8.1; PHPUnit for tests.
-- **No bun/bundler here** — unlike newer iWorks plugins, this repo is
-  Grunt-based. There is no `bundler/` directory.
+- [Bun](https://bun.sh) + the `bundler/` scripts (ported from
+  `../wordpress-plugin-stub/bundler/`). Entry point `bundler/index.js`,
+  config in `bundler/config.mjs`, pipelines in `bundler/pipelines.mjs`,
+  tool wrappers (sass, terser, clean-css, prettier) in `bundler/tools.mjs`,
+  ZIP staging in `makeZip.mjs`, i18n via wp-cli in `makePot.mjs`.
+- Dependencies (in `package.json` `devDependencies`): `archiver`, `clean-css`,
+  `prettier`, `sass`, `terser`. Install with `bun install` (its `postinstall`
+  downloads `wp-cli.phar` for `make-pot`; a `wp` binary phar copy also works).
+- PHP ≥ 8.1; wp-cli for i18n; PHPUnit for tests. There is **no Gruntfile**
+  anymore (removed; grunt deps dropped from `package.json`).
+- Prettier reads `.editorconfig` (tabs for JS) + `.prettierrc`
+  (`singleQuote`) — `bundler/tools.mjs` resolves the config explicitly
+  (`prettier.resolveConfig(..., { editorconfig: true })`) and passes it to
+  `prettier.format()` (the bare `editorconfig: true` format option is not
+  honored by prettier's API).
 
-## Tasks (`grunt ...`)
+## Tasks (`bun run ...`)
 
-| Command              | Description                                                                 |
-| -------------------- | --------------------------------------------------------------------------- |
-| `grunt` (default)    | `clean:temp` → concat → uglify → sass → concat_css → cssmin (all assets)    |
-| `grunt js`           | concat + uglify only                                                        |
-| `grunt css`          | sass + concat_css + cssmin only                                             |
-| `grunt watch`        | watcher: sass scripts targets (500 ms debounce)                              |
-| `grunt i18n`         | checktextdomain + makepot (`.pot` + `.po` update)                            |
-| `grunt build`        | **wp.org flavor**: default → i18n → copy:wporg → replace → compress:wporg    |
-| `grunt build:github` | **GitHub flavor**: default → i18n → potomo → copy:github → replace → compress |
-| `grunt release`      | `build:wporg`-equivalent + `build:github` + release notes                    |
-| `grunt test`         | phpunit + jshint + release notes                                             |
+| Command            | Description                                                                |
+| ------------------ | -------------------------------------------------------------------------- |
+| `bun run dev`      | watcher: prettier + recompile assets on change (no ZIP, no i18n)           |
+| `bun run compile`  | one-shot asset compile (CSS + JS, **with** source maps, no prettier pass)  |
+| `bun run build`    | both flavors: `build:wporg` + `build:github`                               |
+| `bun run build:wporg`  | production build → `release/wporg/aqualog.zip`                         |
+| `bun run build:github` | production build + `.mo` → `release/github/aqualog.zip`                |
+| `bun run make-pot` | translations only (`.pot` + `.po` update via wp-cli i18n)                  |
+| `bun run update-libs` | git pull on the vendored iWorks libraries (`includes/iworks/{options,rate}`) |
+| `bun run test`     | PHPUnit (`tests/php/phpunit.xml`)                                          |
 
-## Asset pipeline (`grunt` default)
+## Asset pipeline
 
-1. **clean:temp** — remove `**/*.tmp`, `.afpDeleted*`, `.DS_Store`.
-2. **concat** — JS sources → `assets/scripts/aqualog-{frontend,admin}.js`
-   (sources: `assets/scripts/src/{frontend,admin}/*.js`), grunt banner
-   `/*! {title} - {version}\n * {homepage}\n * Copyright (c) {year}\n * Licensed {license} */`.
-3. **uglify** — every non-`.min.js` in `assets/scripts/` → `.min.js`
-   (mangle except `jQuery`, banner with `Copyright (c) {year};` — note the `;`).
-4. **sass** — fixed list in `css_files_compile`: `assets/sass/admin/{settings,commons,dashboard,chemistry,events}.scss`
-   → `assets/styles/admin/*.css` (adding a SCSS file requires editing the Gruntfile).
-5. **concat_css** — `assets/styles/admin/*.css` → `assets/styles/aqualog-admin.css`
-   (+ a frontend bundle target from `assets/styles/frontend/`).
-6. **cssmin** — every non-`.min.css` → `.min.css`.
+1. **prettier** (build modes only) — formats `assets/scripts/src/**/*.js`
+   and the bundler sources.
+2. **CSS** — every non-partial `.scss` under `assets/sass/` is compiled
+   (sass API, no fixed list — new SCSS files are picked up automatically),
+   then `assets/styles/admin/*.css` → `assets/styles/aqualog-admin.css`
+   (+ frontend bundle from `assets/styles/frontend/`, settings.css first),
+   then both bundles are minified (clean-css) to `.min.css`. Build modes
+   strip `sourceMappingURL` comments; `compile`/`dev` keep maps.
+3. **JS** — `assets/scripts/src/{admin,frontend}/*.js` →
+   `assets/scripts/aqualog-{admin,frontend}.js` (sorted, banner prepended)
+   → terser minify (mangle reserves `jQuery`) to `.min.js`.
+4. **i18n** — wp-cli `i18n make-pot` → `languages/aqualog.pot`,
+   `update-po` for every `.po`; `build:github` also runs `make-mo`.
 
 Compiled outputs (`assets/styles/`, `assets/scripts/aqualog-*.js`) are
 gitignored — never edit them.
 
 ## Release ZIPs
 
-- **wp.org** (`grunt build`) → `release/wporg/{version}/{name}/` →
-  `release/wporg/aqualog.zip`. Excludes (ordered, first match wins): repo meta
-  (`.git*`, `.editorconfig`, `Gruntfile.js`, `package.json`, lock files,
-  `README.md`, `LICENSE`, `contributing.md`, tests, `release/`,
-  `.sass-cache/`, source maps, legacy `**/img/src`, `**/js/src`,
-  `**/css/{less,sass,src}`), asset sources (`assets/sass`,
-  `assets/scripts/src`, `assets/scss`, `assets/styles/frontend`), the GitHub
-  self-updater class (`includes/iworks/aqualog/class-iworks-aqualog-github.php`),
+- **wp.org** (`bun run build:wporg`) → `release/wporg/{version}/{name}/` →
+  `release/wporg/aqualog.zip`. Copy rules live in `bundler/config.mjs`
+  `copyRules(flavor)` — ordered, **first match wins** (grunt parity), the
+  catch-all `{ glob: "**/*", include: true }` must stay last. Base excludes:
+  repo meta (`.git*`, `.github/`, `.editorconfig`, `.prettierrc`,
+  `AGENTS.md`, `Gruntfile.js`, `bundler/`, `bun.lock*`, `wp-cli.phar`,
+  `package.json`, lock files, `README.md`, `LICENSE`, `contributing.md`,
+  tests, `release/`, `.sass-cache/`, `.opencode/`, `.playwright-mcp/`,
+  source maps, `o/`, legacy `**/img/src`, `**/js/src`, `**/css/{less,sass,src}`),
+  asset sources (`assets/sass`, `assets/scripts/src`, `assets/scss`,
+  `assets/styles/frontend`), the GitHub self-updater class
+  (`includes/iworks/aqualog/class-iworks-aqualog-github.php`),
   `includes/pro/`, `languages/*.po|*.mo`. `readme.txt` **is** included
   (required by wp.org).
-- **GitHub** (`grunt build:github`) → `release/github/{version}/{name}/`.
-  Base excludes plus `readme.txt` and `includes/pro/`; `.po` **are** included
-  and `.mo` are compiled from them (`potomo`). Pairs with the GitHub
-  self-updater class.
-- The exclude lists are plain arrays in `Gruntfile.js`
-  (`excludeCopyFiles`, `excludeCopyFilesGIT`, `excludeCopyFilesWPorg`) built
-  with `**` include first + `!` negations — the catch-all `**` must stay first.
-- After copy, **replace** applies the placeholder patterns to every staged text
-  file (images and `.mo` skipped), then **compress** zips the staged directory.
+- **GitHub** (`bun run build:github`) → `release/github/{version}/{name}/`.
+  Base excludes plus `readme.txt`; `.po` **are** included and `.mo` are
+  compiled. Pairs with the GitHub self-updater class.
+- Placeholder **replace** runs on every staged text file (binary extensions
+  and `.mo` skipped, see `BINARY_EXTENSIONS`), then `archiver` zips the
+  staging directory (level 9, `{name}/` wrapper folder).
 
 ## Placeholders (release copies only)
 
@@ -74,37 +82,32 @@ gitignored — never edit them.
 `IWORKS_OPTIONS_TEXTDOMAIN`, `PLUGIN_DESCRIPTION`, `PLUGIN_GITHUB_WEBSITE`,
 `PLUGIN_NAME` (also used as the textdomain!), `PLUGIN_REQUIRES_PHP`,
 `PLUGIN_REQUIRES_WORDPRESS`, `PLUGIN_TESTED_WORDPRESS`, `PLUGIN_TAGLINE`,
-`PLUGIN_TAGS`, `PLUGIN_TILL_YEAR`, `PLUGIN_TITLE`, `PLUGIN_URI`,
-`PLUGIN_VERSION`, and the `^Version: .*$` header line — all sourced from
-`package.json` + build time (`Gruntfile.js` `replace_patterns`).
+`PLUGIN_TAGS`, `PLUGIN_TILL_YEAR`, `PLUGIN_TITLE`, `PLUGIN_URI`/`PLUGIN_URL`
+(from `pkg.homepage`), `PLUGIN_VERSION`, and the `^Version: .*$` header line —
+all sourced from `package.json` + build time (`bundler/config.mjs`
+`replacePatterns()`).
 
 `CURRENT_YEAR` is **not** replaced at build (copyright years are baked in
 manually, e.g. `2026-PLUGIN_TILL_YEAR`).
 
-## Translations
-
-- `grunt i18n`: `checktextdomain` (domains: `aqualog`, `PLUGIN_NAME`,
-  `IWORKS_RATE_TEXTDOMAIN`, `IWORKS_OPTIONS_TEXTDOMAIN` over
-  `aqualog.php` + `includes/**/*.php`) then `makepot` (grunt-wp-i18n) →
-  `languages/aqualog.pot` + update-po.
-- `grunt build:github` additionally runs `potomo` (`.po` → `.mo`).
-
 ## Tests
 
-- `grunt test` → `phpunit --configuration tests/php/phpunit.xml`
-  (bootstrap: `tests/php/bootstrap.php`) + jshint on the Gruntfile and
-  `assets/scripts/src/**`. Needs a WordPress test environment.
+- `bun run test` → `phpunit --configuration tests/php/phpunit.xml`
+  (bootstrap: `tests/php/bootstrap.php`). Needs a WordPress test
+  environment. jshint was dropped with Grunt; the bundler runs
+  prettier instead and `node --check` on the bundle works as a
+  smoke test.
 
 ## Runtime quirks / pitfalls (do not fix without approval)
 
-- `grunt build` is the **wp.org** build; the GitHub flavor is `build:github`
-  (there is no `build:wporg` alias).
-- New SCSS entries must be added to the `css_files_compile` map in the
-  Gruntfile — sass does not glob.
-- The `concat_css` frontend target reads `assets/styles/frontend/` which only
-  exists after a sass step produces it; the map is grunt-concat-css config, not
-  sass output.
-- jshint + checktextdomain still run here (unlike the bun-era stub which
-  dropped them).
-- Sass compile uses Ruby sass via grunt-contrib-sass — requires a working
-  `sass` binary in the environment.
+- `bun run build:wporg` is the **wp.org** build; `bun run build` does both
+  flavors (there is no plain `build` that only compiles assets — use
+  `compile` for that).
+- `compile`/`dev` keep source-map comments in the CSS bundles — grunt never
+  wrote them; production builds strip them.
+- The bundler concatenates full source files (prettier-formatted), so the
+  built bundles keep file docblocks; grunt's `stripBanners` removed them.
+- `build` runs the **prettier pass over the JS sources in place** — commit
+  any formatting churn it produces.
+- wp-cli.phar is expected in the project root (`postinstall` downloads it;
+  `makePot.mjs` retries the download when missing).

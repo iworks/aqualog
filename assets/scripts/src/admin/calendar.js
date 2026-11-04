@@ -17,7 +17,7 @@
 
 /* global window, jQuery, wp, document */
 
-(function($) {
+(function ($) {
 	'use strict';
 
 	// Initialize calendar functionality
@@ -34,10 +34,12 @@
 	 *
 	 * @param {Object} entry Entry data.
 	 */
-	window.iworks_aqualog.calendar.renderDetails = function(entry) {
+	window.iworks_aqualog.calendar.renderDetails = function (entry) {
 		var data = $.extend({}, entry);
 		if (data.kind === 'reminder' && data.interval > 0) {
-			data.repeat_label = (window.iworks_aqualog.calendar.everyDays || 'Every %d days').replace('%d', data.interval);
+			data.repeat_label = (
+				window.iworks_aqualog.calendar.everyDays || 'Every %d days'
+			).replace('%d', data.interval);
 		}
 		var template = wp.template('aqualog-calendar-event-details');
 		$('.aqualog-modal').html(template(data));
@@ -48,7 +50,7 @@
 	 *
 	 * @param {Object} entry Entry data from the chip's data-entry attribute.
 	 */
-	window.iworks_aqualog.calendar.showDetails = function(entry) {
+	window.iworks_aqualog.calendar.showDetails = function (entry) {
 		window.iworks_aqualog.calendar.currentEntry = entry;
 
 		/**
@@ -71,13 +73,14 @@
 		$modal.fadeIn(300);
 
 		// Handle overlay click to close
-		$overlay.on('click', function() {
+		$overlay.on('click', function () {
 			window.iworks_aqualog.calendar.closeDetails();
 		});
 
 		// Handle escape key to close
-		$(document).on('keydown.aqualog-calendar-modal', function(e) {
-			if (e.keyCode === 27) { // Escape key
+		$(document).on('keydown.aqualog-calendar-modal', function (e) {
+			if (e.keyCode === 27) {
+				// Escape key
 				window.iworks_aqualog.calendar.closeDetails();
 			}
 		});
@@ -86,16 +89,16 @@
 	/**
 	 * Close entry details modal
 	 */
-	window.iworks_aqualog.calendar.closeDetails = function() {
+	window.iworks_aqualog.calendar.closeDetails = function () {
 		var $overlay = $('.aqualog-modal-overlay');
 		var $modal = $('.aqualog-modal');
 
 		if ($overlay.length || $modal.length) {
 			// Fade out and remove
-			$overlay.fadeOut(300, function() {
+			$overlay.fadeOut(300, function () {
 				$(this).remove();
 			});
-			$modal.fadeOut(300, function() {
+			$modal.fadeOut(300, function () {
 				$(this).remove();
 			});
 
@@ -105,9 +108,9 @@
 	};
 
 	// Initialize when DOM is ready
-	$(document).ready(function() {
+	$(document).ready(function () {
 		// Bind click handler to the calendar event chips
-		$(document).on('click', '.aqualog-calendar-event', function(e) {
+		$(document).on('click', '.aqualog-calendar-event', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -118,7 +121,7 @@
 		});
 
 		// "Edit Task" button inside the details modal
-		$(document).on('click', '.aqualog-calendar-details-edit', function(e) {
+		$(document).on('click', '.aqualog-calendar-details-edit', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -137,17 +140,20 @@
 					title: entry.title,
 					description: entry.description,
 					status: entry.status,
-					date: entry.date_key + (entry.time ? 'T' + entry.time : '')
-				}
+					date: entry.date_key + (entry.time ? 'T' + entry.time : ''),
+				},
 			});
 		});
 
 		// "Close" button inside the details modal
-		$(document).on('click', '.aqualog-calendar-details-close', function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			window.iworks_aqualog.calendar.closeDetails();
-		});
+		$(document).on(
+			'click',
+			'.aqualog-calendar-details-close',
+			function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				window.iworks_aqualog.calendar.closeDetails();
+			},
+		);
 	});
-
 })(jQuery);

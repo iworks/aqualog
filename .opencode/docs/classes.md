@@ -155,8 +155,8 @@ Every file: `defined( 'ABSPATH' ) || exit;` + `class_exists` guard + own
   `tmpl-aqualog-maintenance-form` wp.template
   (`assets/templates/elements/maintenance-form.php`) into a modal, triggered by
   the `#aqualog-add-task-trigger` quick action; styles in
-  `assets/sass/admin/maintenance.scss` (registered in the Gruntfile
-  `css_files_compile` map).
+  `assets/sass/admin/maintenance.scss` (compiled automatically by the Bun
+  bundler — all non-partials under `assets/sass/`).
 - **Maintenance edit flow** (same class): the task list has an **Edit** row
   action (`.aqualog-maintenance-edit` link in `column_title()`, task data in
   the `data-task` JSON attribute) that opens the same add-task modal in edit
@@ -202,8 +202,9 @@ Every file: `defined( 'ABSPATH' ) || exit;` + `class_exists` guard + own
   `iworks/aqualog/wp-admin/calendar_page` (fired by
   `render_calendar_page()` in the wp-admin class). Server-rendered grid, no
   external calendar library — template `pages/calendar.php`, styles
-  `assets/sass/admin/calendar.scss` (registered in the Gruntfile
-  `css_files_compile` map). Navigation is plain links: `view=month|week`,
+  `assets/sass/admin/calendar.scss` (compiled automatically by the Bun
+  bundler — all non-partials under `assets/sass/`). Navigation is plain
+  links: `view=month|week`,
   `date=YYYY-MM-DD`; the grid honors the WP `start_of_week` option (month =
   6-week grid, week = 7 days) and the header shows full weekday names
   (`date_i18n( 'l' )`, localized). Events come from `get_events( $from, $to )`:

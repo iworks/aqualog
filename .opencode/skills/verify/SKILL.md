@@ -14,10 +14,10 @@ When a task that changed code (PHP, JS, SCSS) is finished, **before reporting su
 
 Do not declare success based on a single quick command — run the **full pipeline** for the changed asset type (each must pass end-to-end):
 
-- **JS (`assets/scripts/src/**`)**: `grunt js` — must pass (jshint runs inside `grunt test`; a plain `grunt`/`grunt js` run validates concat + uglify). For a release-affecting change run the full `grunt build` (wp.org ZIP) or `grunt build:github` when the GitHub release path is affected.
-- **SCSS (`assets/sass/**`)**: `grunt css` — must pass (sass → concat_css → cssmin). Remember: new SCSS entry files must be registered in the `css_files_compile` map in `Gruntfile.js`.
-- **PHP (`includes/**`, `etc/`, main file)**: `php -l` on every changed file (new files included) — there is no phpcs setup in this repo, so do not claim WPCS compliance, just match the surrounding style. If a WordPress test env is available, `grunt test` (PHPUnit) is a bonus.
-- **Gruntfile changes**: full `grunt build` + `grunt build:github` and check the staged ZIP contents (the exclude lists in `Gruntfile.js` are order-sensitive — see `build.md`).
+- **JS (`assets/scripts/src/**`)**: `bun run compile` — must pass (concat + terser; syntax smoke test via `node --check assets/scripts/aqualog-admin.js`). For a release-affecting change run the full `bun run build:wporg` (wp.org ZIP) or `bun run build:github` when the GitHub release path is affected.
+- **SCSS (`assets/sass/**`)**: `bun run compile` — must pass (sass → concat → clean-css). New SCSS entry files are picked up automatically (all non-partials under `assets/sass/` are compiled).
+- **PHP (`includes/**`, `etc/`, main file)**: `php -l` on every changed file (new files included) — there is no phpcs setup in this repo, so do not claim WPCS compliance, just match the surrounding style. If a WordPress test env is available, `bun run test` (PHPUnit) is a bonus.
+- **Bundler changes**: full `bun run build:wporg` + `bun run build:github` and check the staged ZIP contents (the copy rules in `bundler/config.mjs` are order-sensitive — see `build.md`).
 
 ## 3. Report
 

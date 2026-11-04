@@ -7,25 +7,25 @@
  * @since 1.0.0
  */
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
 	// Modal open/close
-	$('#aqualog-add-note-trigger').on('click', function(e) {
+	$('#aqualog-add-note-trigger').on('click', function (e) {
 		e.preventDefault();
 		$('#aqualog-add-note-modal').show();
 	});
 
-	$('.aqualog-modal-close, .aqualog-modal-cancel').on('click', function() {
+	$('.aqualog-modal-close, .aqualog-modal-cancel').on('click', function () {
 		$('#aqualog-add-note-modal').hide();
 	});
 
-	$(window).on('click', function(e) {
+	$(window).on('click', function (e) {
 		if ($(e.target).hasClass('aqualog-modal')) {
 			$('#aqualog-add-note-modal').hide();
 		}
 	});
 
 	// Form submission
-	$('#aqualog-add-note-form').on('submit', function(e) {
+	$('#aqualog-add-note-form').on('submit', function (e) {
 		e.preventDefault();
 
 		var formData = $(this).serialize();
@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
 			url: window.iworks_aqualog.ajax_url,
 			type: 'POST',
 			data: formData,
-			success: function(response) {
+			success: function (response) {
 				if (response.success) {
 					$('#aqualog-add-note-modal').hide();
 					$('#aqualog-add-note-form')[0].reset();
@@ -46,9 +46,9 @@ jQuery(document).ready(function($) {
 					alert(window.iworks_aqualog.i18n.messages.noteError);
 				}
 			},
-			error: function() {
+			error: function () {
 				alert(window.iworks_aqualog.i18n.messages.noteError);
-			}
+			},
 		});
 	});
 });

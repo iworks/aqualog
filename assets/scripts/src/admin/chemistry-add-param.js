@@ -15,7 +15,7 @@
 
 /* global window, jQuery, wp, document */
 
-(function($) {
+(function ($) {
 	'use strict';
 
 	var field_value_class = '.aqualog-chemistry-item-body-scale-value';
@@ -34,7 +34,7 @@
 	 *
 	 * @param {Object} data Form data including parameters, values, etc.
 	 */
-	window.iworks_aqualog.chemistry.setFormData = function(data) {
+	window.iworks_aqualog.chemistry.setFormData = function (data) {
 		window.iworks_aqualog.chemistry.formData = data;
 		data.style = window.iworks_aqualog.chemistry.getScaleStyle();
 		data.range_step = Math.min((data.range[1] - data.range[0]) / 50, 10);
@@ -53,26 +53,46 @@
 		window.iworks_aqualog.chemistry.formData = data;
 	};
 
-	window.iworks_aqualog.chemistry.scaleItem = function(range) {
+	window.iworks_aqualog.chemistry.scaleItem = function (range) {
 		var args = window.iworks_aqualog.chemistry.formData;
 		var min = args.range[0];
 		var max = args.range[1];
 		var length = (max - min) * 1000;
-		var start = (args[range][0] - min) * 100000 / length;
-		var end = (args[range][1] - min) * 100000 / length;
+		var start = ((args[range][0] - min) * 100000) / length;
+		var end = ((args[range][1] - min) * 100000) / length;
 		return [start, end];
 	};
 
-	window.iworks_aqualog.chemistry.getScaleStyle = function() {
+	window.iworks_aqualog.chemistry.getScaleStyle = function () {
 		var danger = window.iworks_aqualog.chemistry.scaleItem('danger');
 		var safety = window.iworks_aqualog.chemistry.scaleItem('safety');
 		var ideal = window.iworks_aqualog.chemistry.scaleItem('ideal');
 		var style = 'background: linear-gradient(';
 		style += 'to right,';
-		style += 'var(--aqualog-settings-danger) ' + danger[0] + '% ' + safety[0] + '%,';
-		style += 'var(--aqualog-settings-safety) ' + safety[0] + '% ' + ideal[0] + '%,';
-		style += 'var(--aqualog-settings-ideal) ' + ideal[0] + '% ' + ideal[1] + '%,';
-		style += 'var(--aqualog-settings-safety) ' + ideal[1] + '% ' + safety[1] + '%,';
+		style +=
+			'var(--aqualog-settings-danger) ' +
+			danger[0] +
+			'% ' +
+			safety[0] +
+			'%,';
+		style +=
+			'var(--aqualog-settings-safety) ' +
+			safety[0] +
+			'% ' +
+			ideal[0] +
+			'%,';
+		style +=
+			'var(--aqualog-settings-ideal) ' +
+			ideal[0] +
+			'% ' +
+			ideal[1] +
+			'%,';
+		style +=
+			'var(--aqualog-settings-safety) ' +
+			ideal[1] +
+			'% ' +
+			safety[1] +
+			'%,';
 		style += 'var(--aqualog-settings-danger) ' + safety[1] + '% 100%);';
 		return style;
 	};
@@ -80,15 +100,15 @@
 	/**
 	 * Render the chemistry form using wp.template
 	 */
-	window.iworks_aqualog.chemistry.renderForm = function() {
+	window.iworks_aqualog.chemistry.renderForm = function () {
 		if (!window.iworks_aqualog.chemistry.formData) {
-			window.console.warn('Aqualog: No form data available for rendering');
+			window.console.warn(
+				'Aqualog: No form data available for rendering',
+			);
 			return;
 		}
 		var template = wp.template('aqualog-chemistry-form');
-		var formHTML = template(
-			window.iworks_aqualog.chemistry.formData
-		);
+		var formHTML = template(window.iworks_aqualog.chemistry.formData);
 
 		$('.aqualog-modal').html(formHTML);
 
@@ -99,7 +119,7 @@
 	/**
 	 * Initialize form event handlers and validation
 	 */
-	window.iworks_aqualog.chemistry.initializeForm = function() {
+	window.iworks_aqualog.chemistry.initializeForm = function () {
 		var $form = $('#aqualog-chemistry-measurement-form');
 		var args = window.iworks_aqualog.chemistry.formData;
 
@@ -108,26 +128,29 @@
 		}
 
 		// Handle form submission
-		$form.on('submit', function(e) {
+		$form.on('submit', function (e) {
 			e.preventDefault();
 			window.iworks_aqualog.chemistry.submitForm($(this));
 		});
 
 		// Clear error state on input
-		$form.find(field_value_class).on('input', function() {
+		$form.find(field_value_class).on('input', function () {
 			$(this).removeClass('error');
 		});
 		/**
 		 * set min/max
 		 */
-		$form.find(field_value_class)
+		$form
+			.find(field_value_class)
 			.val(args.value)
 			.attr('min', args.range[0])
 			.attr('max', args.range[1])
 			.attr('step', args.range_step)
-			.on('input change keyup keydown paste cut focus blur', function() {
+			.on('input change keyup keydown paste cut focus blur', function () {
 				var value = $(this).val();
-				$form.find('.aqualog-chemistry-item-body-scale-slider').slider('value', value);
+				$form
+					.find('.aqualog-chemistry-item-body-scale-slider')
+					.slider('value', value);
 			});
 		/**
 		 * Initialize slider
@@ -138,17 +161,19 @@
 				max: args.range[1],
 				step: args.range_step,
 				value: args.value,
-				change: function(event, ui) {
+				change: function (event, ui) {
 					$form.find(field_value_class).val(ui.value);
-				}
+				},
 			});
 		}
-		$('.aqualog-chemistry-item-body-scale-button').on('click', function() {
+		$('.aqualog-chemistry-item-body-scale-button').on('click', function () {
 			var value = $(this).data('value');
 			var current = parseFloat($form.find(field_value_class).val()) || 0;
 			var new_value = current + parseFloat(value);
 			$form.find(field_value_class).val(new_value);
-			$form.find('.aqualog-chemistry-item-body-scale-slider').slider('value', new_value);
+			$form
+				.find('.aqualog-chemistry-item-body-scale-slider')
+				.slider('value', new_value);
 		});
 	};
 
@@ -158,10 +183,10 @@
 	 * @param {jQuery} $form Form element
 	 * @return {boolean} True if valid, false otherwise
 	 */
-	window.iworks_aqualog.chemistry.validateForm = function($form) {
+	window.iworks_aqualog.chemistry.validateForm = function ($form) {
 		var isValid = true;
 
-		$form.find(field_value_class).each(function() {
+		$form.find(field_value_class).each(function () {
 			var $input = $(this);
 			var value = parseFloat($input.val());
 			var min = parseFloat($input.data('range-min'));
@@ -183,20 +208,26 @@
 	 *
 	 * @param {jQuery} $form Form element
 	 */
-	window.iworks_aqualog.chemistry.submitForm = function($form) {
+	window.iworks_aqualog.chemistry.submitForm = function ($form) {
 		var $submit = $form.find('.aqualog-form-submit');
 		var originalText = $submit.html();
 
 		// Validate form
 		if (!window.iworks_aqualog.chemistry.validateForm($form)) {
-			window.iworks_aqualog.showNotice('error', window.iworks_aqualog.i18n.messages.invalidValues);
+			window.iworks_aqualog.showNotice(
+				'error',
+				window.iworks_aqualog.i18n.messages.invalidValues,
+			);
 			return;
 		}
 
-
 		// Show loading state
-		$submit.prop('disabled', true)
-			.html('<span class="dashicons dashicons-update spin"></span> ' + window.iworks_aqualog.i18n.messages.saving);
+		$submit
+			.prop('disabled', true)
+			.html(
+				'<span class="dashicons dashicons-update spin"></span> ' +
+					window.iworks_aqualog.i18n.messages.saving,
+			);
 
 		// Submit via AJAX
 		$.ajax({
@@ -205,41 +236,53 @@
 			data: {
 				action: 'aquarium_log_chemistry_add_param',
 				_wpnonce: window.iworks_aqualog.nonces.chemistry.add_param,
-				date: $form.closest('.aqualog-card').find('input[name="date"]').val(),
+				date: $form
+					.closest('.aqualog-card')
+					.find('input[name="date"]')
+					.val(),
 				value: $form.find(field_value_class).val(),
 				key: window.iworks_aqualog.chemistry.formData.key,
 				id: $form.data('aquarium-id'),
 			},
-			success: function(response) {
+			success: function (response) {
 				if (response.success) {
 					// Show success message
-					window.iworks_aqualog.showNotice('success', response.data.message);
+					window.iworks_aqualog.showNotice(
+						'success',
+						response.data.message,
+					);
 
 					// Close form after delay
-					window.setTimeout(function() {
+					window.setTimeout(function () {
 						window.iworks_aqualog.chemistry.closeForm();
 						// Reload page to show updated values
 						window.location.reload();
 					}, 1500);
 				} else {
 					// Show error message
-					window.iworks_aqualog.showNotice('error', response.data.message);
+					window.iworks_aqualog.showNotice(
+						'error',
+						response.data.message,
+					);
 				}
 			},
-			error: function() {
-				window.iworks_aqualog.showNotice('error', window.iworks_aqualog.i18n.messages.saveError);
+			error: function () {
+				window.iworks_aqualog.showNotice(
+					'error',
+					window.iworks_aqualog.i18n.messages.saveError,
+				);
 			},
-			complete: function() {
+			complete: function () {
 				// Restore button state
 				$submit.prop('disabled', false).html(originalText);
-			}
+			},
 		});
 	};
 
 	/**
 	 * Close chemistry form
 	 */
-	window.iworks_aqualog.chemistry.closeForm = function() {
+	window.iworks_aqualog.chemistry.closeForm = function () {
 		// Check if form is in modal
 		var $modal = $('.aqualog-modal');
 		if ($modal.length) {
@@ -247,7 +290,7 @@
 			window.iworks_aqualog.chemistry.closeModal();
 		} else {
 			// Close standalone form
-			$('.aqualog-chemistry-form').fadeOut(300, function() {
+			$('.aqualog-chemistry-form').fadeOut(300, function () {
 				$(this).remove();
 			});
 		}
@@ -259,9 +302,15 @@
 	 * @param {string} type Notice type (success, error, warning)
 	 * @param {string} message Notice message
 	 */
-	window.iworks_aqualog.showNotice = function(type, message) {
+	window.iworks_aqualog.showNotice = function (type, message) {
 		var noticeClass = 'notice-' + type;
-		var $notice = $('<div class="notice is-dismissible ' + noticeClass + '"><p>' + message + '</p></div>');
+		var $notice = $(
+			'<div class="notice is-dismissible ' +
+				noticeClass +
+				'"><p>' +
+				message +
+				'</p></div>',
+		);
 
 		// Insert notice at the top of the form or page
 		var $target = $('.aqualog-chemistry-form').find('.aqualog-card-header');
@@ -274,8 +323,8 @@
 
 		// Auto-dismiss after 5 seconds for success notices
 		if (type === 'success') {
-			window.setTimeout(function() {
-				$notice.fadeOut(function() {
+			window.setTimeout(function () {
+				$notice.fadeOut(function () {
 					$notice.remove();
 				});
 			}, 5000);
@@ -285,7 +334,7 @@
 	/**
 	 * Show chemistry form as modal
 	 */
-	window.iworks_aqualog.chemistry.showModal = function() {
+	window.iworks_aqualog.chemistry.showModal = function () {
 		// Create modal overlay
 		var $overlay = $('<div class="aqualog-modal-overlay"></div>');
 		var $modal = $('<div class="aqualog-modal"></div>');
@@ -309,13 +358,14 @@
 		$modal.fadeIn(300);
 
 		// Handle overlay click to close
-		$overlay.on('click', function() {
+		$overlay.on('click', function () {
 			window.iworks_aqualog.chemistry.closeModal();
 		});
 
 		// Handle escape key to close
-		$(document).on('keydown.aqualog-modal', function(e) {
-			if (e.keyCode === 27) { // Escape key
+		$(document).on('keydown.aqualog-modal', function (e) {
+			if (e.keyCode === 27) {
+				// Escape key
 				window.iworks_aqualog.chemistry.closeModal();
 			}
 		});
@@ -324,16 +374,16 @@
 	/**
 	 * Close chemistry form modal
 	 */
-	window.iworks_aqualog.chemistry.closeModal = function() {
+	window.iworks_aqualog.chemistry.closeModal = function () {
 		var $overlay = $('.aqualog-modal-overlay');
 		var $modal = $('.aqualog-modal');
 
 		if ($overlay.length || $modal.length) {
 			// Fade out and remove
-			$overlay.fadeOut(300, function() {
+			$overlay.fadeOut(300, function () {
 				$(this).remove();
 			});
-			$modal.fadeOut(300, function() {
+			$modal.fadeOut(300, function () {
 				$(this).remove();
 			});
 
@@ -343,19 +393,18 @@
 	};
 
 	// Initialize when DOM is ready
-	$(document).ready(function() {
+	$(document).ready(function () {
 		// Bind click handler to chemistry items
-		$(document).on('click', '.aqualog-chemistry-item', function(e) {
+		$(document).on('click', '.aqualog-chemistry-item', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 
 			window.iworks_aqualog.chemistry.setFormData(
-				window.iworks_aqualog.chemistry.params[$(this).data('key')]
+				window.iworks_aqualog.chemistry.params[$(this).data('key')],
 			);
 
 			// Show modal with form
 			window.iworks_aqualog.chemistry.showModal();
 		});
 	});
-
 })(jQuery);

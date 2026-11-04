@@ -10,9 +10,9 @@ tasks and notes. Main file `aqualog.php` (textdomain `aqualog`); the plugin
 slug/package name is `aqualog` (single source of truth: `package.json` `"name"`).
 
 Source files contain **literal placeholders** (`PLUGIN_VERSION`, `PLUGIN_NAME`,
-`BUILDTIMESTAMP`, `PLUGIN_TILL_YEAR`, …) — they are replaced by Grunt at build
-time (see `build.md`), never in the source. Notably the textdomain is written
-as `'PLUGIN_NAME'` in sources.
+`BUILDTIMESTAMP`, `PLUGIN_TILL_YEAR`, …) — they are replaced by the Bun
+bundler at build time (see `build.md`), never in the source. Notably the
+textdomain is written as `'PLUGIN_NAME'` in sources.
 
 The version lives only in `package.json` (`"version"`); the main file header
 and the version constant both use the `PLUGIN_VERSION` placeholder.
@@ -48,7 +48,7 @@ and the version constant both use the `PLUGIN_VERSION` placeholder.
 │   └── styles/                   # Compiled CSS (gitignored)
 ├── languages/                    # aqualog.pot (+ .po/.mo built)
 ├── tests/php/                    # PHPUnit (phpunit.xml, bootstrap.php)
-├── Gruntfile.js                  # Build system — see build.md
+├── bundler/                      # Bun build system — see build.md
 ├── package.json                  # Version + release metadata (single source of truth)
 └── readme.txt                    # WordPress.org readme
 ```
@@ -175,11 +175,11 @@ and the version constant both use the `PLUGIN_VERSION` placeholder.
 - Textdomain: `aqualog`; `languages/aqualog.pot`.
 - In sources the textdomain is the **literal `'PLUGIN_NAME'`** (plus
   `IWORKS_RATE_TEXTDOMAIN` / `IWORKS_OPTIONS_TEXTDOMAIN` in vendored code) —
-  replaced in the release copies only. `grunt checktextdomain` validates all
-  four domains.
-- `grunt i18n` runs `checktextdomain` + `makepot` (grunt-wp-i18n: creates the
-  `.pot` and updates every existing `.po`).
-- `.mo` files are compiled (`potomo`) only in `grunt build:github`.
+  replaced in the release copies only. (The old `grunt checktextdomain` task
+  was dropped with Grunt.)
+- `bun run make-pot` runs wp-cli `i18n make-pot` (creates the `.pot` and
+  updates every existing `.po`).
+- `.mo` files are compiled (`make-mo`) only in `bun run build:github`.
 
 ## GitHub self-updater
 
@@ -201,7 +201,7 @@ self-update from GitHub).
 ## Tests
 
 - PHPUnit in `tests/php/` (`phpunit.xml`, `bootstrap.php`),
-  run via `grunt test` (see `build.md`).
+  run via `bun run test` (see `build.md`).
 
 ## General conventions
 

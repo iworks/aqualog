@@ -6,7 +6,7 @@
 
 A WordPress plugin for aquarium tracking (water parameters, maintenance, notes):
 main file (`aqualog.php`) + PHP classes (`/includes/iworks`) + options config
-(`/etc/options.php`) + assets (`/assets`), built with Grunt → `release/` ZIPs.
+(`/etc/options.php`) + assets (`/assets`), built with Bun (bundler/) → `release/` ZIPs.
 Scaffolded from the iWorks WordPress Plugin Stub; sources contain build-time
 placeholders (`PLUGIN_VERSION`, `PLUGIN_NAME`, `CURRENT_YEAR`, …).
 
@@ -15,7 +15,7 @@ placeholders (`PLUGIN_VERSION`, `PLUGIN_NAME`, `CURRENT_YEAR`, …).
 | Task | Read first |
 | --- | --- |
 | PHP classes, admin layer, post types, taxonomies, options, new class | `.opencode/docs/classes.md` |
-| Grunt build, release ZIPs, placeholders, translations (.pot/.po) | `.opencode/docs/build.md` |
+| Bun bundler build, release ZIPs, placeholders, translations (.pot/.po) | `.opencode/docs/build.md` |
 | Loading flow, assets, enqueue, i18n, dependencies, project conventions | `.opencode/docs/project.md` |
 | After any task that changed code | skill `verify` (`.opencode/skills/verify/SKILL.md`) |
 
@@ -33,12 +33,12 @@ placeholders (`PLUGIN_VERSION`, `PLUGIN_NAME`, `CURRENT_YEAR`, …).
   PHP classes `iworks_aqualog_` prefix, snake_case, lowercase.
 - Version lives only in `package.json` — placeholders (`PLUGIN_VERSION`,
   `BUILDTIMESTAMP`, and the literal `'PLUGIN_NAME'` textdomain) are replaced by
-  Grunt during build; never hardcode real values in sources.
+  the Bun bundler during build; never hardcode real values in sources.
 - Do not fix known typos/pitfalls without approval (see topic docs).
 
 ## Commands
 
-`grunt` (default: all assets) · `grunt js` (concat + uglify) ·
-`grunt css` (sass + concat + cssmin) · `grunt i18n` (checktextdomain + makepot) ·
-`grunt build` (wp.org ZIP) · `grunt build:github` (GitHub ZIP) ·
-`grunt release` (both ZIPs + notes) · `grunt test` (phpunit + jshint)
+`bun run compile` (all assets, with maps) · `bun run dev` (watcher) ·
+`bun run build:wporg` (wp.org ZIP) · `bun run build:github` (GitHub ZIP) ·
+`bun run build` (both ZIPs) · `bun run make-pot` (i18n) ·
+`bun run update-libs` · `bun run test` (phpunit)
