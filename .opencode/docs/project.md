@@ -119,10 +119,11 @@ and the version constant both use the `PLUGIN_VERSION` placeholder.
   `loved_this_plugin()` / `need_assistance()`).
 - Menu: main page slug `aqualog-dashboard` (SVG base64 icon, position from the
   `menu_position` option); submenus (Current Aquarium, Dosings, Chemistry,
-  Maintenance, Notes, Equipment, Plants, Aquariums, Help) are gated by
+  Maintenance, Calendar, Notes, Equipment, Plants, Aquariums, Help) are gated by
   **modules**: `is_module_enabled( $module )` reads the `module_{name}` option
   and `module_load_check => 'check'` entries additionally add the filter
   `iworks/aqualog/load/module/{module}` → `__return_true` when the module is on.
+  (Calendar and Help use `module_load_check => 'skip'` — always visible.)
 - Admin sub-classes live in `wp-admin/` (activity, aquarium, chemistry,
   dashboard, maintenance, statistics); each page renders via actions like
   `iworks/aqualog/wp-admin/page/dashboard` and can extend the JS

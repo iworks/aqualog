@@ -334,6 +334,7 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 						'saving'        => /* translators: Saving message */ esc_html__( 'Saving…', 'PLUGIN_NAME' ),
 						'saveError'     => /* translators: Error message when saving fails */ esc_html__( 'An error occurred while saving. Please try again.', 'PLUGIN_NAME' ),
 						'invalidValues' => /* translators: Validation error message */ esc_html__( 'Please correct the highlighted fields and try again.', 'PLUGIN_NAME' ),
+						'editTask'      => /* translators: Edit task modal heading */ esc_html__( 'Edit Task', 'PLUGIN_NAME' ),
 						'noteAdded'     => /* translators: Success message after adding a note */ esc_html__( 'Note added successfully!', 'PLUGIN_NAME' ),
 						'noteError'     => /* translators: Error message when adding a note fails */ esc_html__( 'Error adding note. Please try again.', 'PLUGIN_NAME' ),
 					),
@@ -537,6 +538,13 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 				'module_load_check' => 'skip',
 			),
 			array(
+				/* translators: Calendar submenu title */
+				'title'             => esc_html__( 'Calendar', 'PLUGIN_NAME' ),
+				'slug'              => 'aqualog-calendar',
+				'callback'          => array( $this, 'render_calendar_page' ),
+				'module_load_check' => 'skip',
+			),
+			array(
 				/* translators: Help submenu title */
 				'title'             => esc_html__( 'Help', 'PLUGIN_NAME' ),
 				'slug'              => 'aqualog-help',
@@ -666,6 +674,20 @@ class iworks_aqualog_wp_admin extends iworks_aqualog_base {
 	 */
 	public function render_maintenance_page() {
 		do_action( 'iworks/aqualog/wp-admin/maintenance_page' );
+	}
+
+	/**
+	 * Render calendar page.
+	 *
+	 * Triggers the calendar page action to allow other components
+	 * to render the month/week calendar interface.
+	 *
+	 * @since 1.0.0
+	 * @action iworks/aqualog/wp-admin/calendar_page
+	 * @return  void
+	 */
+	public function render_calendar_page() {
+		do_action( 'iworks/aqualog/wp-admin/calendar_page' );
 	}
 
 	/**

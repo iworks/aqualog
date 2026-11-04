@@ -291,7 +291,21 @@ private $options;
 			),
 			'aqualog_maintenance_delete'
 		);
+		$edit_data = array(
+			'id'          => intval( $item['id'] ),
+			'aquarium_id' => intval( $item['aquarium_id'] ),
+			'type'        => $item['type'],
+			'title'       => $item['title'],
+			'description' => isset( $item['description'] ) ? $item['description'] : '',
+			'status'      => $item['status'],
+			'date'        => ! empty( $item['start_date'] ) ? str_replace( ' ', 'T', substr( $item['start_date'], 0, 16 ) ) : '',
+		);
 		$actions = array(
+			'edit'   => sprintf(
+				'<a href="#" class="aqualog-maintenance-edit" data-task="%s">%s</a>',
+				esc_attr( wp_json_encode( $edit_data ) ),
+				esc_html__( 'Edit', 'PLUGIN_NAME' )
+			),
 			'delete' => sprintf( '<a href="%s">%s</a>', esc_url( $delete_url ), esc_html__( 'Delete', 'PLUGIN_NAME' ) ),
 		);
 		return sprintf(

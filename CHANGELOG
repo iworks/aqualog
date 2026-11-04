@@ -1,2 +1,12 @@
-## 1.0.0 (Initial Release)
-- Initial release of Aqualog
+## 0.0.3 - 2026.11
+### Added
+	- "Add Task" quick action on the Maintenance page with a modal form (AJAX, validated, logged).
+	- "Add Reminder" quick action with repeat frequency (interval stored per reminder).
+	- Maintenance tasks list view (status views, search, sortable columns, pagination, single and bulk delete).
+	- "Edit" row action for maintenance tasks (edit modal with prefilled fields, save via AJAX).
+	- Calendar submenu with month and week views: task and reminder events, reminder recurrence expansion, per-day "Add Task" button, and click-to-preview entry details with direct "Edit Task".
+### Improved
+	- Calendar grid honors the WordPress "week starts on" setting and shows full localized weekday names.
+	- Maintenance events on the Current Aquarium page use the Font Awesome screwdriver-wrench icon.
+### Fixed
+	- Reminder table missing `user_id` and `reminder_interval` columns on older installs (migration v6).

@@ -232,6 +232,32 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 			update_option( $this->_db_version, $version_to_update );
 			$db_version = intval( get_option( $this->_db_version ) );
 		}
+		/**
+		 * Upgrade reminder table: add user_id and reminder_interval columns
+		 * (older installs created the table without them; dbDelta does not
+		 * reliably pick them up, so add them explicitly).
+		 */
+		$version_to_update = 6;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'aquarium_log_reminder';
+			$columns    = $wpdb->get_col( "SHOW COLUMNS FROM {$table_name}" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+			$alter      = array();
+			if ( ! in_array( 'user_id', $columns, true ) ) {
+				$alter[] = "ADD COLUMN user_id bigint(20) unsigned NOT NULL DEFAULT 1 COMMENT 'User ID' AFTER id";
+			}
+			if ( ! in_array( 'reminder_interval', $columns, true ) ) {
+				$alter[] = "ADD COLUMN reminder_interval int(11) DEFAULT NULL COMMENT 'Reminder interval in days' AFTER reminder_date";
+			}
+			if ( ! empty( $alter ) ) {
+				if ( ! in_array( 'user_id', $columns, true ) ) {
+					$alter[] = 'ADD KEY user_id (user_id)';
+				}
+				$wpdb->query( sprintf( 'ALTER TABLE %s %s', $table_name, implode( ', ', $alter ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+			}
+			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
+		}
 	}
 
 	/**

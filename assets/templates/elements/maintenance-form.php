@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
 	<div class="aqualog-maintenance-form">
 		<div class="aqualog-card">
 			<div class="aqualog-card-header">
-				<h2><?php esc_html_e( 'Add Task', 'PLUGIN_NAME' ); ?></h2>
+				<h2 class="aqualog-maintenance-form-heading"><?php esc_html_e( 'Add Task', 'PLUGIN_NAME' ); ?></h2>
 				<div class="aqualog-card-header-date">
 					<input name="date" type="datetime-local" class="aqualog-card-header-date__input" value="<?php echo esc_attr( date_i18n( 'Y-m-d\TH:i' ) ); ?>">
 				</div>

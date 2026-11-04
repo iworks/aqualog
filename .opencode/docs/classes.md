@@ -157,6 +157,36 @@ Every file: `defined( 'ABSPATH' ) || exit;` + `class_exists` guard + own
   the `#aqualog-add-task-trigger` quick action; styles in
   `assets/sass/admin/maintenance.scss` (registered in the Gruntfile
   `css_files_compile` map).
+- **Maintenance edit flow** (same class): the task list has an **Edit** row
+  action (`.aqualog-maintenance-edit` link in `column_title()`, task data in
+  the `data-task` JSON attribute) that opens the same add-task modal in edit
+  mode (`maintenance-add-task.js` `prefillTask()` → heading "Edit Task", all
+  fields prefilled, form gets `data-task-id`). Submission goes to AJAX
+  `wp_ajax_aquarium_log_maintenance_edit_task` (nonce
+  `nonces.maintenance.save`), which validates the task exists, keeps its
+  aquarium (it cannot be changed), validates type/status/date like the add
+  flow, updates via the `iworks/aqualog/maintenance/sql/update/data` filter
+  and logs via `iworks_aqualog_logger::log_maintenance_updated()`. The list
+  view (`render_list_table()`) loads the task form template so the modal is
+  available there.
+- **Maintenance add-reminder flow** (same class + `maintenance-add-reminder.js`
+  + `elements/maintenance-reminder-form.php`, template
+  `tmpl-aqualog-maintenance-reminder-form`, trigger
+  `#aqualog-add-reminder-trigger`): AJAX `wp_ajax_aquarium_log_maintenance_add_reminder`
+  (nonce `nonces.maintenance.reminder`), inputs `id`/`type` (validated against
+  `maintenance_tasks`)/`frequency` (validated against `frequencies`)/`date`;
+  converts the frequency into a `reminder_interval` in days via
+  `get_frequency_interval()` (filter
+  `iworks/aqualog/reminder/frequency/interval`; `on_demand`/`other` → NULL),
+  inserts into `$wpdb->aquarium_log_reminder` with `user_id` (current user)
+  and the `iworks/aqualog/reminder/sql/insert/data` filter, logs via
+  `iworks_aqualog_logger::log_reminder_added()`. Frequencies are localized as
+  `iworks_aqualog.maintenance.frequencies`; upcoming reminders are available
+  via `get_reminders()`.
+- **DB migration v6** (`class-iworks-aqualog-db.php`): older installs created
+  `aquarium_log_reminder` without `user_id` and `reminder_interval` — the v6
+  step adds the missing columns with a guarded `ALTER TABLE` (dbDelta does not
+  pick them up).
 - **Maintenance list view** (`wp-admin/class-iworks-aqualog-maintenance-list-table.php`,
   `iworks_aqualog_maintenance_list_table extends WP_List_Table`, required by the
   maintenance class): rendered on
@@ -166,6 +196,38 @@ Every file: `defined( 'ABSPATH' ) || exit;` + `class_exists` guard + own
   single + bulk delete (nonce `aqualog_maintenance_delete` /
   `bulk-maintenance-tasks`, redirect with `deleted=N`), aquarium column links
   to the post edit screen.
+- **Calendar** (`wp-admin/class-iworks-aqualog-wp-admin-calendar.php`, auto-loaded
+  by the wp-admin loader): submenu slug `aqualog-calendar`
+  (`module_load_check => 'skip'`, always visible), page renders via action
+  `iworks/aqualog/wp-admin/calendar_page` (fired by
+  `render_calendar_page()` in the wp-admin class). Server-rendered grid, no
+  external calendar library — template `pages/calendar.php`, styles
+  `assets/sass/admin/calendar.scss` (registered in the Gruntfile
+  `css_files_compile` map). Navigation is plain links: `view=month|week`,
+  `date=YYYY-MM-DD`; the grid honors the WP `start_of_week` option (month =
+  6-week grid, week = 7 days) and the header shows full weekday names
+  (`date_i18n( 'l' )`, localized). Events come from `get_events( $from, $to )`:
+  maintenance tasks (`start_date`/`next_schedule_date`) + reminders
+  (`reminder_date`, expanded by `reminder_interval` days, capped to the
+  visible range and 366 iterations), grouped by day, filterable via
+  `iworks/aqualog/calendar/events` (flat list, plus
+  `iworks/aqualog/wp-admin/calendar/args` for the whole template args). Each
+  day has a "+" button (`.aqualog-calendar-add`, `data-date="Y-m-d"`) that
+  opens the Add Task modal with the `datetime-local` input prefilled
+  (`maintenance-add-task.js` `showModal({ date })`); the page also loads the
+  task/reminder form templates so both modals work.
+- **Calendar entry details preview** (same class + `assets/scripts/src/admin/calendar.js`
+  + `elements/calendar-event-details.php`, template
+  `tmpl-aqualog-calendar-event-details`): every event chip in the grid is a
+  button carrying the entry data as a `data-entry` JSON attribute (kind, id,
+  title, status + label, type, localized date, time, aquarium title,
+  description, `reminder_interval`, raw `date_key`). Clicking it opens a
+  read-only details modal (`calendar.js` `showDetails()`, overlay/Escape/Close
+  close it) with a "Repeats: Every %d days" row for recurring reminders
+  (`iworks_aqualog.calendar.everyDays` localized string from the class's
+  `filter_wp_localize_script()`). For tasks the modal has an **Edit Task**
+  button that closes the preview and delegates to the maintenance edit flow
+  (`maintenance.showModal({ task })`); reminders have no edit button.
 - **`class-iworks-aqualog-db.php`** — DB layer: option
   `aquarium_log_db_version`, `$table_names` array (names get the `$wpdb`
   prefix and are registered with `$wpdb` so they are reachable as
@@ -177,7 +239,11 @@ Every file: `defined( 'ABSPATH' ) || exit;` + `class_exists` guard + own
   `log_chemistry_measurement_added/updated`), queries via
   `get_log_entries( $aquarium_id, $type, $limit, $offset )` and
   `get_last_events()`; shows latest events on the dashboard
-  (`action_show_aquarium_latest_events`). Complement: the base class
+  (`action_show_aquarium_latest_events`): each event row
+  (`elements/aquarium-event-event.php`) shows an inline Font Awesome SVG icon
+  per log type — `aquarium` (window), `chemistry` (flask), `maintenance`
+  (screwdriver-wrench, FA 7.3.1 solid, viewBox 576×512), other types fall back
+  to plain text. Complement: the base class
   `simple_history_logger_helper()` for the Simple History plugin.
 - **`class-iworks-aqualog-github.php`** — GitHub self-updater
   (standalone): repo `iworks/aqualog`, GitHub releases API,

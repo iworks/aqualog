@@ -52,6 +52,14 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		 */
 		add_action( 'wp_ajax_aquarium_log_maintenance_add_task', array( $this, 'ajax_add_maintenance_task' ) );
 		/**
+		 * AJAX handler for editing (saving) maintenance tasks.
+		 */
+		add_action( 'wp_ajax_aquarium_log_maintenance_edit_task', array( $this, 'ajax_edit_maintenance_task' ) );
+		/**
+		 * AJAX handler for adding maintenance reminders.
+		 */
+		add_action( 'wp_ajax_aquarium_log_maintenance_add_reminder', array( $this, 'ajax_add_reminder' ) );
+		/**
 		 * Aqualog plugin action hook for maintenance page rendering.
 		 *
 		 * @since 1.0.0
@@ -71,11 +79,13 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	public function filter_wp_localize_script( $data ) {
 		$this->set_current_aquarium_id();
 		$data['maintenance']           = array(
-			'tasks' => $this->get_task_types(),
+			'tasks'       => $this->get_task_types(),
+			'frequencies' => $this->get_frequencies(),
 		);
 		$data['nonces']['maintenance'] = array(
-			'add'  => wp_create_nonce( $this->get_meta_name( 'maintenance_add' ) ),
-			'save' => wp_create_nonce( $this->get_meta_name( 'maintenance_save' ) ),
+			'add'      => wp_create_nonce( $this->get_meta_name( 'maintenance_add' ) ),
+			'save'     => wp_create_nonce( $this->get_meta_name( 'maintenance_save' ) ),
+			'reminder' => wp_create_nonce( $this->get_meta_name( 'reminder_add' ) ),
 		);
 		return $data;
 	}
@@ -240,6 +250,15 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			</form>
 		</div>
 		<?php
+		// Load the maintenance form template (wp.template block, rendered by JS into a modal).
+		$this->load_template(
+			'maintenance-form',
+			'elements',
+			false,
+			array( 'aquarium_id' => $this->current_aquarium_id ?? 0 )
+		);
+		?>
+		<?php
 	}
 
 	/**
@@ -317,6 +336,264 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			);
 		}
 		wp_send_json_error( esc_html__( 'Failed to add task', 'PLUGIN_NAME' ) );
+	}
+
+	/**
+	 * AJAX handler for editing (saving) a maintenance task.
+	 *
+	 * Mirrors the "add task" flow: validates the task type against the
+	 * configured task types, updates the row in the maintenance table
+	 * and logs the action.
+	 *
+	 * @since 1.0.0
+	 */
+	public function ajax_edit_maintenance_task() {
+		check_ajax_referer( $this->get_meta_name( 'maintenance_save' ) );
+		$this->check_option_object();
+		$task_id     = intval( filter_input( INPUT_POST, 'task_id', FILTER_SANITIZE_NUMBER_INT ) );
+		$id          = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
+		$type        = sanitize_key( filter_input( INPUT_POST, 'type' ) );
+		$title       = sanitize_text_field( filter_input( INPUT_POST, 'title' ) );
+		$description = sanitize_textarea_field( filter_input( INPUT_POST, 'description' ) );
+		$status      = sanitize_key( filter_input( INPUT_POST, 'status' ) );
+		$date        = sanitize_text_field( filter_input( INPUT_POST, 'date' ) );
+		/**
+		 * validate task
+		 */
+		global $wpdb;
+		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', $wpdb->aquarium_log_maintenance, $task_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		if ( empty( $row ) || ! is_array( $row ) ) {
+			wp_send_json_error( esc_html__( 'Invalid task', 'PLUGIN_NAME' ) );
+		}
+		/**
+		 * the aquarium of the task cannot be changed
+		 */
+		$id = intval( $row['aquarium_id'] );
+		/**
+		 * validate task type
+		 */
+		$config = $this->options->get_group( 'maintenance_tasks' );
+		if ( ! array_key_exists( $type, $config ) ) {
+			wp_send_json_error( esc_html__( 'Invalid task type', 'PLUGIN_NAME' ) );
+		}
+		/**
+		 * sanitize
+		 */
+		if ( empty( $title ) ) {
+			$title = isset( $config[ $type ]['title'] ) ? $config[ $type ]['title'] : $type;
+		}
+		$allowed_status = array( 'pending', 'in_progress', 'completed' );
+		if ( ! in_array( $status, $allowed_status, true ) ) {
+			$status = 'pending';
+		}
+		$start_date = $date ? date( 'Y-m-d H:i:s', strtotime( $date ) ) : $row['start_date'];
+		/**
+		 * Filter the data before updating the database.
+		 *
+		 * @since 1.0.0
+		 * @param array $data The data to update.
+		 * @return array The filtered data.
+		 */
+		$data   = apply_filters(
+			'iworks/aqualog/maintenance/sql/update/data',
+			array(
+				'type'       => $type,
+				'title'      => $title,
+				'description' => $description,
+				'status'     => $status,
+				'start_date' => $start_date,
+			)
+		);
+		$result = $wpdb->update(
+			$wpdb->aquarium_log_maintenance,
+			$data,
+			array( 'id' => $task_id ),
+			array( '%s', '%s', '%s', '%s', '%s' ),
+			array( '%d' )
+		);
+		if ( false === $result ) {
+			wp_send_json_error( esc_html__( 'Failed to save task', 'PLUGIN_NAME' ) );
+		}
+		$this->log_maintenance_updated( $id, $title, $type, $status, $start_date );
+		wp_send_json_success(
+			array(
+				'message' => esc_html__( 'Task saved successfully', 'PLUGIN_NAME' ),
+			)
+		);
+	}
+
+	/**
+	 * Get available reminder frequencies.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return array Frequencies (key => label).
+	 */
+	public function get_frequencies() {
+		$this->check_option_object();
+		return apply_filters( 'iworks/aqualog/reminder/frequencies', $this->options->get_group( 'frequencies' ) );
+	}
+
+	/**
+	 * Convert a frequency key into a repeat interval in days.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @param string $frequency Frequency key.
+	 * @return int|null Interval in days, or null when the frequency does not repeat.
+	 */
+	public function get_frequency_interval( $frequency ) {
+		$intervals = apply_filters(
+			'iworks/aqualog/reminder/frequency/interval',
+			array(
+				'daily'           => 1,
+				'twice_daily'     => 1,
+				'every_other_day' => 2,
+				'weekly'          => 7,
+				'twice_monthly'   => 15,
+				'monthly'         => 30,
+				'quarterly'       => 91,
+				'semi_annually'   => 182,
+				'annually'        => 365,
+				'on_demand'       => null,
+				'other'           => null,
+			)
+		);
+		return isset( $intervals[ $frequency ] ) ? $intervals[ $frequency ] : null;
+	}
+
+	/**
+	 * Get reminders for an aquarium.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @param int $aquarium_id Aquarium ID.
+	 * @param int $limit       Number of reminders to retrieve.
+	 * @return array List of upcoming reminders.
+	 */
+	public function get_reminders( $aquarium_id, $limit = 10 ) {
+		global $wpdb;
+		if ( empty( $aquarium_id ) ) {
+			return array();
+		}
+		$sql     = sprintf(
+			'SELECT * FROM %s WHERE aquarium_id = %%d AND reminder_date >= %%s ORDER BY reminder_date ASC LIMIT %%d',
+			$wpdb->aquarium_log_reminder
+		);
+		$results = $wpdb->get_results( $wpdb->prepare( $sql, $aquarium_id, current_time( 'mysql' ), $limit ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		if ( empty( $results ) || ! is_array( $results ) ) {
+			return array();
+		}
+		return $results;
+	}
+
+	/**
+	 * AJAX handler for adding a maintenance reminder.
+	 *
+	 * Mirrors the "add task" flow: validates the task type against the
+	 * configured task types, inserts a row into the reminder table and
+	 * logs the action.
+	 *
+	 * @since 1.0.0
+	 */
+	public function ajax_add_reminder() {
+		check_ajax_referer( $this->get_meta_name( 'reminder_add' ) );
+		$this->check_option_object();
+		$id        = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
+		$type      = sanitize_key( filter_input( INPUT_POST, 'type' ) );
+		$frequency = sanitize_key( filter_input( INPUT_POST, 'frequency' ) );
+		$date      = sanitize_text_field( filter_input( INPUT_POST, 'date' ) );
+		/**
+		 * validate aquarium
+		 */
+		if ( ! apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $id ) ) {
+			wp_send_json_error( esc_html__( 'Invalid aquarium', 'PLUGIN_NAME' ) );
+		}
+		/**
+		 * validate task type
+		 */
+		$config = $this->options->get_group( 'maintenance_tasks' );
+		if ( ! array_key_exists( $type, $config ) ) {
+			wp_send_json_error( esc_html__( 'Invalid task type', 'PLUGIN_NAME' ) );
+		}
+		/**
+		 * validate frequency
+		 */
+		$frequencies = $this->options->get_group( 'frequencies' );
+		if ( ! array_key_exists( $frequency, $frequencies ) ) {
+			wp_send_json_error( esc_html__( 'Invalid frequency', 'PLUGIN_NAME' ) );
+		}
+		/**
+		 * sanitize
+		 */
+		if ( empty( $date ) ) {
+			wp_send_json_error( esc_html__( 'Invalid date', 'PLUGIN_NAME' ) );
+		}
+		$reminder_date     = date( 'Y-m-d H:i:s', strtotime( $date ) );
+		$reminder_interval = $this->get_frequency_interval( $frequency );
+		/**
+		 * Filter the data before inserting into the database.
+		 *
+		 * @since 1.0.0
+		 * @param array $data The data to insert.
+		 * @return array The filtered data.
+		 */
+		$data   = apply_filters(
+			'iworks/aqualog/reminder/sql/insert/data',
+			array(
+				'user_id'           => get_current_user_id(),
+				'aquarium_id'       => $id,
+				'reminder_type'     => $type,
+				'reminder_date'     => $reminder_date,
+				'reminder_interval' => $reminder_interval,
+			)
+		);
+		global $wpdb;
+		$result = $wpdb->insert(
+			$wpdb->aquarium_log_reminder,
+			$data,
+			array( '%d', '%d', '%s', '%s', is_null( $reminder_interval ) ? null : '%d' )
+		);
+		if ( $result ) {
+			$this->log_reminder_added( $id, $type, $reminder_date, $reminder_interval );
+			wp_send_json_success(
+				array(
+					'message' => esc_html__( 'Reminder added successfully', 'PLUGIN_NAME' ),
+				)
+			);
+		}
+		wp_send_json_error( esc_html__( 'Failed to add reminder', 'PLUGIN_NAME' ) );
+	}
+
+	/**
+	 * Log reminder addition.
+	 *
+	 * @since 1.0.0
+	 * @param int      $aquarium_id Aquarium ID.
+	 * @param string   $type        Task type key.
+	 * @param string   $date        Reminder date.
+	 * @param int|null $interval    Repeat interval in days.
+	 * @return void
+	 */
+	private function log_reminder_added( $aquarium_id, $type, $date = null, $interval = null ) {
+		$logger = new iworks_aqualog_logger();
+		$logger->log_reminder_added( $aquarium_id, $type, $date, $interval );
+	}
+
+	/**
+	 * Log maintenance task update.
+	 *
+	 * @since 1.0.0
+	 * @param int    $aquarium_id Aquarium ID.
+	 * @param string $title       Task title.
+	 * @param string $type        Task type key.
+	 * @param string $status      Task status.
+	 * @param string $date        Task date.
+	 * @return void
+	 */
+	private function log_maintenance_updated( $aquarium_id, $title, $type, $status, $date = null ) {
+		$logger = new iworks_aqualog_logger();
+		$logger->log_maintenance_updated( $aquarium_id, $title, $type, $status, $date );
 	}
 
 	/**

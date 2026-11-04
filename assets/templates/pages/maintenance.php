@@ -76,10 +76,10 @@ defined( 'ABSPATH' ) || exit;
 						<span><?php esc_html_e( 'Add Task', 'PLUGIN_NAME' ); ?></span>
 					</button>
 
-					<a href="#" class="aqualog-action-card">
+					<button type="button" class="aqualog-action-card" id="aqualog-add-reminder-trigger">
 						<span class="dashicons dashicons-plus"></span>
 						<span><?php esc_html_e( 'Add Reminder', 'PLUGIN_NAME' ); ?></span>
-					</a>
+					</button>
 
 					<button type="button" class="aqualog-action-card" id="aqualog-add-note-trigger">
 						<span class="dashicons dashicons-plus"></span>
@@ -105,6 +105,8 @@ defined( 'ABSPATH' ) || exit;
 <?php
 // Load the maintenance form template (wp.template block, rendered by JS into a modal).
 load_template( dirname( __DIR__, 1 ) . '/elements/maintenance-form.php', false, $args );
+// Load the maintenance reminder form template (wp.template block, rendered by JS into a modal).
+load_template( dirname( __DIR__, 1 ) . '/elements/maintenance-reminder-form.php', false, $args );
 ?>
 
 <!-- Add Note Modal -->

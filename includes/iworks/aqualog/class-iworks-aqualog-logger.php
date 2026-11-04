@@ -334,6 +334,40 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 	}
 
 	/**
+	 * Log maintenance task update
+	 *
+	 * @since 1.0.0
+	 * @param int    $aquarium_id Aquarium ID
+	 * @param string $title       Task title
+	 * @param string $type        Task type key
+	 * @param string $status      Task status
+	 * @param string $date        Task date
+	 * @return bool|WP_Error
+	 */
+	public function log_maintenance_updated( $aquarium_id, $title, $type, $status = 'pending', $date = null ) {
+		$this->check_option_object();
+		$config    = $this->options->get_group( 'maintenance_tasks' );
+		$type_name = isset( $config[ $type ]['title'] ) ? $config[ $type ]['title'] : $type;
+		$date      = $date ?: current_time( 'mysql' );
+		$message   = sprintf(
+			/* translators: 1: task title, 2: task type name, 3: task status */
+			esc_html__( 'Maintenance task updated: %1$s (%2$s), status: %3$s', 'PLUGIN_NAME' ),
+			$title,
+			$type_name,
+			$status
+		);
+		$details = array(
+			'action'     => 'update_task',
+			'task_title' => $title,
+			'task_type'  => $type,
+			'task_status' => $status,
+			'task_date'  => $date,
+		);
+
+		return $this->log_action( 'maintenance', $aquarium_id, $message, $details, null, $date );
+	}
+
+	/**
 	 * Get parameter name from key
 	 *
 	 * @since 1.0.0
@@ -344,6 +378,53 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 		$this->check_option_object();
 		$config = $this->options->get_group( 'chemistry' );
 		return isset( $config[ $param_key ]['name'] ) ? $config[ $param_key ]['name'] : $param_key;
+	}
+
+	/**
+	 * Log reminder addition
+	 *
+	 * @since 1.0.0
+	 * @param int      $aquarium_id Aquarium ID
+	 * @param string   $type        Task type key
+	 * @param string   $date        Reminder date
+	 * @param int|null $interval    Repeat interval in days
+	 * @return bool|WP_Error
+	 */
+	public function log_reminder_added( $aquarium_id, $type, $date = null, $interval = null ) {
+		$this->check_option_object();
+		$config    = $this->options->get_group( 'maintenance_tasks' );
+		$type_name = isset( $config[ $type ]['title'] ) ? $config[ $type ]['title'] : $type;
+		$date      = $date ?: current_time( 'mysql' );
+		$frequency = $this->options->get_group( 'frequencies' );
+		$interval_text = '';
+		$frequency_key = array_search( $interval, array(
+			'daily'           => 1,
+			'every_other_day' => 2,
+			'weekly'          => 7,
+			'twice_monthly'   => 15,
+			'monthly'         => 30,
+			'quarterly'       => 91,
+			'semi_annually'   => 182,
+			'annually'        => 365,
+		), true );
+		if ( $frequency_key && isset( $frequency[ $frequency_key ] ) ) {
+			$interval_text = sprintf( ', %s', strtolower( $frequency[ $frequency_key ] ) );
+		}
+		$message = sprintf(
+			/* translators: 1: task type name, 2: reminder date, 3: repeat frequency */
+			esc_html__( 'Reminder added: %1$s on %2$s%3$s', 'PLUGIN_NAME' ),
+			$type_name,
+			$date,
+			$interval_text
+		);
+		$details = array(
+			'action'     => 'add_reminder',
+			'task_type'  => $type,
+			'reminder_date' => $date,
+			'interval'   => $interval,
+		);
+
+		return $this->log_action( 'maintenance', $aquarium_id, $message, $details );
 	}
 
 	/**

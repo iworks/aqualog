@@ -26,14 +26,44 @@
 	/**
 	 * Render the maintenance form using wp.template
 	 */
-	window.iworks_aqualog.maintenance.renderForm = function() {
+	window.iworks_aqualog.maintenance.renderForm = function(prefill) {
+		prefill = prefill || {};
 		var template = wp.template('aqualog-maintenance-form');
 		$('.aqualog-modal').html(
 			template({
-				aquarium_id: window.iworks_aqualog.maintenance.aquarium_id || 0
+				aquarium_id: prefill.task ? prefill.task.aquarium_id : (window.iworks_aqualog.maintenance.aquarium_id || 0)
 			})
 		);
+		if (prefill.task) {
+			window.iworks_aqualog.maintenance.prefillTask(prefill.task);
+		} else if (prefill.date) {
+			var $date = $('.aqualog-modal').find('input[name="date"]');
+			var current = ($date.val() || '').split('T');
+			var time = current.length > 1 ? current[1] : '';
+			$date.val(prefill.date + (time ? 'T' + time : ''));
+		}
 		window.iworks_aqualog.maintenance.initializeForm();
+	};
+
+	/**
+	 * Prefill the form with an existing task (edit mode)
+	 *
+	 * @param {Object} task Task data (id, aquarium_id, type, title, description, status, date)
+	 */
+	window.iworks_aqualog.maintenance.prefillTask = function(task) {
+		var $form = $('#aqualog-maintenance-task-form');
+		if (!$form.length) {
+			return;
+		}
+		$form.attr('data-task-id', task.id);
+		$form.find('.aqualog-maintenance-task-type').val(task.type);
+		$form.find('.aqualog-maintenance-task-title').val(task.title);
+		$form.find('.aqualog-maintenance-task-description').val(task.description || '');
+		$form.find('.aqualog-maintenance-task-status').val(task.status);
+		if (task.date) {
+			$('.aqualog-modal').find('input[name="date"]').val(task.date);
+		}
+		$('.aqualog-modal').find('.aqualog-maintenance-form-heading').text(window.iworks_aqualog.i18n.messages.editTask || 'Edit Task');
 	};
 
 	/**
@@ -88,6 +118,7 @@
 	window.iworks_aqualog.maintenance.submitForm = function($form) {
 		var $submit = $form.find('.aqualog-form-submit');
 		var originalText = $submit.html();
+		var taskId = parseInt($form.attr('data-task-id'), 10) || 0;
 
 		// Validate form
 		if (!window.iworks_aqualog.maintenance.validateForm($form)) {
@@ -104,8 +135,9 @@
 			url: window.iworks_aqualog.ajax_url,
 			type: 'POST',
 			data: {
-				action: 'aquarium_log_maintenance_add_task',
-				_wpnonce: window.iworks_aqualog.nonces.maintenance.add,
+				action: taskId ? 'aquarium_log_maintenance_edit_task' : 'aquarium_log_maintenance_add_task',
+				_wpnonce: taskId ? window.iworks_aqualog.nonces.maintenance.save : window.iworks_aqualog.nonces.maintenance.add,
+				task_id: taskId,
 				id: $form.data('aquarium-id'),
 				type: $form.find('.aqualog-maintenance-task-type').val(),
 				title: $form.find('.aqualog-maintenance-task-title').val(),
@@ -149,7 +181,8 @@
 	/**
 	 * Show maintenance form as modal
 	 */
-	window.iworks_aqualog.maintenance.showModal = function() {
+	window.iworks_aqualog.maintenance.showModal = function(prefill) {
+		prefill = prefill || {};
 		// Create modal overlay
 		var $overlay = $('<div class="aqualog-modal-overlay"></div>');
 		var $modal = $('<div class="aqualog-modal"></div>');
@@ -163,7 +196,7 @@
 		$('body').append($overlay).append($modal);
 
 		// Render form inside modal
-		window.iworks_aqualog.maintenance.renderForm();
+		window.iworks_aqualog.maintenance.renderForm(prefill);
 
 		// Show modal with animation
 		$overlay.fadeIn(300);
@@ -212,6 +245,27 @@
 
 			// Show modal with form
 			window.iworks_aqualog.maintenance.showModal();
+		});
+
+		// Bind click handler to the calendar day "+" buttons (prefilled date)
+		$(document).on('click', '.aqualog-calendar-add', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			window.iworks_aqualog.maintenance.showModal({
+				date: $(this).data('date')
+			});
+		});
+
+		// Bind click handler to the task list "Edit" row action
+		$(document).on('click', '.aqualog-maintenance-edit', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			var task = $(this).data('task');
+			if (task) {
+				window.iworks_aqualog.maintenance.showModal({ task: task });
+			}
 		});
 	});
 
