@@ -81,6 +81,13 @@ gitignored — never edit them.
   (`includes/iworks/aqualog/class-iworks-aqualog-github.php`),
   `includes/pro/`, `languages/*.po|*.mo`. `readme.txt` **is** included
   (required by wp.org).
+- **Plugin Check (PCP)** (`bun run check:pcp`) — builds the wp.org ZIP (skip
+  with `--skip-build`), stages it into `wp-content/plugins/{name}-pcp/`,
+  runs `wp plugin check <dir> --slug={name} --format=csv` (`--slug` prevents
+  the i18n "expected <staging-slug>" noise), prints errors/warnings grouped
+  and removes the staging copy. Exits 1 on any ERROR. Needs `wp` CLI, the
+  `plugin-check` plugin on the site and `unzip`; WP root is auto-detected
+  as the repo's `../../../` (override with `WP_ROOT`).
 - **GitHub** (`bun run build:github`) → `release/github/{version}/{name}/`.
   Base excludes plus `readme.txt`; `.po` **are** included and `.mo` are
   compiled. Pairs with the GitHub self-updater class.

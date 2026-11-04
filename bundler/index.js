@@ -10,6 +10,7 @@
  *   build:github  — production build + .mo → release/github/{name}.zip
  *   make-pot      — translations only (.pot + .po update)
  *   update-libs   — git pull on the vendored iWorks libraries (submodules)
+ *   check:pcp     — Plugin Check (PCP) on the built wp.org ZIP (stages + cleans up)
  *   test          — PHPUnit (tests/php/phpunit.xml)
  */
 
@@ -28,6 +29,7 @@ import {
 import { prettierFile } from './tools.mjs';
 import { makeZip } from './makeZip.mjs';
 import { makePot } from './makePot.mjs';
+import { pluginCheck } from './pluginCheck.mjs';
 
 const root = resolve(dirname(new URL(import.meta.url).pathname), '..');
 
@@ -244,6 +246,15 @@ const modes = {
 	'build:github': () => build('github'),
 	'make-pot': () => executionTime('make-pot', () => makePot(false)),
 	'update-libs': () => executionTime('update-libs', () => updateLibs()),
+	'check:pcp': () =>
+		pluginCheck({
+			skipBuild: process.argv.includes('--skip-build'),
+			ignoreWarnings: process.argv.includes('--ignore-warnings'),
+		}).then((code) => {
+			if (code !== 0) {
+				process.exit(code);
+			}
+		}),
 	test: () => test(),
 };
 

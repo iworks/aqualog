@@ -51,6 +51,7 @@
         "build:github": "bun bundler/index.js build:github",
         "make-pot": "bun bundler/index.js make-pot",
         "update-libs": "bun bundler/index.js update-libs",
+        "check:pcp": "bun bundler/index.js check:pcp",
         "test": "bun bundler/index.js test",
         "postinstall": "curl -sSfL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o wp-cli.phar || echo 'wp-cli.phar download failed - make-pot will retry it'"
     },

@@ -41,4 +41,5 @@ placeholders (`PLUGIN_VERSION`, `PLUGIN_NAME`, `CURRENT_YEAR`, …).
 `bun run compile` (all assets, with maps) · `bun run dev` (watcher) ·
 `bun run build:wporg` (wp.org ZIP) · `bun run build:github` (GitHub ZIP) ·
 `bun run build` (both ZIPs) · `bun run make-pot` (i18n) ·
+`bun run check:pcp` (Plugin Check on the built wp.org ZIP) ·
 `bun run update-libs` · `bun run test` (phpunit)
