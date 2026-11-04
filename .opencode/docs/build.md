@@ -47,8 +47,17 @@
 3. **JS** — `assets/scripts/src/{admin,frontend}/*.js` →
    `assets/scripts/aqualog-{admin,frontend}.js` (sorted, banner prepended)
    → terser minify (mangle reserves `jQuery`) to `.min.js`.
-4. **i18n** — wp-cli `i18n make-pot` → `languages/aqualog.pot`,
-   `update-po` for every `.po`; `build:github` also runs `make-mo`.
+4. **i18n** — wp-cli `i18n make-pot` with `--ignore-domain` (sources use the
+   `'PLUGIN_NAME'` textdomain placeholder, so a domain-filtered run would
+   extract nothing) → `languages/aqualog.pot`, `update-po` for every `.po`;
+   `build:github` also runs `make-mo`.
+   The textdomain **loader** (`load_plugin_textdomain( 'aqualog', … )`, in
+   `class-iworks-aqualog.php` on `init` priority 1, plus the GitHub updater
+   class) uses the literal `aqualog` — like the stub — so the built plugin
+   loads translations; on the dev site UI strings stay untranslated because
+   the `__()` placeholders are not replaced (by design). The plugin header
+   also carries `Domain Path: /languages` (wp-settings registers the JIT
+   path from it).
 
 Compiled outputs (`assets/styles/`, `assets/scripts/aqualog-*.js`) are
 gitignored — never edit them.

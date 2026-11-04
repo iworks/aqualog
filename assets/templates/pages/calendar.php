@@ -40,9 +40,9 @@ $iworks_aqualog_link = function ( $view, $date ) {
 
 	<div class="aqualog-calendar-nav">
 		<div class="aqualog-calendar-nav-period">
-			<a class="button" href="<?php echo call_user_func( $iworks_aqualog_link, $iworks_aqualog_view, $iworks_aqualog_range['prev'] ); ?>">&lsaquo;</a>
+			<a class="button" aria-label="<?php esc_attr_e( 'Previous period', 'PLUGIN_NAME' ); ?>" href="<?php echo call_user_func( $iworks_aqualog_link, $iworks_aqualog_view, $iworks_aqualog_range['prev'] ); ?>">&lsaquo;</a>
 			<a class="button" href="<?php echo call_user_func( $iworks_aqualog_link, $iworks_aqualog_view, $iworks_aqualog_today ); ?>"><?php esc_html_e( 'Today', 'PLUGIN_NAME' ); ?></a>
-			<a class="button" href="<?php echo call_user_func( $iworks_aqualog_link, $iworks_aqualog_view, $iworks_aqualog_range['next'] ); ?>">&rsaquo;</a>
+			<a class="button" aria-label="<?php esc_attr_e( 'Next period', 'PLUGIN_NAME' ); ?>" href="<?php echo call_user_func( $iworks_aqualog_link, $iworks_aqualog_view, $iworks_aqualog_range['next'] ); ?>">&rsaquo;</a>
 			<span class="aqualog-calendar-title"><?php echo esc_html( $iworks_aqualog_range['title'] ); ?></span>
 		</div>
 		<div class="aqualog-calendar-nav-views">
@@ -76,7 +76,7 @@ $iworks_aqualog_link = function ( $view, $date ) {
 						<td class="<?php echo esc_attr( implode( ' ', $iworks_aqualog_classes ) ); ?>">
 							<div class="aqualog-calendar-day-header">
 								<span class="aqualog-calendar-day-number"><?php echo esc_html( intval( substr( $iworks_aqualog_cell['date'], 8, 2 ) ) ); ?></span>
-								<button type="button" class="button-link aqualog-calendar-add" data-date="<?php echo esc_attr( $iworks_aqualog_cell['date'] ); ?>" title="<?php esc_attr_e( 'Add Task', 'PLUGIN_NAME' ); ?>">
+								<button type="button" class="button-link aqualog-calendar-add" data-date="<?php echo esc_attr( $iworks_aqualog_cell['date'] ); ?>" title="<?php esc_attr_e( 'Add Task', 'PLUGIN_NAME' ); ?>" aria-label="<?php esc_attr_e( 'Add Task', 'PLUGIN_NAME' ); ?>">
 									<span class="dashicons dashicons-plus-alt"></span>
 								</button>
 							</div>

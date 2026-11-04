@@ -104,10 +104,10 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 	private function get_last_events( $aquarium_id ) {
 		global $wpdb;
 		$query = $wpdb->prepare(
-			"SELECT * FROM {$wpdb->aquarium_log_log} WHERE aquarium_id = %d ORDER BY log_date DESC LIMIT 10",
+			"SELECT * FROM {$wpdb->aquarium_log_log} WHERE aquarium_id = %d ORDER BY log_date DESC LIMIT 10", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$aquarium_id
 		);
-		return $wpdb->get_results( $query, ARRAY_A );
+		return $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
 	/**
@@ -448,8 +448,8 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 		}
 		$where_clause = implode( ' AND ', $where );
 		$limit_clause = $wpdb->prepare( 'LIMIT %d OFFSET %d', $limit, $offset );
-		$sql          = "SELECT * FROM {$table_name} WHERE {$where_clause} ORDER BY log_date DESC {$limit_clause}";
-		$results      = $wpdb->get_results( $wpdb->prepare( $sql, $params ) );
+		$sql          = "SELECT * FROM {$table_name} WHERE {$where_clause} ORDER BY log_date DESC {$limit_clause}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+		$results      = $wpdb->get_results( $wpdb->prepare( $sql, $params ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		if ( null === $results ) {
 			return new WP_Error(

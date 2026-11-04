@@ -229,9 +229,9 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 			return $this->latest_measurements[ $this->current_aquarium_id ];
 		}
 		global $wpdb;
-		$sql     = "SELECT t1.* FROM {$wpdb->aquarium_log_chemistry} t1 WHERE t1.aquarium_id = %d and t1.measurement_date = ( SELECT MAX(t2.measurement_date) FROM {$wpdb->aquarium_log_chemistry} t2 WHERE t2.param_key = t1.param_key)";
-		$query   = $wpdb->prepare( $sql, $this->current_aquarium_id );
-		$results = $wpdb->get_results( $query, ARRAY_A );
+		$sql     = "SELECT t1.* FROM {$wpdb->aquarium_log_chemistry} t1 WHERE t1.aquarium_id = %d and t1.measurement_date = ( SELECT MAX(t2.measurement_date) FROM {$wpdb->aquarium_log_chemistry} t2 WHERE t2.param_key = t1.param_key)"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$query   = $wpdb->prepare( $sql, $this->current_aquarium_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		if ( empty( $results ) || ! is_array( $results ) ) {
 			return array();
 		}
@@ -308,6 +308,9 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 
 	public function ajax_add_chemistry_param() {
 		check_ajax_referer( $this->get_meta_name( 'chemistry_add_param' ) );
+		if ( ! current_user_can( $this->get_this_capability() ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to perform this action.', 'PLUGIN_NAME' ) );
+		}
 		$this->check_option_object();
 		$value = sanitize_text_field( filter_input( INPUT_POST, 'value' ) );
 		$key   = sanitize_key( filter_input( INPUT_POST, 'key' ) );

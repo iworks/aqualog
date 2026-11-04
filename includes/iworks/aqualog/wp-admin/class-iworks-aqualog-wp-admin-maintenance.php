@@ -236,7 +236,7 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		?>
 		<div class="wrap aqualog-maintenance aqualog-maintenance-list">
 			<h1 class="wp-heading-inline"><?php esc_html_e( 'Maintenance', 'PLUGIN_NAME' ); ?></h1>
-			<?php if ( isset( $_REQUEST['deleted'] ) && $_REQUEST['deleted'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+			<?php if ( isset( $_REQUEST['deleted'] ) && absint( wp_unslash( $_REQUEST['deleted'] ) ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
 				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Task(s) deleted.', 'PLUGIN_NAME' ); ?></p></div>
 			<?php endif; ?>
 			<form method="get">
@@ -272,6 +272,9 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	 */
 	public function ajax_add_maintenance_task() {
 		check_ajax_referer( $this->get_meta_name( 'maintenance_add' ) );
+		if ( ! current_user_can( $this->get_this_capability() ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to perform this action.', 'PLUGIN_NAME' ) );
+		}
 		$this->check_option_object();
 		$id          = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
 		$type        = sanitize_key( filter_input( INPUT_POST, 'type' ) );
@@ -349,6 +352,9 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	 */
 	public function ajax_edit_maintenance_task() {
 		check_ajax_referer( $this->get_meta_name( 'maintenance_save' ) );
+		if ( ! current_user_can( $this->get_this_capability() ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to perform this action.', 'PLUGIN_NAME' ) );
+		}
 		$this->check_option_object();
 		$task_id     = intval( filter_input( INPUT_POST, 'task_id', FILTER_SANITIZE_NUMBER_INT ) );
 		$id          = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
@@ -498,6 +504,9 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	 */
 	public function ajax_add_reminder() {
 		check_ajax_referer( $this->get_meta_name( 'reminder_add' ) );
+		if ( ! current_user_can( $this->get_this_capability() ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to perform this action.', 'PLUGIN_NAME' ) );
+		}
 		$this->check_option_object();
 		$id        = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
 		$type      = sanitize_key( filter_input( INPUT_POST, 'type' ) );

@@ -321,6 +321,14 @@
 			$notice.insertBefore('.wrap h1');
 		}
 
+		// Announce to screen readers (WCAG 4.1.3 Status Messages)
+		if (window.wp && window.wp.a11y && window.wp.a11y.speak) {
+			window.wp.a11y.speak(
+				message,
+				type === 'success' ? 'polite' : 'assertive',
+			);
+		}
+
 		// Auto-dismiss after 5 seconds for success notices
 		if (type === 'success') {
 			window.setTimeout(function () {
@@ -337,7 +345,15 @@
 	window.iworks_aqualog.chemistry.showModal = function () {
 		// Create modal overlay
 		var $overlay = $('<div class="aqualog-modal-overlay"></div>');
-		var $modal = $('<div class="aqualog-modal"></div>');
+		var $modal = $(
+			'<div class="aqualog-modal" role="dialog" aria-modal="true"></div>',
+		);
+
+		/**
+		 * Remember the trigger so focus can return to it on close (WCAG 2.4.3)
+		 */
+		window.iworks_aqualog.chemistry.lastFocusedElement =
+			document.activeElement;
 
 		/**
 		 * Remove any existing modals to prevent duplicates
@@ -353,9 +369,24 @@
 		// Move form into modal
 		$('.aqualog-chemistry-form').appendTo($modal);
 
-		// Show modal with animation
+		/**
+		 * Name the dialog from its heading (WCAG 4.1.2)
+		 */
+		var $heading = $modal.find('h2').first();
+		if ($heading.length) {
+			$modal.attr('aria-label', $heading.text());
+		}
+
+		// Show modal with animation; move focus into the dialog once
+		// it is displayed (WCAG 2.4.3)
 		$overlay.fadeIn(300);
-		$modal.fadeIn(300);
+		$modal.fadeIn(300, function () {
+			$modal
+				.find('input, select, textarea, button')
+				.filter(':visible')
+				.first()
+				.trigger('focus');
+		});
 
 		// Handle overlay click to close
 		$overlay.on('click', function () {
@@ -389,6 +420,15 @@
 
 			// Remove event listeners
 			$(document).off('keydown.aqualog-modal');
+
+			// Return focus to the element that opened the modal (WCAG 2.4.3)
+			if (
+				window.iworks_aqualog.chemistry.lastFocusedElement &&
+				window.iworks_aqualog.chemistry.lastFocusedElement.focus
+			) {
+				window.iworks_aqualog.chemistry.lastFocusedElement.focus();
+				window.iworks_aqualog.chemistry.lastFocusedElement = null;
+			}
 		}
 	};
 

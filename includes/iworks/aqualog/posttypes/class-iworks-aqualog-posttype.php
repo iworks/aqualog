@@ -217,7 +217,7 @@ abstract class iworks_aqualog_posttype extends iworks_aqualog_base {
 			wp_enqueue_media();
 		}
 		if ( isset( $one['label'] ) ) {
-			echo wpautop( esc_html( $one['label'] ) );
+			echo wpautop( esc_html( $one['label'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- output is esc_html'ed inside wpautop
 		}
 		echo '<p class="iworks-field-image-row">';
 		/**

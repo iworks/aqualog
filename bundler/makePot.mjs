@@ -75,6 +75,9 @@ export async function makePot(makeMo = false) {
             'make-pot',
             '.',
             potFile,
+            // Sources use the 'PLUGIN_NAME' textdomain placeholder — without
+            // --ignore-domain wp-cli would filter them out by domain.
+            '--ignore-domain',
             `--exclude=${excludes}`,
             `--slug=${config.textdomain}`,
         ],

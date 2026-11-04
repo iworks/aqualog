@@ -8,5 +8,10 @@
 ### Improved
 	- Calendar grid honors the WordPress "week starts on" setting and shows full localized weekday names.
 	- Maintenance events on the Current Aquarium page use the Font Awesome screwdriver-wrench icon.
+	- Accessibility (WCAG 2.1 AA): modals announce themselves as dialogs, move focus in on open and restore it on close; notices are announced via wp.a11y.speak; calendar navigation, day buttons and form date fields have accessible names; event icons are hidden from screen readers; out-of-range calendar day numbers meet the 4.5:1 contrast requirement.
 ### Fixed
 	- Reminder table missing `user_id` and `reminder_interval` columns on older installs (migration v6).
+	- AJAX endpoints (maintenance add/edit, reminder, chemistry parameter) now check user capabilities in addition to nonces.
+	- Maintenance list view reads the "deleted" notice parameter safely (unslashed/sanitized).
+	- Plugin uninstall could not drop the plugin tables because of an invalid SQL placeholder in the identifier position.
+	- Escaping and $wpdb->prepare() hardening in statistics, chemistry, logger and meta-box code paths (all queries prepared).

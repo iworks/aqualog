@@ -241,7 +241,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		if ( $db_version < $version_to_update ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'aquarium_log_reminder';
-			$columns    = $wpdb->get_col( "SHOW COLUMNS FROM {$table_name}" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+			$columns    = $wpdb->get_col( "SHOW COLUMNS FROM {$table_name}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$alter      = array();
 			if ( ! in_array( 'user_id', $columns, true ) ) {
 				$alter[] = "ADD COLUMN user_id bigint(20) unsigned NOT NULL DEFAULT 1 COMMENT 'User ID' AFTER id";
@@ -274,9 +274,11 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 
 		// Drop each table
 		foreach ( $this->table_names as $table_name ) {
-			$sql   = 'DROP TABLE IF EXISTS %s';
-			$query = $wpdb->prepare( $sql, $wpdb->$table_name );
-			$wpdb->query( $query );
+			// Table identifiers cannot be prepared placeholders — the name
+			// comes from the internal, hardcoded $this->table_names list.
+			$sql   = "DROP TABLE IF EXISTS {$wpdb->$table_name}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$query = $wpdb->prepare( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		}
 
 		// Re-enable foreign key checks

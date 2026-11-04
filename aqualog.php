@@ -2,6 +2,7 @@
 /*
 Plugin Name: iWorks Aquarium Tracker: Water Parameters, Reminders & Notes
 Text Domain: aqualog
+Domain Path: /languages
 Plugin URI: PLUGIN_URI
 Description: PLUGIN_TAGLINE
 Version: PLUGIN_VERSION

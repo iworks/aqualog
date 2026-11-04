@@ -15,6 +15,17 @@ PLUGIN_TAGLINE
 
 PLUGIN_DESCRIPTION
 
+= Features =
+
+* **Multiple Aquariums** — track any number of tanks, each with its own dashboard, water parameters and history.
+* **Water Chemistry** — log pH, temperature, nitrates and custom parameters; trend charts show how your water evolves over time.
+* **Maintenance Tasks** — schedule tasks like water changes and filter cleaning, keep them in a searchable list view, edit or delete them at any time.
+* **Reminders** — set recurring reminders (daily to annually) so you never miss a maintenance date.
+* **Calendar** — a month and week view showing upcoming tasks and reminders at a glance; click an entry to see its details or jump straight to editing it.
+* **Activity Log** — every action is logged per aquarium, with an easy-to-read events feed.
+* **Notes with Photos** — add observations to your aquariums, complete with images from the media library.
+* **Dashboard & Statistics** — multi-tank overview cards with water-entry and reading statistics.
+
 = GitHub =
 
 The aqualog plugin is available also on [GitHub - aqualog](https://github.com/iworks/aqualog).

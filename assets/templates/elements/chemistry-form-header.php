@@ -15,6 +15,6 @@ defined( 'ABSPATH' ) || exit;
 <div class="aqualog-card-header">
 	<h2>{{ data.description }} ({{ data.name }})</h2>
 	<div class="aqualog-card-header-date">
-		<input name="date" type="datetime-local" class="aqualog-card-header-date__input" value="<?php echo esc_attr( date_i18n( 'Y-m-d\TH:i' ) ); ?>">
+		<input name="date" type="datetime-local" aria-label="<?php esc_attr_e( 'Date and time', 'PLUGIN_NAME' ); ?>" class="aqualog-card-header-date__input" value="<?php echo esc_attr( date_i18n( 'Y-m-d\TH:i' ) ); ?>">
 	</div>
 </div>

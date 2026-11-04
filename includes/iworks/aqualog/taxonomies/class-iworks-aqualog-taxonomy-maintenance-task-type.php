@@ -730,7 +730,7 @@ class iworks_aqualog_posttype_aquarium extends iworks_aqualog_posttype {
 	 */
 	private function get_post_changes( $post_id ) {
 		$post_before = get_post( $post_id );
-		$post_after  = $_POST; // This contains the submitted form data
+		$post_after  = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- caller verified the save nonce; values are sanitized before use below
 
 		$changes = array();
 

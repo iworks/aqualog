@@ -49,6 +49,7 @@ class iworks_aqualog extends iworks_aqualog_base {
 		 * WordPress Hooks
 		 */
 		add_action( 'init', array( $this, 'action_init_settings' ) );
+		add_action( 'init', array( $this, 'action_init_load_textdomain' ), 1 );
 		add_action( 'query_vars', array( $this, 'add_query_vars' ), 0 );
 		/**
 		 * Enable aquarium post type
@@ -142,6 +143,20 @@ class iworks_aqualog extends iworks_aqualog_base {
 			$this->objects[ $group ] = array();
 		}
 		return $this->objects[ $group ][ $name ] = $object;
+	}
+
+	/**
+	 * Load the plugin textdomain.
+	 *
+	 * @since 0.0.3
+	 * @return void
+	 */
+	public function action_init_load_textdomain() {
+		load_plugin_textdomain(
+			'aqualog',
+			false,
+			dirname( plugin_basename( $this->plugin_file_path ) ) . '/languages'
+		);
 	}
 
 	/**

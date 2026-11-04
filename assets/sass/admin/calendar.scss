@@ -46,7 +46,9 @@
 				background: #f6f7f7;
 
 				.aqualog-calendar-day-number {
-					opacity: 0.4;
+					// 4.97:1 on #f6f7f7 (WCAG AA 1.4.3 needs 4.5:1); replaces the
+					// old opacity: 0.4 (2.05:1, failing).
+					color: #6b6b6b;
 				}
 			}
 
