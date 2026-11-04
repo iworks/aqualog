@@ -116,8 +116,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 			return;
 		}
 		global $wpdb;
-		$query = $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->aquarium_log_chemistry}" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$count = $wpdb->get_var( $query );
+		$count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->aquarium_log_chemistry}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$this->render_card(
 			'water-entries',
 			/* translators: Statistics card title for water entries */
@@ -143,8 +142,7 @@ class iworks_aqualog_wp_admin_statistics extends iworks_aqualog_base {
 			return;
 		}
 		global $wpdb;
-		$query = $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->aquarium_log_chemistry} WHERE param_key = %s", 'ph' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$count = $wpdb->get_var( $query );
+		$count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->aquarium_log_chemistry} WHERE param_key = %s", 'ph' ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$this->render_card(
 			'ph-readings',
 			/* translators: Statistics card title for pH readings */

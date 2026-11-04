@@ -18,6 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @see https://make.wordpress.org/core/2024/10/17/new-block-type-registration-apis-to-improve-performance-in-wordpress-6-7/
  */
 function init_action_create_block_aqualog_aquarium_link( $attributes = array() ) {
-	wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
+	if ( function_exists( 'wp_register_block_types_from_metadata_collection' ) ) {
+		wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
+	} else {
+		register_block_type( __DIR__ . '/build/aqualog-aquarium-link' );
+	}
 }
 add_action( 'init', 'init_action_create_block_aqualog_aquarium_link' );

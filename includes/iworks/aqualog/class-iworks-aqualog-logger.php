@@ -449,7 +449,7 @@ class iworks_aqualog_logger extends iworks_aqualog_base {
 		$where_clause = implode( ' AND ', $where );
 		$limit_clause = $wpdb->prepare( 'LIMIT %d OFFSET %d', $limit, $offset );
 		$sql          = "SELECT * FROM {$table_name} WHERE {$where_clause} ORDER BY log_date DESC {$limit_clause}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
-		$results      = $wpdb->get_results( $wpdb->prepare( $sql, $params ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$results      = $wpdb->get_results( $wpdb->prepare( $sql, $params ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 		if ( null === $results ) {
 			return new WP_Error(

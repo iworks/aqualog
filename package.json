@@ -16,10 +16,7 @@
         "chemistry",
         "maintenance",
         "reminders",
-        "notes",
-        "gutenberg",
-        "blocks",
-        "custom-blocks"
+        "notes"
     ],
     "contributors": [
         {
@@ -37,7 +34,7 @@
         "PHP": "8.1"
     },
     "tested": {
-        "WordPress": "7.0"
+        "WordPress": "7.1"
     },
     "devDependencies": {
         "archiver": "^7",

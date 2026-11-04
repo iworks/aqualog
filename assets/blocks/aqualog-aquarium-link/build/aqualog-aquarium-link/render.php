@@ -10,6 +10,8 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
+defined( 'ABSPATH' ) || exit;
+
 $block_content = '<div ' . get_block_wrapper_attributes() . '>';
 $block_content .= apply_filters( 'iworks/aqualog/aquarium/the_content', '', $attributes['postId'] );
 $block_content .= '</div>';

@@ -227,7 +227,7 @@ private $options;
 		 * total + pagination
 		 */
 		$sql_count   = sprintf( 'SELECT COUNT(*) FROM %s WHERE %s', $wpdb->aquarium_log_maintenance, implode( ' AND ', $where ) );
-		$total_items = intval( $wpdb->get_var( 0 === count( $params ) ? $sql_count : $wpdb->prepare( $sql_count, $params ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		$total_items = intval( $wpdb->get_var( 0 === count( $params ) ? $sql_count : $wpdb->prepare( $sql_count, $params ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$paged       = max( 1, intval( filter_input( INPUT_GET, 'paged', FILTER_SANITIZE_NUMBER_INT ) ) );
 		$this->set_pagination_args(
 			array(
@@ -247,7 +247,7 @@ private $options;
 			implode( ' AND ', $where ),
 			$orderby
 		);
-		$this->items = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		$this->items = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		if ( empty( $this->items ) ) {
 			$this->items = array();
 		}

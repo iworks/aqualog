@@ -230,8 +230,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		}
 		global $wpdb;
 		$sql     = "SELECT t1.* FROM {$wpdb->aquarium_log_chemistry} t1 WHERE t1.aquarium_id = %d and t1.measurement_date = ( SELECT MAX(t2.measurement_date) FROM {$wpdb->aquarium_log_chemistry} t2 WHERE t2.param_key = t1.param_key)"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$query   = $wpdb->prepare( $sql, $this->current_aquarium_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$results = $wpdb->get_results( $wpdb->prepare( $sql, $this->current_aquarium_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		if ( empty( $results ) || ! is_array( $results ) ) {
 			return array();
 		}
@@ -319,7 +318,7 @@ class iworks_aqualog_wp_admin_chemistry extends iworks_aqualog_base {
 		/**
 		 * convert date to datetime
 		 */
-		$measurement_date = date( 'Y-m-d H:i:s', strtotime( $date ) );
+		$measurement_date = gmdate( 'Y-m-d H:i:s', strtotime( $date ) );
 		/**
 		 * sanitize
 		 */

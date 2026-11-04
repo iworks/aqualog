@@ -127,6 +127,11 @@ export function copyRules(flavor) {
     const base = [
         // Build tooling and repo meta never ship.
         { glob: '**/.git/**', include: false },
+        { glob: '**/.git', include: false },
+        { glob: '**/.gitignore', include: false },
+        { glob: '**/.gitmodules', include: false },
+        { glob: '**/.editorconfig', include: false },
+        { glob: '**/.prettierrc*', include: false },
         { glob: '.github/**', include: false },
         { glob: '.gitignore', include: false },
         { glob: '.gitmodules', include: false },

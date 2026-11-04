@@ -66,13 +66,16 @@ gitignored — never edit them.
 
 - **wp.org** (`bun run build:wporg`) → `release/wporg/{version}/{name}/` →
   `release/wporg/aqualog.zip`. Copy rules live in `bundler/config.mjs`
-  `copyRules(flavor)` — ordered, **first match wins** (grunt parity), the
-  catch-all `{ glob: "**/*", include: true }` must stay last. Base excludes:
+  `copyRules(flavor)` — ordered, **first match wins** (grunt parity), the  catch-all `{ glob: "**/*", include: true }` must stay last. Base excludes:
   repo meta (`.git*`, `.github/`, `.editorconfig`, `.prettierrc`,
   `AGENTS.md`, `Gruntfile.js`, `bundler/`, `bun.lock*`, `wp-cli.phar`,
   `package.json`, lock files, `README.md`, `LICENSE`, `contributing.md`,
   tests, `release/`, `.sass-cache/`, `.opencode/`, `.playwright-mcp/`,
-  source maps, `o/`, legacy `**/img/src`, `**/js/src`, `**/css/{less,sass,src}`),
+  source maps, `o/`, legacy `**/img/src`, `**/js/src`, `**/css/{less,sass,src}`) —
+  the `**/.git`, `**/.gitignore`, `**/.gitmodules`, `**/.editorconfig`,
+  `**/.prettierrc*` globs also cover **nested** vendored files
+  (`includes/iworks/{options,rate}` submodules ship `.git` pointer files
+  and dotfiles that wp.org Plugin Check rejects as `hidden_files`),
   asset sources (`assets/sass`, `assets/scripts/src`, `assets/scss`,
   `assets/styles/frontend`), the GitHub self-updater class
   (`includes/iworks/aqualog/class-iworks-aqualog-github.php`),

@@ -180,7 +180,7 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			implode( ' AND ', $where )
 		);
 		$params[] = $limit;
-		$results  = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results  = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		if ( empty( $results ) || ! is_array( $results ) ) {
 			$results = array();
 		}
@@ -305,7 +305,7 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( ! in_array( $status, $allowed_status, true ) ) {
 			$status = 'pending';
 		}
-		$start_date = $date ? date( 'Y-m-d H:i:s', strtotime( $date ) ) : current_time( 'mysql' );
+		$start_date = $date ? gmdate( 'Y-m-d H:i:s', strtotime( $date ) ) : current_time( 'mysql' );
 		/**
 		 * Filter the data before inserting into the database.
 		 *
@@ -367,7 +367,8 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		 * validate task
 		 */
 		global $wpdb;
-		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', $wpdb->aquarium_log_maintenance, $task_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		$table   = $wpdb->aquarium_log_maintenance;
+		$row     = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $task_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
 		if ( empty( $row ) || ! is_array( $row ) ) {
 			wp_send_json_error( esc_html__( 'Invalid task', 'PLUGIN_NAME' ) );
 		}
@@ -392,7 +393,7 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( ! in_array( $status, $allowed_status, true ) ) {
 			$status = 'pending';
 		}
-		$start_date = $date ? date( 'Y-m-d H:i:s', strtotime( $date ) ) : $row['start_date'];
+		$start_date = $date ? gmdate( 'Y-m-d H:i:s', strtotime( $date ) ) : $row['start_date'];
 		/**
 		 * Filter the data before updating the database.
 		 *
@@ -538,7 +539,7 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( empty( $date ) ) {
 			wp_send_json_error( esc_html__( 'Invalid date', 'PLUGIN_NAME' ) );
 		}
-		$reminder_date     = date( 'Y-m-d H:i:s', strtotime( $date ) );
+		$reminder_date     = gmdate( 'Y-m-d H:i:s', strtotime( $date ) );
 		$reminder_interval = $this->get_frequency_interval( $frequency );
 		/**
 		 * Filter the data before inserting into the database.
