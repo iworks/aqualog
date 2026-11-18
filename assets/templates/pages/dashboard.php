@@ -14,10 +14,8 @@ defined( 'ABSPATH' ) || exit;
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Aqualog Dashboard', 'PLUGIN_NAME' ); ?></h1>
 	<?php do_action( 'iworks/aqualog/dashboard/before' ); ?>
 			
-	<section class="aqualog-dashboard-section aqualog-dashboard-grid">
-		<!-- Statistics Cards -->
-		<div class="aqualog-recent">
-			<h2><?php esc_html_e( 'Recent Aquariums', 'PLUGIN_NAME' ); ?></h2>
+	<section class="aqualog-dashboard-section aqualog-recent">
+		<h2><?php esc_html_e( 'Recent Aquariums', 'PLUGIN_NAME' ); ?></h2>
 <?php
 if ( $args['recent_aquariums'] ) {
 	echo '<div class="aqualog-aquariums-list">';
@@ -89,10 +87,10 @@ if ( $args['recent_aquariums'] ) {
 	<?php
 }
 ?>
-		</section>
-		
-		<!-- Statistics Cards -->
-		<section class="aqualog-dashboard-section aqualog-stats">
+	</section>
+
+	<!-- Statistics Cards -->
+	<section class="aqualog-dashboard-section aqualog-stats">
 			<h2><?php esc_html_e( 'Statistics', 'PLUGIN_NAME' ); ?></h2>
 			<div class="aqualog-stats-grid">
 				<?php do_action( 'iworks/aqualog/dashboard/statistics' ); ?>
@@ -181,10 +179,10 @@ if ( $args['recent_aquariums'] ) {
 					<?php do_action( 'iworks/aqualog/dashboard/recent_activity' ); ?>
 				</div>
 			</div>
-		</div>
+		</section>
 
 		<!-- Quick Actions -->
-		<div class="aqualog-quick-actions-section">
+		<section class="aqualog-dashboard-section aqualog-quick-actions-section">
 			<h2><?php esc_html_e( 'Quick Actions', 'PLUGIN_NAME' ); ?></h2>
 			<div class="aqualog-card">
 				<div class="aqualog-actions-grid">
@@ -206,7 +204,7 @@ if ( $args['recent_aquariums'] ) {
 					</a>
 				</div>
 			</div>
-		</div>
+		</section>
 
 	</div>
 </div>

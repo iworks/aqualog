@@ -68,6 +68,48 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		add_filter( 'iworks/aqualog/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
 		add_filter( 'iworks/aqualog/dashboard/upcoming_tasks', array( $this, 'filter_upcoming_tasks' ), 10, 3 );
 		add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widgets' ) );
+		add_filter( 'set_screen_option_aqualog_upcoming_days', array( $this, 'filter_set_screen_option' ), 10, 3 );
+		add_filter( 'set_screen_option_aqualog_dashboard_scope', array( $this, 'filter_set_screen_option' ), 10, 3 );
+		add_filter( 'screen_settings', array( $this, 'filter_screen_settings' ), 10, 2 );
+		add_action( 'wp_loaded', array( $this, 'save_dashboard_scope' ) );
+	}
+
+	/**
+	 * Add the aquarium scope selector to the dashboard Screen Options.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @param string $screen_settings Screen settings HTML.
+	 * @param WP_Screen $screen        Current screen.
+	 * @return string Modified screen settings HTML.
+	 */
+	public function filter_screen_settings( $screen_settings, $screen ) {
+		if ( ! $screen || 'dashboard' !== $screen->id ) {
+			return $screen_settings;
+		}
+		if ( ! apply_filters( 'iworks/aqualog/load/module/maintenance', false ) ) {
+			return $screen_settings;
+		}
+		$this->check_option_object();
+		if ( ! intval( $this->options->get_option( 'notification_enabled' ) ) ) {
+			return $screen_settings;
+		}
+		$scope = $this->is_all_aquariums_scope() ? 'all' : 'current';
+		ob_start();
+		?>
+		<fieldset class="aqualog-screen-scope">
+			<legend><?php esc_html_e( 'Aqualog tasks scope', 'PLUGIN_NAME' ); ?></legend>
+			<label>
+				<input type="radio" name="aqualog_dashboard_scope" value="current" <?php checked( 'current', $scope ); ?>>
+				<?php esc_html_e( 'Current aquarium', 'PLUGIN_NAME' ); ?>
+			</label>
+			<label>
+				<input type="radio" name="aqualog_dashboard_scope" value="all" <?php checked( 'all', $scope ); ?>>
+				<?php esc_html_e( 'All aquariums', 'PLUGIN_NAME' ); ?>
+			</label>
+		</fieldset>
+		<?php
+		return $screen_settings . ob_get_clean();
 	}
 
 	/**
@@ -90,27 +132,135 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			return;
 		}
 		$this->set_current_aquarium_id();
-		if ( empty( $this->current_aquarium_id ) ) {
-			return;
-		}
-		wp_add_dashboard_widget(
+		add_screen_option(
+			'per_page',
+			array(
+				'label'   => esc_html__( 'Upcoming tasks days', 'PLUGIN_NAME' ),
+				'default' => max( 1, intval( $this->options->get_option( 'notification_upcoming_days' ) ) ?: 3 ),
+				'option'  => 'aqualog_upcoming_days',
+			)
+		);
+		$days = $this->get_user_upcoming_days();
+		$all  = $this->is_all_aquariums_scope();
+		$this->register_dashboard_widget(
 			'aqualog_dashboard_today_tasks',
 			esc_html__( 'Aqualog: Today\'s Tasks', 'PLUGIN_NAME' ),
-			array( $this, 'render_dashboard_widget_today' )
+			$all
 		);
-		$days = intval( $this->options->get_option( 'notification_upcoming_days' ) );
-		if ( $days < 1 ) {
-			$days = 3;
-		}
-		wp_add_dashboard_widget(
+		$this->register_dashboard_widget(
 			'aqualog_dashboard_upcoming_tasks',
 			sprintf(
 				/* translators: %d: number of days */
 				esc_html__( 'Aqualog: Upcoming Tasks (next %d days)', 'PLUGIN_NAME' ),
 				$days
 			),
-			array( $this, 'render_dashboard_widget_upcoming' )
+			$all
 		);
+	}
+
+	/**
+	 * Register a dashboard widget when its scope has data to show.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @param string $id           Widget ID.
+	 * @param string $title        Widget title.
+	 * @param bool   $all_aquariums Whether the "all aquariums" scope is active.
+	 * @return void
+	 */
+	private function register_dashboard_widget( $id, $title, $all_aquariums ) {
+		if ( ! $all_aquariums && empty( $this->current_aquarium_id ) ) {
+			return;
+		}
+		$callback = 'aqualog_dashboard_today_tasks' === $id
+			? array( $this, 'render_dashboard_widget_today' )
+			: array( $this, 'render_dashboard_widget_upcoming' );
+		wp_add_dashboard_widget( $id, $title, $callback );
+	}
+
+	/**
+	 * Is the per-user scope set to "all aquariums"?
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @return bool True when all aquariums are shown.
+	 */
+	private function is_all_aquariums_scope() {
+		return 'all' === get_user_option( 'aqualog_dashboard_scope' );
+	}
+
+	/**
+	 * Get the scope value for queries: 0 means all aquariums.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @return int Aquarium ID or 0 for all.
+	 */
+	private function get_scope_aquarium_id() {
+		return $this->is_all_aquariums_scope() ? 0 : intval( $this->current_aquarium_id );
+	}
+
+	/**
+	 * Get the per-user "upcoming days" value.
+	 *
+	 * Uses the per-user screen option when set (saved via the dashboard
+	 * "Screen Options" tab), falling back to the plugin setting.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @return int Number of days (minimum 1).
+	 */
+	private function get_user_upcoming_days() {
+		$days = intval( get_user_option( 'aqualog_upcoming_days' ) );
+		if ( $days < 1 ) {
+			$days = intval( $this->options->get_option( 'notification_upcoming_days' ) );
+		}
+		return max( 1, $days ?: 3 );
+	}
+
+	/**
+	 * Save the "upcoming days" screen option.
+	 *
+	 * Registered via the "screen_settings" filter by WordPress when a
+	 * per_page screen option is declared; persists the per-user value.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @param mixed $status Screen option status.
+	 * @param mixed $option Option name.
+	 * @param mixed $value  Submitted value.
+	 * @return int|mixed Saved value.
+	 */
+	public function filter_set_screen_option( $status, $option, $value ) {
+		if ( 'aqualog_upcoming_days' === $option ) {
+			return max( 1, intval( $value ) ?: 3 );
+		}
+		if ( 'aqualog_dashboard_scope' === $option ) {
+			return 'all' === $value ? 'all' : 'current';
+		}
+		return $status;
+	}
+
+	/**
+	 * Save the aquarium scope choice submitted with the Screen Options form.
+	 *
+	 * The core Screen Options handler only persists its own option pair and
+	 * redirects before `admin_init`, so the radio field is saved on `wp_loaded`.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @return void
+	 */
+	public function save_dashboard_scope() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified below on the same request.
+		if ( ! isset( $_POST['aqualog_dashboard_scope'], $_POST['screenoptionnonce'] ) ) {
+			return;
+		}
+		$scope = sanitize_key( wp_unslash( $_POST['aqualog_dashboard_scope'] ) );
+		if ( ! check_admin_referer( 'screen-options-nonce', 'screenoptionnonce' ) ) {
+			return;
+		}
+		update_user_meta( get_current_user_id(), 'aqualog_dashboard_scope', 'all' === $scope ? 'all' : 'current' );
 	}
 
 	/**
@@ -121,8 +271,8 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_dashboard_widget_today() {
-		$this->render_dashboard_widget_list(
-			$this->get_today_tasks( $this->current_aquarium_id )
+		$this->render_dashboard_widget(
+			$this->get_today_tasks( $this->get_scope_aquarium_id() )
 		);
 	}
 
@@ -134,24 +284,30 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	 * @return void
 	 */
 	public function render_dashboard_widget_upcoming() {
-		$days = intval( $this->options->get_option( 'notification_upcoming_days' ) );
-		if ( $days < 1 ) {
-			$days = 3;
-		}
-		$this->render_dashboard_widget_list(
-			$this->get_upcoming_tasks( $this->current_aquarium_id, $days )
+		$this->render_dashboard_widget(
+			$this->get_upcoming_tasks( $this->get_scope_aquarium_id(), $this->get_user_upcoming_days() )
 		);
 	}
 
 	/**
-	 * Render a task list inside a dashboard widget.
+	 * Render a dashboard widget body with scope awareness.
+	 *
+	 * In "current aquarium" scope the aquarium name is shown at the top;
+	 * in "all aquariums" scope each row gets the aquarium name.
 	 *
 	 * @since 1.1.0
 	 * @access private
 	 * @param array $tasks List of tasks from get_upcoming_tasks().
 	 * @return void
 	 */
-	private function render_dashboard_widget_list( $tasks ) {
+	private function render_dashboard_widget( $tasks ) {
+		$all_aquariums = $this->is_all_aquariums_scope();
+		if ( ! $all_aquariums ) {
+			printf(
+				'<p class="aqualog-widget-aquarium"><span class="dashicons dashicons-buddicons-groups"></span> %s</p>',
+				esc_html( get_the_title( $this->current_aquarium_id ) )
+			);
+		}
 		if ( empty( $tasks ) ) {
 			echo '<p>' . esc_html__( 'No tasks.', 'PLUGIN_NAME' ) . '</p>';
 			return;
@@ -159,13 +315,16 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		echo '<ul class="aqualog-widget-tasks">';
 		foreach ( $tasks as $task ) {
 			printf(
-				'<li class="%1$s"><span class="aqualog-widget-task-date">%2$s</span> %3$s</li>',
+				'<li class="%1$s"><span class="aqualog-widget-task-date">%2$s</span> %3$s%4$s</li>',
 				esc_attr( ! empty( $task['overdue'] ) ? 'is-overdue' : '' ),
 				esc_html(
 					date_i18n( get_option( 'date_format' ), strtotime( $task['date'] ) ) .
 					( empty( $task['full_day'] ) && $task['time'] ? ' ' . $task['time'] : '' )
 				),
-				esc_html( $task['title'] )
+				esc_html( $task['title'] ),
+				$all_aquariums && ! empty( $task['aquarium_id'] )
+					? ' <span class="aqualog-widget-task-aquarium">(' . esc_html( get_the_title( $task['aquarium_id'] ) ) . ')</span>'
+					: ''
 			);
 		}
 		echo '</ul>';
@@ -653,10 +812,8 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	 */
 	public function get_upcoming_tasks( $aquarium_id, $days = 7, $limit = 10 ) {
 		global $wpdb;
-		if ( empty( $aquarium_id ) ) {
-			return array();
-		}
-		$now     = current_time( 'timestamp' );
+		$all_aquariums = empty( $aquarium_id );
+		$now           = current_time( 'timestamp' );
 		if ( $days < 0 ) {
 			$days = 0;
 		}
@@ -665,11 +822,18 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			// "Today" — end of the current day.
 			$to_time = strtotime( 'tomorrow midnight', $now ) - 1;
 		}
+		$where = ' WHERE status != %s AND start_date IS NOT NULL';
+		$args  = array( 'completed' );
+		if ( ! $all_aquariums ) {
+			$where .= ' AND aquarium_id = %d';
+			$args[] = $aquarium_id;
+		}
 		$sql     = sprintf(
-			'SELECT * FROM %s WHERE aquarium_id = %%d AND status != %%s AND start_date IS NOT NULL ORDER BY start_date ASC',
-			$wpdb->aquarium_log_maintenance
+			'SELECT * FROM %s%s ORDER BY start_date ASC',
+			$wpdb->aquarium_log_maintenance,
+			$where
 		);
-		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $aquarium_id, 'completed' ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $args ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
 		if ( empty( $rows ) || ! is_array( $rows ) ) {
 			return array();
 		}
@@ -687,14 +851,15 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 					break;
 				}
 				$tasks[] = array(
-					'id'       => intval( $row['id'] ),
-					'type'     => $row['type'],
-					'title'    => $row['title'],
-					'status'   => $row['status'],
-					'date'     => gmdate( 'Y-m-d', $current ),
-					'time'     => gmdate( 'H:i', $current ),
-					'full_day' => ! empty( $row['full_day'] ),
-					'overdue'  => $current < $now,
+					'id'          => intval( $row['id'] ),
+					'type'        => $row['type'],
+					'title'       => $row['title'],
+					'status'      => $row['status'],
+					'date'        => gmdate( 'Y-m-d', $current ),
+					'time'        => gmdate( 'H:i', $current ),
+					'full_day'    => ! empty( $row['full_day'] ),
+					'overdue'     => $current < $now,
+					'aquarium_id' => intval( $row['aquarium_id'] ),
 				);
 				if ( $interval < 1 ) {
 					break;
