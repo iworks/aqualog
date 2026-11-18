@@ -99,6 +99,38 @@ if ( $args['recent_aquariums'] ) {
 			</div>
 		</section>
 
+		<!-- Notifications -->
+		<?php if ( ! empty( $args['notifications'] ) ) : ?>
+		<section class="aqualog-dashboard-section aqualog-notifications">
+			<h2><?php esc_html_e( 'Notifications', 'PLUGIN_NAME' ); ?></h2>
+			<div class="aqualog-card">
+				<ul class="aqualog-notifications-list">
+					<li>
+						<span class="dashicons <?php echo empty( $args['notifications']['enabled'] ) ? 'dashicons-no-alt' : 'dashicons-yes-alt'; ?>"></span>
+						<?php
+						echo empty( $args['notifications']['enabled'] )
+							? esc_html__( 'Notifications are disabled.', 'PLUGIN_NAME' )
+							: esc_html__( 'Notifications are enabled.', 'PLUGIN_NAME' );
+						?>
+					</li>
+					<li>
+						<span class="dashicons <?php echo empty( $args['notifications']['email'] ) ? 'dashicons-no-alt' : 'dashicons-email-alt'; ?>"></span>
+						<?php
+						echo empty( $args['notifications']['email'] )
+							? esc_html__( 'Email notifications are off.', 'PLUGIN_NAME' )
+							: esc_html__( 'Email notifications are on.', 'PLUGIN_NAME' );
+						?>
+					</li>
+				</ul>
+				<p class="aqualog-notifications-settings-link">
+					<a href="<?php echo esc_url( admin_url( add_query_arg( 'page', 'iworks_aqualog_index', 'admin.php' ) ) ); ?>">
+						<?php esc_html_e( 'Change notification settings', 'PLUGIN_NAME' ); ?>
+					</a>
+				</p>
+			</div>
+		</section>
+		<?php endif; ?>
+
 		<!-- Recent Aquariums -->
 		<section class="aqualog-dashboard-section aqualog-recent-aquariums-section">
 			<?php do_action( 'iworks/aqualog/dashboard/recent_aquariums' ); ?>

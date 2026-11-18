@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-18T19:42:49+00:00\n"
+"POT-Creation-Date: 2026-11-18T20:15:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 
@@ -343,32 +343,57 @@ msgstr ""
 msgid "Statistics"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:109
+#: assets/templates/pages/dashboard.php:105
+#: etc/options.php:142
+msgid "Notifications"
+msgstr ""
+
+#: assets/templates/pages/dashboard.php:112
+msgid "Notifications are disabled."
+msgstr ""
+
+#: assets/templates/pages/dashboard.php:113
+msgid "Notifications are enabled."
+msgstr ""
+
+#: assets/templates/pages/dashboard.php:120
+msgid "Email notifications are off."
+msgstr ""
+
+#: assets/templates/pages/dashboard.php:121
+msgid "Email notifications are on."
+msgstr ""
+
+#: assets/templates/pages/dashboard.php:127
+msgid "Change notification settings"
+msgstr ""
+
+#: assets/templates/pages/dashboard.php:141
 msgid "Recent Activity"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:119
+#: assets/templates/pages/dashboard.php:151
 #: assets/templates/pages/maintenance.php:72
 msgid "Quick Actions"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:124
+#: assets/templates/pages/dashboard.php:156
 msgid "Add Aquarium"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:128
+#: assets/templates/pages/dashboard.php:160
 msgid "View All"
 msgstr ""
 
 #. translators: Settings menu item
-#: assets/templates/pages/dashboard.php:132
+#: assets/templates/pages/dashboard.php:164
 #: etc/options.php:48
 #: includes/iworks/aqualog/class-iworks-aqualog-wp-admin.php:381
 #: includes/iworks/rate/rate.php:159
 msgid "Settings"
 msgstr ""
 
-#: assets/templates/pages/dashboard.php:136
+#: assets/templates/pages/dashboard.php:168
 msgid "Documentation"
 msgstr ""
 
@@ -498,269 +523,285 @@ msgstr ""
 msgid "Track aquatic plants and care needs."
 msgstr ""
 
-#: etc/options.php:142
-msgid "Aquarium Settings"
-msgstr ""
-
 #: etc/options.php:148
-msgid "Default Aquarium"
+msgid "Enable notifications"
 msgstr ""
 
 #: etc/options.php:149
-msgid "Select the default aquarium to display."
+msgid "Show notifications on the dashboard."
 msgstr ""
 
-#: etc/options.php:154
-#: etc/options.php:182
-msgid "--- Select ---"
+#: etc/options.php:158
+msgid "Send email notifications"
 msgstr ""
 
 #: etc/options.php:159
-msgid "Plugin Settings"
+msgid "Send email notifications about upcoming tasks."
 msgstr ""
 
-#: etc/options.php:165
-msgid "Menu Position"
+#: etc/options.php:168
+msgid "Aquarium Settings"
 msgstr ""
 
-#: etc/options.php:166
-msgid "Set the position of the main menu item."
+#: etc/options.php:174
+msgid "Default Aquarium"
 msgstr ""
 
 #: etc/options.php:175
-msgid "Capability"
+msgid "Select the default aquarium to display."
 msgstr ""
 
-#: etc/options.php:176
-msgid "Set the capability required to access the plugin."
-msgstr ""
-
-#: etc/options.php:183
-msgid "Administrator"
-msgstr ""
-
-#: etc/options.php:184
-msgid "Editor"
+#: etc/options.php:180
+#: etc/options.php:208
+msgid "--- Select ---"
 msgstr ""
 
 #: etc/options.php:185
-msgid "Author"
+msgid "Plugin Settings"
 msgstr ""
 
-#: etc/options.php:186
-msgid "Contributor"
+#: etc/options.php:191
+msgid "Menu Position"
+msgstr ""
+
+#: etc/options.php:192
+msgid "Set the position of the main menu item."
+msgstr ""
+
+#: etc/options.php:201
+msgid "Capability"
+msgstr ""
+
+#: etc/options.php:202
+msgid "Set the capability required to access the plugin."
+msgstr ""
+
+#: etc/options.php:209
+msgid "Administrator"
+msgstr ""
+
+#: etc/options.php:210
+msgid "Editor"
 msgstr ""
 
 #: etc/options.php:211
+msgid "Author"
+msgstr ""
+
+#: etc/options.php:212
+msgid "Contributor"
+msgstr ""
+
+#: etc/options.php:237
 msgid "Water temperature"
 msgstr ""
 
-#: etc/options.php:223
+#: etc/options.php:249
 msgid "Acidity/Alkalinity level"
 msgstr ""
 
-#: etc/options.php:234
+#: etc/options.php:260
 msgid "General Hardness"
 msgstr ""
 
-#: etc/options.php:245
+#: etc/options.php:271
 msgid "Carbonate Hardness"
 msgstr ""
 
-#: etc/options.php:256
+#: etc/options.php:282
 msgid "Nitrate"
 msgstr ""
 
-#: etc/options.php:267
+#: etc/options.php:293
 msgid "Nitrite"
 msgstr ""
 
-#: etc/options.php:278
+#: etc/options.php:304
 msgid "Ammonia"
 msgstr ""
 
-#: etc/options.php:289
+#: etc/options.php:315
 msgid "Phosphate"
 msgstr ""
 
-#: etc/options.php:300
+#: etc/options.php:326
 msgid "Iron"
 msgstr ""
 
-#: etc/options.php:311
+#: etc/options.php:337
 msgid "Calcium"
 msgstr ""
 
-#: etc/options.php:322
+#: etc/options.php:348
 msgid "Magnesium"
 msgstr ""
 
-#: etc/options.php:333
+#: etc/options.php:359
 msgid "Potassium"
 msgstr ""
 
-#: etc/options.php:344
+#: etc/options.php:370
 msgid "Total Dissolved Solids"
 msgstr ""
 
-#: etc/options.php:355
+#: etc/options.php:381
 msgid "Oxygen"
 msgstr ""
 
-#: etc/options.php:365
+#: etc/options.php:391
 msgid "Carbon Dioxide"
 msgstr ""
 
-#: etc/options.php:376
+#: etc/options.php:402
 msgid "Chlorine"
 msgstr ""
 
-#: etc/options.php:386
+#: etc/options.php:412
 msgid "Copper"
 msgstr ""
 
-#: etc/options.php:395
+#: etc/options.php:421
 msgid "Zinc"
 msgstr ""
 
-#: etc/options.php:404
+#: etc/options.php:430
 msgid "Manganese"
 msgstr ""
 
-#: etc/options.php:413
+#: etc/options.php:439
 msgid "Molybdenum"
 msgstr ""
 
-#: etc/options.php:422
+#: etc/options.php:448
 msgid "Boron"
 msgstr ""
 
-#: etc/options.php:431
+#: etc/options.php:457
 msgid "Annually"
 msgstr ""
 
-#: etc/options.php:432
+#: etc/options.php:458
 msgid "Daily"
 msgstr ""
 
-#: etc/options.php:433
+#: etc/options.php:459
 msgid "Every other day"
 msgstr ""
 
-#: etc/options.php:434
+#: etc/options.php:460
 msgid "Monthly"
 msgstr ""
 
-#: etc/options.php:435
+#: etc/options.php:461
 msgid "On demand"
 msgstr ""
 
-#: etc/options.php:436
-#: etc/options.php:496
+#: etc/options.php:462
+#: etc/options.php:522
 msgid "Other"
 msgstr ""
 
-#: etc/options.php:437
+#: etc/options.php:463
 msgid "Quarterly"
 msgstr ""
 
-#: etc/options.php:438
+#: etc/options.php:464
 msgid "Semi-annually"
 msgstr ""
 
-#: etc/options.php:439
+#: etc/options.php:465
 msgid "Twice daily"
 msgstr ""
 
-#: etc/options.php:440
+#: etc/options.php:466
 msgid "Twice monthly"
 msgstr ""
 
-#: etc/options.php:441
+#: etc/options.php:467
 msgid "Weekly"
 msgstr ""
 
-#: etc/options.php:446
+#: etc/options.php:472
 msgid "Algae Removal"
 msgstr ""
 
-#: etc/options.php:447
+#: etc/options.php:473
 msgid "Remove algae from tank surfaces"
 msgstr ""
 
-#: etc/options.php:451
+#: etc/options.php:477
 msgid "Equipment Inspection"
 msgstr ""
 
-#: etc/options.php:452
+#: etc/options.php:478
 msgid "Inspect and clean equipment"
 msgstr ""
 
-#: etc/options.php:456
+#: etc/options.php:482
 msgid "Feeding"
 msgstr ""
 
-#: etc/options.php:457
+#: etc/options.php:483
 msgid "Feed fish and monitor feeding schedule"
 msgstr ""
 
-#: etc/options.php:461
+#: etc/options.php:487
 msgid "Fertilization"
 msgstr ""
 
-#: etc/options.php:462
+#: etc/options.php:488
 msgid "Add fertilizers and nutrients"
 msgstr ""
 
-#: etc/options.php:466
+#: etc/options.php:492
 msgid "Filter Cleaning"
 msgstr ""
 
-#: etc/options.php:467
+#: etc/options.php:493
 msgid "Clean or replace filter media"
 msgstr ""
 
-#: etc/options.php:471
+#: etc/options.php:497
 msgid "Glass Cleaning"
 msgstr ""
 
-#: etc/options.php:472
+#: etc/options.php:498
 msgid "Clean aquarium glass and remove algae"
 msgstr ""
 
-#: etc/options.php:476
+#: etc/options.php:502
 msgid "Plant Trimming"
 msgstr ""
 
-#: etc/options.php:477
+#: etc/options.php:503
 msgid "Trim and maintain aquatic plants"
 msgstr ""
 
-#: etc/options.php:481
+#: etc/options.php:507
 msgid "Substrate Cleaning"
 msgstr ""
 
-#: etc/options.php:482
+#: etc/options.php:508
 msgid "Clean substrate and gravel"
 msgstr ""
 
-#: etc/options.php:486
+#: etc/options.php:512
 msgid "Temperature Adjustment"
 msgstr ""
 
-#: etc/options.php:487
+#: etc/options.php:513
 msgid "Check and adjust water temperature"
 msgstr ""
 
-#: etc/options.php:491
+#: etc/options.php:517
 msgid "Water Testing"
 msgstr ""
 
-#: etc/options.php:492
+#: etc/options.php:518
 msgid "Test water parameters"
 msgstr ""
 
-#: etc/options.php:497
+#: etc/options.php:523
 msgid "Other maintenance tasks"
 msgstr ""
 

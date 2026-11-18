@@ -60,9 +60,15 @@ class iworks_aqualog_wp_admin_dashboard extends iworks_aqualog_base {
 
 	public function render_page() {
 		$this->set_current_aquarium_id();
+		$this->check_option_object();
 		$args = apply_filters(
 			'iworks/aqualog/wp-admin/dashboard/args',
-			array()
+			array(
+				'notifications' => array(
+					'enabled' => intval( $this->options->get_option( 'notification_enabled' ) ),
+					'email'   => intval( $this->options->get_option( 'notification_email' ) ),
+				),
+			)
 		);
 		$this->load_template(
 			'dashboard',

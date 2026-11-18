@@ -139,6 +139,32 @@ function iworks_aqualog_options() {
 
 				array(
 					'type'  => 'heading',
+					'label' => esc_html__( 'Notifications', 'PLUGIN_NAME' ),
+					'since' => '1.0.0',
+				),
+				array(
+					'name'              => 'notification_enabled',
+					'type'              => 'checkbox',
+					'th'                => esc_html__( 'Enable notifications', 'PLUGIN_NAME' ),
+					'description'       => esc_html__( 'Show notifications on the dashboard.', 'PLUGIN_NAME' ),
+					'default'           => 1,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'switch-button' ),
+					'since'             => '1.0.0',
+				),
+				array(
+					'name'              => 'notification_email',
+					'type'              => 'checkbox',
+					'th'                => esc_html__( 'Send email notifications', 'PLUGIN_NAME' ),
+					'description'       => esc_html__( 'Send email notifications about upcoming tasks.', 'PLUGIN_NAME' ),
+					'default'           => 0,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'switch-button' ),
+					'since'             => '1.0.0',
+				),
+
+				array(
+					'type'  => 'heading',
 					'label' => esc_html__( 'Aquarium Settings', 'PLUGIN_NAME' ),
 					'since' => '1.0.0',
 				),
