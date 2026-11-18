@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-18T19:03:21+00:00\n"
+"POT-Creation-Date: 2026-11-18T19:42:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 
@@ -57,7 +57,7 @@ msgid "L"
 msgstr ""
 
 #: assets/templates/elements/calendar-event-details.php:30
-#: assets/templates/elements/maintenance-form.php:39
+#: assets/templates/elements/maintenance-form.php:43
 msgid "Task Type"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgid "Aquarium"
 msgstr ""
 
 #: assets/templates/elements/calendar-event-details.php:44
-#: assets/templates/elements/maintenance-form.php:51
+#: assets/templates/elements/maintenance-form.php:55
 msgid "Description"
 msgstr ""
 
@@ -92,7 +92,7 @@ msgid "Edit Task"
 msgstr ""
 
 #: assets/templates/elements/calendar-event-details.php:58
-#: assets/templates/elements/maintenance-form.php:59
+#: assets/templates/elements/maintenance-form.php:63
 #: assets/templates/pages/maintenance.php:34
 msgid "Completed"
 msgstr ""
@@ -106,7 +106,7 @@ msgid "Save Measurements"
 msgstr ""
 
 #: assets/templates/elements/chemistry-form-actions.php:22
-#: assets/templates/elements/maintenance-form.php:77
+#: assets/templates/elements/maintenance-form.php:85
 #: assets/templates/pages/maintenance.php:163
 msgid "Cancel"
 msgstr ""
@@ -134,34 +134,50 @@ msgstr ""
 msgid "Add Task"
 msgstr ""
 
-#: assets/templates/elements/maintenance-form.php:47
+#: assets/templates/elements/maintenance-form.php:37
+msgid "Full day"
+msgstr ""
+
+#: assets/templates/elements/maintenance-form.php:51
 #: assets/templates/pages/maintenance.php:118
 #: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-maintenance-list-table.php:64
 msgid "Title"
 msgstr ""
 
-#: assets/templates/elements/maintenance-form.php:55
+#: assets/templates/elements/maintenance-form.php:59
 #: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-maintenance-list-table.php:67
 msgid "Status"
 msgstr ""
 
-#: assets/templates/elements/maintenance-form.php:57
+#: assets/templates/elements/maintenance-form.php:61
 msgid "Pending"
 msgstr ""
 
-#: assets/templates/elements/maintenance-form.php:58
+#: assets/templates/elements/maintenance-form.php:62
 msgid "In Progress"
 msgstr ""
 
-#: assets/templates/elements/maintenance-form.php:63
+#: assets/templates/elements/maintenance-form.php:67
 msgid "Repeat"
 msgstr ""
 
-#: assets/templates/elements/maintenance-form.php:65
+#: assets/templates/elements/maintenance-form.php:69
 msgid "Do not repeat"
 msgstr ""
 
-#: assets/templates/elements/maintenance-form.php:74
+#: assets/templates/elements/maintenance-form.php:73
+msgid "Custom…"
+msgstr ""
+
+#: assets/templates/elements/maintenance-form.php:76
+msgid "Repeat every (days)"
+msgstr ""
+
+#: assets/templates/elements/maintenance-form.php:76
+msgid "days"
+msgstr ""
+
+#: assets/templates/elements/maintenance-form.php:82
 msgid "Save Task"
 msgstr ""
 
@@ -202,13 +218,13 @@ msgstr ""
 msgid "Never"
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:139
+#: assets/templates/elements/recent-aquariums-card.php:147
 #: includes/iworks/aqualog/posttypes/class-iworks-aqualog-posttype-aquarium.php:256
 #: includes/iworks/aqualog/taxonomies/class-iworks-aqualog-taxonomy-maintenance-task-type.php:168
 msgid "No aquariums found."
 msgstr ""
 
-#: assets/templates/elements/recent-aquariums-card.php:142
+#: assets/templates/elements/recent-aquariums-card.php:150
 #: assets/templates/messages/create-aquarium-first.php:18
 msgid "Create Your First Aquarium"
 msgstr ""
@@ -1573,7 +1589,7 @@ msgid "Every %d days"
 msgstr ""
 
 #. translators: 1: start date, 2: end date
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-calendar.php:127
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-calendar.php:131
 #, php-format
 msgid "%1$s – %2$s"
 msgstr ""
@@ -1604,8 +1620,8 @@ msgstr ""
 
 #: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-chemistry.php:311
 #: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:275
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:358
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:529
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:368
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:544
 msgid "You are not allowed to perform this action."
 msgstr ""
 
@@ -1634,50 +1650,50 @@ msgid "Invalid aquarium"
 msgstr ""
 
 #: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:295
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:386
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:396
 msgid "Invalid task type"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:339
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:349
 msgid "Task added successfully"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:343
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:353
 msgid "Failed to add task"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:375
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:385
 msgid "Invalid task"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:427
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:442
 msgid "Failed to save task"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:448
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:463
 msgid "Task saved successfully"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:536
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:551
 msgid "Invalid status"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:539
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:569
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:554
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:584
 msgid "Invalid event"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:551
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:579
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:566
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:594
 msgid "Failed to update status"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:555
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:584
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:570
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:599
 msgid "Status updated successfully"
 msgstr ""
 
-#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:561
+#: includes/iworks/aqualog/wp-admin/class-iworks-aqualog-wp-admin-maintenance.php:576
 msgid "Invalid event kind"
 msgstr ""
 

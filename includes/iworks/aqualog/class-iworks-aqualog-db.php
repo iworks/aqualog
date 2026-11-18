@@ -164,6 +164,8 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 				start_date datetime DEFAULT NULL COMMENT 'Task start date',
 				end_date datetime DEFAULT NULL COMMENT 'Task end date',
 				status varchar(20) NOT NULL DEFAULT 'pending' COMMENT 'Task status',
+				repeat_interval int(11) DEFAULT NULL COMMENT 'Repeat interval in days',
+				full_day tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Full day event (no time)',
 				created_at datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
 				updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update timestamp',
 				next_schedule_date datetime DEFAULT NULL COMMENT 'Next schedule date',
@@ -270,6 +272,9 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 			if ( ! in_array( 'repeat_interval', $columns, true ) ) {
 				$wpdb->query( "ALTER TABLE {$maintenance_table} ADD COLUMN repeat_interval int(11) DEFAULT NULL COMMENT 'Repeat interval in days' AFTER status" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}
+			if ( ! in_array( 'full_day', $columns, true ) ) {
+				$wpdb->query( "ALTER TABLE {$maintenance_table} ADD COLUMN full_day tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Full day event (no time)' AFTER repeat_interval" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			}
 			/**
 			 * One-time migration: copy existing reminders into the
 			 * maintenance table as repeating tasks. The reminder table
@@ -306,8 +311,9 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 							'start_date'      => $reminder->reminder_date,
 							'status'          => $reminder->reminder_status,
 							'repeat_interval' => intval( $reminder->reminder_interval ),
+							'full_day'        => 0,
 						),
-						array( '%d', '%s', '%s', '%s', '%s', '%s', '%d' )
+						array( '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d' )
 					);
 					if ( $result ) {
 						$migrated_ids[] = intval( $reminder->id );

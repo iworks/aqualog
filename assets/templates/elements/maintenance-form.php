@@ -32,6 +32,10 @@ defined( 'ABSPATH' ) || exit;
 				<h2 class="aqualog-maintenance-form-heading"><?php esc_html_e( 'Add Task', 'PLUGIN_NAME' ); ?></h2>
 				<div class="aqualog-card-header-date">
 					<input name="date" type="datetime-local" aria-label="<?php esc_attr_e( 'Date and time', 'PLUGIN_NAME' ); ?>" class="aqualog-card-header-date__input" value="<?php echo esc_attr( date_i18n( 'Y-m-d\TH:i' ) ); ?>">
+					<label class="aqualog-card-header-date__full-day">
+						<input type="checkbox" name="full_day" value="1" class="aqualog-card-header-date__full-day-input">
+						<?php esc_html_e( 'Full day', 'PLUGIN_NAME' ); ?>
+					</label>
 				</div>
 			</div>
 			<form id="aqualog-maintenance-task-form" data-aquarium-id="<?php echo esc_attr( $args['aquarium_id'] ); ?>">
@@ -66,7 +70,11 @@ defined( 'ABSPATH' ) || exit;
 						<# _.each( window.iworks_aqualog.maintenance.frequencies, function( label, key ) { #>
 						<option value="{{ key }}">{{ label }}</option>
 						<# } ); #>
+						<option value="custom"><?php esc_html_e( 'Custom…', 'PLUGIN_NAME' ); ?></option>
 					</select>
+					<span class="aqualog-maintenance-task-frequency-custom" style="display:none;">
+						<input type="number" min="1" max="365" class="aqualog-maintenance-task-repeat-days" aria-label="<?php esc_attr_e( 'Repeat every (days)', 'PLUGIN_NAME' ); ?>"> <?php esc_html_e( 'days', 'PLUGIN_NAME' ); ?>
+					</span>
 				</div>
 				<div class="aqualog-form-actions">
 					<button type="submit" class="button button-primary aqualog-form-submit">

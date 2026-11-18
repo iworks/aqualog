@@ -48,9 +48,51 @@
 	};
 
 	/**
+	 * Toggle the "Full day" state: with the checkbox checked the date
+	 * input drops the time part (type="date"), otherwise it is a
+	 * datetime-local input.
+	 *
+	 * @param {jQuery} $card Modal card element containing the date input.
+	 * @param {boolean} fullDay Checked state.
+	 */
+	window.iworks_aqualog.maintenance.toggleFullDay = function (
+		$card,
+		fullDay,
+	) {
+		var $date = $card.find('input[name="date"]');
+		if (!$date.length) {
+			return;
+		}
+		var value = $date.val() || '';
+		if (fullDay) {
+			// Remember the time part so unchecking restores it.
+			var parts = value.split('T');
+			if (parts.length > 1) {
+				window.iworks_aqualog.maintenance.lastTimePart = parts[1];
+			}
+			$date.attr('type', 'date');
+			// Set the value after the type swap so the browser accepts
+			// the date-only format (and skip a stale datetime value).
+			$date.val(parts[0]);
+		} else {
+			$date.attr('type', 'datetime-local');
+			var datePart = value.split('T')[0];
+			var timePart = window.iworks_aqualog.maintenance.lastTimePart;
+			if (!timePart) {
+				var now = new Date();
+				timePart =
+					String(now.getHours()).padStart(2, '0') +
+					':' +
+					String(now.getMinutes()).padStart(2, '0');
+			}
+			$date.val(datePart + 'T' + timePart);
+		}
+	};
+
+	/**
 	 * Prefill the form with an existing task (edit mode)
 	 *
-	 * @param {Object} task Task data (id, aquarium_id, type, title, description, status, date)
+	 * @param {Object} task Task data (id, aquarium_id, type, title, description, status, date, full_day)
 	 */
 	window.iworks_aqualog.maintenance.prefillTask = function (task) {
 		var $form = $('#aqualog-maintenance-task-form');
@@ -64,9 +106,25 @@
 			.find('.aqualog-maintenance-task-description')
 			.val(task.description || '');
 		$form.find('.aqualog-maintenance-task-status').val(task.status);
-		if (task.date) {
-			$('.aqualog-modal').find('input[name="date"]').val(task.date);
+		var $frequency = $form.find('.aqualog-maintenance-task-frequency');
+		var $card = $form.closest('.aqualog-card');
+		if (task.interval > 0) {
+			$frequency.val('custom');
+			$card
+				.find('.aqualog-maintenance-task-frequency-custom')
+				.show()
+				.find('.aqualog-maintenance-task-repeat-days')
+				.val(task.interval);
+		} else {
+			$frequency.val(task.frequency || '');
+			$card.find('.aqualog-maintenance-task-frequency-custom').hide();
 		}
+		var $fullDay = $card.find('input[name="full_day"]');
+		if (task.date) {
+			$card.find('input[name="date"]').val(task.date);
+		}
+		$fullDay.prop('checked', !!task.full_day);
+		window.iworks_aqualog.maintenance.toggleFullDay($card, !!task.full_day);
 		$('.aqualog-modal')
 			.find('.aqualog-maintenance-form-heading')
 			.text(window.iworks_aqualog.i18n.messages.editTask || 'Edit Task');
@@ -98,6 +156,28 @@
 			e.preventDefault();
 			window.iworks_aqualog.maintenance.submitForm($(this));
 		});
+
+		/**
+		 * "Full day" checkbox — hide the time part when checked.
+		 */
+		var $card = $form.closest('.aqualog-card');
+		$card.find('input[name="full_day"]').on('change', function () {
+			window.iworks_aqualog.maintenance.toggleFullDay(
+				$card,
+				$(this).is(':checked'),
+			);
+		});
+
+		/**
+		 * "Custom…" repeat option — show the days input.
+		 */
+		$card
+			.find('.aqualog-maintenance-task-frequency')
+			.on('change', function () {
+				$card
+					.find('.aqualog-maintenance-task-frequency-custom')
+					.toggle(this.value === 'custom');
+			});
 	};
 
 	/**
@@ -167,6 +247,24 @@
 				frequency: $form
 					.find('.aqualog-maintenance-task-frequency')
 					.val(),
+				repeat_days:
+					$form.find('.aqualog-maintenance-task-frequency').val() ===
+					'custom'
+						? parseInt(
+								$form
+									.find(
+										'.aqualog-maintenance-task-repeat-days',
+									)
+									.val(),
+								10,
+							) || 0
+						: 0,
+				full_day: $form
+					.closest('.aqualog-card')
+					.find('input[name="full_day"]')
+					.is(':checked')
+					? 1
+					: 0,
 				date: $form
 					.closest('.aqualog-card')
 					.find('input[name="date"]')

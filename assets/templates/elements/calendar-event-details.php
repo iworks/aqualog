@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) || exit;
 				<dd>{{ data.type_label }}</dd>
 				<# } #>
 				<dt><?php esc_html_e( 'Date', 'PLUGIN_NAME' ); ?></dt>
-				<dd>{{ data.date }}<# if ( data.time ) { #>, {{ data.time }}<# } #></dd>
+				<dd>{{ data.date }}<# if ( ! data.full_day && data.time ) { #>, {{ data.time }}<# } #></dd>
 				<# if ( data.interval > 0 ) { #>
 				<dt><?php esc_html_e( 'Repeats', 'PLUGIN_NAME' ); ?></dt>
 				<dd>{{ data.repeat_label }}</dd>

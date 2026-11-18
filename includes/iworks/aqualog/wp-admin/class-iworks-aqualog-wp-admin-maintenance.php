@@ -304,8 +304,17 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( ! in_array( $status, $allowed_status, true ) ) {
 			$status = 'pending';
 		}
-		$frequency      = sanitize_key( filter_input( INPUT_POST, 'frequency' ) );
+		$frequency       = sanitize_key( filter_input( INPUT_POST, 'frequency' ) );
+		$repeat_days     = intval( filter_input( INPUT_POST, 'repeat_days', FILTER_VALIDATE_INT ) ?: 0 );
 		$repeat_interval = $this->get_frequency_interval( $frequency );
+		if ( 'custom' === $frequency && $repeat_days > 0 ) {
+			$repeat_interval = $repeat_days;
+		}
+		$full_day       = filter_input( INPUT_POST, 'full_day', FILTER_VALIDATE_BOOLEAN );
+		/**
+		 * Full day events are stored at midnight: the date-only input
+		 * value parses to 00:00:00 automatically.
+		 */
 		$start_date     = $date ? gmdate( 'Y-m-d H:i:s', strtotime( $date ) ) : current_time( 'mysql' );
 		/**
 		 * Filter the data before inserting into the database.
@@ -324,13 +333,14 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 				'status'          => $status,
 				'start_date'      => $start_date,
 				'repeat_interval' => $repeat_interval,
+				'full_day'        => $full_day ? 1 : 0,
 			)
 		);
 		global $wpdb;
 		$result = $wpdb->insert(
 			$wpdb->aquarium_log_maintenance,
 			$data,
-			array( '%d', '%s', '%s', '%s', '%s', '%s', is_null( $repeat_interval ) ? null : '%d' )
+			array( '%d', '%s', '%s', '%s', '%s', '%s', is_null( $repeat_interval ) ? null : '%d', '%d' )
 		);
 		if ( $result ) {
 			$this->log_maintenance_added( $id, $title, $type, $start_date );
@@ -396,7 +406,11 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			$status = 'pending';
 		}
 		$frequency       = sanitize_key( filter_input( INPUT_POST, 'frequency' ) );
+		$repeat_days     = intval( filter_input( INPUT_POST, 'repeat_days', FILTER_VALIDATE_INT ) ?: 0 );
 		$repeat_interval = $this->get_frequency_interval( $frequency );
+		if ( 'custom' === $frequency && $repeat_days > 0 ) {
+			$repeat_interval = $repeat_days;
+		}
 		$start_date = $date ? gmdate( 'Y-m-d H:i:s', strtotime( $date ) ) : $row['start_date'];
 		/**
 		 * Filter the data before updating the database.
@@ -414,13 +428,14 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 				'status'          => $status,
 				'start_date'      => $start_date,
 				'repeat_interval' => $repeat_interval,
+				'full_day'        => filter_input( INPUT_POST, 'full_day', FILTER_VALIDATE_BOOLEAN ) ? 1 : 0,
 			)
 		);
 		$result = $wpdb->update(
 			$wpdb->aquarium_log_maintenance,
 			$data,
 			array( 'id' => $task_id ),
-			array( '%s', '%s', '%s', '%s', '%s', is_null( $repeat_interval ) ? null : '%d' ),
+			array( '%s', '%s', '%s', '%s', '%s', is_null( $repeat_interval ) ? null : '%d', '%d' ),
 			array( '%d' )
 		);
 		if ( false === $result ) {

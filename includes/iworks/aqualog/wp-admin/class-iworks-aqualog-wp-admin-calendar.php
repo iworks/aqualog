@@ -65,7 +65,11 @@ class iworks_aqualog_wp_admin_calendar extends iworks_aqualog_base {
 	 */
 	public function render_page() {
 		$this->set_current_aquarium_id();
-		if ( empty( $this->current_aquarium_id ) ) {
+		/**
+		 * The "Change Aquarium" link forces the selection screen.
+		 */
+		$change = 'aquarium' === filter_input( INPUT_GET, 'change' );
+		if ( empty( $this->current_aquarium_id ) || $change ) {
 			$this->load_template( 'select-aquarium', 'messages' );
 			return;
 		}
@@ -248,6 +252,7 @@ class iworks_aqualog_wp_admin_calendar extends iworks_aqualog_base {
 							'title' => $title,
 							'description' => isset( $row['description'] ) ? $row['description'] : '',
 							'interval' => $interval,
+							'full_day' => empty( $row['full_day'] ) ? 0 : 1,
 							'aquarium_id' => $aquarium_id,
 						);
 					}
@@ -297,6 +302,7 @@ class iworks_aqualog_wp_admin_calendar extends iworks_aqualog_base {
 							'title' => isset( $config[ $type ]['title'] ) ? $config[ $type ]['title'] : $type,
 							'description' => '',
 							'interval' => $interval,
+							'full_day' => 0,
 							'aquarium_id' => $aquarium_id,
 						);
 					}

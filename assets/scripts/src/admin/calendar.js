@@ -148,7 +148,15 @@
 					title: entry.title,
 					description: entry.description,
 					status: entry.status,
-					date: entry.date_key + (entry.time ? 'T' + entry.time : ''),
+					full_day: entry.full_day ? 1 : 0,
+					interval: entry.interval || 0,
+					date:
+						entry.date_key +
+						(entry.full_day
+							? ''
+							: entry.time
+								? 'T' + entry.time
+								: ''),
 				},
 			});
 		});
