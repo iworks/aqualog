@@ -59,6 +59,15 @@ defined( 'ABSPATH' ) || exit;
 						<option value="completed"><?php esc_html_e( 'Completed', 'PLUGIN_NAME' ); ?></option>
 					</select>
 				</div>
+				<div class="aqualog-form-field">
+					<label for="aqualog-maintenance-task-frequency"><?php esc_html_e( 'Repeat', 'PLUGIN_NAME' ); ?></label>
+					<select id="aqualog-maintenance-task-frequency" name="frequency" class="aqualog-maintenance-task-frequency">
+						<option value=""><?php esc_html_e( 'Do not repeat', 'PLUGIN_NAME' ); ?></option>
+						<# _.each( window.iworks_aqualog.maintenance.frequencies, function( label, key ) { #>
+						<option value="{{ key }}">{{ label }}</option>
+						<# } ); #>
+					</select>
+				</div>
 				<div class="aqualog-form-actions">
 					<button type="submit" class="button button-primary aqualog-form-submit">
 						<span class="dashicons dashicons-saved"></span>

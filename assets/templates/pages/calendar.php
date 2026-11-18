@@ -119,7 +119,6 @@ $iworks_aqualog_link = function ( $view, $date ) {
 <?php
 // Load the maintenance form templates (wp.template blocks, rendered by JS into a modal).
 load_template( dirname( __DIR__, 1 ) . '/elements/maintenance-form.php', false, $args );
-load_template( dirname( __DIR__, 1 ) . '/elements/maintenance-reminder-form.php', false, $args );
 // Load the calendar entry details template (wp.template block, rendered by JS into a modal).
 load_template( dirname( __DIR__, 1 ) . '/elements/calendar-event-details.php', false, $args );
 ?>

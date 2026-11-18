@@ -164,6 +164,9 @@
 					.find('.aqualog-maintenance-task-description')
 					.val(),
 				status: $form.find('.aqualog-maintenance-task-status').val(),
+				frequency: $form
+					.find('.aqualog-maintenance-task-frequency')
+					.val(),
 				date: $form
 					.closest('.aqualog-card')
 					.find('input[name="date"]')

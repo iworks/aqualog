@@ -3,8 +3,8 @@
  * Aqualog Calendar Class
  *
  * Renders the Calendar submenu page with month and week views.
- * Events are merged from the maintenance tasks table and the
- * reminders table (with recurrence expansion) and rendered as a
+ * Events come from the maintenance tasks table (with recurrence
+ * expansion for repeating tasks) and are rendered as a
  * server-generated grid - no external calendar library.
  *
  * @package    iWorks
@@ -190,9 +190,9 @@ class iworks_aqualog_wp_admin_calendar extends iworks_aqualog_base {
 	/**
 	 * Get calendar events for the current aquarium in a date range.
 	 *
-	 * Merges maintenance tasks (start_date and next_schedule_date) with
-	 * reminders (reminder_date, expanded by reminder_interval days when
-	 * the reminder repeats) and sorts them by date.
+	 * Collects maintenance tasks (start_date, expanded by repeat_interval
+	 * days when the task repeats) plus non-migrated legacy reminders and
+	 * sorts them by date.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -212,42 +212,59 @@ class iworks_aqualog_wp_admin_calendar extends iworks_aqualog_base {
 		$from_time = $from . ' 00:00:00';
 		$to_time   = $to . ' 23:59:59';
 		/**
-		 * maintenance tasks
+		 * maintenance tasks, with recurrence expansion
+		 * (repeating tasks replace the former separate reminders)
 		 */
 		$sql     = sprintf(
-			'SELECT * FROM %s WHERE aquarium_id = %%d AND ( ( start_date >= %%s AND start_date <= %%s ) OR ( next_schedule_date >= %%s AND next_schedule_date <= %%s ) )',
+			'SELECT * FROM %s WHERE aquarium_id = %%d AND start_date <= %%s',
 			$wpdb->aquarium_log_maintenance
 		);
-		$results = $wpdb->get_results( $wpdb->prepare( $sql, $aquarium_id, $from_time, $to_time, $from_time, $to_time ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		$results = $wpdb->get_results( $wpdb->prepare( $sql, $aquarium_id, $to_time ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
 		if ( is_array( $results ) ) {
 			foreach ( $results as $row ) {
-				$dates = array();
-				if ( ! empty( $row['start_date'] ) && $row['start_date'] >= $from_time && $row['start_date'] <= $to_time ) {
-					$dates[] = $row['start_date'];
+				if ( empty( $row['start_date'] ) ) {
+					continue;
 				}
-				if ( ! empty( $row['next_schedule_date'] ) && $row['next_schedule_date'] >= $from_time && $row['next_schedule_date'] <= $to_time ) {
-					$dates[] = $row['next_schedule_date'];
-				}
-				foreach ( array_unique( $dates ) as $datetime ) {
-					$type  = isset( $row['type'] ) ? $row['type'] : '';
-					$title = ! empty( $row['title'] ) ? $row['title'] : ( isset( $config[ $type ]['title'] ) ? $config[ $type ]['title'] : $type );
-					$events[] = array(
-						'id'    => intval( $row['id'] ),
-						'date'  => substr( $datetime, 0, 10 ),
-						'time'  => substr( $datetime, 11, 5 ),
-						'kind'  => 'task',
-						'type'  => $type,
-						'status' => ! empty( $row['status'] ) ? $row['status'] : 'pending',
-						'title' => $title,
-						'description' => isset( $row['description'] ) ? $row['description'] : '',
-						'aquarium_id' => $aquarium_id,
-					);
+				$type  = isset( $row['type'] ) ? $row['type'] : '';
+				$title = ! empty( $row['title'] ) ? $row['title'] : ( isset( $config[ $type ]['title'] ) ? $config[ $type ]['title'] : $type );
+				/**
+				 * repeating tasks: expand occurrences inside the range
+				 */
+				$interval = isset( $row['repeat_interval'] ) ? intval( $row['repeat_interval'] ) : 0;
+				$current  = strtotime( $row['start_date'] );
+				$end      = strtotime( $to_time );
+				$guard    = 0;
+				while ( $current <= $end && $guard < 366 ) {
+					$guard++;
+					$datetime = gmdate( 'Y-m-d H:i:s', $current );
+					if ( $datetime >= $from_time ) {
+						$events[] = array(
+							'id'    => intval( $row['id'] ),
+							'date'  => substr( $datetime, 0, 10 ),
+							'time'  => substr( $datetime, 11, 5 ),
+							'kind'  => 'task',
+							'type'  => $type,
+							'status' => ! empty( $row['status'] ) ? $row['status'] : 'pending',
+							'title' => $title,
+							'description' => isset( $row['description'] ) ? $row['description'] : '',
+							'interval' => $interval,
+							'aquarium_id' => $aquarium_id,
+						);
+					}
+					if ( $interval < 1 ) {
+						break;
+					}
+					$current = strtotime( sprintf( '+%d days', $interval ), $current );
 				}
 			}
 		}
 		/**
-		 * reminders, with recurrence expansion
+		 * Backward compatibility: reminders created before the merge that
+		 * were NOT migrated are also expanded (the table is kept read-only
+		 * for old data).
 		 */
+		$migrated = get_option( 'aquarium_log_reminders_migrated', array() );
+		$migrated = is_array( $migrated ) ? array_map( 'intval', $migrated ) : array();
 		$sql     = sprintf(
 			'SELECT * FROM %s WHERE aquarium_id = %%d AND reminder_date <= %%s',
 			$wpdb->aquarium_log_reminder
@@ -255,6 +272,9 @@ class iworks_aqualog_wp_admin_calendar extends iworks_aqualog_base {
 		$results = $wpdb->get_results( $wpdb->prepare( $sql, $aquarium_id, $to_time ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
 		if ( is_array( $results ) ) {
 			foreach ( $results as $row ) {
+				if ( in_array( intval( $row['id'] ), $migrated, true ) ) {
+					continue;
+				}
 				if ( empty( $row['reminder_date'] ) ) {
 					continue;
 				}

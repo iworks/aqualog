@@ -56,9 +56,9 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		 */
 		add_action( 'wp_ajax_aquarium_log_maintenance_edit_task', array( $this, 'ajax_edit_maintenance_task' ) );
 		/**
-		 * AJAX handler for adding maintenance reminders.
+		 * AJAX handler for changing a calendar event status.
 		 */
-		add_action( 'wp_ajax_aquarium_log_maintenance_add_reminder', array( $this, 'ajax_add_reminder' ) );
+		add_action( 'wp_ajax_aquarium_log_calendar_event_status', array( $this, 'ajax_calendar_event_status' ) );
 		/**
 		 * Aqualog plugin action hook for maintenance page rendering.
 		 *
@@ -85,7 +85,6 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		$data['nonces']['maintenance'] = array(
 			'add'      => wp_create_nonce( $this->get_meta_name( 'maintenance_add' ) ),
 			'save'     => wp_create_nonce( $this->get_meta_name( 'maintenance_save' ) ),
-			'reminder' => wp_create_nonce( $this->get_meta_name( 'reminder_add' ) ),
 		);
 		return $data;
 	}
@@ -305,7 +304,9 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( ! in_array( $status, $allowed_status, true ) ) {
 			$status = 'pending';
 		}
-		$start_date = $date ? gmdate( 'Y-m-d H:i:s', strtotime( $date ) ) : current_time( 'mysql' );
+		$frequency      = sanitize_key( filter_input( INPUT_POST, 'frequency' ) );
+		$repeat_interval = $this->get_frequency_interval( $frequency );
+		$start_date     = $date ? gmdate( 'Y-m-d H:i:s', strtotime( $date ) ) : current_time( 'mysql' );
 		/**
 		 * Filter the data before inserting into the database.
 		 *
@@ -316,19 +317,20 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		$data   = apply_filters(
 			'iworks/aqualog/maintenance/sql/insert/data',
 			array(
-				'aquarium_id'  => $id,
-				'type'         => $type,
-				'title'        => $title,
-				'description'  => $description,
-				'status'       => $status,
-				'start_date'   => $start_date,
+				'aquarium_id'     => $id,
+				'type'            => $type,
+				'title'           => $title,
+				'description'     => $description,
+				'status'          => $status,
+				'start_date'      => $start_date,
+				'repeat_interval' => $repeat_interval,
 			)
 		);
 		global $wpdb;
 		$result = $wpdb->insert(
 			$wpdb->aquarium_log_maintenance,
 			$data,
-			array( '%d', '%s', '%s', '%s', '%s', '%s' )
+			array( '%d', '%s', '%s', '%s', '%s', '%s', is_null( $repeat_interval ) ? null : '%d' )
 		);
 		if ( $result ) {
 			$this->log_maintenance_added( $id, $title, $type, $start_date );
@@ -393,6 +395,8 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( ! in_array( $status, $allowed_status, true ) ) {
 			$status = 'pending';
 		}
+		$frequency       = sanitize_key( filter_input( INPUT_POST, 'frequency' ) );
+		$repeat_interval = $this->get_frequency_interval( $frequency );
 		$start_date = $date ? gmdate( 'Y-m-d H:i:s', strtotime( $date ) ) : $row['start_date'];
 		/**
 		 * Filter the data before updating the database.
@@ -404,23 +408,40 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		$data   = apply_filters(
 			'iworks/aqualog/maintenance/sql/update/data',
 			array(
-				'type'       => $type,
-				'title'      => $title,
-				'description' => $description,
-				'status'     => $status,
-				'start_date' => $start_date,
+				'type'            => $type,
+				'title'           => $title,
+				'description'     => $description,
+				'status'          => $status,
+				'start_date'      => $start_date,
+				'repeat_interval' => $repeat_interval,
 			)
 		);
 		$result = $wpdb->update(
 			$wpdb->aquarium_log_maintenance,
 			$data,
 			array( 'id' => $task_id ),
-			array( '%s', '%s', '%s', '%s', '%s' ),
+			array( '%s', '%s', '%s', '%s', '%s', is_null( $repeat_interval ) ? null : '%d' ),
 			array( '%d' )
 		);
 		if ( false === $result ) {
 			wp_send_json_error( esc_html__( 'Failed to save task', 'PLUGIN_NAME' ) );
 		}
+		/**
+		 * Keep next_schedule_date in sync for repeating tasks.
+		 */
+		$update = array();
+		if ( ! is_null( $repeat_interval ) && $repeat_interval > 0 ) {
+			$update['next_schedule_date'] = gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) + $repeat_interval * DAY_IN_SECONDS );
+		} else {
+			$update['next_schedule_date'] = null;
+		}
+		$wpdb->update(
+			$wpdb->aquarium_log_maintenance,
+			$update,
+			array( 'id' => $task_id ),
+			array( is_null( $update['next_schedule_date'] ) ? null : '%s' ),
+			array( '%d' )
+		);
 		$this->log_maintenance_updated( $id, $title, $type, $status, $start_date );
 		wp_send_json_success(
 			array(
@@ -495,99 +516,75 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	}
 
 	/**
-	 * AJAX handler for adding a maintenance reminder.
+	 * AJAX handler for changing a calendar event status.
 	 *
-	 * Mirrors the "add task" flow: validates the task type against the
-	 * configured task types, inserts a row into the reminder table and
-	 * logs the action.
+	 * Updates the status of either a maintenance task or a reminder
+	 * (both shown on the calendar), selected by the "kind" parameter.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 */
-	public function ajax_add_reminder() {
-		check_ajax_referer( $this->get_meta_name( 'reminder_add' ) );
+	public function ajax_calendar_event_status() {
+		check_ajax_referer( $this->get_meta_name( 'maintenance_save' ) );
 		if ( ! current_user_can( $this->get_this_capability() ) ) {
 			wp_send_json_error( esc_html__( 'You are not allowed to perform this action.', 'PLUGIN_NAME' ) );
 		}
-		$this->check_option_object();
-		$id        = intval( filter_input( INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT ) );
-		$type      = sanitize_key( filter_input( INPUT_POST, 'type' ) );
-		$frequency = sanitize_key( filter_input( INPUT_POST, 'frequency' ) );
-		$date      = sanitize_text_field( filter_input( INPUT_POST, 'date' ) );
-		/**
-		 * validate aquarium
-		 */
-		if ( ! apply_filters( 'iworks/aqualog/post_type/aquarium/check/id', false, $id ) ) {
-			wp_send_json_error( esc_html__( 'Invalid aquarium', 'PLUGIN_NAME' ) );
+		$kind   = sanitize_key( filter_input( INPUT_POST, 'kind' ) );
+		$id     = intval( filter_input( INPUT_POST, 'event_id', FILTER_SANITIZE_NUMBER_INT ) );
+		$status = sanitize_key( filter_input( INPUT_POST, 'status' ) );
+		$allowed_status = array( 'pending', 'in_progress', 'completed' );
+		if ( ! in_array( $status, $allowed_status, true ) ) {
+			wp_send_json_error( esc_html__( 'Invalid status', 'PLUGIN_NAME' ) );
 		}
-		/**
-		 * validate task type
-		 */
-		$config = $this->options->get_group( 'maintenance_tasks' );
-		if ( ! array_key_exists( $type, $config ) ) {
-			wp_send_json_error( esc_html__( 'Invalid task type', 'PLUGIN_NAME' ) );
+		if ( $id < 1 ) {
+			wp_send_json_error( esc_html__( 'Invalid event', 'PLUGIN_NAME' ) );
 		}
-		/**
-		 * validate frequency
-		 */
-		$frequencies = $this->options->get_group( 'frequencies' );
-		if ( ! array_key_exists( $frequency, $frequencies ) ) {
-			wp_send_json_error( esc_html__( 'Invalid frequency', 'PLUGIN_NAME' ) );
-		}
-		/**
-		 * sanitize
-		 */
-		if ( empty( $date ) ) {
-			wp_send_json_error( esc_html__( 'Invalid date', 'PLUGIN_NAME' ) );
-		}
-		$reminder_date     = gmdate( 'Y-m-d H:i:s', strtotime( $date ) );
-		$reminder_interval = $this->get_frequency_interval( $frequency );
-		/**
-		 * Filter the data before inserting into the database.
-		 *
-		 * @since 1.0.0
-		 * @param array $data The data to insert.
-		 * @return array The filtered data.
-		 */
-		$data   = apply_filters(
-			'iworks/aqualog/reminder/sql/insert/data',
-			array(
-				'user_id'           => get_current_user_id(),
-				'aquarium_id'       => $id,
-				'reminder_type'     => $type,
-				'reminder_date'     => $reminder_date,
-				'reminder_interval' => $reminder_interval,
-			)
-		);
 		global $wpdb;
-		$result = $wpdb->insert(
-			$wpdb->aquarium_log_reminder,
-			$data,
-			array( '%d', '%d', '%s', '%s', is_null( $reminder_interval ) ? null : '%d' )
-		);
-		if ( $result ) {
-			$this->log_reminder_added( $id, $type, $reminder_date, $reminder_interval );
+		if ( 'reminder' === $kind ) {
+			$result = $wpdb->update(
+				$wpdb->aquarium_log_reminder,
+				array( 'reminder_status' => $status ),
+				array( 'id' => $id ),
+				array( '%s' ),
+				array( '%d' )
+			);
+			if ( false === $result ) {
+				wp_send_json_error( esc_html__( 'Failed to update status', 'PLUGIN_NAME' ) );
+			}
 			wp_send_json_success(
 				array(
-					'message' => esc_html__( 'Reminder added successfully', 'PLUGIN_NAME' ),
+					'message' => esc_html__( 'Status updated successfully', 'PLUGIN_NAME' ),
+					'status'  => $status,
 				)
 			);
 		}
-		wp_send_json_error( esc_html__( 'Failed to add reminder', 'PLUGIN_NAME' ) );
-	}
-
-	/**
-	 * Log reminder addition.
-	 *
-	 * @since 1.0.0
-	 * @param int      $aquarium_id Aquarium ID.
-	 * @param string   $type        Task type key.
-	 * @param string   $date        Reminder date.
-	 * @param int|null $interval    Repeat interval in days.
-	 * @return void
-	 */
-	private function log_reminder_added( $aquarium_id, $type, $date = null, $interval = null ) {
-		$logger = new iworks_aqualog_logger();
-		$logger->log_reminder_added( $aquarium_id, $type, $date, $interval );
+		if ( 'task' !== $kind ) {
+			wp_send_json_error( esc_html__( 'Invalid event kind', 'PLUGIN_NAME' ) );
+		}
+		$sql = sprintf(
+			'SELECT * FROM %s WHERE id = %%d',
+			$wpdb->aquarium_log_maintenance
+		);
+		$row = $wpdb->get_row( $wpdb->prepare( $sql, $id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		if ( empty( $row ) || ! is_array( $row ) ) {
+			wp_send_json_error( esc_html__( 'Invalid event', 'PLUGIN_NAME' ) );
+		}
+		$result = $wpdb->update(
+			$wpdb->aquarium_log_maintenance,
+			array( 'status' => $status ),
+			array( 'id' => $id ),
+			array( '%s' ),
+			array( '%d' )
+		);
+		if ( false === $result ) {
+			wp_send_json_error( esc_html__( 'Failed to update status', 'PLUGIN_NAME' ) );
+		}
+		$this->log_maintenance_updated( intval( $row['aquarium_id'] ), $row['title'], $row['type'], $status );
+		wp_send_json_success(
+			array(
+				'message' => esc_html__( 'Status updated successfully', 'PLUGIN_NAME' ),
+				'status'  => $status,
+			)
+		);
 	}
 
 	/**

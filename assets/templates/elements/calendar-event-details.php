@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 				<# } #>
 				<dt><?php esc_html_e( 'Date', 'PLUGIN_NAME' ); ?></dt>
 				<dd>{{ data.date }}<# if ( data.time ) { #>, {{ data.time }}<# } #></dd>
-				<# if ( data.kind === 'reminder' && data.interval > 0 ) { #>
+				<# if ( data.interval > 0 ) { #>
 				<dt><?php esc_html_e( 'Repeats', 'PLUGIN_NAME' ); ?></dt>
 				<dd>{{ data.repeat_label }}</dd>
 				<# } #>
@@ -50,6 +50,12 @@ defined( 'ABSPATH' ) || exit;
 				<button type="button" class="button button-primary aqualog-calendar-details-edit">
 					<span class="dashicons dashicons-edit"></span>
 					<?php esc_html_e( 'Edit Task', 'PLUGIN_NAME' ); ?>
+				</button>
+				<# } #>
+				<# if ( data.status !== 'completed' ) { #>
+				<button type="button" class="button button-primary aqualog-calendar-details-complete">
+					<span class="dashicons dashicons-yes"></span>
+					<?php esc_html_e( 'Completed', 'PLUGIN_NAME' ); ?>
 				</button>
 				<# } #>
 				<button type="button" class="button aqualog-calendar-details-close">

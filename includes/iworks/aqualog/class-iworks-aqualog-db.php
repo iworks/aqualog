@@ -258,6 +258,66 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 			update_option( $this->_db_version, $version_to_update );
 			$db_version = intval( get_option( $this->_db_version ) );
 		}
+		/**
+		 * Merge reminders into tasks: add repeat_interval to the
+		 * maintenance table and migrate existing reminder rows.
+		 */
+		$version_to_update = 7;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$maintenance_table = $wpdb->prefix . 'aquarium_log_maintenance';
+			$columns           = $wpdb->get_col( "SHOW COLUMNS FROM {$maintenance_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			if ( ! in_array( 'repeat_interval', $columns, true ) ) {
+				$wpdb->query( "ALTER TABLE {$maintenance_table} ADD COLUMN repeat_interval int(11) DEFAULT NULL COMMENT 'Repeat interval in days' AFTER status" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			}
+			/**
+			 * One-time migration: copy existing reminders into the
+			 * maintenance table as repeating tasks. The reminder table
+			 * is kept (backward compatibility) but no longer written.
+			 */
+			$reminder_table = $wpdb->prefix . 'aquarium_log_reminder';
+			$reminders      = $wpdb->get_results( "SELECT * FROM {$reminder_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			if ( $reminders ) {
+				$migrated_ids = array();
+				foreach ( $reminders as $reminder ) {
+					$exists = intval(
+						$wpdb->get_var(
+							$wpdb->prepare(
+								"SELECT COUNT(*) FROM {$maintenance_table} WHERE aquarium_id = %d AND type = %s AND start_date = %s AND status = %s AND repeat_interval = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+								$reminder->aquarium_id,
+								$reminder->reminder_type,
+								$reminder->reminder_date,
+								$reminder->reminder_status,
+								intval( $reminder->reminder_interval )
+							)
+						)
+					);
+					if ( $exists ) {
+						$migrated_ids[] = intval( $reminder->id );
+						continue;
+					}
+					$result = $wpdb->insert(
+						$maintenance_table,
+						array(
+							'aquarium_id'     => $reminder->aquarium_id,
+							'type'            => $reminder->reminder_type,
+							'title'           => '',
+							'description'     => '',
+							'start_date'      => $reminder->reminder_date,
+							'status'          => $reminder->reminder_status,
+							'repeat_interval' => intval( $reminder->reminder_interval ),
+						),
+						array( '%d', '%s', '%s', '%s', '%s', '%s', '%d' )
+					);
+					if ( $result ) {
+						$migrated_ids[] = intval( $reminder->id );
+					}
+				}
+				update_option( 'aquarium_log_reminders_migrated', $migrated_ids, false );
+			}
+			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
+		}
 	}
 
 	/**

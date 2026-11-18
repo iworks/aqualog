@@ -36,7 +36,15 @@
 	 */
 	window.iworks_aqualog.calendar.renderDetails = function (entry) {
 		var data = $.extend({}, entry);
-		if (data.kind === 'reminder' && data.interval > 0) {
+		// Keep the badge label in sync with the (possibly changed) status.
+		if (data.status) {
+			data.status_label = data.status
+				.replace(/_/g, ' ')
+				.replace(/^./, function (c) {
+					return c.toUpperCase();
+				});
+		}
+		if (data.interval > 0) {
 			data.repeat_label = (
 				window.iworks_aqualog.calendar.everyDays || 'Every %d days'
 			).replace('%d', data.interval);
@@ -144,6 +152,84 @@
 				},
 			});
 		});
+
+		// "Completed" button inside the details modal — one click marks the
+		// event as done (task or reminder alike).
+		$(document).on(
+			'click',
+			'.aqualog-calendar-details-complete',
+			function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+
+				var entry = window.iworks_aqualog.calendar.currentEntry;
+				if (!entry) {
+					return;
+				}
+				var $button = $(this);
+
+				// Show loading state
+				$button
+					.prop('disabled', true)
+					.html(
+						'<span class="dashicons dashicons-update spin"></span> ' +
+							(window.iworks_aqualog.i18n.messages.saving ||
+								'Saving…'),
+					);
+
+				$.ajax({
+					url: window.iworks_aqualog.ajax_url,
+					type: 'POST',
+					data: {
+						action: 'aquarium_log_calendar_event_status',
+						_wpnonce: window.iworks_aqualog.nonces.maintenance.save,
+						kind: entry.kind,
+						event_id: entry.id,
+						status: 'completed',
+					},
+					success: function (response) {
+						if (response.success) {
+							// Update chip in the grid and re-render modal state.
+							$('.aqualog-calendar-event[data-entry]').each(
+								function () {
+									var chip = $(this).data('entry');
+									if (
+										chip &&
+										chip.kind === entry.kind &&
+										chip.id === entry.id
+									) {
+										chip.status = 'completed';
+										$(this).data('entry', chip);
+									}
+								},
+							);
+							entry.status = 'completed';
+							window.iworks_aqualog.showNotice(
+								'success',
+								response.data.message,
+							);
+							window.iworks_aqualog.calendar.renderDetails(entry);
+						} else {
+							window.iworks_aqualog.showNotice(
+								'error',
+								(response.data && response.data.message) ||
+									window.iworks_aqualog.i18n.messages
+										.saveError,
+							);
+						}
+					},
+					error: function () {
+						window.iworks_aqualog.showNotice(
+							'error',
+							window.iworks_aqualog.i18n.messages.saveError,
+						);
+					},
+					complete: function () {
+						$button.prop('disabled', false);
+					},
+				});
+			},
+		);
 
 		// "Close" button inside the details modal
 		$(document).on(
