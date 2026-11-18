@@ -131,6 +131,43 @@ if ( $args['recent_aquariums'] ) {
 		</section>
 		<?php endif; ?>
 
+		<!-- Upcoming Tasks -->
+		<?php if ( ! empty( $args['notifications']['enabled'] ) && isset( $args['upcoming_tasks'] ) ) : ?>
+		<section class="aqualog-dashboard-section aqualog-upcoming">
+			<h2>
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: %d: number of days */
+						__( 'Upcoming Tasks (next %d days)', 'PLUGIN_NAME' ),
+						intval( $args['upcoming_days'] )
+					)
+				);
+				?>
+			</h2>
+			<div class="aqualog-card">
+				<?php if ( empty( $args['upcoming_tasks'] ) ) : ?>
+					<p><?php esc_html_e( 'No upcoming tasks.', 'PLUGIN_NAME' ); ?></p>
+				<?php else : ?>
+				<ul class="aqualog-upcoming-list">
+					<?php foreach ( $args['upcoming_tasks'] as $iworks_aqualog_task ) : ?>
+					<li class="<?php echo ! empty( $iworks_aqualog_task['overdue'] ) ? 'is-overdue' : ''; ?>">
+						<span class="dashicons <?php echo 'completed' === $iworks_aqualog_task['status'] ? 'dashicons-yes-alt' : 'dashicons-calendar-alt'; ?>"></span>
+						<span class="aqualog-upcoming-date">
+							<?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $iworks_aqualog_task['date'] ) ) ); ?>
+							<?php if ( empty( $iworks_aqualog_task['full_day'] ) && $iworks_aqualog_task['time'] ) : ?>
+								<?php echo esc_html( $iworks_aqualog_task['time'] ); ?>
+							<?php endif; ?>
+						</span>
+						<span class="aqualog-upcoming-title"><?php echo esc_html( $iworks_aqualog_task['title'] ); ?></span>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+				<?php endif; ?>
+			</div>
+		</section>
+		<?php endif; ?>
+
 		<!-- Recent Aquariums -->
 		<section class="aqualog-dashboard-section aqualog-recent-aquariums-section">
 			<?php do_action( 'iworks/aqualog/dashboard/recent_aquariums' ); ?>

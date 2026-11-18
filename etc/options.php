@@ -164,6 +164,17 @@ function iworks_aqualog_options() {
 				),
 
 				array(
+					'name'              => 'notification_upcoming_days',
+					'type'              => 'number',
+					'th'                => esc_html__( 'Upcoming tasks days', 'PLUGIN_NAME' ),
+					'description'       => esc_html__( 'Number of days ahead to show upcoming tasks on the dashboard.', 'PLUGIN_NAME' ),
+					'default'           => 3,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'small-text' ),
+					'since'             => '1.0.0',
+				),
+
+				array(
 					'type'  => 'heading',
 					'label' => esc_html__( 'Aquarium Settings', 'PLUGIN_NAME' ),
 					'since' => '1.0.0',

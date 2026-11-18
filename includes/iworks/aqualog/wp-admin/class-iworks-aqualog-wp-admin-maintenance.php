@@ -66,6 +66,112 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		 */
 		add_action( 'iworks/aqualog/wp-admin/maintenance_page', array( $this, 'render_page' ) );
 		add_filter( 'iworks/aqualog/wp-admin/wp_localize_script', array( $this, 'filter_wp_localize_script' ) );
+		add_filter( 'iworks/aqualog/dashboard/upcoming_tasks', array( $this, 'filter_upcoming_tasks' ), 10, 3 );
+		add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widgets' ) );
+	}
+
+	/**
+	 * Register WordPress dashboard widgets.
+	 *
+	 * Adds "Today's Tasks" and "Upcoming Tasks" widgets to the WP admin
+	 * dashboard when notifications are enabled and the maintenance module
+	 * is active.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @return void
+	 */
+	public function register_dashboard_widgets() {
+		if ( ! apply_filters( 'iworks/aqualog/load/module/maintenance', false ) ) {
+			return;
+		}
+		$this->check_option_object();
+		if ( ! intval( $this->options->get_option( 'notification_enabled' ) ) ) {
+			return;
+		}
+		$this->set_current_aquarium_id();
+		if ( empty( $this->current_aquarium_id ) ) {
+			return;
+		}
+		wp_add_dashboard_widget(
+			'aqualog_dashboard_today_tasks',
+			esc_html__( 'Aqualog: Today\'s Tasks', 'PLUGIN_NAME' ),
+			array( $this, 'render_dashboard_widget_today' )
+		);
+		$days = intval( $this->options->get_option( 'notification_upcoming_days' ) );
+		if ( $days < 1 ) {
+			$days = 3;
+		}
+		wp_add_dashboard_widget(
+			'aqualog_dashboard_upcoming_tasks',
+			sprintf(
+				/* translators: %d: number of days */
+				esc_html__( 'Aqualog: Upcoming Tasks (next %d days)', 'PLUGIN_NAME' ),
+				$days
+			),
+			array( $this, 'render_dashboard_widget_upcoming' )
+		);
+	}
+
+	/**
+	 * Render the "Today's Tasks" dashboard widget.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @return void
+	 */
+	public function render_dashboard_widget_today() {
+		$this->render_dashboard_widget_list(
+			$this->get_today_tasks( $this->current_aquarium_id )
+		);
+	}
+
+	/**
+	 * Render the "Upcoming Tasks" dashboard widget.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @return void
+	 */
+	public function render_dashboard_widget_upcoming() {
+		$days = intval( $this->options->get_option( 'notification_upcoming_days' ) );
+		if ( $days < 1 ) {
+			$days = 3;
+		}
+		$this->render_dashboard_widget_list(
+			$this->get_upcoming_tasks( $this->current_aquarium_id, $days )
+		);
+	}
+
+	/**
+	 * Render a task list inside a dashboard widget.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 * @param array $tasks List of tasks from get_upcoming_tasks().
+	 * @return void
+	 */
+	private function render_dashboard_widget_list( $tasks ) {
+		if ( empty( $tasks ) ) {
+			echo '<p>' . esc_html__( 'No tasks.', 'PLUGIN_NAME' ) . '</p>';
+			return;
+		}
+		echo '<ul class="aqualog-widget-tasks">';
+		foreach ( $tasks as $task ) {
+			printf(
+				'<li class="%1$s"><span class="aqualog-widget-task-date">%2$s</span> %3$s</li>',
+				esc_attr( ! empty( $task['overdue'] ) ? 'is-overdue' : '' ),
+				esc_html(
+					date_i18n( get_option( 'date_format' ), strtotime( $task['date'] ) ) .
+					( empty( $task['full_day'] ) && $task['time'] ? ' ' . $task['time'] : '' )
+				),
+				esc_html( $task['title'] )
+			);
+		}
+		echo '</ul>';
+		echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=aqualog-calendar' ) ) . '">';
+		echo esc_html__( 'View calendar', 'PLUGIN_NAME' );
+		echo '</a></p>';
 	}
 
 	/**
@@ -503,6 +609,110 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			)
 		);
 		return isset( $intervals[ $frequency ] ) ? $intervals[ $frequency ] : null;
+	}
+
+	/**
+	 * Provide upcoming tasks for the dashboard.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @param array $tasks       Default (empty) task list.
+	 * @param int   $aquarium_id Current aquarium ID.
+	 * @param int   $days        Number of days ahead.
+	 * @return array Upcoming tasks.
+	 */
+	public function filter_upcoming_tasks( $tasks, $aquarium_id, $days ) {
+		return $this->get_upcoming_tasks( $aquarium_id, $days );
+	}
+
+	/**
+	 * Get tasks due today for an aquarium.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @param int $aquarium_id Aquarium ID.
+	 * @param int $limit       Maximum number of tasks to return.
+	 * @return array List of tasks due today.
+	 */
+	public function get_today_tasks( $aquarium_id, $limit = 10 ) {
+		return $this->get_upcoming_tasks( $aquarium_id, 0, $limit );
+	}
+
+	/**
+	 * Get upcoming tasks for an aquarium.
+	 *
+	 * Returns non-completed tasks due within the given number of days,
+	 * including occurrences of repeating tasks (expanded day by day).
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @param int $aquarium_id Aquarium ID.
+	 * @param int $days        Number of days ahead to include.
+	 * @param int $limit       Maximum number of tasks to return.
+	 * @return array List of upcoming tasks.
+	 */
+	public function get_upcoming_tasks( $aquarium_id, $days = 7, $limit = 10 ) {
+		global $wpdb;
+		if ( empty( $aquarium_id ) ) {
+			return array();
+		}
+		$now     = current_time( 'timestamp' );
+		if ( $days < 0 ) {
+			$days = 0;
+		}
+		$to_time = strtotime( sprintf( '+%d days', $days ), $now );
+		if ( $days < 1 ) {
+			// "Today" — end of the current day.
+			$to_time = strtotime( 'tomorrow midnight', $now ) - 1;
+		}
+		$sql     = sprintf(
+			'SELECT * FROM %s WHERE aquarium_id = %%d AND status != %%s AND start_date IS NOT NULL ORDER BY start_date ASC',
+			$wpdb->aquarium_log_maintenance
+		);
+		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $aquarium_id, 'completed' ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		if ( empty( $rows ) || ! is_array( $rows ) ) {
+			return array();
+		}
+		$tasks = array();
+		foreach ( $rows as $row ) {
+			$timestamp = strtotime( $row['start_date'] );
+			if ( $timestamp < $now - DAY_IN_SECONDS ) {
+				continue;
+			}
+			$interval = intval( $row['repeat_interval'] ?? 0 );
+			$current  = $timestamp;
+			$guard    = 0;
+			do {
+				if ( $current > $to_time ) {
+					break;
+				}
+				$tasks[] = array(
+					'id'       => intval( $row['id'] ),
+					'type'     => $row['type'],
+					'title'    => $row['title'],
+					'status'   => $row['status'],
+					'date'     => gmdate( 'Y-m-d', $current ),
+					'time'     => gmdate( 'H:i', $current ),
+					'full_day' => ! empty( $row['full_day'] ),
+					'overdue'  => $current < $now,
+				);
+				if ( $interval < 1 ) {
+					break;
+				}
+				$current = strtotime( sprintf( '+%d days', $interval ), $current );
+				$guard++;
+			} while ( $current <= $to_time && $guard < 366 );
+			if ( count( $tasks ) >= $limit ) {
+				break;
+			}
+		}
+		usort(
+			$tasks,
+			function ( $a, $b ) {
+				return strcmp( $a['date'] . $a['time'], $b['date'] . $b['time'] );
+			}
+		);
+		return array_slice( $tasks, 0, $limit );
 	}
 
 	/**
