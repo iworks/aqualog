@@ -11,6 +11,7 @@ import {
     cpSync,
     readdirSync,
     readFileSync,
+    writeFileSync,
     rmSync,
 } from 'node:fs';
 import archiver from 'archiver';
@@ -91,6 +92,37 @@ function replacePlaceholders(file) {
 }
 
 /**
+ * The index.php silence file placed into every directory of the release.
+ */
+const INDEX_CONTENT = ['<?php', '// Silence is golden.', ''].join('\n');
+
+/**
+ * Ensure every directory in the staging copy contains an index.php
+ * (wp.org review requirement — prevents directory listing on sloppy hosts).
+ *
+ * @param {string} stagingDir Absolute staging directory.
+ * @return {number} Number of index.php files written.
+ */
+function addIndexFiles(stagingDir) {
+    let written = 0;
+    const dirs = [stagingDir];
+    for (const dir of dirs) {
+        for (const entry of readdirSync(dir, { withFileTypes: true })) {
+            if (entry.isDirectory()) {
+                dirs.push(join(dir, entry.name));
+            }
+        }
+    }
+    for (const dir of dirs) {
+        if (!existsSync(join(dir, 'index.php'))) {
+            writeFileSync(join(dir, 'index.php'), INDEX_CONTENT);
+            written++;
+        }
+    }
+    return written;
+}
+
+/**
  * Build one release flavor.
  *
  * @param {string} flavor "wporg" or "github".
@@ -118,6 +150,12 @@ export async function makeZip(flavor) {
         replacePlaceholders(dest);
     }
     log(`makeZip — ${files.length} files staged for ${flavor}`, 'i');
+
+    // Silence file in every directory (wp.org review requirement).
+    const indexFiles = addIndexFiles(stagingDir);
+    if (indexFiles) {
+        log(`makeZip — added ${indexFiles} missing index.php file(s)`, 'i');
+    }
 
     // Zip (level 9), wrapper folder {name}/ inside.
     await new Promise((resolveZip, rejectZip) => {

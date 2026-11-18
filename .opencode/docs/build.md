@@ -80,7 +80,9 @@ gitignored — never edit them.
   `assets/styles/frontend`), the GitHub self-updater class
   (`includes/iworks/aqualog/class-iworks-aqualog-github.php`),
   `includes/pro/`, `languages/*.po|*.mo`. `readme.txt` **is** included
-  (required by wp.org).
+  (required by wp.org). After staging, every directory without one gets an
+  `index.php` silence file (`// Silence is golden.`) — wp.org review
+  requirement to prevent directory listing; existing files are kept.
 - **Plugin Check (PCP)** (`bun run check:pcp`) — builds the wp.org ZIP (skip
   with `--skip-build`), stages it into `wp-content/plugins/{name}-pcp/`,
   runs `wp plugin check <dir> --slug={name} --format=csv` (`--slug` prevents
