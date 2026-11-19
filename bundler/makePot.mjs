@@ -4,7 +4,14 @@
  */
 
 import { dirname, join, resolve } from 'node:path';
-import { existsSync, readdirSync } from 'node:fs';
+import {
+    copyFileSync,
+    existsSync,
+    readFileSync,
+    readdirSync,
+    renameSync,
+    unlinkSync,
+} from 'node:fs';
 import { log } from './consoleHelpers.mjs';
 import { config } from './config.mjs';
 import { spawnAsync } from './spawnAsync.mjs';
@@ -62,6 +69,31 @@ async function wpCliI18n(args, label) {
 }
 
 /**
+ * Compare two .pot/.po contents ignoring volatile metadata
+ * (PO-Revision-Date, POT-Creation-Date, X-Generator) so a
+ * regeneration that only touched metadata does not overwrite
+ * the file (keeps diffs and VCS history clean).
+ *
+ * @param {string} a First file content.
+ * @param {string} b Second file content.
+ * @return {boolean} True when contents are equal ignoring metadata.
+ */
+function equalIgnoringMeta(a, b) {
+    const strip = (s) =>
+        s
+            .split('\n')
+            .filter(
+                (line) =>
+                    !/^"POT-Creation-Date:/i.test(line) &&
+                    !/^"PO-Revision-Date:/i.test(line) &&
+                    !/^"X-Generator:/i.test(line) &&
+                    !/^"Project-Id-Version:.*PLUGIN_VERSION/i.test(line),
+            )
+            .join('\n');
+    return strip(a) === strip(b);
+}
+
+/**
  * Build the .pot file and update all .po files.
  *
  * @param {boolean} makeMo Also compile .mo files (build:github).
@@ -70,6 +102,18 @@ export async function makePot(makeMo = false) {
     const potFile = join(config.languagesDir, `${config.textdomain}.pot`);
     const excludes =
         'release,node_modules,.git,.opencode,bundler,tests,.sass-cache';
+    /**
+     * Keep the previous .pot around: if the regeneration only changes
+     * metadata (creation date, generator, version timestamp), restore
+     * the original file instead of polluting the diff.
+     */
+    const potBackup = potFile + '.makepot.bak';
+    const hadPot = existsSync(potFile);
+    const potBefore = hadPot ? readFileSync(potFile, 'utf8') : null;
+    if (hadPot) {
+        const { copyFileSync } = await import('node:fs');
+        copyFileSync(potFile, potBackup);
+    }
     await wpCliI18n(
         [
             'make-pot',
@@ -83,6 +127,11 @@ export async function makePot(makeMo = false) {
         ],
         'make-pot',
     );
+    if (hadPot && equalIgnoringMeta(potBefore, readFileSync(potFile, 'utf8'))) {
+        renameSync(potBackup, potFile);
+    } else if (hadPot) {
+        unlinkSync(potBackup);
+    }
     const poFiles = existsSync(join(root, config.languagesDir))
         ? readdirSync(join(root, config.languagesDir)).filter((f) =>
               f.endsWith('.po'),
