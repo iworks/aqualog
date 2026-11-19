@@ -56,6 +56,11 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		 */
 		add_action( 'wp_ajax_aquarium_log_maintenance_edit_task', array( $this, 'ajax_edit_maintenance_task' ) );
 		/**
+		 * AJAX handler for deleting a maintenance task (optionally with
+		 * all its future occurrences).
+		 */
+		add_action( 'wp_ajax_aquarium_log_maintenance_delete_task', array( $this, 'ajax_delete_maintenance_task' ) );
+		/**
 		 * AJAX handler for changing a calendar event status.
 		 */
 		add_action( 'wp_ajax_aquarium_log_calendar_event_status', array( $this, 'ajax_calendar_event_status' ) );
@@ -608,6 +613,39 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			array( '%d', '%s', '%s', '%s', '%s', '%s', is_null( $repeat_interval ) ? null : '%d', '%d' )
 		);
 		if ( $result ) {
+			/**
+			 * Repeatable task: materialize occurrences as separate rows up
+			 * to the configured horizon ("how far in advance should tasks
+			 * be scheduled", in months). Each row keeps the series root ID
+			 * so the whole series can be managed together.
+			 */
+			if ( ! is_null( $repeat_interval ) && $repeat_interval > 0 ) {
+				$series_id = intval( $wpdb->insert_id );
+				$horizon   = strtotime( sprintf( '+%d months', $this->get_schedule_months() ), strtotime( gmdate( 'Y-m-d 23:59:59', current_time( 'timestamp' ) ) ) );
+				$current   = strtotime( $start_date . ' +' . $repeat_interval . ' days' );
+				$rows      = array();
+				while ( $current <= $horizon ) {
+					$rows[] = array(
+						'aquarium_id'     => $id,
+						'series_id'       => $series_id,
+						'type'            => $type,
+						'title'           => $title,
+						'description'     => $description,
+						'status'          => $status,
+						'start_date'      => gmdate( 'Y-m-d H:i:s', $current ),
+						'repeat_interval' => null,
+						'full_day'        => $full_day ? 1 : 0,
+					);
+					$current = strtotime( sprintf( '+%d days', $repeat_interval ), $current );
+				}
+				foreach ( $rows as $row ) {
+					$wpdb->insert(
+						$wpdb->aquarium_log_maintenance,
+						$row,
+						array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', null, '%d' )
+					);
+				}
+			}
 			$this->log_maintenance_added( $id, $title, $type, $start_date );
 			wp_send_json_success(
 				array(
@@ -695,8 +733,7 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 				'repeat_interval' => $repeat_interval,
 				'full_day'        => filter_input( INPUT_POST, 'full_day', FILTER_VALIDATE_BOOLEAN ) ? 1 : 0,
 			)
-		);
-		$result = $wpdb->update(
+		);		$result = $wpdb->update(
 			$wpdb->aquarium_log_maintenance,
 			$data,
 			array( 'id' => $task_id ),
@@ -706,26 +743,98 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( false === $result ) {
 			wp_send_json_error( esc_html__( 'Failed to save task', 'PLUGIN_NAME' ) );
 		}
-		/**
-		 * Keep next_schedule_date in sync for repeating tasks.
-		 */
-		$update = array();
-		if ( ! is_null( $repeat_interval ) && $repeat_interval > 0 ) {
-			$update['next_schedule_date'] = gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) + $repeat_interval * DAY_IN_SECONDS );
-		} else {
-			$update['next_schedule_date'] = null;
-		}
-		$wpdb->update(
-			$wpdb->aquarium_log_maintenance,
-			$update,
-			array( 'id' => $task_id ),
-			array( is_null( $update['next_schedule_date'] ) ? null : '%s' ),
-			array( '%d' )
-		);
 		$this->log_maintenance_updated( $id, $title, $type, $status, $start_date );
 		wp_send_json_success(
 			array(
 				'message' => esc_html__( 'Task saved successfully', 'PLUGIN_NAME' ),
+			)
+		);
+	}
+
+	/**
+	 * AJAX handler for deleting a maintenance task.
+	 *
+	 * Deletes a single task, or — for repeating tasks when requested —
+	 * also all its future occurrences (per-occurrence statuses included).
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_delete_maintenance_task() {
+		check_ajax_referer( $this->get_meta_name( 'maintenance_save' ) );
+		if ( ! current_user_can( $this->get_this_capability() ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to perform this action.', 'PLUGIN_NAME' ) );
+		}
+		$this->check_option_object();
+		$task_id = intval( filter_input( INPUT_POST, 'task_id', FILTER_SANITIZE_NUMBER_INT ) );
+		if ( $task_id < 1 ) {
+			wp_send_json_error( esc_html__( 'Invalid task', 'PLUGIN_NAME' ) );
+		}
+		global $wpdb;
+		$row = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->prepare(
+				"SELECT * FROM {$wpdb->aquarium_log_maintenance} WHERE id = %d",
+				$task_id
+			),
+			ARRAY_A
+		);
+		if ( empty( $row ) || ! is_array( $row ) ) {
+			wp_send_json_error( esc_html__( 'Invalid task', 'PLUGIN_NAME' ) );
+		}
+		$with_future = filter_input( INPUT_POST, 'with_future', FILTER_VALIDATE_BOOLEAN );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified above.
+		$occurrence_date = sanitize_text_field( wp_unslash( $_POST['occurrence_date'] ?? '' ) );
+		/**
+		 * The series root stores series_id = NULL (only members carry
+		 * the root ID), so when the deleted row is the root itself,
+		 * the series ID is the row's own ID.
+		 */
+		$series_id = intval( $row['series_id'] ?? 0 );
+		if ( 0 === $series_id && intval( $row['repeat_interval'] ?? 0 ) > 0 ) {
+			$series_id = $task_id;
+		}
+		/**
+		 * Occurrences are separate rows. "Delete future" removes this row
+		 * plus every series row from the occurrence date onwards; past
+		 * occurrences stay. Without "future" only this row is removed.
+		 */
+		if ( $with_future && $series_id > 0 ) {
+			$from = ! empty( $occurrence_date ) ? gmdate( 'Y-m-d 00:00:00', strtotime( $occurrence_date ) ) : gmdate( 'Y-m-d 00:00:00', current_time( 'timestamp' ) );
+			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$wpdb->prepare(
+					"DELETE FROM {$wpdb->aquarium_log_maintenance} WHERE ( id = %d OR series_id = %d ) AND start_date >= %s",
+					$series_id,
+					$series_id,
+					$from
+				)
+			);
+		} elseif ( $with_future ) {
+			/**
+			 * Legacy repeating row (no series): remove the row itself.
+			 */
+			$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$wpdb->aquarium_log_maintenance,
+				array( 'id' => $task_id ),
+				array( '%d' )
+			);
+		} else {
+			$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$wpdb->aquarium_log_maintenance,
+				array( 'id' => $task_id ),
+				array( '%d' )
+			);
+		}
+		$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->aquarium_log_maintenance_status,
+			array( 'task_id' => $task_id ),
+			array( '%d' )
+		);
+		$this->log_maintenance_deleted( intval( $row['aquarium_id'] ), $row['title'], $row['type'] );
+		wp_send_json_success(
+			array(
+				'message' => esc_html__( 'Task deleted successfully', 'PLUGIN_NAME' ),
+				'task_id' => $task_id,
 			)
 		);
 	}
@@ -740,6 +849,19 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	public function get_frequencies() {
 		$this->check_option_object();
 		return apply_filters( 'iworks/aqualog/reminder/frequencies', $this->options->get_group( 'frequencies' ) );
+	}
+
+	/**
+	 * How far in advance repeating task occurrences are generated, in months.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @return int Number of months (minimum 1).
+	 */
+	public function get_schedule_months() {
+		$this->check_option_object();
+		$months = intval( $this->options->get_option( 'maintenance_schedule_months' ) );
+		return max( 1, $months ?: 3 );
 	}
 
 	/**
@@ -837,36 +959,27 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( empty( $rows ) || ! is_array( $rows ) ) {
 			return array();
 		}
-		$tasks = array();
+		$task_ids = wp_list_pluck( $rows, 'id' );
+		$statuses = $this->get_occurrence_statuses( array_map( 'intval', $task_ids ) );
+		$tasks    = array();
 		foreach ( $rows as $row ) {
 			$timestamp = strtotime( $row['start_date'] );
 			if ( $timestamp < $now - DAY_IN_SECONDS ) {
 				continue;
 			}
-			$interval = intval( $row['repeat_interval'] ?? 0 );
-			$current  = $timestamp;
-			$guard    = 0;
-			do {
-				if ( $current > $to_time ) {
-					break;
-				}
-				$tasks[] = array(
-					'id'          => intval( $row['id'] ),
-					'type'        => $row['type'],
-					'title'       => $row['title'],
-					'status'      => $row['status'],
-					'date'        => gmdate( 'Y-m-d', $current ),
-					'time'        => gmdate( 'H:i', $current ),
-					'full_day'    => ! empty( $row['full_day'] ),
-					'overdue'     => $current < $now,
-					'aquarium_id' => intval( $row['aquarium_id'] ),
-				);
-				if ( $interval < 1 ) {
-					break;
-				}
-				$current = strtotime( sprintf( '+%d days', $interval ), $current );
-				$guard++;
-			} while ( $current <= $to_time && $guard < 366 );
+			$date_key = gmdate( 'Y-m-d', $timestamp );
+			$tasks[]  = array(
+				'id'          => intval( $row['id'] ),
+				'type'        => $row['type'],
+				'title'       => $row['title'],
+				'status'      => $statuses[ intval( $row['id'] ) ][ $date_key ] ?? $row['status'],
+				'date'        => $date_key,
+				'time'        => gmdate( 'H:i', $timestamp ),
+				'full_day'    => ! empty( $row['full_day'] ),
+				'overdue'     => $timestamp < $now,
+				'series_id'   => intval( $row['series_id'] ?? 0 ),
+				'aquarium_id' => intval( $row['aquarium_id'] ),
+			);
 			if ( count( $tasks ) >= $limit ) {
 				break;
 			}
@@ -878,6 +991,93 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 			}
 		);
 		return array_slice( $tasks, 0, $limit );
+	}
+
+	/**
+	 * Get per-occurrence statuses for maintenance tasks.
+	 *
+	 * A repeating task is a single DB row expanded into many occurrences;
+	 * the status of each occurrence is stored separately, keyed by
+	 * task ID and occurrence date.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @param array $task_ids List of task IDs.
+	 * @return array Map: task_id => ( occurrence_date (Y-m-d) => status ).
+	 */
+	public function get_occurrence_statuses( $task_ids ) {
+		global $wpdb;
+		$task_ids = array_filter( array_map( 'intval', (array) $task_ids ) );
+		if ( empty( $task_ids ) ) {
+			return array();
+		}
+		$placeholders = implode( ', ', array_fill( 0, count( $task_ids ), '%d' ) );
+		$sql          = sprintf(
+			'SELECT task_id, occurrence_date, status FROM %s WHERE task_id IN ( %s )',
+			$wpdb->aquarium_log_maintenance_status,
+			$placeholders
+		);
+		$rows = $wpdb->get_results( $wpdb->prepare( $sql, ...$task_ids ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		if ( empty( $rows ) || ! is_array( $rows ) ) {
+			return array();
+		}
+		$map = array();
+		foreach ( $rows as $row ) {
+			$map[ intval( $row['task_id'] ) ][ $row['occurrence_date'] ] = $row['status'];
+		}
+		return $map;
+	}
+
+	/**
+	 * Save the status of a single task occurrence.
+	 *
+	 * @since 1.1.0
+	 * @access public
+	 * @param int    $task_id   Task ID.
+	 * @param string $date      Occurrence date (Y-m-d).
+	 * @param string $status    Status (pending, in_progress, completed).
+	 * @return bool True on success.
+	 */
+	public function save_occurrence_status( $task_id, $date, $status ) {
+		global $wpdb;
+		$task_id = intval( $task_id );
+		$date    = gmdate( 'Y-m-d', strtotime( $date ) );
+		if ( $task_id < 1 || empty( $date ) ) {
+			return false;
+		}
+		$existing = intval(
+			$wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$wpdb->prepare(
+					"SELECT id FROM {$wpdb->aquarium_log_maintenance_status} WHERE task_id = %d AND occurrence_date = %s",
+					$task_id,
+					$date
+				)
+			)
+		);
+		if ( $existing ) {
+			$result = $wpdb->update(
+				$wpdb->aquarium_log_maintenance_status,
+				array(
+					'status'  => $status,
+					'user_id' => get_current_user_id(),
+				),
+				array( 'id' => $existing ),
+				array( '%s', '%d' ),
+				array( '%d' )
+			);
+			return false !== $result;
+		}
+		$result = $wpdb->insert(
+			$wpdb->aquarium_log_maintenance_status,
+			array(
+				'task_id'         => $task_id,
+				'occurrence_date' => $date,
+				'status'          => $status,
+				'user_id'         => get_current_user_id(),
+			),
+			array( '%d', '%s', '%s', '%d' )
+		);
+		return false !== $result;
 	}
 
 	/**
@@ -958,6 +1158,25 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 		if ( empty( $row ) || ! is_array( $row ) ) {
 			wp_send_json_error( esc_html__( 'Invalid event', 'PLUGIN_NAME' ) );
 		}
+		/**
+		 * When an occurrence date is passed, only that occurrence is
+		 * updated — repeating tasks expand into many events, and each
+		 * keeps its own status. Without a date the base task is updated.
+		 */
+		$date = sanitize_text_field( filter_input( INPUT_POST, 'date' ) );
+		if ( ! empty( $date ) ) {
+			$updated = $this->save_occurrence_status( $id, $date, $status );
+			if ( ! $updated ) {
+				wp_send_json_error( esc_html__( 'Failed to update status', 'PLUGIN_NAME' ) );
+			}
+			$this->log_maintenance_updated( intval( $row['aquarium_id'] ), $row['title'], $row['type'], $status, $date );
+			wp_send_json_success(
+				array(
+					'message' => esc_html__( 'Status updated successfully', 'PLUGIN_NAME' ),
+					'status'  => $status,
+				)
+			);
+		}
 		$result = $wpdb->update(
 			$wpdb->aquarium_log_maintenance,
 			array( 'status' => $status ),
@@ -1006,5 +1225,19 @@ class iworks_aqualog_wp_admin_maintenance extends iworks_aqualog_base {
 	private function log_maintenance_added( $aquarium_id, $title, $type, $date = null ) {
 		$logger = new iworks_aqualog_logger();
 		$logger->log_maintenance_added( $aquarium_id, $title, $type, $date );
+	}
+
+	/**
+	 * Log maintenance task deletion.
+	 *
+	 * @since 1.1.0
+	 * @param int    $aquarium_id Aquarium ID.
+	 * @param string $title       Task title.
+	 * @param string $type        Task type key.
+	 * @return void
+	 */
+	private function log_maintenance_deleted( $aquarium_id, $title, $type ) {
+		$logger = new iworks_aqualog_logger();
+		$logger->log_maintenance_deleted( $aquarium_id, $title, $type );
 	}
 }

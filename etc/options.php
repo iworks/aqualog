@@ -175,6 +175,17 @@ function iworks_aqualog_options() {
 				),
 
 				array(
+					'name'              => 'maintenance_schedule_months',
+					'type'              => 'number',
+					'th'                => esc_html__( 'How far in advance should tasks be scheduled', 'PLUGIN_NAME' ),
+					'description'       => esc_html__( 'Number of months ahead for which repeating task occurrences are generated (default: 3 = quarter).', 'PLUGIN_NAME' ),
+					'default'           => 3,
+					'sanitize_callback' => 'absint',
+					'classes'           => array( 'small-text' ),
+					'since'             => '1.1.0',
+				),
+
+				array(
 					'type'  => 'heading',
 					'label' => esc_html__( 'Aquarium Settings', 'PLUGIN_NAME' ),
 					'since' => '1.0.0',

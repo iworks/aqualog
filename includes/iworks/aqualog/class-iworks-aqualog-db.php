@@ -43,6 +43,7 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 		'aquarium_log_log',
 		'aquarium_log_chemistry',
 		'aquarium_log_maintenance',
+		'aquarium_log_maintenance_status',
 		'aquarium_log_dosing',
 		'aquarium_log_reminder',
 	);
@@ -320,6 +321,62 @@ class iworks_aqualog_db extends iworks_aqualog_base {
 					}
 				}
 				update_option( 'aquarium_log_reminders_migrated', $migrated_ids, false );
+			}
+			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
+		}
+		/**
+		 * Create the per-occurrence status table. A repeating task is a
+		 * single row expanded into many calendar occurrences; statuses of
+		 * individual occurrences (e.g. "completed this week") live here,
+		 * so marking one occurrence does not affect the others.
+		 */
+		$version_to_update = 8;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$table_name      = $wpdb->prefix . 'aquarium_log_maintenance_status';
+			$charset_collate = $wpdb->get_charset_collate();
+			$sql             = "CREATE TABLE IF NOT EXISTS $table_name (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				task_id bigint(20) unsigned NOT NULL COMMENT 'Maintenance task ID',
+				occurrence_date date NOT NULL COMMENT 'Occurrence date (Y-m-d)',
+				status varchar(20) NOT NULL DEFAULT 'pending' COMMENT 'Occurrence status',
+				user_id bigint(20) unsigned DEFAULT NULL COMMENT 'User who set status',
+				created_at datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+				updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update timestamp',
+				PRIMARY KEY (id),
+				UNIQUE KEY task_occurrence (task_id, occurrence_date),
+				KEY status (status)
+			) $charset_collate;";
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			dbDelta( $sql );
+			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
+		}
+		/**
+		 * Add repeat_until to the maintenance table: explicit end of a
+		 * repeating series ("delete all future occurrences" sets it, past
+		 * occurrences remain visible).
+		 */
+		$version_to_update = 9;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$maintenance_table = $wpdb->prefix . 'aquarium_log_maintenance';
+			$columns           = $wpdb->get_col( "SHOW COLUMNS FROM {$maintenance_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			if ( ! in_array( 'repeat_until', $columns, true ) ) {
+				$wpdb->query( "ALTER TABLE {$maintenance_table} ADD COLUMN repeat_until date DEFAULT NULL COMMENT 'Series end date (occurrences after it are deleted)' AFTER repeat_interval" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			}
+			update_option( $this->_db_version, $version_to_update );
+			$db_version = intval( get_option( $this->_db_version ) );
+		}
+		$version_to_update = 10;
+		if ( $db_version < $version_to_update ) {
+			global $wpdb;
+			$maintenance_table = $wpdb->prefix . 'aquarium_log_maintenance';
+			$columns           = $wpdb->get_col( "SHOW COLUMNS FROM {$maintenance_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			if ( ! in_array( 'series_id', $columns, true ) ) {
+				$wpdb->query( "ALTER TABLE {$maintenance_table} ADD COLUMN series_id bigint(20) unsigned DEFAULT NULL COMMENT 'Repeating series root task ID (NULL = single task)' AFTER aquarium_id" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->query( "ALTER TABLE {$maintenance_table} ADD KEY series_id (series_id)" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			}
 			update_option( $this->_db_version, $version_to_update );
 			$db_version = intval( get_option( $this->_db_version ) );

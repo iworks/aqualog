@@ -51,6 +51,60 @@ a.aqualog-stat-card {
 			overflow-y: auto;
 			padding: 20px;
 		}
+
+		&-delete-confirm {
+			width: 400px;
+
+			.aqualog-form-actions {
+				display: flex;
+				gap: 8px;
+				flex-wrap: wrap;
+				margin-top: 12px;
+			}
+		}
+	}
+
+	&-modal-close {
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 4px;
+		line-height: 1;
+		color: #646970;
+
+		&:hover {
+			color: #d63638;
+		}
+	}
+
+	/**
+	 * Spinner used on buttons during AJAX requests
+	 * (Save, Complete, Delete).
+	 */
+	.dashicons.spin {
+		animation: aqualog-spin 1s linear infinite;
+	}
+
+	@keyframes aqualog-spin {
+		from {
+			transform: rotate(0deg);
+		}
+
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	&-calendar {
+		&-details-delete {
+			.dashicons {
+				line-height: 1;
+				margin-top: 3px;
+			}
+		}
 	}
 
 	&-maintenance {

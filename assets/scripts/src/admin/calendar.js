@@ -194,20 +194,28 @@
 						kind: entry.kind,
 						event_id: entry.id,
 						status: 'completed',
+						date: entry.date_key || '',
 					},
 					success: function (response) {
 						if (response.success) {
-							// Update chip in the grid and re-render modal state.
+							// Update only the clicked chip in the grid and
+							// re-render modal state.
 							$('.aqualog-calendar-event[data-entry]').each(
 								function () {
 									var chip = $(this).data('entry');
 									if (
 										chip &&
 										chip.kind === entry.kind &&
-										chip.id === entry.id
+										chip.id === entry.id &&
+										chip.date_key === entry.date_key
 									) {
 										chip.status = 'completed';
 										$(this).data('entry', chip);
+										$(this)
+											.removeClass(
+												'task-pending task-in_progress task-completed',
+											)
+											.addClass('task-completed');
 									}
 								},
 							);
@@ -235,6 +243,158 @@
 					complete: function () {
 						$button.prop('disabled', false);
 					},
+				});
+			},
+		);
+
+		// "Delete" button inside the details modal. For repeating tasks a
+		// confirmation asks whether future occurrences should be deleted too.
+		$(document).on(
+			'click',
+			'.aqualog-calendar-details-delete',
+			function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+
+				var entry = window.iworks_aqualog.calendar.currentEntry;
+				if (!entry) {
+					return;
+				}
+				/**
+				 * Occurrences are materialized rows: series members carry
+				 * series_id instead of a repeat interval, but they are part
+				 * of a repeating series all the same.
+				 */
+				var repeating =
+					parseInt(entry.interval, 10) > 0 ||
+					parseInt(entry.series_id, 10) > 0;
+
+				var doDelete = function (withFuture) {
+					var $button = $('.aqualog-calendar-details-delete');
+					$button
+						.prop('disabled', true)
+						.html(
+							'<span class="dashicons dashicons-update spin"></span> ' +
+								(window.iworks_aqualog.i18n.messages.saving ||
+									'Saving…'),
+						);
+
+					$.ajax({
+						url: window.iworks_aqualog.ajax_url,
+						type: 'POST',
+						data: {
+							action: 'aquarium_log_maintenance_delete_task',
+							_wpnonce:
+								window.iworks_aqualog.nonces.maintenance.save,
+							task_id: entry.id,
+							occurrence_date: entry.date_key || '',
+							with_future: withFuture ? 1 : 0,
+						},
+						success: function (response) {
+							if (response.success) {
+								window.iworks_aqualog.showNotice(
+									'success',
+									response.data.message,
+								);
+								window.iworks_aqualog.calendar.closeDetails();
+								window.location.reload();
+							} else {
+								$button
+									.prop('disabled', false)
+									.html(
+										'<span class="dashicons dashicons-trash"></span> ' +
+											(window.iworks_aqualog.i18n.messages
+												.delete || 'Delete'),
+									);
+								window.iworks_aqualog.showNotice(
+									'error',
+									(response.data && response.data.message) ||
+										window.iworks_aqualog.i18n.messages
+											.saveError,
+								);
+							}
+						},
+						error: function () {
+							$button
+								.prop('disabled', false)
+								.html(
+									'<span class="dashicons dashicons-trash"></span> ' +
+										(window.iworks_aqualog.i18n.messages
+											.delete || 'Delete'),
+								);
+							window.iworks_aqualog.showNotice(
+								'error',
+								window.iworks_aqualog.i18n.messages.saveError,
+							);
+						},
+					});
+				};
+
+				if (!repeating) {
+					// Non-repeating task: simple browser confirm.
+					if (
+						window.confirm(
+							window.iworks_aqualog.i18n.messages
+								.deleteTaskConfirm || 'Delete this task?',
+						)
+					) {
+						doDelete(false);
+					}
+					return;
+				}
+
+				// Repeating task: custom modal asking about future occurrences.
+				var $overlay = $('<div class="aqualog-modal-overlay"></div>');
+				var $modal = $(
+					'<div class="aqualog-modal aqualog-modal-delete-confirm"></div>',
+				);
+				var i18n = window.iworks_aqualog.i18n;
+				$modal.html(
+					'<button type="button" class="aqualog-modal-close aqualog-delete-cancel" aria-label="' +
+						(i18n.messages.cancel || 'Cancel') +
+						'"><span class="dashicons dashicons-no-alt"></span></button>' +
+						'<div class="aqualog-card"><div class="aqualog-card-header"><h2>' +
+						(i18n.messages.deleteFutureTitle || 'Delete task') +
+						'</h2></div>' +
+						'<p>' +
+						(i18n.messages.deleteFutureQuestion ||
+							'Delete all future occurrences as well?') +
+						'</p>' +
+						'<div class="aqualog-form-actions">' +
+						'<button type="button" class="button button-primary aqualog-delete-future">' +
+						(i18n.messages.deleteFutureYes ||
+							'Yes, delete future too') +
+						'</button>' +
+						'<button type="button" class="button button-primary aqualog-delete-single">' +
+						(i18n.messages.deleteFutureNo || 'No, only this one') +
+						'</button>' +
+						'</div></div>',
+				);
+				$('body').append($overlay).append($modal);
+				$overlay.fadeIn(300);
+				$modal.fadeIn(300);
+
+				$modal.on('click', '.aqualog-delete-future', function () {
+					$overlay.remove();
+					$modal.remove();
+					doDelete(true);
+				});
+				$modal.on('click', '.aqualog-delete-single', function () {
+					$overlay.remove();
+					$modal.remove();
+					doDelete(false);
+				});
+				$modal.on('click', '.aqualog-delete-cancel', function () {
+					$overlay.fadeOut(150, function () {
+						$(this).remove();
+					});
+					$modal.fadeOut(150, function () {
+						$(this).remove();
+					});
+				});
+				$overlay.on('click', function () {
+					$overlay.remove();
+					$modal.remove();
 				});
 			},
 		);

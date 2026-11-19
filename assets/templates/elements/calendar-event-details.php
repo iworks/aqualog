@@ -21,6 +21,9 @@ defined( 'ABSPATH' ) || exit;
 <script type="text/html" id="tmpl-aqualog-calendar-event-details">
 	<div class="aqualog-calendar-details">
 		<div class="aqualog-card">
+			<button type="button" class="aqualog-calendar-details-close aqualog-modal-close" aria-label="<?php esc_attr_e( 'Close', 'PLUGIN_NAME' ); ?>">
+				<span class="dashicons dashicons-no-alt"></span>
+			</button>
 			<div class="aqualog-card-header">
 				<h2>{{ data.title }}</h2>
 				<span class="aqualog-task-status status-{{ data.status }}">{{ data.status_label }}</span>
@@ -52,14 +55,15 @@ defined( 'ABSPATH' ) || exit;
 					<?php esc_html_e( 'Edit Task', 'PLUGIN_NAME' ); ?>
 				</button>
 				<# } #>
-				<# if ( data.status !== 'completed' ) { #>
+				<# if ( data.status !== 'completed' && ! data.is_future ) { #>
 				<button type="button" class="button button-primary aqualog-calendar-details-complete">
 					<span class="dashicons dashicons-yes"></span>
 					<?php esc_html_e( 'Completed', 'PLUGIN_NAME' ); ?>
 				</button>
 				<# } #>
-				<button type="button" class="button aqualog-calendar-details-close">
-					<?php esc_html_e( 'Close', 'PLUGIN_NAME' ); ?>
+				<button type="button" class="button aqualog-calendar-details-delete" title="<?php esc_attr_e( 'Delete', 'PLUGIN_NAME' ); ?>">
+					<span class="dashicons dashicons-trash"></span>
+					<?php esc_html_e( 'Delete', 'PLUGIN_NAME' ); ?>
 				</button>
 			</div>
 		</div>

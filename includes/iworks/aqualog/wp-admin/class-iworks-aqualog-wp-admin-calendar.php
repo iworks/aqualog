@@ -224,44 +224,52 @@ class iworks_aqualog_wp_admin_calendar extends iworks_aqualog_base {
 			$wpdb->aquarium_log_maintenance
 		);
 		$results = $wpdb->get_results( $wpdb->prepare( $sql, $aquarium_id, $to_time ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
+		$task_rows = array();
 		if ( is_array( $results ) ) {
 			foreach ( $results as $row ) {
 				if ( empty( $row['start_date'] ) ) {
 					continue;
 				}
+				$task_rows[] = $row;
+			}
+		}
+		$occurrence_statuses = array();
+		$maintenance         = null;
+		$maintenance_file    = dirname( __FILE__ ) . '/class-iworks-aqualog-wp-admin-maintenance.php';
+		if ( is_file( $maintenance_file ) ) {
+			include_once $maintenance_file;
+			$maintenance         = new iworks_aqualog_wp_admin_maintenance();
+			$occurrence_statuses = $maintenance->get_occurrence_statuses( wp_list_pluck( $task_rows, 'id' ) );
+		}
+		foreach ( $task_rows as $row ) {
 				$type  = isset( $row['type'] ) ? $row['type'] : '';
 				$title = ! empty( $row['title'] ) ? $row['title'] : ( isset( $config[ $type ]['title'] ) ? $config[ $type ]['title'] : $type );
 				/**
-				 * repeating tasks: expand occurrences inside the range
+				 * Occurrences are stored as separate rows (repeating tasks
+				 * are materialized up to the configured horizon), so each
+				 * row is one calendar event.
 				 */
 				$interval = isset( $row['repeat_interval'] ) ? intval( $row['repeat_interval'] ) : 0;
 				$current  = strtotime( $row['start_date'] );
-				$end      = strtotime( $to_time );
-				$guard    = 0;
-				while ( $current <= $end && $guard < 366 ) {
-					$guard++;
-					$datetime = gmdate( 'Y-m-d H:i:s', $current );
-					if ( $datetime >= $from_time ) {
-						$events[] = array(
-							'id'    => intval( $row['id'] ),
-							'date'  => substr( $datetime, 0, 10 ),
-							'time'  => substr( $datetime, 11, 5 ),
-							'kind'  => 'task',
-							'type'  => $type,
-							'status' => ! empty( $row['status'] ) ? $row['status'] : 'pending',
-							'title' => $title,
-							'description' => isset( $row['description'] ) ? $row['description'] : '',
-							'interval' => $interval,
-							'full_day' => empty( $row['full_day'] ) ? 0 : 1,
-							'aquarium_id' => $aquarium_id,
-						);
-					}
-					if ( $interval < 1 ) {
-						break;
-					}
-					$current = strtotime( sprintf( '+%d days', $interval ), $current );
+				$datetime = gmdate( 'Y-m-d H:i:s', $current );
+				if ( $datetime >= $from_time && $datetime <= $to_time ) {
+					$date_key   = substr( $datetime, 0, 10 );
+					$occurrence = $occurrence_statuses[ intval( $row['id'] ) ][ $date_key ] ?? null;
+					$events[]   = array(
+						'id'    => intval( $row['id'] ),
+						'date'  => $date_key,
+						'time'  => substr( $datetime, 11, 5 ),
+						'kind'  => 'task',
+						'type'  => $type,
+						'status' => null !== $occurrence ? $occurrence : ( ! empty( $row['status'] ) ? $row['status'] : 'pending' ),
+						'title' => $title,
+						'description' => isset( $row['description'] ) ? $row['description'] : '',
+						'interval' => $interval,
+						'series_id' => intval( $row['series_id'] ?? 0 ),
+						'full_day' => empty( $row['full_day'] ) ? 0 : 1,
+						'aquarium_id' => $aquarium_id,
+					);
 				}
-			}
 		}
 		/**
 		 * Backward compatibility: reminders created before the merge that

@@ -89,6 +89,7 @@ $iworks_aqualog_link = function ( $view, $date ) {
 									$iworks_aqualog_event_classes[] = 'task-' . sanitize_html_class( $iworks_aqualog_event['status'] );
 								}
 								$iworks_aqualog_full_day = ! empty( $iworks_aqualog_event['full_day'] );
+								$iworks_aqualog_is_future = strtotime( $iworks_aqualog_event['date'] . ( $iworks_aqualog_full_day ? ' 23:59:59' : ' ' . $iworks_aqualog_event['time'] ) ) > current_time( 'timestamp' );
 								$iworks_aqualog_entry = array(
 									'kind'         => $iworks_aqualog_event['kind'],
 									'id'           => $iworks_aqualog_event['id'],
@@ -101,8 +102,10 @@ $iworks_aqualog_link = function ( $view, $date ) {
 									'aquarium'     => get_the_title( $iworks_aqualog_event['aquarium_id'] ),
 									'description'  => $iworks_aqualog_event['description'] ?? '',
 									'interval'     => intval( $iworks_aqualog_event['interval'] ?? 0 ),
+									'series_id'    => intval( $iworks_aqualog_event['series_id'] ?? 0 ),
 									'full_day'     => $iworks_aqualog_full_day ? 1 : 0,
 									'date_key'     => $iworks_aqualog_event['date'],
+									'is_future'    => $iworks_aqualog_is_future ? 1 : 0,
 								);
 								?>
 								<button type="button" class="<?php echo esc_attr( implode( ' ', $iworks_aqualog_event_classes ) ); ?>" data-entry="<?php echo esc_attr( wp_json_encode( $iworks_aqualog_entry ) ); ?>">
